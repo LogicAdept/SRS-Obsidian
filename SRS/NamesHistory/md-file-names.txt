@@ -3,7 +3,7 @@
 - [ ] Can a Java interface declare a constructor.md
 - [ ] Can a Java interface declare private fields or variables.md
 - [ ] Can a Java interface declare private methods.md
-- [ ] Can a JPA entity class be abstract.md
+- [x] Can a JPA entity class be abstract.md
 - [ ] Can a method be abstract and static at the same time.md
 - [x] Can a primitive value be used directly as a Map key in Java.md
 - [ ] Can a servlet use PrintWriter and ServletOutputStream on the same response.md
@@ -75,7 +75,7 @@
 - [x] How can a single-threaded program get ConcurrentModificationException.md
 - [x] How can misuse of HashMap lead to an infinite loop.md
 - [ ] How can one servlet call or forward to another servlet.md
-- [ ] How can you apply dependency injection with a Spring bean.md
+- [x] How can you apply dependency injection with a Spring bean.md
 - [ ] How can you avoid being forced to handle checked IOException.md
 - [ ] How can you check if a thread holds a monitor lock in Java.md
 - [ ] How can you extend JSP functionality.md
@@ -98,10 +98,10 @@
 - [x] How do JDBC interface types such as Statement and PreparedStatement differ.md
 - [ ] How do left, right, and inner SQL joins differ.md
 - [x] What is the difference between optimistic and pessimistic locking in Hibernate.md
-- [ ] How do servlet filters Spring MVC interceptors and web listeners differ.md
+- [x] How do servlet filters Spring MVC interceptors and web listeners differ.md
 - [ ] How do servlets work in a multithreaded environment.md
 - [x] What is the difference between Spring Component, Repository, and Service stereotypes.md
-- [ ] How do Spring stereotype component annotations differ.md
+- [x] What is the difference between Spring stereotype component annotations.md
 - [ ] How do static and final fields affect Java serialization.md
 - [ ] How do string literals enter the Java string pool.md
 - [ ] How do the stack and heap differ for multithreading in Java.md
@@ -129,7 +129,7 @@
 - [ ] How do you create a database index.md
 - [ ] How do you create a REST service quickly.md
 - [ ] How do you create a singleton Spring bean at application startup.md
-- [ ] How do you create a Spring MVC controller.md
+- [x] How do you create a Spring MVC controller.md
 - [ ] How do you create a thread in Java.md
 - [ ] How do you customize Java serialization and deserialization.md
 - [ ] How do you declare a custom annotation in Java.md
@@ -172,8 +172,8 @@
 - [ ] How do you prevent Java object serialization.md
 - [ ] How do you prevent SQL injection in a database.md
 - [ ] How do you propagate an exception up the call stack in Java.md
-- [ ] How do you register a JDBC driver.md
-- [ ] How do you register a servlet in Spring.md
+- [x] How do you register a JDBC driver.md
+- [x] How do you register a servlet in Spring.md
 - [ ] How do you restrict servlet endpoints to users with a valid session.md
 - [ ] How do you run a class instance on its own thread.md
 - [ ] How do you run a command in the shell as a background job.md
@@ -194,12 +194,12 @@
 - [ ] How do you write a web application in Java.md
 - [ ] How does a database query run and how are results processed.md
 - [ ] How does a doubly linked list differ structurally from a singly linked list.md
-- [ ] How does a plain Java object differ from a Spring bean.md
-- [ ] How does a prototype Spring bean behave when injected into a singleton.md
+- [x] What is the difference between a plain Java object and a Spring bean.md
+- [x] How does a prototype Spring bean behave when injected into a singleton.md
 - [ ] How does a servlet container manage the servlet lifecycle.md
 - [ ] How does a Spring application call another service.md
-- [ ] How does a Spring configuration class differ from a component class.md
-- [ ] How does a Spring stereotype component relate to a Spring bean.md
+- [x] What is the difference between a Spring configuration class and a component class.md
+- [x] What is the relationship between a Spring stereotype component and a Spring bean.md
 - [ ] How does cloning work for objects arrays and two-dimensional arrays in Java.md
 - [x] How does close behave when using a JDBC connection pool.md
 - [ ] How does composition differ from inheritance.md
@@ -269,7 +269,7 @@
 - [x] How many new objects may be allocated when inserting a new entry into HashMap.md
 - [ ] How many normal forms are commonly taught for relational databases.md
 - [ ] How many parts does a JWT have.md
-- [ ] How many Spring application contexts can an application have.md
+- [x] How many Spring application contexts can an application have.md
 - [ ] How many years of Java experience do you have in total.md
 - [x] How much extra memory can ArrayList add trigger when resizing.md
 - [x] How much extra memory does LinkedList add allocate per insertion.md
@@ -291,17 +291,17 @@
 - [x] What advantages does Hibernate provide over plain JDBC.md
 - [ ] How would you explain advantages of composition in object oriented design.md
 - [ ] How would you explain advantages of Java NIO over classic blocking IO.md
-- [ ] How would you explain advantages of programming directly with JDBC.md
+- [x] What are the advantages of programming directly with JDBC.md
 - [ ] How would you explain alternate or secondary keys in relational databases.md
 - [ ] How would you explain annotations used to configure a Spring application context.md
 - [ ] How would you explain anonymous classes in Java and typical use cases.md
 - [ ] How would you explain Apache Maven.md
 - [ ] How would you explain application level error handling approaches.md
-- [ ] How would you explain aspect oriented programming AOP.md
+- [x] What is aspect oriented programming AOP.md
 - [ ] How would you explain asymptotic time complexity notation.md
 - [ ] How would you explain asynchronous messaging between systems.md
 - [ ] How would you explain asynchronous programming and execution.md
-- [ ] How would you explain atomicity in ACID transactions.md
+- [x] What is atomicity in ACID transactions.md
 - [ ] How would you explain behavior driven development BDD.md
 - [ ] How would you explain benefits of buffered input and output.md
 - [ ] How would you explain big design up front BDUF.md
@@ -345,7 +345,7 @@
 - [ ] How would you explain CREATE TABLE syntax in SQL.md
 - [ ] How would you explain criticisms of checked exceptions in Java.md
 - [ ] How would you explain daemon threads in Java.md
-- [ ] How would you explain database cursors in JDBC and SQL.md
+- [x] What are database cursors in JDBC and SQL.md
 - [ ] How would you explain database replication strategies.md
 - [ ] How would you explain database triggers in SQL.md
 - [ ] How would you explain DDL DML and DCL in SQL.md
@@ -357,7 +357,7 @@
 - [ ] How would you explain denormalization tradeoffs in relational databases.md
 - [ ] How would you explain dependency injection.md
 - [ ] How would you explain dependency inversion as a design principle.md
-- [ ] How would you explain dirty reads in transaction isolation.md
+- [x] What are dirty reads in transaction isolation.md
 - [ ] How would you explain disadvantages of adding database indexes.md
 - [x] What are the distinctive features of Spring Boot.md
 - [ ] How would you explain distinctive traits of dependency injection.md
@@ -390,9 +390,9 @@
 - [x] What is Hibernate dirty checking.md
 - [x] What is Hibernate entity lifecycle states.md
 - [x] What are Hibernate first and second level cache tiers.md
-- [ ] How would you explain Hibernate named queries.md
-- [ ] How would you explain Hibernate Query Language HQL.md
-- [ ] How would you explain Hibernate second level cache and its main components.md
+- [x] What are Hibernate named queries.md
+- [x] What is Hibernate Query Language HQL.md
+- [x] What is Hibernate second level cache and its main components.md
 - [x] What is Hibernate SessionFactory.md
 - [ ] How would you explain horizontal database sharding.md
 - [ ] How would you explain HTTP cookies.md
@@ -442,8 +442,8 @@
 - [ ] How would you explain JavaServer Pages JSP.md
 - [ ] How would you explain JAXP for XML parsing and transformation in Java.md
 - [x] What is JDBC for database access in Java.md
-- [ ] How would you explain JDBC ResultSet.md
-- [ ] How would you explain JDBC Statement PreparedStatement and CallableStatement.md
+- [x] What is JDBC ResultSet.md
+- [x] What are JDBC Statement PreparedStatement and CallableStatement.md
 - [x] What are JPA fetch types for entity associations.md
 - [ ] How would you explain JSTL the JSP Standard Tag Library.md
 - [ ] How would you explain JVM memory regions and how the garbage collector uses them.md
@@ -485,7 +485,7 @@
 - [ ] How would you explain parallel streams in Java.md
 - [ ] How would you explain parameterized types and generics in Java.md
 - [ ] How would you explain performance pitfalls of naive string concatenation.md
-- [ ] How would you explain phantom reads under weak isolation.md
+- [x] What are phantom reads under weak isolation.md
 - [ ] How would you explain pitfalls when implementing equals and hashCode.md
 - [ ] How would you explain PIVOT and UNPIVOT in Transact-SQL.md
 - [ ] How would you explain polymorphism in Java.md
@@ -521,16 +521,16 @@
 - [ ] How would you explain simple keys versus composite keys in databases.md
 - [ ] How would you explain single service per host deployment.md
 - [x] What are Spring bean scopes.md
-- [ ] How would you explain Spring BeanDefinition.md
-- [ ] How would you explain Spring BeanPostProcessor.md
+- [x] What is Spring BeanDefinition.md
+- [x] What is Spring BeanPostProcessor.md
 - [ ] How would you explain Spring Boot and its main advantage.md
 - [ ] How would you explain Spring Core inversion of control features.md
-- [ ] How would you explain Spring Data JPA Specification queries.md
-- [ ] How would you explain Spring Data Repository interfaces.md
+- [x] What are Spring Data JPA Specification queries.md
+- [x] What are Spring Data Repository interfaces.md
 - [x] What is Spring JdbcTemplate.md
 - [x] What is Spring MVC DispatcherServlet.md
-- [ ] How would you explain Spring MVC web layer.md
-- [ ] How would you explain Spring proxies and their tradeoffs.md
+- [x] What is the Spring MVC web layer.md
+- [x] What are Spring proxies and their tradeoffs.md
 - [x] What are Spring transaction propagation levels.md
 - [ ] How would you explain Spring Web modules for HTTP services.md
 - [ ] How would you explain SQL constraints such as primary key and foreign key.md
@@ -538,7 +538,7 @@
 - [ ] How would you explain SQL IN BETWEEN and LIKE predicates.md
 - [ ] How would you explain SQL injection attacks and defenses.md
 - [ ] How would you explain SQL JOIN types and when each is used.md
-- [ ] How would you explain SQL transaction isolation levels.md
+- [x] What are SQL transaction isolation levels.md
 - [ ] How would you explain StackOverflowError in Java.md
 - [ ] How would you explain static and instance initializer blocks in Java.md
 - [ ] How would you explain static initialization order in Java.md
@@ -547,18 +547,18 @@
 - [ ] How would you explain static methods on Java interfaces.md
 - [ ] How would you explain static nested classes in Java.md
 - [ ] How would you explain static typing in Java.md
-- [ ] How would you explain stored procedures and calling them from JDBC.md
+- [x] What is calling stored procedures from JDBC.md
 - [ ] How would you explain symmetry requirements for the equals contract.md
 - [ ] How would you explain synchronization with synchronized and locks in Java.md
 - [ ] How would you explain synchronized blocks in Java and common pitfalls.md
 - [ ] How would you explain table or index partitioning in databases.md
-- [ ] How would you explain target methods and advice binding in Spring AOP.md
+- [x] What is target method and advice binding in Spring AOP.md
 - [ ] How would you explain TCP or UDP sockets in Java networking.md
 - [ ] How would you explain test driven development TDD.md
 - [ ] How would you explain test fixtures in JUnit.md
 - [ ] How would you explain the abstract keyword in Java.md
 - [ ] How would you explain the abstraction principle in software engineering.md
-- [ ] How would you explain the ACID properties of database transactions.md
+- [x] What are the ACID properties of database transactions.md
 - [ ] How would you explain the Adapter design pattern.md
 - [ ] How would you explain the AutoCloseable interface in Java.md
 - [ ] How would you explain the backends for frontends pattern.md
@@ -623,15 +623,15 @@
 - [ ] How would you explain the java.lang.Exception type hierarchy.md
 - [ ] How would you explain the java.util.concurrent package.md
 - [ ] How would you explain the jjs command line tool for Nashorn.md
-- [ ] How would you explain the JPA Column annotation.md
-- [ ] How would you explain the JPA Criteria API.md
-- [ ] How would you explain the JPA Id annotation.md
-- [ ] How would you explain the JPA Table annotation and its attributes.md
+- [x] What is the JPA Column annotation.md
+- [x] What is the JPA Criteria API.md
+- [x] What is the JPA Id annotation.md
+- [x] What is the JPA Table annotation and its attributes.md
 - [ ] How would you explain the JSON data interchange format.md
 - [ ] How would you explain the JSP page lifecycle.md
 - [ ] How would you explain the JVM execution engine.md
 - [ ] How would you explain the JVM stack and stack frames.md
-- [ ] How would you explain the layered architecture of JDBC.md
+- [x] What is the layered architecture of JDBC.md
 - [ ] How would you explain the layered memory hierarchy from registers to disk.md
 - [ ] How would you explain the Liskov substitution principle in SOLID.md
 - [x] What is the List interface in Java.md
@@ -676,14 +676,14 @@
 - [ ] How would you explain the SOLID design principles as a set.md
 - [x] What is the Spring application context.md
 - [x] What is the Spring application context.md
-- [ ] How would you explain the Spring Bean annotation.md
-- [ ] How would you explain the Spring bean lifecycle and extension points.md
+- [x] What is the Spring Bean annotation.md
+- [x] What is the Spring bean lifecycle and extension points.md
 - [x] What is the Spring ComponentScan annotation.md
-- [ ] How would you explain the Spring Data umbrella project.md
+- [x] What is the Spring Data umbrella project.md
 - [x] What is the Spring ecosystem at a high level.md
 - [x] What is the Spring Framework.md
 - [x] What is the Spring inversion of control container.md
-- [ ] How would you explain the Spring Service annotation.md
+- [x] What is the Spring Service annotation.md
 - [x] What is the Spring Transactional annotation and its parameters.md
 - [ ] How would you explain the SQL COMMIT statement for transactions.md
 - [ ] How would you explain the SQL DROP statement.md
@@ -703,7 +703,7 @@
 - [ ] How would you explain the term plain old Java object POJO.md
 - [ ] How would you explain the ternary conditional operator in Java.md
 - [ ] How would you explain the throws clause for checked exceptions.md
-- [ ] How would you explain the Transactional annotation in Spring Data.md
+- [x] What is the Transactional annotation in Spring Data.md
 - [ ] How would you explain the transactional outbox pattern.md
 - [ ] How would you explain the transient field modifier in Java.md
 - [ ] How would you explain the two main JVM memory regions stack and heap.md
@@ -719,16 +719,16 @@
 - [ ] How would you explain ToDoubleBiFunction ToIntBiFunction and ToLongBiFunction.md
 - [ ] How would you explain ToDoubleFunction ToIntFunction and ToLongFunction.md
 - [ ] How would you explain tradeoffs among relational document and other database types.md
-- [ ] How would you explain transaction isolation levels in general.md
-- [ ] How would you explain transaction isolation levels in Hibernate.md
+- [x] What are transaction isolation levels in general.md
+- [x] What are transaction isolation levels in Hibernate.md
 - [ ] How would you explain transaction log tailing for integration.md
-- [ ] How would you explain transaction propagation in Spring Data.md
-- [ ] How would you explain transaction propagation semantics in Spring or JTA.md
+- [x] What is transaction propagation in Spring Data.md
+- [x] What are transaction propagation semantics in Spring or JTA.md
 - [ ] How would you explain transitive relations in relational algebra.md
 - [ ] How would you explain try catch finally exception handling in Java.md
 - [ ] How would you explain try with resources in Java.md
 - [ ] How would you explain tuning garbage collector settings on the JVM.md
-- [ ] How would you explain tuning Hibernate performance.md
+- [x] What is Hibernate performance tuning.md
 - [ ] How would you explain type erasure for Java generics.md
 - [ ] How would you explain types of test doubles such as mocks and stubs.md
 - [ ] How would you explain UI frames in desktop Java or legacy web framesets.md
@@ -764,7 +764,7 @@
 - [ ] If calling method A will throw an exception what should you do.md
 - [ ] In a business context must equals consider all entity fields.md
 - [ ] In SQL does the engine conceptually apply JOIN or WHERE filtering first.md
-- [ ] In what order does Spring initialize a bean and its dependencies.md
+- [x] In what order does Spring initialize a bean and its dependencies.md
 - [ ] In what order is a given snippet of Java code executed.md
 - [ ] In which Java version were generics introduced.md
 - [ ] Is a finally block always executed in Java.md
@@ -772,7 +772,7 @@
 - [ ] Is a Java array a static or dynamic data structure.md
 - [ ] Is a primary key implemented as an index and why.md
 - [ ] Is a session object always created on a JSP page and can it be disabled.md
-- [ ] Is a Spring bean a class or an object.md
+- [x] Is a Spring bean a class or an object.md
 - [ ] Is caching only used with databases.md
 - [x] Is equals invoked when a HashMap bucket contains a single element.md
 - [ ] Is it accurate to say String is backed by a character array internally.md
@@ -788,7 +788,7 @@
 - [ ] On which object does a static synchronized method acquire a lock.md
 - [ ] Should you define a constructor for a servlet and how should you initialize it.md
 - [ ] Use cases for the final keyword in Java.md
-- [ ] What ACID requirements apply to database transactions.md
+- [x] What ACID requirements apply to database transactions.md
 - [x] What advantages do microservices have over a monolith.md
 - [ ] What advantages does ExecutorService offer over creating raw threads.md
 - [ ] What approaches exist for writing or generating XML in Java.md
@@ -797,7 +797,7 @@
 - [ ] What are alternatives to class inheritance.md
 - [ ] What are autoboxing and unboxing in Java.md
 - [ ] What are common concrete InputStream and OutputStream implementations.md
-- [ ] What are common JDBC SQL types and how do they map to Java types.md
+- [x] What are common JDBC SQL types and how do they map to Java types.md
 - [ ] What are common kinds of unchecked exceptions in Java.md
 - [x] What are common terminal operations on Java streams.md
 - [ ] What are database connection pools for.md
@@ -818,10 +818,10 @@
 - [ ] What are practical guidelines for working with JSP.md
 - [ ] What are programming design patterns for.md
 - [ ] What are servlet attributes for and how do they work.md
-- [ ] What are Spring bean scopes for.md
+- [x] What are Spring bean scopes for.md
 - [ ] What are the advantages of servlets over CGI.md
 - [ ] What are the advantages of the Builder pattern over constructors.md
-- [ ] What are the defining properties of a database transaction.md
+- [x] What are the defining properties of a database transaction.md
 - [ ] What are the implicit EL scope objects in JSP and how do they differ from servlet scoped objects.md
 - [ ] What are the key base exception types in Java.md
 - [ ] What are the main characteristics of software design patterns.md
@@ -843,7 +843,7 @@
 - [ ] What are the wrapper types for Java primitives.md
 - [ ] What are three common kinds of database constraints.md
 - [ ] What are version control systems for.md
-- [ ] What association types exist in Hibernate.md
+- [x] What association types exist in Hibernate.md
 - [x] What backing data structure does ArrayList use internally.md
 - [x] What backs Java parallelStream under the hood.md
 - [ ] What can violating database normalization lead to.md
@@ -851,7 +851,7 @@
 - [ ] What categories of NoSQL databases exist.md
 - [ ] What conditions define a relational database.md
 - [ ] What configuration approaches exist for log4j.md
-- [ ] What configuration styles exist in Spring.md
+- [x] What configuration styles exist in Spring.md
 - [x] What constraints apply to keys in a Java Map.md
 - [ ] What constraints does a primary key impose on a table.md
 - [x] What core ideas underpin the Spring Framework.md
@@ -900,10 +900,10 @@
 - [ ] What happens when a second Kafka consumer reads the same topic.md
 - [ ] What happens when a thread pool queue is full and a new task arrives.md
 - [ ] What happens when an uncaught exception escapes a thread run method.md
-- [ ] What happens when one Spring Transactional method calls another.md
+- [x] What happens when one Spring Transactional method calls another.md
 - [ ] What happens when this code runs line by line.md
 - [x] What happens when you insert elements into a TreeSet in ascending order.md
-- [ ] What happens when you request the same singleton bean twice from ApplicationContext.md
+- [x] What happens when you request the same singleton bean twice from ApplicationContext.md
 - [ ] What harmful SQL patterns or pitfalls do you know.md
 - [ ] What have you learned or read recently that you would recommend.md
 - [ ] What HTTP request methods exist.md
@@ -914,7 +914,7 @@
 - [ ] What intermediate stream operations do you know in Java.md
 - [x] What internal abstractions power a Java stream pipeline.md
 - [x] What internal structures back HashSet and TreeSet.md
-- [ ] What invokes Spring MVC controller methods.md
+- [x] What invokes Spring MVC controller methods.md
 - [ ] What is a binomial tree.md
 - [ ] What is a bitmask.md
 - [ ] What is a design matrix.md
@@ -922,7 +922,7 @@
 - [ ] What is a greedy algorithm.md
 - [ ] What is a hash collision.md
 - [ ] What is a heuristic algorithm.md
-- [ ] What is a JDBC ResultSet for.md
+- [x] What is a JDBC ResultSet for.md
 - [ ] What is a k-d tree.md
 - [ ] What is a leftist heap.md
 - [ ] What is a lightweight alternative to the Command pattern.md
@@ -971,7 +971,7 @@
 - [ ] What is continuous simulation.md
 - [ ] What is counting sort.md
 - [ ] What is database denormalization for.md
-- [ ] What is database transaction isolation.md
+- [x] What is database transaction isolation.md
 - [x] What is depth-first search.md
 - [ ] What is depth-limited search.md
 - [ ] What is Dijkstra's algorithm.md
@@ -988,7 +988,7 @@
 - [x] What is IdentityHashMap for.md
 - [ ] What is in-order tree traversal.md
 - [ ] What is insertion sort.md
-- [ ] What is JDBC, an implementation or a specification.md
+- [x] What is JDBC, an implementation or a specification.md
 - [ ] What is JWT for.md
 - [ ] What is Kadane's algorithm.md
 - [ ] What is Kosaraju's algorithm.md
@@ -1010,7 +1010,7 @@
 - [ ] What is SHA-2.md
 - [ ] What is simulation in algorithms.md
 - [ ] What is sorted for in Java streams.md
-- [ ] What is Spring Boot used for.md
+- [x] What is Spring Boot used for.md
 - [x] What is Spring for.md
 - [ ] What is string hashing.md
 - [ ] What is supervised learning.md
@@ -1046,7 +1046,7 @@
 - [x] What is the cost of accessing the middle element of a LinkedList.md
 - [ ] What is the Datatype Channel pattern.md
 - [ ] What is the Dead Letter Channel pattern.md
-- [ ] What is the default Spring bean scope.md
+- [x] What is the default Spring bean scope.md
 - [ ] What is the dependencyManagement section in Maven for.md
 - [ ] What is the Detour pattern.md
 - [ ] What is the difference between a Java interface and an abstract class.md
@@ -1055,7 +1055,7 @@
 - [ ] What is the difference between an abstract class with an abstract method and an interface with an abstract method in Java.md
 - [ ] What is the difference between an instance member and a static member in Java.md
 - [ ] What is the difference between an OS process and a Java thread.md
-- [ ] What is the difference between AOP advice and pointcuts.md
+- [x] What is the difference between AOP advice and pointcuts.md
 - [x] What is the difference between ArrayList and LinkedList.md
 - [x] What is the difference between ArrayList and Vector.md
 - [ ] What is the difference between atomicity and consistency.md
@@ -1089,19 +1089,19 @@
 - [x] What is the difference between JPA FetchType lazy and eager.md
 - [ ] What is the difference between JspWriter and servlet PrintWriter.md
 - [ ] What is the difference between object oriented and functional programming styles.md
-- [ ] What is the difference between PreparedStatement and Statement in JDBC.md
+- [x] What is the difference between PreparedStatement and Statement in JDBC.md
 - [ ] What is the difference between PRIMARY KEY and UNIQUE constraints.md
 - [ ] What is the difference between primitive and reference types in Java.md
 - [ ] What is the difference between Project Reactor Mono and Flux.md
 - [ ] What is the difference between reference types and primitives in Java.md
-- [ ] What is the difference between Repository Component Controller and Service annotations.md
+- [x] What is the difference between Repository Component Controller and Service annotations.md
 - [ ] What is the difference between RequestMapping and PutMapping.md
-- [ ] What is the difference between save and saveAll in Spring Data.md
+- [x] What is the difference between save and saveAll in Spring Data.md
 - [ ] What is the difference between ServletContext and ServletConfig.md
 - [ ] What is the difference between SoftReference and WeakReference.md
-- [ ] What is the difference between Spring Boot auto configuration and plain Spring context.md
+- [x] What is the difference between Spring Boot auto configuration and plain Spring context.md
 - [x] What is the difference between Spring RestController and Controller.md
-- [ ] What is the difference between Spring Service Repository and Controller annotations.md
+- [x] What is the difference between Spring Service Repository and Controller annotations.md
 - [ ] What is the difference between SQL and NoSQL data stores.md
 - [ ] What is the difference between SQL char and varchar types.md
 - [ ] What is the difference between SQL DATETIME and TIMESTAMP.md
@@ -1208,7 +1208,7 @@
 - [ ] What is the Smart Proxy pattern.md
 - [ ] What is the Splitter pattern.md
 - [x] What is the Spring Framework for.md
-- [ ] What is the Spring IoC container in practice.md
+- [x] What is the Spring IoC container in practice.md
 - [ ] What is the Strategy pattern used for.md
 - [ ] What is the sweep line algorithm.md
 - [ ] What is the synchronized keyword for in Java.md
@@ -1223,7 +1223,7 @@
 - [ ] What is the Transactional Client pattern.md
 - [ ] What is the two pointers technique.md
 - [ ] What is the union-find data structure.md
-- [ ] What is the value of Spring Boot.md
+- [x] What is the value of Spring Boot.md
 - [ ] What is the value range of the Java short type.md
 - [ ] What is the Wire Tap pattern.md
 - [x] What is the worst case time complexity of add on a LinkedList.md
@@ -1241,7 +1241,7 @@
 - [x] What is WeakHashMap used for.md
 - [ ] What is your view on checked exceptions in Java.md
 - [ ] What Java books or articles have you read.md
-- [ ] What JDBC or API pieces are used to build and execute database queries.md
+- [x] What JDBC API pieces are used to build and execute database queries.md
 - [x] What JDBC statement types exist.md
 - [ ] What JVM runtime memory regions exist.md
 - [ ] What kinds of constructs exist in an XSD schema.md
@@ -1251,7 +1251,7 @@
 - [ ] What kinds of methods can a Java interface declare.md
 - [ ] What kinds of problems does SQL JOIN solve.md
 - [ ] What kinds of proxies exist in Java or Spring.md
-- [ ] What kinds of queries can Hibernate run.md
+- [x] What kinds of queries can Hibernate run.md
 - [ ] What kinds of queries or requests do you know in SQL or HTTP.md
 - [ ] What kinds of SQL JOIN exist.md
 - [ ] What kinds of stream operations exist in Java.md
@@ -1268,7 +1268,7 @@
 - [ ] What mechanisms implement polymorphism in Java.md
 - [ ] What merge strategies are important in database development.md
 - [ ] What message delivery semantics exist in distributed systems and their tradeoffs.md
-- [ ] What minimal setup is required for Spring MVC to handle HTTP requests.md
+- [x] What minimal setup is required for Spring MVC to handle HTTP requests.md
 - [ ] What must a class implement to support enhanced for each iteration.md
 - [x] What need did HashMap address compared to older maps.md
 - [ ] What non Java technical books have you read.md
@@ -1277,7 +1277,7 @@
 - [ ] What options exist for handling checked exceptions in Java.md
 - [ ] What options send data from an HTTP client to a server.md
 - [ ] What ordering guarantees does Kafka provide for messages.md
-- [ ] What parts make up a JDBC URL.md
+- [x] What parts make up a JDBC URL.md
 - [ ] What practical benefits does encapsulation bring to large systems.md
 - [ ] What principles do you follow in multithreaded Java programming.md
 - [ ] What problem does database sharding solve.md
@@ -1285,7 +1285,7 @@
 - [ ] What problems can missing database transactions cause.md
 - [ ] What problems commonly appear when using caching.md
 - [ ] What problems does distributed tracing solve.md
-- [ ] What problems does the Spring Framework address.md
+- [x] What problems does the Spring Framework address.md
 - [ ] What professional goals do you set for yourself.md
 - [ ] What properties does an equivalence relation induced by equals have.md
 - [ ] What range of int values can hashCode return in Java.md
@@ -1294,10 +1294,10 @@
 - [ ] What relationship types exist in databases with examples.md
 - [x] What requirements apply to keys used in a HashMap.md
 - [x] What restriction applies when adding elements to a TreeSet.md
-- [ ] What return types can a Spring MVC controller method have.md
+- [x] What return types can a Spring MVC controller method have.md
 - [x] What rule governs when HashMap grows its number of buckets.md
-- [ ] What runs first among constructor injection setter injection and field injection in Spring.md
-- [ ] What scopes can Spring beans have.md
+- [x] What runs first among constructor injection setter injection and field injection in Spring.md
+- [x] What scopes can Spring beans have.md
 - [ ] What search algorithms exist for arrays.md
 - [ ] What security related technologies have you worked with.md
 - [ ] What servlet authentication mechanisms exist.md
@@ -1305,7 +1305,7 @@
 - [ ] What simple approach would you use to implement an in memory cache.md
 - [ ] What sits at the root of every Java exception.md
 - [ ] What software development workflows or methodologies do you know.md
-- [ ] What Spring bean scope variants exist.md
+- [x] What Spring bean scope variants exist.md
 - [ ] What Spring dependency injection styles exist how do they differ and which are preferred.md
 - [ ] What Spring related work have you done.md
 - [ ] What SQL clauses usually accompany aggregate queries.md
@@ -1318,20 +1318,20 @@
 - [ ] What synchronization mechanisms exist in Java.md
 - [ ] What task or ticket workflows have you used.md
 - [ ] What task types can you submit to an ExecutorService.md
-- [ ] What technologies does Spring Data build upon.md
+- [x] What technologies does Spring Data build upon.md
 - [ ] What technology stacks did you use on past projects.md
 - [ ] What terminal stream operations do you know in Java.md
 - [ ] What tests do you write and how do you structure them.md
 - [x] What thread-safe collections exist in Java.md
 - [ ] What topics did you study besides Java.md
-- [ ] What transaction isolation levels does JDBC support.md
+- [x] What transaction isolation levels does JDBC support.md
 - [ ] What types of database indexes exist.md
 - [ ] What types of dependency injection exist.md
 - [ ] What typical responsibilities does a servlet container have.md
 - [ ] What variable scopes exist in JSP.md
 - [ ] What was the main command or workflow you used on your last project.md
 - [ ] What was your role on your last project and what did you own.md
-- [ ] What ways exist to configure a Spring application.md
+- [x] What ways exist to configure a Spring application.md
 - [ ] What ways exist to create a Java stream.md
 - [x] What ways exist to iterate the elements of a List.md
 - [ ] What will this Java snippet print to the console.md
@@ -1358,20 +1358,20 @@
 - [ ] When should you use package private visibility in Java.md
 - [ ] When should you use servlet filters versus listeners.md
 - [ ] When would you use Java-based Spring configuration.md
-- [ ] When would you use prototype scope in Spring.md
-- [ ] Where can you read the official JDBC documentation.md
+- [x] When would you use prototype scope in Spring.md
+- [x] Where can you read the official JDBC documentation.md
 - [ ] Where do default equals and hashCode implementations come from in Java.md
-- [ ] Where do generated identifiers come from when inserting rows in JDBC batch mode.md
+- [x] Where do generated identifiers come from when inserting rows in JDBC batch mode.md
 - [ ] Where have you programmed.md
 - [ ] Where is the authoritative reference for Java primitive types.md
-- [ ] Where is the Bean annotation used in Spring.md
-- [ ] Where is the Transactional annotation used in Spring.md
+- [x] Where is the Bean annotation used in Spring.md
+- [x] Where is the Transactional annotation used in Spring.md
 - [ ] Where may static and instance fields be initialized in Java.md
 - [ ] Where should you prefer inheritance versus aggregation.md
 - [ ] Which annotations tell Spring to create beans from your classes.md
 - [x] Which classes implement the Java List interface.md
 - [ ] Which common HTTP methods are not idempotent.md
-- [ ] Which common Spring Boot starters do you know.md
+- [x] Which common Spring Boot starters do you know.md
 - [x] Which data structure underlies Java LinkedList.md
 - [ ] Which data type is best for entity identifiers.md
 - [ ] Which databases have you used.md
@@ -1417,10 +1417,10 @@
 - [ ] Which Spring bean scopes have you used.md
 - [ ] Which Spring configuration style do you prefer XML Java or annotations and why.md
 - [ ] Which Spring configuration style takes precedence XML Java or annotations.md
-- [ ] Which Spring Data JPA annotations have you used.md
+- [x] Which Spring Data JPA annotations have you used.md
 - [ ] Which Spring Framework configuration would you choose in a new project.md
-- [ ] Which Spring stereotype annotations create beans.md
-- [ ] Which Spring stereotype annotations exist besides Service.md
+- [x] Which Spring stereotype annotations create beans.md
+- [x] Which Spring stereotype annotations exist besides Service.md
 - [ ] Which task tracking tools have you used.md
 - [ ] Which tools besides Java have you used in your stack.md
 - [x] Which tree data structure backs Java TreeSet.md
@@ -1447,7 +1447,7 @@
 - [x] Why is a byte array a poor or unsafe choice for a HashMap key.md
 - [ ] Why is a database preferable to plain text files for structured data.md
 - [ ] Why is a stack trace important for exceptions.md
-- [ ] Why is Autowired often omitted on a single constructor in modern Spring.md
+- [x] Why is Autowired often omitted on a single constructor in modern Spring.md
 - [ ] Why is char array preferred over String for passwords.md
 - [ ] Why is clone declared on Object rather than on Cloneable.md
 - [ ] Why is composition often recommended over inheritance.md
@@ -1466,9 +1466,9 @@
 - [ ] Why is the singleton pattern often labeled an anti pattern.md
 - [ ] Why is Thread.stop deprecated and unsafe.md
 - [ ] Why might a Java interface declare no methods.md
-- [ ] Why must JDBC and IO resources be closed explicitly.md
+- [x] Why must JDBC and IO resources be closed explicitly.md
 - [ ] Why must wait and notify run inside synchronized blocks.md
-- [ ] Why must you load a JDBC database driver.md
+- [x] Why must you load a JDBC database driver.md
 - [ ] Why override the no argument init method in a servlet.md
 - [ ] Why run a program on multiple threads instead of one.md
 - [ ] Why should arbitrary objects not be compared with double equals in Java.md
