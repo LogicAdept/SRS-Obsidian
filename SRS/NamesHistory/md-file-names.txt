@@ -236,7 +236,7 @@
 - [x] How does Spring Boot auto-configure beans when you add a dependency.md
 - [x] What is the difference between Spring Boot and the core Spring Framework.md
 - [x] What is the difference between Spring Data JPA and using Hibernate directly.md
-- [ ] How does Spring work under the hood.md
+- [x] How does Spring work under the hood.md
 - [ ] How does SQL JOIN differ from UNION.md
 - [ ] How does SQL UNION differ from UNION ALL recap.md
 - [ ] How does Supplier differ from Consumer in Java.md
@@ -293,7 +293,7 @@
 - [ ] How would you explain advantages of Java NIO over classic blocking IO.md
 - [x] What are the advantages of programming directly with JDBC.md
 - [ ] How would you explain alternate or secondary keys in relational databases.md
-- [ ] How would you explain annotations used to configure a Spring application context.md
+- [x] What annotations are used to configure a Spring application context.md
 - [ ] How would you explain anonymous classes in Java and typical use cases.md
 - [ ] How would you explain Apache Maven.md
 - [ ] How would you explain application level error handling approaches.md
@@ -480,7 +480,7 @@
 - [ ] How would you explain object oriented programming principles.md
 - [x] What is object relational mapping ORM.md
 - [ ] How would you explain ODBC database connectivity.md
-- [ ] How would you explain one to one relationships in databases or JPA.md
+- [x] What is a one to one relationship in databases or JPA.md
 - [x] What is the difference between optimistic and pessimistic locking in JPA.md
 - [ ] How would you explain parallel streams in Java.md
 - [ ] How would you explain parameterized types and generics in Java.md
@@ -951,7 +951,7 @@
 - [x] What is an efficient way to remove a contiguous block from the middle of an ArrayList.md
 - [ ] What is an embedding.md
 - [ ] What is an Euler tour.md
-- [ ] What is an example of a one to many relationship in databases or JPA.md
+- [x] What is an example of a one to many relationship in databases or JPA.md
 - [ ] What is an example of a relational database and a non relational database.md
 - [ ] What is an example of using custom JSP tags.md
 - [ ] What is an observation in machine learning.md
@@ -1067,7 +1067,7 @@
 - [ ] What is the difference between CyclicBarrier and CountDownLatch.md
 - [ ] What is the difference between database replication and sharding.md
 - [ ] What is the difference between dependency injection and dependency inversion.md
-- [ ] What is the difference between dependency injection and inversion of control.md
+- [x] What is the difference between dependency injection and inversion of control.md
 - [x] What is the difference between Docker containers and virtual machines.md
 - [ ] What is the difference between dynamic and static content in JSP.md
 - [x] What is the difference between Enumeration and Iterator in Java.md
@@ -1250,7 +1250,7 @@
 - [ ] What kinds of method references exist in Java.md
 - [ ] What kinds of methods can a Java interface declare.md
 - [ ] What kinds of problems does SQL JOIN solve.md
-- [ ] What kinds of proxies exist in Java or Spring.md
+- [x] What kinds of proxies exist in Java or Spring.md
 - [x] What kinds of queries can Hibernate run.md
 - [ ] What kinds of queries or requests do you know in SQL or HTTP.md
 - [ ] What kinds of SQL JOIN exist.md
@@ -1306,7 +1306,7 @@
 - [ ] What sits at the root of every Java exception.md
 - [ ] What software development workflows or methodologies do you know.md
 - [x] What Spring bean scope variants exist.md
-- [ ] What Spring dependency injection styles exist how do they differ and which are preferred.md
+- [x] What Spring dependency injection styles exist how do they differ and which are preferred.md
 - [ ] What Spring related work have you done.md
 - [ ] What SQL clauses usually accompany aggregate queries.md
 - [ ] What SQL operators exist.md
@@ -1368,7 +1368,7 @@
 - [x] Where is the Transactional annotation used in Spring.md
 - [ ] Where may static and instance fields be initialized in Java.md
 - [ ] Where should you prefer inheritance versus aggregation.md
-- [ ] Which annotations tell Spring to create beans from your classes.md
+- [x] Which annotations tell Spring to create beans from your classes.md
 - [x] Which classes implement the Java List interface.md
 - [ ] Which common HTTP methods are not idempotent.md
 - [x] Which common Spring Boot starters do you know.md
@@ -1408,15 +1408,15 @@
 - [ ] Which programming paradigm does the Streams API follow.md
 - [ ] Which projects have you worked on.md
 - [ ] Which role or position are you aiming for.md
-- [ ] Which Spring abstractions participate in bean creation.md
-- [ ] Which Spring annotation indicates that beans are being created or scanned.md
-- [ ] Which Spring annotations declare beans that you know.md
+- [x] Which Spring abstractions participate in bean creation.md
+- [x] Which Spring annotation indicates that beans are being created or scanned.md
+- [x] Which Spring annotations declare beans that you know.md
 - [ ] Which Spring bean scopes can you name.md
 - [ ] Which Spring bean scopes do you know by name.md
 - [ ] Which Spring bean scopes fit most application types.md
 - [ ] Which Spring bean scopes have you used.md
 - [ ] Which Spring configuration style do you prefer XML Java or annotations and why.md
-- [ ] Which Spring configuration style takes precedence XML Java or annotations.md
+- [x] Which Spring configuration style takes precedence XML Java or annotations.md
 - [x] Which Spring Data JPA annotations have you used.md
 - [ ] Which Spring Framework configuration would you choose in a new project.md
 - [x] Which Spring stereotype annotations create beans.md
