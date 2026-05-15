@@ -1,4 +1,4 @@
-﻿- [x] Can a column referenced by a foreign key be NULL.md
+- [x] Can a column referenced by a foreign key be NULL.md
 - [x] Can a HashMap contain two equal keys at the same time.md
 - [x] Can a Java interface declare a constructor.md
 - [x] Can a Java interface declare private fields or variables.md
@@ -61,26 +61,26 @@
 - [x] Have you written automated tests.md
 - [x] How and when does HashMap resize its buckets.md
 - [x] How are generics implemented in Java.md
-- [ ] How are hashCode and equals implemented in java.lang.Object.md
-- [ ] How are immutable objects used in Java APIs.md
-- [ ] How are indexes implemented in relational databases.md
+- [x] How are hashCode and equals implemented in java.lang.Object.md
+- [x] How are immutable objects used in Java APIs.md
+- [x] How are indexes implemented in relational databases.md
 - [x] How are Iterable and Iterator related in Java.md
 - [x] How are Iterable Iterator and for-each related in Java.md
-- [ ] How are JavaScript and Java related if at all.md
-- [ ] How are parameters passed in Java.md
-- [ ] How are parameters passed in Java.md
+- [x] How are JavaScript and Java related if at all.md
+- [x] How are parameters passed in Java.md
+- [x] How are parameters passed in Java.md
 - [x] How are Spring beans initialized.md
-- [ ] How can a client tell what the server sent to the browser.md
-- [ ] How can a nested class access fields of its enclosing class.md
+- [x] How can a client tell what the server sent to the browser.md
+- [x] How can a nested class access fields of its enclosing class.md
 - [x] How can a single-threaded program get ConcurrentModificationException.md
 - [x] How can misuse of HashMap lead to an infinite loop.md
 - [x] How can one servlet call or forward to another servlet.md
 - [x] How can you apply dependency injection with a Spring bean.md
-- [ ] How can you avoid being forced to handle checked IOException.md
-- [ ] How can you check if a thread holds a monitor lock in Java.md
+- [x] How can you avoid being forced to handle checked IOException.md
+- [x] How can you check if a thread holds a monitor lock in Java.md
 - [x] How can you extend JSP functionality.md
 - [x] How can you lose a value in a HashMap.md
-- [ ] How can you test a program and reduce the risk of bugs.md
+- [x] How can you test a program and reduce the risk of bugs.md
 - [ ] How did marker interfaces evolve and what largely replaced them.md
 - [ ] How did you deploy applications on past projects.md
 - [ ] How did you store data in your projects.md

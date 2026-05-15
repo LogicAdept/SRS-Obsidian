@@ -2,5 +2,5 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map #SRS #New
+#Java/Collections/Map #Java/HashCodeEquals #SRS #New
 
