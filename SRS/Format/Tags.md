@@ -35,13 +35,16 @@
 - `#Java/Streams`
 - `#Java/OOP`
 - `#Java/Concurrency`
+- `#Java/Exceptions`
 - `#Java/IO`
 - `#Java/Tooling`
 - `#Java/Tooling/Maven`
+- `#Java/JavaEE`
 - `#Java/Servlet`
 - `#Java/CGI`
 - `#Java/Listeners`
 - `#Java/JSP`
+- `#Java/JSP/JSTL`
 - `#Java/Spring`
 - `#Java/Spring/Core`
 - `#Java/Spring/Core/IoC`
@@ -93,6 +96,18 @@
 
 ### DistributedSystems
 - `#DistributedSystems/Communication`
+
+### Networking
+- `#Networking`
+- `#Networking/TCP`
+- `#Networking/UDP`
+- `#Networking/DNS`
+- `#Networking/Web`
+- `#Networking/Web/Protocols`
+- `#Networking/Web/Protocols/HTTP`
+- `#Networking/Web/Protocols/TLS`
+- `#Networking/Web/Cookies`
+- `#Networking/Web/Caching`
 
 ### API
 - `#API/REST`

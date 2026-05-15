@@ -1,4 +1,4 @@
-- [ ] Can a column referenced by a foreign key be NULL.md
+﻿- [ ] Can a column referenced by a foreign key be NULL.md
 - [x] Can a HashMap contain two equal keys at the same time.md
 - [ ] Can a Java interface declare a constructor.md
 - [ ] Can a Java interface declare private fields or variables.md
@@ -26,7 +26,7 @@
 - [ ] Can thread priority reliably control execution order in Java.md
 - [ ] Can you catch and handle java.lang.Error like normal exceptions.md
 - [x] Can you create two singleton beans of the same type in Spring.md
-- [ ] Can you declare a class inside a JSP page.md
+- [x] Can you declare a class inside a JSP page.md
 - [ ] Can you declare a narrower return type when overriding a method.md
 - [ ] Can you develop Java with only a JRE and no JDK.md
 - [x] Can you lose objects in a HashMap due to mutable or poorly chosen keys.md
@@ -36,7 +36,7 @@
 - [ ] Can you turn a Java array into a stream.md
 - [ ] Can you use a weaker access modifier when overriding a method.md
 - [ ] Can you use enhanced for with your own class in Java.md
-- [ ] Can you use JavaScript inside a JSP page.md
+- [x] Can you use JavaScript inside a JSP page.md
 - [ ] Can you use strings in a Java switch statement.md
 - [x] Can you use the Servlet request object in every Spring application.md
 - [ ] Compare compare and swap with fetch and add.md
@@ -78,7 +78,7 @@
 - [x] How can you apply dependency injection with a Spring bean.md
 - [ ] How can you avoid being forced to handle checked IOException.md
 - [ ] How can you check if a thread holds a monitor lock in Java.md
-- [ ] How can you extend JSP functionality.md
+- [x] How can you extend JSP functionality.md
 - [x] How can you lose a value in a HashMap.md
 - [ ] How can you test a program and reduce the risk of bugs.md
 - [ ] How did marker interfaces evolve and what largely replaced them.md
@@ -91,7 +91,7 @@
 - [x] How do execute, executeQuery, and executeUpdate differ in JDBC.md
 - [x] How do HashMap, TreeMap, and LinkedHashMap differ at a high level.md
 - [x] How do HashMap, TreeMap, and LinkedHashMap work at a high level.md
-- [ ] How do HTTP PUT and PATCH semantics differ.md
+- [x] How do HTTP PUT and PATCH semantics differ.md
 - [ ] How do Java access modifiers work.md
 - [ ] How do Java for, while, and do-while loops differ.md
 - [ ] How do Java methods accept parameters and return values.md
@@ -119,7 +119,7 @@
 - [ ] How do you compare objects for equality in Java.md
 - [ ] How do you compare primitive and wrapper values in Java.md
 - [ ] How do you compare primitive values in Java.md
-- [ ] How do you configure initialization parameters for a JSP.md
+- [x] How do you configure initialization parameters for a JSP.md
 - [ ] How do you connect a local repository to a remote Git repository.md
 - [x] How do you connect to a database and add logging in a servlet.md
 - [x] How do you convert a HashSet to an ArrayList in one line.md
@@ -144,13 +144,13 @@
 - [ ] How do you exclude fields from Java serialization.md
 - [ ] How do you find bugs in a program and avoid mistakes.md
 - [ ] How do you forbid NULL or empty values in a database column.md
-- [ ] How do you handle errors on JSP pages.md
+- [x] How do you handle errors on JSP pages.md
 - [ ] How do you handle exceptions in Java applications.md
 - [ ] How do you handle transaction isolation anomalies.md
 - [ ] How do you identify slow or non performant SQL queries.md
 - [ ] How do you implement a thread-safe singleton in Java.md
 - [ ] How do you implement an immutable class in Java.md
-- [ ] How do you insert a line break in HTML from JSP.md
+- [x] How do you insert a line break in HTML from JSP.md
 - [ ] How do you inspect the previous Git commit.md
 - [ ] How do you integrate a database with a Java application.md
 - [ ] How do you invoke a default interface method from an implementing class.md
@@ -164,9 +164,9 @@
 - [ ] How do you merge two divergent Git branches.md
 - [x] How do you obtain a read-only or unmodifiable collection in Java.md
 - [x] How do you obtain synchronized wrappers for standard Java collections.md
-- [ ] How do you optimize a high traffic web service.md
+- [x] How do you optimize a high traffic web service.md
 - [ ] How do you organize batch inserts for many rows.md
-- [ ] How do you populate a JavaBean or object attributes from a request.md
+- [x] How do you populate a JavaBean or object attributes from a request.md
 - [ ] How do you predict what a code snippet will do at runtime.md
 - [ ] How do you prevent duplicate message or packet delivery.md
 - [ ] How do you prevent Java object serialization.md
@@ -186,7 +186,6 @@
 - [ ] How do you stop a Java thread safely.md
 - [ ] How do you synchronize access in a multithreaded Java application.md
 - [x] How do you traverse a LinkedList in reverse without using get index.md
-- [ ] How do you troubleshoot record not found messages in web service logs.md
 - [ ] How do you turn a Java string into a char array.md
 - [x] How do you use dependency injection in practice.md
 - [ ] How do you use your own library in another Java project.md
@@ -217,7 +216,7 @@
 - [ ] How does Java model multiple inheritance with interfaces.md
 - [x] How does JDBC ResultSet behave and what configuration options exist.md
 - [x] What is the difference between JPQL and Hibernate HQL.md
-- [ ] How does JSTL handle errors.md
+- [x] How does JSTL handle errors.md
 - [ ] How does Kafka achieve horizontal scalability.md
 - [ ] How does Kafka provide fault tolerance.md
 - [ ] How does LEFT JOIN differ from INNER JOIN in SQL.md
@@ -261,7 +260,7 @@
 - [ ] How is Java runtime memory organized.md
 - [ ] How is java.lang.String implemented under the hood.md
 - [x] How is JSP configured in the web deployment descriptor.md
-- [ ] How is the JSTL tag library organized.md
+- [x] How is the JSTL tag library organized.md
 - [ ] How long do strings live in the Java string pool.md
 - [ ] How many bits are in one Java byte.md
 - [x] How many buckets can a HashMap table hold.md
@@ -322,7 +321,7 @@
 - [ ] How would you explain client side service discovery.md
 - [ ] How would you explain client side UI composition for micro frontends.md
 - [ ] How would you explain common guidelines for using inheritance in OOP.md
-- [ ] How would you explain common HTTP request methods.md
+- [x] How would you explain common HTTP request methods.md
 - [ ] How would you explain common levels and kinds of software testing.md
 - [ ] How would you explain common principles for scaling software systems.md
 - [ ] How would you explain common software design anti patterns.md
@@ -395,7 +394,7 @@
 - [x] What is Hibernate second level cache and its main components.md
 - [x] What is Hibernate SessionFactory.md
 - [ ] How would you explain horizontal database sharding.md
-- [ ] How would you explain HTTP cookies.md
+- [x] How would you explain HTTP cookies.md
 - [x] How would you explain HTTP sessions in servlet based applications.md
 - [x] How would you explain idempotent HTTP methods in REST APIs.md
 - [ ] How would you explain immutability and its benefits.md
@@ -445,7 +444,7 @@
 - [x] What is JDBC ResultSet.md
 - [x] What are JDBC Statement PreparedStatement and CallableStatement.md
 - [x] What are JPA fetch types for entity associations.md
-- [ ] How would you explain JSTL the JSP Standard Tag Library.md
+- [x] How would you explain JSTL the JSP Standard Tag Library.md
 - [ ] How would you explain JVM memory regions and how the garbage collector uses them.md
 - [ ] How would you explain key methods declared on java.lang.Object.md
 - [ ] How would you explain kinds of loops in Java.md
@@ -594,7 +593,7 @@
 - [ ] How would you explain the happens-before guarantee in the Java Memory Model.md
 - [ ] How would you explain the hashCode method contract in Java.md
 - [x] What is the health check API pattern.md
-- [ ] How would you explain the HTTP protocol at a high level.md
+- [x] How would you explain the HTTP protocol at a high level.md
 - [x] What are the initial capacity and load factor parameters of HashMap.md
 - [ ] How would you explain the Interface Segregation Principle in SOLID.md
 - [x] What is the internal structure of HashMap.md
@@ -607,7 +606,7 @@
 - [x] What is the Java Collections Framework interface hierarchy.md
 - [x] What is the Java Collections Framework.md
 - [ ] How would you explain the Java Development Kit JDK.md
-- [ ] How would you explain the Java EE web deployment descriptor.md
+- [x] How would you explain the Java EE web deployment descriptor.md
 - [ ] How would you explain the Java exception type hierarchy.md
 - [ ] How would you explain the Java ForkJoin framework.md
 - [ ] How would you explain the Java garbage collector.md
@@ -735,7 +734,7 @@
 - [ ] How would you explain UML diagrams notation and metamodel ideas.md
 - [ ] How would you explain UnaryOperator DoubleUnaryOperator IntUnaryOperator and LongUnaryOperator.md
 - [ ] How would you explain unit testing goals and practices.md
-- [ ] How would you explain URL rewriting for session tracking.md
+- [x] How would you explain URL rewriting for session tracking.md
 - [ ] How would you explain Venn diagrams for set intersections.md
 - [ ] How would you explain what a database management system provides.md
 - [ ] How would you explain what a Git branch is.md
@@ -771,7 +770,7 @@
 - [ ] Is a Java array a primitive or an object.md
 - [ ] Is a Java array a static or dynamic data structure.md
 - [ ] Is a primary key implemented as an index and why.md
-- [ ] Is a session object always created on a JSP page and can it be disabled.md
+- [x] Is a session object always created on a JSP page and can it be disabled.md
 - [x] Is a Spring bean a class or an object.md
 - [ ] Is caching only used with databases.md
 - [x] Is equals invoked when a HashMap bucket contains a single element.md
@@ -815,14 +814,14 @@
 - [ ] What are Java threads composed of.md
 - [ ] What are log4j logging levels in order of increasing severity.md
 - [x] What are map and mapToInt for in Java streams.md
-- [ ] What are practical guidelines for working with JSP.md
+- [x] What are practical guidelines for working with JSP.md
 - [ ] What are programming design patterns for.md
 - [x] What are servlet attributes for and how do they work.md
 - [x] What are Spring bean scopes for.md
 - [x] What are the advantages of servlets over CGI.md
 - [ ] What are the advantages of the Builder pattern over constructors.md
 - [x] What are the defining properties of a database transaction.md
-- [ ] What are the implicit EL scope objects in JSP and how do they differ from servlet scoped objects.md
+- [x] What are the implicit EL scope objects in JSP and how do they differ from servlet scoped objects.md
 - [ ] What are the key base exception types in Java.md
 - [ ] What are the main characteristics of software design patterns.md
 - [ ] What are the main functions of an operating system.md
@@ -864,10 +863,10 @@
 - [ ] What difficulties arise when working with caching.md
 - [ ] What do checked and unchecked exceptions mean in Java.md
 - [ ] What do INTERSECT and EXCEPT do in Transact-SQL.md
-- [ ] What do you know about authoring custom JSP tags.md
-- [ ] What do you know about the JSP Expression Language.md
+- [x] What do you know about authoring custom JSP tags.md
+- [x] What do you know about the JSP Expression Language.md
 - [ ] What does a Java class consist of.md
-- [ ] What does a typical Java web application project structure look like.md
+- [x] What does a typical Java web application project structure look like.md
 - [ ] What does it mean that Java is object oriented.md
 - [ ] What does it mean to put a Java thread to sleep.md
 - [ ] What does Maven provide during a typical Java build.md
@@ -906,7 +905,7 @@
 - [x] What happens when you request the same singleton bean twice from ApplicationContext.md
 - [ ] What harmful SQL patterns or pitfalls do you know.md
 - [ ] What have you learned or read recently that you would recommend.md
-- [ ] What HTTP request methods exist.md
+- [x] What HTTP request methods exist.md
 - [ ] What ideas sit at the center of the functional programming paradigm.md
 - [ ] What information should a task from an analyst typically include.md
 - [ ] What interesting engineering problems have you solved.md
@@ -953,7 +952,7 @@
 - [ ] What is an Euler tour.md
 - [x] What is an example of a one to many relationship in databases or JPA.md
 - [ ] What is an example of a relational database and a non relational database.md
-- [ ] What is an example of using custom JSP tags.md
+- [x] What is an example of using custom JSP tags.md
 - [ ] What is an observation in machine learning.md
 - [ ] What is an operating system.md
 - [ ] What is automatic identity or autoincrement in different databases.md
@@ -1069,7 +1068,7 @@
 - [x] What is the difference between dependency injection and dependency inversion.md
 - [x] What is the difference between dependency injection and inversion of control.md
 - [x] What is the difference between Docker containers and virtual machines.md
-- [ ] What is the difference between dynamic and static content in JSP.md
+- [x] What is the difference between dynamic and static content in JSP.md
 - [x] What is the difference between Enumeration and Iterator in Java.md
 - [ ] What is the difference between equals and hashCode contracts.md
 - [ ] What is the difference between final finally and finalize.md
@@ -1079,15 +1078,15 @@
 - [x] What is the difference between HashMap and IdentityHashMap.md
 - [x] What is the difference between HashMap and WeakHashMap.md
 - [x] What is the difference between HashMap put and computeIfAbsent.md
-- [ ] What is the difference between HTTP GET and POST.md
-- [ ] What is the difference between HTTP request methods.md
+- [x] What is the difference between HTTP GET and POST.md
+- [x] What is the difference between HTTP request methods.md
 - [ ] What is the difference between inheritance and polymorphism.md
 - [ ] What is the difference between interrupted and isInterrupted in Java.md
 - [ ] What is the difference between Java Collection APIs and streams.md
 - [ ] What is the difference between java.lang.Error and java.lang.Exception.md
 - [x] What is the difference between JPA as a specification and Hibernate.md
 - [x] What is the difference between JPA FetchType lazy and eager.md
-- [ ] What is the difference between JspWriter and servlet PrintWriter.md
+- [x] What is the difference between JspWriter and servlet PrintWriter.md
 - [ ] What is the difference between object oriented and functional programming styles.md
 - [x] What is the difference between PreparedStatement and Statement in JDBC.md
 - [ ] What is the difference between PRIMARY KEY and UNIQUE constraints.md
@@ -1252,7 +1251,6 @@
 - [ ] What kinds of problems does SQL JOIN solve.md
 - [x] What kinds of proxies exist in Java or Spring.md
 - [x] What kinds of queries can Hibernate run.md
-- [ ] What kinds of queries or requests do you know in SQL or HTTP.md
 - [ ] What kinds of SQL JOIN exist.md
 - [ ] What kinds of stream operations exist in Java.md
 - [ ] What kinds of tasks have you solved on past projects.md
@@ -1273,9 +1271,9 @@
 - [x] What need did HashMap address compared to older maps.md
 - [ ] What non Java technical books have you read.md
 - [ ] What notable features does Java NIO offer.md
-- [ ] What operator types exist in the JSP Expression Language.md
+- [x] What operator types exist in the JSP Expression Language.md
 - [ ] What options exist for handling checked exceptions in Java.md
-- [ ] What options send data from an HTTP client to a server.md
+- [x] What options send data from an HTTP client to a server.md
 - [ ] What ordering guarantees does Kafka provide for messages.md
 - [x] What parts make up a JDBC URL.md
 - [ ] What practical benefits does encapsulation bring to large systems.md
@@ -1300,7 +1298,7 @@
 - [x] What scopes can Spring beans have.md
 - [ ] What search algorithms exist for arrays.md
 - [ ] What security related technologies have you worked with.md
-- [ ] What servlet authentication mechanisms exist.md
+- [x] What servlet authentication mechanisms exist.md
 - [ ] What should you use for complex queries with many parameters.md
 - [ ] What simple approach would you use to implement an in memory cache.md
 - [ ] What sits at the root of every Java exception.md
@@ -1328,7 +1326,7 @@
 - [ ] What types of database indexes exist.md
 - [x] What types of dependency injection exist.md
 - [x] What typical responsibilities does a servlet container have.md
-- [ ] What variable scopes exist in JSP.md
+- [x] What variable scopes exist in JSP.md
 - [ ] What was the main command or workflow you used on your last project.md
 - [ ] What was your role on your last project and what did you own.md
 - [x] What ways exist to configure a Spring application.md
@@ -1346,7 +1344,7 @@
 - [x] When is ArrayList faster than LinkedList and when is it slower.md
 - [x] When is Java configuration more convenient than XML configuration in Spring.md
 - [x] When is Java configuration preferable to annotation-based configuration.md
-- [ ] When must you override the service method in a Java servlet.md
+- [x] When must you override the service method in a Java servlet.md
 - [ ] When should you change serialVersionUID.md
 - [ ] When should you override equals in Java.md
 - [ ] When should you prefer JOINs versus subqueries in SQL.md
@@ -1370,7 +1368,7 @@
 - [ ] Where should you prefer inheritance versus aggregation.md
 - [x] Which annotations tell Spring to create beans from your classes.md
 - [x] Which classes implement the Java List interface.md
-- [ ] Which common HTTP methods are not idempotent.md
+- [x] Which common HTTP methods are not idempotent.md
 - [x] Which common Spring Boot starters do you know.md
 - [x] Which data structure underlies Java LinkedList.md
 - [ ] Which data type is best for entity identifiers.md
@@ -1381,7 +1379,7 @@
 - [ ] Which functional interface does Stream map use.md
 - [ ] Which functional interface represents a filter or predicate in the Stream API.md
 - [ ] Which has the highest abstraction level among class abstract class and interface.md
-- [ ] Which implicit JSP objects are unavailable on a plain JSP page.md
+- [x] Which implicit JSP objects are unavailable on a plain JSP page.md
 - [ ] Which inversion of control containers or frameworks do you know.md
 - [ ] Which Java 8 class supports Base64 encoding and decoding.md
 - [x] Which Java class implements a resizable dynamic array.md
@@ -1392,7 +1390,7 @@
 - [ ] Which Java syntax elements express inheritance.md
 - [ ] Which Java versions have you used professionally.md
 - [ ] Which java.lang.Object methods are most commonly used.md
-- [ ] Which JSP lifecycle methods can be overridden.md
+- [x] Which JSP lifecycle methods can be overridden.md
 - [ ] Which JVM flags are commonly set when launching a Java process.md
 - [ ] Which keyword throws an exception in Java.md
 - [ ] Which mechanism implements parallel streams in Java.md
@@ -1426,7 +1424,7 @@
 - [x] Which tree data structure backs Java TreeSet.md
 - [ ] Which university did you attend.md
 - [ ] Which variables can lambda expressions access in Java.md
-- [ ] Why are built in JSP tags not configured in web.xml.md
+- [x] Why are built in JSP tags not configured in web.xml.md
 - [ ] Why are clear behavioral contracts important in Java APIs.md
 - [ ] Why are immutable objects valuable in concurrent code.md
 - [x] Why are mutable keys such as byte arrays risky in a HashMap.md
@@ -1436,7 +1434,7 @@
 - [ ] Why can two unequal objects share the same hashCode value.md
 - [ ] Why did you choose or stick with the Java platform.md
 - [ ] Why do Java primitive types have bounded numeric ranges.md
-- [ ] Why do servlets use listeners.md
+- [x] Why do servlets use listeners.md
 - [x] Why does each collection class supply its own Iterator implementation.md
 - [ ] Why does Java disallow multiple class inheritance.md
 - [x] Why does Java provide EnumSet in addition to HashSet and TreeSet.md
@@ -1473,7 +1471,7 @@
 - [ ] Why run a program on multiple threads instead of one.md
 - [ ] Why should arbitrary objects not be compared with double equals in Java.md
 - [ ] Why should equals and hashCode be overridden together.md
-- [ ] Why should JSP scriptlets be avoided in modern applications.md
-- [ ] Why use Java EE application servers when servlet containers exist.md
+- [x] Why should JSP scriptlets be avoided in modern applications.md
+- [x] Why use Java EE application servers when servlet containers exist.md
 - [x] Why was ArrayList added when Vector already existed.md
 - [ ] Would you remove checked exceptions from Java if you could redesign the language.md

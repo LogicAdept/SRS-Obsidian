@@ -330,15 +330,12 @@ _(gRPC — в исходном списке вопросов нет)_
 - [ ] What typical responsibilities does a servlet container have.md
 - [ ] Why is HttpServlet declared as an abstract class.md
 - [ ] How does a servlet container manage the servlet lifecycle.md
-- [ ] How do you troubleshoot record not found messages in web service logs.md
 
 ### Опыт проектирования и документирования API
 - [ ] How would you design a delete operation or endpoint.md
 - [ ] What is Swagger for.md
 - [ ] What is the difference between RequestMapping and PutMapping.md
 - [ ] What options send data from an HTTP client to a server.md
-- [ ] What kinds of queries or requests do you know in SQL or HTTP.md
-
 ### Практический опыт работы с PostgreSQL / MySQL / Oracle
 - [ ] Can a column referenced by a foreign key be NULL.md
 - [ ] How are indexes implemented in relational databases.md
