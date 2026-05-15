@@ -16,11 +16,7 @@
 
 **Неполный путь (не лист):** допустимо указать тег **короче**, чем самый глубокий известный префикс в дереве ниже, если **нет дочернего тега**, который по смыслу подошёл бы заметно лучше. Если подходящий лист уже есть в дереве — предпочитай его (и не дублируй вместе с его родителем на одной карточке, см. абзац выше).
 
-**Проблемы и антипаттерны:** для карточек про **ошибки, риски и антипаттерны** используй отдельное дерево **`#Problems/...`** (не внутри `#Java/...`), чтобы срез «подводные камни» не смешивался с изучением API. Тематический тег области (**`#Java/Persistence/Hibernate`**, **`#Java/JDBC`**, **`#Java/IO`** и т.д.) **оставляй** первым по смыслу; лист из **`#Problems/...`** добавляй вторым — для выборки «все проблемы по персистентности» и т.п. Сейчас в дереве есть **`#Problems/Persistence`** (ORM, JDBC, SQL, транзакции в постановке «что ломается»); узкие дочерние теги добавляй по мере необходимости.
-
 **Расширение:** новые заметки по возможности **расширяют это дерево** (новые подтеги под уже принятыми корнями), а не вводят **параллельные теги-синонимы** одного и того же понятия. Если для сущности уже закреплён путь (например Kubernetes только как `#DevOps/Tools/Kubernetes`), не добавлять второй корень без причины (`#Kubernetes` рядом с тем же смыслом). Для разных видов API используй префикс **`#API/`** и лист **`#API/<Вид>`** (например `#API/REST`), а не отдельные корни вроде `#REST` и не ветку под `Patterns`.
-
-**Spring Core и IoC-контейнер:** обзорные карточки про Spring как продукт/экосистему/идеи (**«что такое Spring»**, какие проблемы решает), а также **DI, стереотипы, scopes, жизненный цикл бина, сканирование как набор аннотаций, BeanPostProcessor, порядок внедрения** — на **`#Java/Spring/Core`**. Лист **`#Java/Spring/Core/IoC`** — только про **детали использования именно IoC-контейнера как контекста**: что такое **`ApplicationContext`**, **несколько контекстов**, **загрузка и приоритет конфигурации метаданных контекста** (XML / Java-config / аннотации, смешение источников), **сравнение «обычный контекст» и Boot в части контекста**, явное **обращение к контейнеру за бином** (например повторный запрос singleton из контекста), формулировки **«IoC-контейнер» / «контейнер инверсии управления» в практическом смысле**. На ту же карточку **не** дублируй `#Java/Spring/Core` вместе с `#Java/Spring/Core/IoC` (см. правило про родителя и лист выше).
 
 **Новый тег, если тема не влезает:** если для карточки **нет подходящего листа** в дереве (нет смысла маскировать тему под «почти подходящий» тег), **не натягивай** ближайший похожий. Добавь в **`Tags.md`** в раздел **«Дерево»** новый префикс под **логичным корнем** (или новый корень, например **`#SQL/...`** для языка SQL вне JVM) и затем используй этот тег на карточке. Дерево и выборки по тегам должны отражать предмет честно.
 
@@ -37,8 +33,15 @@
 - `#Java/Collections/Iteration`
 - `#Java/Collections/Concurrency`
 - `#Java/Streams`
+- `#Java/OOP`
+- `#Java/Concurrency`
 - `#Java/IO`
+- `#Java/Tooling`
+- `#Java/Tooling/Maven`
 - `#Java/Servlet`
+- `#Java/CGI`
+- `#Java/Listeners`
+- `#Java/JSP`
 - `#Java/Spring`
 - `#Java/Spring/Core`
 - `#Java/Spring/Core/IoC`
@@ -85,6 +88,9 @@
 - `#DSA/Algorithms/Search`
 - `#DSA/DataStructures/Graph`
 
+### Paradigms
+- `#Paradigms/OOP`
+
 ### DistributedSystems
 - `#DistributedSystems/Communication`
 
@@ -111,7 +117,6 @@
 - `#Patterns/Enterprise/Integration/Transformation`
 - `#Patterns/Enterprise/Integration/Endpoints`
 - `#Patterns/Enterprise/Integration/Management`
-- `#Patterns/Concurrency`
 - `#Patterns/DistributedSystems`
 - `#Patterns/Cloud`
 - `#Patterns/Architecture/UI`
@@ -132,10 +137,24 @@
 - `#Methodologies/Principles/DRY`
 - `#Methodologies/Principles/KISS`
 - `#Methodologies/Principles/IoC`
+- `#Methodologies/Principles/DependencyInjection`
 - `#Methodologies/Principles/YAGNI`
 - `#Methodologies/Principles/SeparationOfConcerns`
 - `#Methodologies/Principles/TellDontAsk`
 - `#Methodologies/Principles/LawOfDemeter`
+
+### Career
+- `#Career`
+- `#Career/Interview`
+- `#Career/Experience`
+- `#Career/Behavioral`
+
+### Build
+- `#Build/Tools`
+- `#Build/Tools/Maven`
+- `#Build/Tools/Gradle`
+- `#Build/Tools/Ant`
+- `#Build/Tools/CMake`
 
 ### DevOps
 - `#DevOps/Tools/Docker`
