@@ -20,6 +20,18 @@
 
 **Новый тег, если тема не влезает:** если для карточки **нет подходящего листа** в дереве (нет смысла маскировать тему под «почти подходящий» тег), **не натягивай** ближайший похожий. Добавь в **`Tags.md`** в раздел **«Дерево»** новый префикс под **логичным корнем** (или новый корень, например **`#SQL/...`** для языка SQL вне JVM) и затем используй этот тег на карточке. Дерево и выборки по тегам должны отражать предмет честно.
 
+**`#Java/Language`:** сам язык Java — **синтаксис**, **ключевые слова**, базовые **конструкции** (`switch`, `for`/`while`, блоки `try`/`catch`/`finally`, объявления, приведения), когда акцент не на ООП, коллекциях и предметном API пакетов. Пересечение с `#Java/OOP` или `#Java/Exceptions` допустимо, если смешаны уровни.
+
+**`#Java/Generics`:** **обобщения** в Java: параметры типа, wildcards, ограничения, стирание (erasure), связь с байткодом и JVM — когда тема именно про систему типов с дженериками, а не про «просто синтаксис» или только коллекции без дженериков.
+
+**`#Testing`:** **тестирование** как практика и подходы (автотесты, пирамида, регресс, моки), **вне** узкого контекста Spring (`#Java/Spring/Framework/Testing` остаётся для Spring Test).
+
+**`#Databases/Indexes`:** **индексы** в реляционных (и сходных) СУБД: создание, селективность, кардинальность, планы запросов — отдельно от общего тега `#Databases` и транзакций.
+
+**`#DevOps/Cloud`:** **облачные платформы** и управляемые сервисы (IaaS/PaaS, сеть, IAM, биллинг), практический опыт работы — **не** то же самое, что **`#Patterns/Cloud`** (архитектурные паттерны и стили в облачных системах, а не «пользовался ли AWS/Azure»).
+
+**`#Patterns/Cloud`:** паттерны и **архитектурные** идеи в облачном контексте (например сочетание сервисов, границы), когда речь не про личный опыт с конкретным провайдером.
+
 ---
 
 ## Дерево (префиксы в карточках)
@@ -36,9 +48,15 @@
 - `#Java/OOP`
 - `#Java/Concurrency`
 - `#Java/Exceptions`
+- `#Java/Language`
+- `#Java/Generics`
 - `#Java/IO`
+- `#Java/JVM`
+- `#Java/JVM/GarbageCollector`
+- `#Java/JDK`
 - `#Java/Tooling`
 - `#Java/Tooling/Maven`
+- `#Java/Tooling/Gradle`
 - `#Java/JavaEE`
 - `#Java/Servlet`
 - `#Java/CGI`
@@ -76,12 +94,19 @@
 - `#Java/Persistence/JPA`
 - `#Java/Persistence/Hibernate`
 
+### Testing
+- `#Testing`
+
+### Kotlin
+- `#Kotlin`
+
 ### SQL
 - `#SQL`
 - `#SQL/Transactions`
 
 ### Databases
 - `#Databases`
+- `#Databases/Indexes`
 - `#Databases/Transactions`
 
 ### Problems
@@ -162,6 +187,7 @@
 - `#Career`
 - `#Career/Interview`
 - `#Career/Experience`
+- `#Career/Java`
 - `#Career/Behavioral`
 
 ### Build
@@ -178,6 +204,7 @@
 - `#DevOps/Virtualisation`
 - `#DevOps/Orchestration`
 - `#DevOps/Configuration`
+- `#DevOps/Cloud`
 - `#DevOps/Deployment`
 - `#DevOps/Deployment/Strategies`
 

@@ -1,66 +1,66 @@
-﻿- [ ] Can a column referenced by a foreign key be NULL.md
+﻿- [x] Can a column referenced by a foreign key be NULL.md
 - [x] Can a HashMap contain two equal keys at the same time.md
-- [ ] Can a Java interface declare a constructor.md
-- [ ] Can a Java interface declare private fields or variables.md
-- [ ] Can a Java interface declare private methods.md
+- [x] Can a Java interface declare a constructor.md
+- [x] Can a Java interface declare private fields or variables.md
+- [x] Can a Java interface declare private methods.md
 - [x] Can a JPA entity class be abstract.md
-- [ ] Can a method be abstract and static at the same time.md
+- [x] Can a method be abstract and static at the same time.md
 - [x] Can a primitive value be used directly as a Map key in Java.md
 - [x] Can a servlet use PrintWriter and ServletOutputStream on the same response.md
 - [x] Can a Spring controller be missing from the application context.md
 - [x] Can a TreeSet contain null.md
-- [ ] Can a try block exist without a catch in Java.md
-- [ ] Can an instance method overload a static method in Java.md
+- [x] Can a try block exist without a catch in Java.md
+- [x] Can an instance method overload a static method in Java.md
 - [x] Can dependency injection use mechanisms other than constructor injection.md
-- [ ] Can developers control garbage collection or JVM memory settings.md
+- [x] Can developers control garbage collection or JVM memory settings.md
 - [x] Can HashMap degrade to a linked list when keys have different hashCodes.md
-- [ ] Can Java code manually control which thread holds a monitor.md
+- [x] Can Java code manually control which thread holds a monitor.md
 - [x] Can keys be duplicated in a Java Map.md
-- [ ] Can main throw exceptions outward and where are they handled.md
-- [ ] Can one catch block handle multiple exception types in Java.md
-- [ ] Can one object access another class private fields in Java.md
-- [ ] Can primitive values reside on the Java heap.md
-- [ ] Can static methods be overridden in Java.md
-- [ ] Can the main thread be turned into a daemon thread.md
-- [ ] Can the same primary key value appear in two rows of one table.md
-- [ ] Can thread priority reliably control execution order in Java.md
-- [ ] Can you catch and handle java.lang.Error like normal exceptions.md
+- [x] Can main throw exceptions outward and where are they handled.md
+- [x] Can one catch block handle multiple exception types in Java.md
+- [x] Can one object access another class private fields in Java.md
+- [x] Can primitive values reside on the Java heap.md
+- [x] Can static methods be overridden in Java.md
+- [x] Can the main thread be turned into a daemon thread.md
+- [x] Can the same primary key value appear in two rows of one table.md
+- [x] Can thread priority reliably control execution order in Java.md
+- [x] Can you catch and handle java.lang.Error like normal exceptions.md
 - [x] Can you create two singleton beans of the same type in Spring.md
 - [x] Can you declare a class inside a JSP page.md
-- [ ] Can you declare a narrower return type when overriding a method.md
-- [ ] Can you develop Java with only a JRE and no JDK.md
+- [x] Can you declare a narrower return type when overriding a method.md
+- [x] Can you develop Java with only a JRE and no JDK.md
 - [x] Can you lose objects in a HashMap due to mutable or poorly chosen keys.md
-- [ ] Can you override a constructor the same way you override a method.md
+- [x] Can you override a constructor the same way you override a method.md
 - [x] Can you populate a Map from a collection of entries or key value pairs.md
-- [ ] Can you run a compiled Java application with only a JRE installed.md
-- [ ] Can you turn a Java array into a stream.md
-- [ ] Can you use a weaker access modifier when overriding a method.md
-- [ ] Can you use enhanced for with your own class in Java.md
+- [x] Can you run a compiled Java application with only a JRE installed.md
+- [x] Can you turn a Java array into a stream.md
+- [x] Can you use a weaker access modifier when overriding a method.md
+- [x] Can you use enhanced for with your own class in Java.md
 - [x] Can you use JavaScript inside a JSP page.md
-- [ ] Can you use strings in a Java switch statement.md
+- [x] Can you use strings in a Java switch statement.md
 - [x] Can you use the Servlet request object in every Spring application.md
-- [ ] Compare compare and swap with fetch and add.md
+- [x] Compare compare and swap with fetch and add.md
 - [x] Compare HashMap and TreeMap tradeoffs.md
 - [x] Compare Iterator and ListIterator capabilities.md
-- [ ] Do Java classes inherit from Object explicitly or implicitly.md
-- [ ] Do you use Maven or Gradle for Java project builds.md
-- [ ] Does a java.io.File instance represent only a path without opening the file.md
-- [ ] Does a static nested class have a constructor in Java.md
+- [x] Do Java classes inherit from Object explicitly or implicitly.md
+- [x] Do you use Maven or Gradle for Java project builds.md
+- [x] Does a java.io.File instance represent only a path without opening the file.md
+- [x] Does a static nested class have a constructor in Java.md
 - [x] Does ArrayList always add elements in O(1) time.md
 - [x] Does HashMap guarantee its documented lookup time complexity.md
-- [ ] Does it make sense to index low-cardinality columns.md
-- [ ] Does Java pass arguments by reference or by value.md
-- [ ] Does Java support multiple inheritance for classes.md
+- [x] Does it make sense to index low-cardinality columns.md
+- [x] Does Java pass arguments by reference or by value.md
+- [x] Does Java support multiple inheritance for classes.md
 - [x] Does LinkedList implement Queue and Deque in Java.md
 - [x] Does the Java Stream API optimize for lists that implement RandomAccess.md
 - [x] Does the Stream API use an Iterator internally.md
-- [ ] Have you built multithreaded projects.md
-- [ ] Have you used Java outside your main job or project.md
-- [ ] Have you used Kotlin.md
-- [ ] Have you worked with cloud services.md
-- [ ] Have you written automated tests.md
+- [x] Have you built multithreaded projects.md
+- [x] Have you used Java outside your main job or project.md
+- [x] Have you used Kotlin.md
+- [x] Have you worked with cloud services.md
+- [x] Have you written automated tests.md
 - [x] How and when does HashMap resize its buckets.md
-- [ ] How are generics implemented in Java.md
+- [x] How are generics implemented in Java.md
 - [ ] How are hashCode and equals implemented in java.lang.Object.md
 - [ ] How are immutable objects used in Java APIs.md
 - [ ] How are indexes implemented in relational databases.md
