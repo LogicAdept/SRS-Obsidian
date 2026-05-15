@@ -1,0 +1,672 @@
+# Вопросы из md-file-names.txt, сгруппированные по ожиданиям вакансии.
+# Каждая строка отнесена к одной основной группе (пересечения — по наиболее узкой теме).
+
+## Наши ожидания
+
+### Коммерческий опыт разработки на Java 11+
+- [ ] Can a Java interface declare private methods.md
+- [ ] Can you turn a Java array into a stream.md
+- [ ] Have you written automated tests.md
+- [ ] How would you explain notable language changes in recent Java versions.md
+- [x] What is the Java Stream API.md
+- [x] Which new Map methods were added in Java 8.md
+- [ ] Which Java versions have you used professionally.md
+- [ ] How would you explain try with resources in Java.md
+
+### Практический опыт реализации многопоточности в приложениях
+- [ ] Have you built multithreaded projects.md
+- [ ] Compare compare and swap with fetch and add.md
+- [ ] Can Java code manually control which thread holds a monitor.md
+- [x] How can a single-threaded program get ConcurrentModificationException.md
+- [ ] How can you check if a thread holds a monitor lock in Java.md
+- [ ] How do servlets work in a multithreaded environment.md
+- [ ] How do the stack and heap differ for multithreading in Java.md
+- [ ] How do you capture a Java thread dump.md
+- [ ] How do you choose the size of a thread pool.md
+- [ ] How do you create a thread in Java.md
+- [ ] How do you implement a thread-safe singleton in Java.md
+- [ ] How do you run a class instance on its own thread.md
+- [ ] How do you share data between two threads in Java.md
+- [ ] How do you stop a Java thread safely.md
+- [ ] How do you synchronize access in a multithreaded Java application.md
+- [ ] How does data move between the stack and the heap in Java.md
+- [x] How does Hashtable differ from ConcurrentHashMap.md
+- [ ] How does multithreading differ from parallelism and async work.md
+- [ ] How does notify differ from notifyAll in Java.md
+- [ ] How does Object wait with a timeout differ from wait without arguments.md
+- [ ] How does the Java Memory Model define visibility and ordering.md
+- [ ] How does Thread.join work in Java.md
+- [ ] How does Thread.sleep differ from Thread.yield.md
+- [ ] How does volatile visibility differ from atomicity for compound updates.md
+- [x] How do you avoid ConcurrentModificationException while iterating a collection.md
+- [x] How do you obtain synchronized wrappers for standard Java collections.md
+- [ ] How would you explain blocking versus non blocking methods in IO and concurrency.md
+- [ ] How would you explain busy spin or busy waiting in concurrent code.md
+- [ ] How would you explain compare and swap CAS and fetch and add FAA.md
+- [ ] How would you explain compare and swap CAS in concurrent algorithms.md
+- [ ] How would you explain CompletableFuture for composing async work.md
+- [ ] How would you explain concurrency in software systems.md
+- [x] What are CopyOnWriteArrayList thread safety tradeoffs.md
+- [ ] How would you explain daemon threads in Java.md
+- [ ] How would you explain deadlock between threads or resources.md
+- [ ] How would you explain fetch and add FAA in concurrent programming.md
+- [ ] How would you explain FutureTask in Java concurrency.md
+- [ ] How would you explain Java atomic types in java.util.concurrent.atomic.md
+- [x] What are Java CopyOnWrite collections.md
+- [ ] How would you explain java.util.concurrent.Future style asynchronous results.md
+- [ ] How would you explain java.util.concurrent.Phaser.md
+- [ ] How would you explain monitor locks and intrinsic locks in Java.md
+- [ ] How would you explain multithreading fundamentals in Java.md
+- [ ] How would you explain non blocking and lock free synchronization ideas.md
+- [ ] How would you explain parallel streams in Java.md
+- [ ] How would you explain race conditions in concurrent programs.md
+- [ ] How would you explain ReadWriteLock for reader writer coordination.md
+- [x] What is the difference between sequential and parallel streams in Java.md
+- [ ] How would you explain semaphores for limiting concurrent access.md
+- [ ] How would you explain synchronization with synchronized and locks in Java.md
+- [ ] How would you explain synchronized blocks in Java and common pitfalls.md
+- [ ] How would you explain the Callable interface in Java.md
+- [ ] How would you explain the ExecutorService interface in Java.md
+- [ ] How would you explain the Future interface in java.util.concurrent.md
+- [ ] How would you explain the happens-before guarantee in the Java Memory Model.md
+- [ ] How would you explain the Java ForkJoin framework.md
+- [ ] How would you explain the java.util.concurrent package.md
+- [ ] How would you explain the Object wait method and waiting on monitors.md
+- [ ] How would you explain the Runnable interface in Java.md
+- [ ] How would you explain the volatile field modifier in Java.md
+- [ ] How would you explain thread pools and executor frameworks in Java.md
+- [ ] How would you explain thread safety for shared mutable state.md
+- [ ] How would you explain ThreadLocal variables in Java.md
+- [ ] How would you explain InterruptedException in Java threads.md
+- [x] What is fail-fast iterator behavior in Java collections.md
+- [ ] How would you explain ResultSet types scrolling and concurrency modes.md
+- [ ] Is java.util.HashMap thread safe.md
+- [ ] Is there a universal fix for race conditions in concurrent code.md
+- [ ] On which object does a static synchronized method acquire a lock.md
+- [ ] What advantages does ExecutorService offer over creating raw threads.md
+- [ ] What are Future and CompletableFuture for in Java.md
+- [ ] What are Java threads composed of.md
+- [x] What backs Java parallelStream under the hood.md
+- [ ] What does volatile on a reference field guarantee for visibility.md
+- [ ] What happens when a thread pool queue is full and a new task arrives.md
+- [ ] What happens when an uncaught exception escapes a thread run method.md
+- [ ] What is CompletableFuture for.md
+- [ ] What is double checked locking for a singleton.md
+- [ ] What is the difference between a race condition and a data race.md
+- [ ] What is the difference between an OS process and a Java thread.md
+- [ ] What is the difference between CyclicBarrier and CountDownLatch.md
+- [ ] What is the difference between submit and execute on an executor service.md
+- [ ] What is the difference between synchronized and ReentrantLock.md
+- [ ] What is the difference between synchronized blocks and java.util.concurrent locks.md
+- [x] What is the difference between thread safe and non thread safe collections.md
+- [ ] What is the difference between volatile fields and atomic variables.md
+- [ ] What is the smallest schedulable unit of work in Java threads.md
+- [ ] What is the synchronized keyword for in Java.md
+- [ ] What principles do you follow in multithreaded Java programming.md
+- [x] What thread-safe collections exist in Java.md
+- [ ] What task types can you submit to an ExecutorService.md
+- [ ] What synchronization mechanisms exist in Java.md
+- [ ] Which mechanism implements parallel streams in Java.md
+- [ ] Why are immutable objects valuable in concurrent code.md
+- [ ] Why does the Java Memory Model matter for concurrency.md
+- [ ] Why is Thread.stop deprecated and unsafe.md
+- [ ] Why must wait and notify run inside synchronized blocks.md
+- [ ] Why run a program on multiple threads instead of one.md
+- [x] Can you lose objects in a HashMap due to mutable or poorly chosen keys.md
+- [x] Why are mutable keys such as byte arrays risky in a HashMap.md
+- [x] Why is a byte array a poor or unsafe choice for a HashMap key.md
+- [ ] How does NIO provide non-blocking access to resources.md
+- [ ] How would you explain advantages of Java NIO over classic blocking IO.md
+
+### Понимание устройства JVM и принципов работы Garbage Collector
+- [ ] Can developers control garbage collection or JVM memory settings.md
+- [ ] How do you diagnose memory pressure and OutOfMemoryError.md
+- [ ] How does garbage collection treat cyclic references between live objects.md
+- [ ] How does garbage collection work on the JVM.md
+- [ ] How does the garbage collector decide an object can be collected.md
+- [ ] How does the JVM decide an object is garbage.md
+- [ ] How does the JVM help Java bytecode run across operating systems.md
+- [ ] How is Java runtime memory organized.md
+- [ ] How would you explain errors that surface at the JVM level.md
+- [ ] How would you explain Java class loaders and dynamic class loading.md
+- [ ] How would you explain JVM memory regions and how the garbage collector uses them.md
+- [ ] How would you explain major garbage collector algorithms on the JVM.md
+- [ ] How would you explain the finalize method and why it is discouraged.md
+- [ ] How would you explain the Java garbage collector.md
+- [ ] How would you explain the Java stack and heap.md
+- [ ] How would you explain the Java Virtual Machine JVM.md
+- [ ] How would you explain the JVM execution engine.md
+- [ ] How would you explain the JVM stack and stack frames.md
+- [ ] How would you explain the two main JVM memory regions stack and heap.md
+- [ ] How would you explain tuning garbage collector settings on the JVM.md
+- [ ] How would you explain what a JVM stack frame represents.md
+- [ ] How would you explain what counts as garbage from the JVM perspective.md
+- [ ] What happens in the JVM when a Java application starts.md
+- [ ] What JVM runtime memory regions exist.md
+- [ ] What structures does the garbage collector analyze to find garbage.md
+- [ ] Which JVM flags are commonly set when launching a Java process.md
+- [ ] Which memory region holds objects in Java.md
+- [ ] Which memory region holds reference types in Java.md
+- [ ] Which memory region holds static fields and methods in Java.md
+- [ ] Which memory region holds strings in Java.md
+- [ ] Which memory region holds the string pool in Java.md
+
+### Опыт работы с фреймворками Spring и/или Quarkus
+_(Quarkus — в исходном списке вопросов нет)_
+- [x] Can a Spring controller be missing from the application context.md
+- [x] Can dependency injection use mechanisms other than constructor injection.md
+- [x] Can you create two singleton beans of the same type in Spring.md
+- [x] Can you use the Servlet request object in every Spring application.md
+- [x] How are Spring beans initialized.md
+- [x] How can you apply dependency injection with a Spring bean.md
+- [x] How do servlet filters Spring MVC interceptors and web listeners differ.md
+- [x] What is the difference between Spring Component, Repository, and Service stereotypes.md
+- [x] What is the difference between Spring stereotype component annotations.md
+- [x] How do you create a REST service quickly.md
+- [x] How do you create a singleton Spring bean at application startup.md
+- [x] How do you create a Spring MVC controller.md
+- [x] How do you register a servlet in Spring.md
+- [x] How do you use dependency injection in practice.md
+- [x] How do you work effectively with the Spring framework.md
+- [x] What is the difference between a plain Java object and a Spring bean.md
+- [x] How does a prototype Spring bean behave when injected into a singleton.md
+- [x] How does a Spring application call another service.md
+- [x] What is the difference between a Spring configuration class and a component class.md
+- [x] What is the relationship between a Spring stereotype component and a Spring bean.md
+- [x] How does DispatcherServlet choose which handler method to invoke.md
+- [x] What is the difference between Spring RestController and Controller.md
+- [x] How does Spring Boot auto-configure beans when you add a dependency.md
+- [x] What is the difference between Spring Boot and the core Spring Framework.md
+- [x] What is the difference between Spring Data JPA and using Hibernate directly.md
+- [x] How does Spring work under the hood.md
+- [x] What is the Spring application context.md
+- [x] How many Spring application contexts can an application have.md
+- [x] What annotations are used to configure a Spring application context.md
+- [x] What is aspect oriented programming AOP.md
+- [x] How would you explain configuration styles for Spring applications.md
+- [x] What are the distinctive features of Spring Boot.md
+- [x] How would you explain distinctive traits of dependency injection.md
+- [x] How would you explain dependency injection.md
+- [x] How would you explain dependency inversion as a design principle.md
+- [x] How would you explain inversion of control versus dependency injection.md
+- [x] How would you explain Spring Boot and its main advantage.md
+- [x] How would you explain Spring Core inversion of control features.md
+- [x] What are Spring Data JPA Specification queries.md
+- [x] What are Spring Data Repository interfaces.md
+- [x] What is Spring JdbcTemplate.md
+- [x] What is Spring MVC DispatcherServlet.md
+- [x] What is the Spring MVC web layer.md
+- [ ] How would you explain the view in MVC web applications.md
+- [x] What are Spring proxies and their tradeoffs.md
+- [x] What are Spring transaction propagation levels.md
+- [x] How would you explain Spring Web modules for HTTP services.md
+- [x] What is target method and advice binding in Spring AOP.md
+- [x] What is the health check API pattern.md
+- [x] What is the Transactional annotation in Spring Data.md
+- [x] What is a Spring bean.md
+- [x] In what order does Spring initialize a bean and its dependencies.md
+- [x] Is a Spring bean a class or an object.md
+- [x] What are Spring bean scopes for.md
+- [x] What configuration styles exist in Spring.md
+- [x] What core ideas underpin the Spring Framework.md
+- [x] What happens from Spring Boot startup until the first HTTP request reaches a controller.md
+- [x] What happens when one Spring Transactional method calls another.md
+- [x] What happens when you request the same singleton bean twice from ApplicationContext.md
+- [x] What invokes Spring MVC controller methods.md
+- [x] What is Spring Boot used for.md
+- [x] What is Spring for.md
+- [x] What is the default Spring bean scope.md
+- [x] What is the difference between AOP advice and pointcuts.md
+- [x] What is the difference between dependency injection and inversion of control.md
+- [x] What is the difference between Repository Component Controller and Service annotations.md
+- [x] What is the difference between save and saveAll in Spring Data.md
+- [x] What is the difference between Spring Boot auto configuration and plain Spring context.md
+- [x] What is the difference between Spring Service Repository and Controller annotations.md
+- [x] What is the Spring Framework for.md
+- [x] What is the Spring IoC container in practice.md
+- [x] What is the value of Spring Boot.md
+- [x] What problems does the Spring Framework address.md
+- [x] What return types can a Spring MVC controller method have.md
+- [x] What runs first among constructor injection setter injection and field injection in Spring.md
+- [x] What scopes can Spring beans have.md
+- [x] What Spring bean scope variants exist.md
+- [x] What Spring dependency injection styles exist how do they differ and which are preferred.md
+- [x] What technologies does Spring Data build upon.md
+- [x] What types of dependency injection exist.md
+- [x] What ways exist to configure a Spring application.md
+- [x] When is Java configuration more convenient than XML configuration in Spring.md
+- [x] When is Java configuration preferable to annotation-based configuration.md
+- [x] When would you use Java-based Spring configuration.md
+- [x] When would you use prototype scope in Spring.md
+- [x] Where is the Bean annotation used in Spring.md
+- [x] Where is the Transactional annotation used in Spring.md
+- [x] Which annotations tell Spring to create beans from your classes.md
+- [x] Which common Spring Boot starters do you know.md
+- [x] Which dependency injection styles do you know.md
+- [x] Which Spring abstractions participate in bean creation.md
+- [x] Which Spring annotation indicates that beans are being created or scanned.md
+- [x] Which Spring annotations declare beans that you know.md
+- [x] Which Spring bean scopes can you name.md
+- [x] Which Spring bean scopes do you know by name.md
+- [x] Which Spring bean scopes fit most application types.md
+- [x] Which Spring bean scopes have you used.md
+- [x] Which Spring configuration style do you prefer XML Java or annotations and why.md
+- [x] Which Spring configuration style takes precedence XML Java or annotations.md
+- [x] Which Spring Data JPA annotations have you used.md
+- [x] Which Spring Framework configuration would you choose in a new project.md
+- [x] Which Spring stereotype annotations create beans.md
+- [x] Which Spring stereotype annotations exist besides Service.md
+- [x] Why is Autowired often omitted on a single constructor in modern Spring.md
+- [x] What are Spring bean scopes.md
+- [x] What is Spring BeanDefinition.md
+- [x] What is Spring BeanPostProcessor.md
+- [x] What is the Spring Bean annotation.md
+- [x] What is the Spring bean lifecycle and extension points.md
+- [x] What is the Spring ComponentScan annotation.md
+- [x] What is the Spring Data umbrella project.md
+- [x] What is the Spring ecosystem at a high level.md
+- [x] What is the Spring Framework.md
+- [x] What is the Spring inversion of control container.md
+- [x] What is the Spring Service annotation.md
+- [x] What is the Spring Transactional annotation and its parameters.md
+- [x] What kinds of proxies exist in Java or Spring.md
+- [x] What minimal setup is required for Spring MVC to handle HTTP requests.md
+
+### Опыт разработки микросервисных приложений или модульных монолитов
+- [x] What is the centralized exception tracking pattern in microservices.md
+- [x] What is the distributed tracing pattern in microservices.md
+- [x] What is the domain-specific boundary pattern in microservice design.md
+- [x] What is the externalized configuration pattern for microservices.md
+- [x] What is the log aggregation pattern in microservices.md
+- [x] What is the deployment and change logging pattern in microservices.md
+- [x] Which interaction styles do you know in microservices.md
+- [x] What is the API gateway pattern in microservices.md
+- [x] What is the application metrics pattern in microservices.md
+- [x] What is the audit logging pattern in microservices.md
+- [x] What is the microservice chassis pattern.md
+- [x] What is the third-party registration pattern in microservices.md
+- [x] What is the service per container pattern.md
+- [x] What advantages do microservices have over a monolith.md
+- [x] What is the remote procedure invocation pattern between microservices.md
+- [ ] How would you explain client side service discovery.md
+- [ ] How would you explain consistency in distributed systems and data stores.md
+- [ ] How would you explain the CAP theorem.md
+- [ ] How would you explain the database per service pattern.md
+- [ ] How would you explain the service mesh pattern.md
+- [ ] How would you explain self registration with a service registry.md
+- [ ] How would you explain server side service discovery.md
+- [ ] How would you explain single service per host deployment.md
+- [ ] How would you explain the service registry pattern.md
+- [ ] How would you explain the backends for frontends pattern.md
+- [ ] How would you explain the sidecar pattern.md
+- [ ] How would you explain multiple services per host deployment.md
+- [ ] How would you orchestrate communication between multiple services.md
+
+### Опыт разработки и интеграции по REST/SOAP/gRPC
+_(gRPC — в исходном списке вопросов нет)_
+- [x] Can a servlet use PrintWriter and ServletOutputStream on the same response.md
+- [ ] How do HTTP PUT and PATCH semantics differ.md
+- [x] How does SOAP differ from REST style web services.md
+- [x] How is an HttpServlet request processed.md
+- [x] How would you explain idempotent HTTP methods in REST APIs.md
+- [x] How would you explain REST style HTTP APIs.md
+- [ ] How would you explain the HTTP protocol at a high level.md
+- [ ] How would you explain the JSON data interchange format.md
+- [ ] What HTTP request methods exist.md
+- [ ] How would you explain common HTTP request methods.md
+- [ ] Which common HTTP methods are not idempotent.md
+- [ ] How would you explain servlet filters and request interception.md
+- [x] How would you explain ServletConfig in the servlet API.md
+- [ ] How would you explain ServletContext in Java web applications.md
+- [ ] How would you explain the ServletRequest interface.md
+- [ ] How would you explain the ServletResponse interface.md
+- [ ] How would you explain HTTP sessions in servlet based applications.md
+- [ ] How would you explain the servlet container and its responsibilities.md
+- [ ] How would you explain the servlet container lifecycle for servlets.md
+- [ ] How would you explain the servlet RequestDispatcher for forward and include.md
+- [ ] What are the main HttpServlet request handling methods.md
+- [ ] What is the difference between GenericServlet and HttpServlet.md
+- [ ] What is the difference between ServletContext and ServletConfig.md
+- [ ] What typical responsibilities does a servlet container have.md
+- [ ] Why is HttpServlet declared as an abstract class.md
+- [ ] How does a servlet container manage the servlet lifecycle.md
+- [ ] How do you troubleshoot record not found messages in web service logs.md
+
+### Опыт проектирования и документирования API
+- [ ] How would you design a delete operation or endpoint.md
+- [ ] What is Swagger for.md
+- [ ] What is the difference between RequestMapping and PutMapping.md
+- [ ] What options send data from an HTTP client to a server.md
+- [ ] What kinds of queries or requests do you know in SQL or HTTP.md
+
+### Практический опыт работы с PostgreSQL / MySQL / Oracle
+- [ ] Can a column referenced by a foreign key be NULL.md
+- [ ] How are indexes implemented in relational databases.md
+- [ ] How do you add constraints to a database.md
+- [ ] How do you add validation or database constraints to your data model.md
+- [ ] How do you alter a table in a relational database.md
+- [ ] How do you create a database index.md
+- [ ] How do you declare constraints in SQL or a relational schema.md
+- [ ] How do you forbid NULL or empty values in a database column.md
+- [ ] How do you handle transaction isolation anomalies.md
+- [ ] How do you identify slow or non performant SQL queries.md
+- [ ] How do you integrate a database with a Java application.md
+- [ ] How do you map or connect a Java class to a database.md
+- [ ] How do you organize batch inserts for many rows.md
+- [ ] How do you prevent SQL injection in a database.md
+- [ ] How does a database query run and how are results processed.md
+- [ ] How does GROUP BY handle NULL in SQL.md
+- [ ] How do left, right, and inner SQL joins differ.md
+- [ ] How does LEFT JOIN differ from INNER JOIN in SQL.md
+- [ ] How does SQL JOIN differ from UNION.md
+- [ ] How does SQL UNION differ from UNION ALL recap.md
+- [ ] How have you worked with databases and what are the tradeoffs of each approach.md
+- [ ] How many normal forms are commonly taught for relational databases.md
+- [ ] How would you design a 100 million row table with fast lookup by int32.md
+- [ ] How would you explain common ways to optimize SQL queries.md
+- [ ] How would you explain composite keys in relational databases.md
+- [ ] How would you explain CREATE TABLE syntax in SQL.md
+- [ ] How would you explain database replication strategies.md
+- [ ] How would you explain database triggers in SQL.md
+- [ ] How would you explain DDL DML and DCL in SQL.md
+- [ ] How would you explain denormalization tradeoffs in relational databases.md
+- [ ] How would you explain DML versus DDL in SQL.md
+- [ ] How would you explain first normal form in relational databases.md
+- [ ] How would you explain foreign keys in relational databases.md
+- [ ] How would you explain horizontal database sharding.md
+- [ ] How would you explain indexing as a general retrieval acceleration idea.md
+- [ ] How would you explain primary keys foreign keys and common SQL constraints.md
+- [ ] How would you explain relational database indexes and common index structures.md
+- [ ] How would you explain relational database normalization.md
+- [ ] How would you explain simple keys versus composite keys in databases.md
+- [ ] How would you explain SQL constraints such as primary key and foreign key.md
+- [ ] How would you explain SQL grouping with GROUP BY.md
+- [ ] How would you explain SQL IN BETWEEN and LIKE predicates.md
+- [ ] How would you explain SQL injection attacks and defenses.md
+- [ ] How would you explain SQL JOIN types and when each is used.md
+- [ ] How would you explain table or index partitioning in databases.md
+- [ ] How would you explain the full syntax of a SQL SELECT statement.md
+- [ ] How would you explain the SQL COMMIT statement for transactions.md
+- [ ] How would you explain the SQL DROP statement.md
+- [ ] How would you explain the SQL EXISTS predicate.md
+- [ ] How would you explain the SQL GROUP BY clause.md
+- [ ] How would you explain the SQL HAVING clause.md
+- [ ] How would you explain the SQL JOIN operation in general.md
+- [ ] How would you explain the SQL language role in applications.md
+- [ ] How would you explain the SQL ORDER BY clause.md
+- [ ] How would you explain the SQL SELECT statement.md
+- [ ] How would you explain the SQL UNION operator.md
+- [ ] How would you explain the SQL VACUUM command in PostgreSQL.md
+- [ ] How would you explain third normal form in relational databases.md
+- [ ] How would you explain what a database management system provides.md
+- [ ] How would you explain what a primary key is in relational databases.md
+- [ ] In SQL does the engine conceptually apply JOIN or WHERE filtering first.md
+- [ ] Is a primary key implemented as an index and why.md
+- [x] What ACID requirements apply to database transactions.md
+- [x] What is atomicity in ACID transactions.md
+- [x] What are the ACID properties of database transactions.md
+- [x] What are the defining properties of a database transaction.md
+- [ ] What are the main groups of SQL commands.md
+- [ ] What are the two fundamental relational data integrity types.md
+- [ ] What are three common kinds of database constraints.md
+- [ ] What conditions define a relational database.md
+- [ ] What database categories or types do you know.md
+- [ ] What does NULL mean in SQL.md
+- [ ] What harmful SQL patterns or pitfalls do you know.md
+- [ ] What is a query plan in a relational database.md
+- [ ] What is a temporary table in SQL and when is it used.md
+- [ ] What is a unique database constraint for.md
+- [ ] What is automatic identity or autoincrement in different databases.md
+- [ ] What is database denormalization for.md
+- [x] What is database transaction isolation.md
+- [ ] What is the difference between PRIMARY KEY and UNIQUE constraints.md
+- [ ] What is the difference between SQL char and varchar types.md
+- [ ] What is the difference between SQL DATETIME and TIMESTAMP.md
+- [ ] What is the difference between SQL DELETE and TRUNCATE.md
+- [ ] What is the difference between SQL UNION and UNION ALL.md
+- [ ] What is the difference between SQL WHERE and HAVING clauses.md
+- [ ] What kinds of database constraints exist.md
+- [ ] What kinds of SQL JOIN exist.md
+- [ ] What makes SQL queries fast on large relational tables.md
+- [ ] What merge strategies are important in database development.md
+- [ ] What relationship types exist between database tables.md
+- [ ] What relationship types exist in databases with examples.md
+- [ ] What SQL clauses usually accompany aggregate queries.md
+- [ ] What SQL operators exist.md
+- [ ] What types of database indexes exist.md
+- [ ] When are database indexes a bad idea.md
+- [ ] When does the N plus 1 query problem occur and how do you fix it.md
+- [ ] When is a full table scan cheaper than using an index.md
+- [ ] When should you prefer JOINs versus subqueries in SQL.md
+- [ ] Why can heavy indexing slow down writes and maintenance.md
+- [ ] What is the difference between clustered and non clustered database indexes.md
+- [ ] What is the difference between database replication and sharding.md
+- [ ] What problem does database sharding solve.md
+- [ ] What problems appear when database transactions run in parallel.md
+- [ ] What problems can missing database transactions cause.md
+- [ ] How does vertical partitioning differ from horizontal partitioning.md
+- [ ] How do you close a database connection properly.md
+- [ ] How do you establish a database connection in Java.md
+- [ ] How do you call a stored procedure from Java.md
+- [ ] How do you connect to a database and add logging in a servlet.md
+- [ ] Which databases have you used.md
+
+### Опыт работы с Hibernate и/или JOOQ
+_(JOOQ — в исходном списке вопросов нет)_
+- [x] Can a JPA entity class be abstract.md
+- [x] What is the difference between optimistic and pessimistic locking in Hibernate.md
+- [x] What advantages does Hibernate provide over plain JDBC.md
+- [x] What is Hibernate as an ORM framework.md
+- [x] What is Hibernate dirty checking.md
+- [x] What is Hibernate entity lifecycle states.md
+- [x] What are Hibernate first and second level cache tiers.md
+- [x] What are Hibernate named queries.md
+- [x] What is Hibernate Query Language HQL.md
+- [x] What is Hibernate second level cache and its main components.md
+- [x] What is Hibernate SessionFactory.md
+- [x] What is lazy fetch in JPA or Hibernate.md
+- [x] What is object relational mapping ORM.md
+- [x] What is a one to one relationship in databases or JPA.md
+- [x] What is the difference between optimistic and pessimistic locking in JPA.md
+- [x] What are phantom reads under weak isolation.md
+- [x] What is the Java Persistence API JPA.md
+- [x] What are JPA fetch types for entity associations.md
+- [x] What is the JPA Column annotation.md
+- [x] What is the JPA Criteria API.md
+- [x] What is the JPA Id annotation.md
+- [x] What is the JPA Table annotation and its attributes.md
+- [x] What is the N plus one problem in Hibernate.md
+- [ ] How would you explain the N plus one query problem in general.md
+- [x] What kinds of queries can Hibernate run.md
+- [x] What association types exist in Hibernate.md
+- [x] What is Hibernate performance tuning.md
+- [x] What are transaction isolation levels in Hibernate.md
+- [x] What is the difference between JPQL and Hibernate HQL.md
+- [x] What is the difference between JPA as a specification and Hibernate.md
+- [x] What is the difference between JPA FetchType lazy and eager.md
+- [x] What is an example of a one to many relationship in databases or JPA.md
+- [ ] Which Java ORM frameworks do you know.md
+- [ ] In a business context must equals consider all entity fields.md
+- [ ] What is the main purpose of caching in an ORM.md
+
+### Опыт работы с чистым JDBC
+- [x] How do execute, executeQuery, and executeUpdate differ in JDBC.md
+- [x] How do JDBC interface types such as Statement and PreparedStatement differ.md
+- [x] How does JDBC ResultSet behave and what configuration options exist.md
+- [x] How does PreparedStatement mitigate SQL injection compared to Statement.md
+- [x] How does close behave when using a JDBC connection pool.md
+- [x] How do you register a JDBC driver.md
+- [x] What are the advantages of programming directly with JDBC.md
+- [x] What are database cursors in JDBC and SQL.md
+- [x] What is JDBC for database access in Java.md
+- [x] What is JDBC ResultSet.md
+- [x] What are JDBC Statement PreparedStatement and CallableStatement.md
+- [x] What is calling stored procedures from JDBC.md
+- [x] What is the layered architecture of JDBC.md
+- [x] What is JDBC, an implementation or a specification.md
+- [x] What JDBC API pieces are used to build and execute database queries.md
+- [x] What JDBC statement types exist.md
+- [x] What parts make up a JDBC URL.md
+- [x] Where can you read the official JDBC documentation.md
+- [x] Where do generated identifiers come from when inserting rows in JDBC batch mode.md
+- [x] Why must JDBC and IO resources be closed explicitly.md
+- [x] Why must you load a JDBC database driver.md
+- [x] What are common JDBC SQL types and how do they map to Java types.md
+- [x] What are the main JDBC steps to work with a database.md
+- [x] What is a JDBC ResultSet for.md
+- [x] What is the difference between PreparedStatement and Statement in JDBC.md
+- [x] What transaction isolation levels does JDBC support.md
+- [ ] What are database connection pools for.md
+- [x] What are SQL transaction isolation levels.md
+- [x] What are dirty reads in transaction isolation.md
+- [x] What are transaction isolation levels in general.md
+- [x] What is transaction propagation in Spring Data.md
+- [x] What are transaction propagation semantics in Spring or JTA.md
+
+### Опыт работы с Kafka или RabbitMQ
+- [ ] How does Kafka achieve horizontal scalability.md
+- [ ] How does Kafka provide fault tolerance.md
+- [ ] What happens when a second Kafka consumer reads the same topic.md
+- [ ] What ordering guarantees does Kafka provide for messages.md
+- [ ] How would you explain asynchronous messaging between systems.md
+- [ ] How would you explain message brokers in distributed systems.md
+
+### Понимание retry-политик, DLQ и delivery semantics
+- [ ] How do you prevent duplicate message or packet delivery.md
+- [ ] What message delivery semantics exist in distributed systems and their tradeoffs.md
+- [ ] What is the Dead Letter Channel pattern.md
+- [ ] What is the Guaranteed Delivery pattern.md
+- [ ] What is the Idempotent Receiver pattern.md
+- [ ] What is the Invalid Message Channel pattern.md
+- [ ] How would you explain the circuit breaker pattern for resilient calls.md
+- [ ] What is the Durable Subscriber pattern.md
+- [ ] What is the Event Message pattern.md
+- [ ] What is the Event-Driven Consumer pattern.md
+- [ ] What is the Message Broker pattern.md
+- [ ] What is the Message Bus pattern.md
+- [ ] What is the Message Channel pattern.md
+- [ ] What is the Message Dispatcher pattern.md
+- [ ] What is the Message Endpoint pattern.md
+- [ ] What is the Message Expiration pattern.md
+- [ ] What is the Message Filter pattern.md
+- [ ] What is the Message History pattern.md
+- [ ] What is the Message Router pattern.md
+- [ ] What is the Message Sequence pattern.md
+- [ ] What is the Message Store pattern.md
+- [ ] What is the Message Translator pattern.md
+- [ ] What is the Messaging Bridge pattern.md
+- [ ] What is the Messaging Gateway pattern.md
+- [ ] What is the Messaging Mapper pattern.md
+- [ ] What is the Publish-Subscribe Channel pattern.md
+- [ ] What is the Request-Reply pattern.md
+- [ ] What is the Transactional Client pattern.md
+- [ ] What are enterprise integration patterns for applications.md
+- [ ] How would you explain asynchronous programming and execution.md
+- [ ] How would you explain transaction log tailing for integration.md
+- [ ] How would you notify a client when a transaction might roll back.md
+- [ ] How would you explain the transactional outbox pattern.md
+
+### Опыт написания unit-тестов (JUnit 5)
+- [ ] How would you explain test driven development TDD.md
+- [ ] How would you explain test fixtures in JUnit.md
+- [ ] What is the JUnit Ignore annotation for.md
+- [ ] What fixture annotations exist in JUnit.md
+- [ ] How would you explain behavior driven development BDD.md
+- [ ] How would you explain unit testing goals and practices.md
+- [ ] What tests do you write and how do you structure them.md
+- [ ] How would you explain common levels and kinds of software testing.md
+
+### Опыт использования Mockito или аналогичных mock-фреймворков
+- [ ] How would you explain mock stub and spy test doubles.md
+- [ ] How would you explain mocking in automated tests.md
+- [ ] How would you explain types of test doubles such as mocks and stubs.md
+- [ ] What is the difference between test stubs and mocks.md
+
+### Опыт написания интеграционных тестов
+- [ ] How would you explain integration testing and how it differs from unit tests.md
+- [ ] How would you implement integration testing.md
+- [ ] What is the difference between unit tests and integration tests.md
+- [ ] How would you ideally organize a CI CD pipeline.md
+- [ ] How would you explain continuous integration and continuous delivery CI CD.md
+
+### Уверенная работа с Git
+- [ ] How do you connect a local repository to a remote Git repository.md
+- [ ] How do you download changes from a remote Git repository.md
+- [ ] How do you inspect the previous Git commit.md
+- [ ] How do you make your first Git commit and add all files.md
+- [ ] How do you merge two divergent Git branches.md
+- [ ] How does Git rebase differ from merge.md
+- [ ] How would you explain the Git merge command.md
+- [ ] How would you explain what a Git branch is.md
+- [ ] What are Git branches for.md
+- [ ] What Git branching strategies do you know.md
+- [ ] What kinds of Git branch merges exist.md
+- [ ] What is Git for.md
+- [ ] What are version control systems for.md
+
+### Опыт сборки проектов с Maven или Gradle
+- [ ] Do you use Maven or Gradle for Java project builds.md
+- [ ] How would you explain Apache Maven.md
+- [ ] How would you explain the Maven build lifecycle.md
+- [ ] How would you explain the structure of a Maven pom.xml file.md
+- [ ] What is the dependencyManagement section in Maven for.md
+- [ ] What does Maven provide during a typical Java build.md
+
+### Опыт работы с Docker на уровне запуска и конфигурации сервисов
+- [x] What are Docker containers and images at a high level.md
+- [x] How does Docker differ from Kubernetes.md
+- [x] What is the difference between Docker containers and virtual machines.md
+
+---
+
+## Будут плюсом
+
+### Опыт разработки на Kotlin
+- [ ] Have you used Kotlin.md
+
+### Опыт работы с MongoDB
+_(прямых вопросов про MongoDB нет — см. смежные про NoSQL и документные БД)_
+- [ ] What categories of NoSQL databases exist.md
+- [ ] What is an example of a relational database and a non relational database.md
+- [ ] How would you explain tradeoffs among relational document and other database types.md
+- [ ] What is the difference between SQL and NoSQL data stores.md
+
+### Базовое понимание Kubernetes
+- _(см. раздел Docker: «How does Docker differ from Kubernetes».)_
+- [ ] How would you explain the service mesh pattern.md
+
+### Опыт работы с Camunda
+_(в исходном списке вопросов нет)_
+
+### Опыт работы с Redis или другими решениями кэширования
+_(кэш второго уровня Hibernate — в разделе Hibernate выше)_
+- [ ] How would you explain caching concepts in applications.md
+- [ ] How would you explain distributed caching and cache hierarchies at a high level.md
+- [ ] What simple approach would you use to implement an in memory cache.md
+- [ ] What difficulties arise when working with caching.md
+- [ ] What problems commonly appear when using caching.md
+- [ ] What is caching used for.md
+
+### Опыт реализации OAuth2 / JWT
+- [ ] How many parts does a JWT have.md
+- [ ] What is JWT for.md
+- [ ] What is the difference between authentication and authorization.md
+- [ ] What security related technologies have you worked with.md
+- [ ] What servlet authentication mechanisms exist.md
+
+### Опыт использования Testcontainers
+_(в исходном списке вопросов нет)_
+
+### Опыт разработки высоконагруженных систем
+- [ ] How do you optimize a high traffic web service.md
+- [x] What happens between an HTTP client and a Spring REST controller under sustained load.md
+- [ ] How would you explain common principles for scaling software systems.md
+
+### Опыт миграции монолита в микросервисную архитектуру
+_(прямых вопросов нет — см. «микросервисы vs монолит» в блоке микросервисов)_
+
+### Опыт работы с reactive stack (WebFlux, Reactor)
+- [ ] What is the difference between Project Reactor Mono and Flux.md
+
+### Опыт менторинга разработчиков
+_(в исходном списке вопросов нет)_

@@ -22,6 +22,8 @@
 
 **Spring Core и IoC-контейнер:** обзорные карточки про Spring как продукт/экосистему/идеи (**«что такое Spring»**, какие проблемы решает), а также **DI, стереотипы, scopes, жизненный цикл бина, сканирование как набор аннотаций, BeanPostProcessor, порядок внедрения** — на **`#Java/Spring/Core`**. Лист **`#Java/Spring/Core/IoC`** — только про **детали использования именно IoC-контейнера как контекста**: что такое **`ApplicationContext`**, **несколько контекстов**, **загрузка и приоритет конфигурации метаданных контекста** (XML / Java-config / аннотации, смешение источников), **сравнение «обычный контекст» и Boot в части контекста**, явное **обращение к контейнеру за бином** (например повторный запрос singleton из контекста), формулировки **«IoC-контейнер» / «контейнер инверсии управления» в практическом смысле**. На ту же карточку **не** дублируй `#Java/Spring/Core` вместе с `#Java/Spring/Core/IoC` (см. правило про родителя и лист выше).
 
+**Принципы проектирования и кода (SOLID, DRY, KISS, YAGNI, IoC и т.п.):** для **языково-независимых** правил и эвристик используй листы **`#Methodologies/Principles/...`** (аббревиатуры в конечном сегменте пиши **заглавными**, см. п. 6). **`#Methodologies/Principles/SOLID`** — только про **пять принципов** (SRP, OCP, LSP, ISP, DIP); **инверсия управления (IoC) в SOLID не входит** — это **отдельная** идея. **Инверсия управления как идея** — **`#Methodologies/Principles/IoC`**; **контейнер Spring и `ApplicationContext`** — только **`#Java/Spring/Core/IoC`** (см. абзац выше). Если карточка одновременно про **принцип** и про **Spring**, добавляй оба несовпадающих тематических тега без дублирования родитель/лист из одной ветки. **`#Patterns/GRASP`** и **`#Patterns/Enterprise`** не заменяют эту ветку.
+
 **Новый тег, если тема не влезает:** если для карточки **нет подходящего листа** в дереве (нет смысла маскировать тему под «почти подходящий» тег), **не натягивай** ближайший похожий. Добавь в **`Tags.md`** в раздел **«Дерево»** новый префикс под **логичным корнем** (или новый корень, например **`#SQL/...`** для языка SQL вне JVM) и затем используй этот тег на карточке. Дерево и выборки по тегам должны отражать предмет честно.
 
 ---
@@ -38,6 +40,7 @@
 - `#Java/Collections/Concurrency`
 - `#Java/Streams`
 - `#Java/IO`
+- `#Java/Servlet`
 - `#Java/Spring`
 - `#Java/Spring/Core`
 - `#Java/Spring/Core/IoC`
@@ -89,6 +92,7 @@
 
 ### API
 - `#API/REST`
+- `#API/SOAP`
 - `#API/GraphQL`
 - `#API/GRPC`
 - `#API/RPC`
@@ -125,6 +129,15 @@
 
 ### Methodologies
 - `#Methodologies/DDD`
+- `#Methodologies/Principles`
+- `#Methodologies/Principles/SOLID`
+- `#Methodologies/Principles/DRY`
+- `#Methodologies/Principles/KISS`
+- `#Methodologies/Principles/IoC`
+- `#Methodologies/Principles/YAGNI`
+- `#Methodologies/Principles/SeparationOfConcerns`
+- `#Methodologies/Principles/TellDontAsk`
+- `#Methodologies/Principles/LawOfDemeter`
 
 ### DevOps
 - `#DevOps/Tools/Docker`
