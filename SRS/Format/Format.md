@@ -1,18 +1,19 @@
 # SRS
 
-`<!-- reps, priority -->` → одна строка `#теги` (есть `#SRS/card`) → Markdown. В мете без дат.
+`<!-- reps, priority -->` → one line of `#tags` (contains `#SRS/card`) → Markdown. No dates in meta.
 
-- `reps`: целое ≥ 0 — число повторений (как именно считать: только успехи, все попытки и т.д. — правило волта).
-- `priority`: число (целое или с десятичной частью) — после каждого повторения пересчитывается; по нему ранжируется очередь (направление сортировки — договор волта, например больше `priority` = выше в списке).
+- `reps`: integer ≥ 0 — number of repetitions (how exactly to count: successes only, all attempts, etc. — vault rule).
+- `priority`: number (integer or decimal) — recalculated after each repetition; used to rank the queue (sorting direction — vault convention, e.g. higher `priority` = higher in the list).
 
-```markdown
+```
 <!--
 reps: 0
 priority: 0
 -->
-#Topic #SRS/cardДобав
+#Topic #SRS/cardAdd
 
 ...
+
 ```
 
-**D2:** fenced-блок `d2`. **Алгоритм раскладки** (`dagre` / `elk` / `tala`) — только в настройках плагина D2 или в `.obsidian/plugins/d2-obsidian/data.json` (`layoutEngine`), не в тексте диаграммы; в волте задано `tala`. В исходнике — `direction`, рёбра, `width`/`height` узлов. Сниппет `d2-full-width.css` (вкл. в `appearance.json`): SVG на всю ширину колонки, по центру.
+**D2:** fenced `d2` block. **Layout algorithm** (`dagre` / `elk` / `tala`) — only in the D2 plugin settings or in `.obsidian/plugins/d2-obsidian/data.json` (`layoutEngine`), not in the diagram text; `tala` is configured in the vault. In the source — `direction`, edges, `width`/`height` of nodes. `d2-full-width.css` snippet (enabled in `appearance.json`): SVG spans the full column width, centered.
