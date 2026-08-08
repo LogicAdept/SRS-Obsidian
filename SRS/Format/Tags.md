@@ -30,6 +30,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ## Tree (prefixes in cards)
 
 ### Java
+<<<<<<< HEAD
+=======
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#Java/Collections`
 * `#Java/Collections/List`
 * `#Java/Collections/Map`
@@ -90,12 +94,24 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Persistence/Hibernate`
 
 ### Testing
+<<<<<<< HEAD
 * `#Testing`
 
 ### Kotlin
 * `#Kotlin`
 
 ### Databases
+=======
+
+* `#Testing`
+
+### Kotlin
+
+* `#Kotlin`
+
+### Databases
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#Databases`
 * `#Databases/SQL`
 * `#Databases/SQL/Transactions`
@@ -103,22 +119,46 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases/Transactions`
 
 ### NoSQL
+<<<<<<< HEAD
 * `#NoSQL`
 
 ### Problems
 * `#Problems/Persistence`
 
 ### DSA
+=======
+
+* `#NoSQL`
+
+### Problems
+
+* `#Problems/Persistence`
+
+### DSA
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#DSA/Algorithms/Search`
 * `#DSA/DataStructures/Graph`
 
 ### Paradigms
+<<<<<<< HEAD
 * `#Paradigms/OOP`
 
 ### DistributedSystems
 * `#DistributedSystems/Communication`
 
 ### Networking
+=======
+
+* `#Paradigms/OOP`
+
+### DistributedSystems
+
+* `#DistributedSystems/Communication`
+
+### Networking
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#Networking`
 * `#Networking/TCP`
 * `#Networking/UDP`
@@ -131,6 +171,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Networking/Web/Caching`
 
 ### API
+<<<<<<< HEAD
+=======
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#API/REST`
 * `#API/SOAP`
 * `#API/GraphQL`
@@ -140,6 +184,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#API/Webhooks`
 
 ### Patterns
+<<<<<<< HEAD
+=======
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#Patterns/GoF`
 * `#Patterns/GoF/Creational`
 * `#Patterns/GoF/Structural`
@@ -167,6 +215,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/Architecture/Microservices/Observability`
 
 ### Methodologies
+<<<<<<< HEAD
+=======
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#Methodologies/DDD`
 * `#Methodologies/Principles`
 * `#Methodologies/Principles/SOLID`
@@ -180,6 +232,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Methodologies/Principles/LawOfDemeter`
 
 ### Career
+<<<<<<< HEAD
+=======
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#Career`
 * `#Career/Interview`
 * `#Career/Experience`
@@ -187,6 +243,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Career/Behavioral`
 
 ### Build
+<<<<<<< HEAD
+=======
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#Build/Tools`
 * `#Build/Tools/Maven`
 * `#Build/Tools/Gradle`
@@ -194,6 +254,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Build/Tools/CMake`
 
 ### DevOps
+<<<<<<< HEAD
+=======
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#DevOps/Tools/Docker`
 * `#DevOps/Tools/Kubernetes`
 * `#DevOps/Containerisation`
@@ -205,6 +269,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DevOps/Deployment/Strategies`
 
 ### SystemDesign
+<<<<<<< HEAD
 * `#SystemDesign`
 * `#SystemDesign/Scalability`
 * `#SystemDesign/Reliability`
@@ -214,5 +279,18 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#SystemDesign/Architecture`
 
 ### System
+=======
+
+* `#SystemDesign`
+* `#SystemDesign/Scalability`
+* `#SystemDesign/Reliability`
+* `#SystemDesign/Performance`
+* `#SystemDesign/Availability`
+* `#SystemDesign/Consistency`
+* `#SystemDesign/Architecture`
+
+### System
+
+>>>>>>> a74789d1f0acc3e218739fc9ab48c7ab107ec9b2
 * `#SRS`
 * `#New`
