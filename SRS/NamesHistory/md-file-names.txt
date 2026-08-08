@@ -766,7 +766,7 @@
 - [x] In what order does Spring initialize a bean and its dependencies.md
 - [ ] In what order is a given snippet of Java code executed.md
 - [ ] In which Java version were generics introduced.md
-- [ ] Is a finally block always executed in Java.md
+- [x] Is a finally block always executed in Java.md
 - [ ] Is a Java array a primitive or an object.md
 - [ ] Is a Java array a static or dynamic data structure.md
 - [ ] Is a primary key implemented as an index and why.md
