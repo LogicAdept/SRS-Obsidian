@@ -1,4 +1,4 @@
-- [x] Can a column referenced by a foreign key be NULL.md
+﻿- [x] Can a column referenced by a foreign key be NULL.md
 - [x] Can a HashMap contain two equal keys at the same time.md
 - [x] Can a Java interface declare a constructor.md
 - [x] Can a Java interface declare private fields or variables.md
@@ -81,20 +81,20 @@
 - [x] How can you extend JSP functionality.md
 - [x] How can you lose a value in a HashMap.md
 - [x] How can you test a program and reduce the risk of bugs.md
-- [ ] How did marker interfaces evolve and what largely replaced them.md
-- [ ] How did you deploy applications on past projects.md
-- [ ] How did you store data in your projects.md
-- [ ] How do database indexes speed up queries.md
-- [ ] How do database indexes work at a high level.md
-- [ ] How do default copy and parameterized constructors differ.md
-- [ ] How do default interface methods differ from static interface methods.md
+- [x] How did marker interfaces evolve and what largely replaced them.md
+- [x] How did you deploy applications on past projects.md
+- [x] How did you store data in your projects.md
+- [x] How do database indexes speed up queries.md
+- [x] How do database indexes work at a high level.md
+- [x] How do default copy and parameterized constructors differ.md
+- [x] How do default interface methods differ from static interface methods.md
 - [x] How do execute, executeQuery, and executeUpdate differ in JDBC.md
 - [x] How do HashMap, TreeMap, and LinkedHashMap differ at a high level.md
 - [x] How do HashMap, TreeMap, and LinkedHashMap work at a high level.md
 - [x] How do HTTP PUT and PATCH semantics differ.md
-- [ ] How do Java access modifiers work.md
-- [ ] How do Java for, while, and do-while loops differ.md
-- [ ] How do Java methods accept parameters and return values.md
+- [x] How do Java access modifiers work.md
+- [x] How do Java for, while, and do-while loops differ.md
+- [x] How do Java methods accept parameters and return values.md
 - [x] How do JDBC interface types such as Statement and PreparedStatement differ.md
 - [ ] How do left, right, and inner SQL joins differ.md
 - [x] What is the difference between optimistic and pessimistic locking in Hibernate.md

@@ -2,5 +2,5 @@
 reps: 0
 priority: 0
 -->
-#SQL/Transactions #SRS #New
+#Databases/SQL/Transactions #SRS #New
 

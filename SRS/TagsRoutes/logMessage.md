@@ -17,3 +17,13 @@
 |[2026-05-13 21:50:03] |After filtered pathes=>|| filtered nodes: |1|  links:| 676|
 |[2026-05-13 21:50:03] |Tags parse completed=>||  tag nodes: |53| tag links:| 671|
 |[2026-05-13 21:50:03] |tags num:| 53| broken files: |0| tag links:| 671|
+
+
+
+||||||||
+|-:|-:|-:|-:|-:|-:|-:|
+|[2026-08-06 23:55:17] |File parse completed=>|| markdown and linked files nodes:| 530| total file links:| 5|
+|[2026-08-06 23:55:17] |add tags and other files=>||  total nodes: |646|  total links:| 1705|
+|[2026-08-06 23:55:17] |After filtered pathes=>|| filtered nodes: |2|  links:| 1705|
+|[2026-08-06 23:55:17] |Tags parse completed=>||  tag nodes: |116| tag links:| 1700|
+|[2026-08-06 23:55:17] |tags num:| 116| broken files: |0| tag links:| 1700|
