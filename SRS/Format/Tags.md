@@ -1,217 +1,236 @@
-Для тегов следующие правила:
-1. Тег **#New** ставят на карточках, которые **ещё без ответа** (пустые) или с ответом **неполным / черновым**; когда карточка доведена до нужного уровня, **#New** с неё убирают. К позиции **#New** в строке тегов см. п. 7.
-2. Теги - композитные, могут быть 1 и больше уровней
-3. Теги задают группы и связи между темами; один документ может иметь несколько тегов
-4. Теги идут сразу после метаинформации
-5. Слова в тегах Начинаются с больших букв
-6. Аббревиатуры - пишутся большими
-7. Тег #New - ставится в конце
-8. Все карточки в корне хранилища имеют тег #SRS (интервальное повторение)
+For tags, use the following rules:
+
+1. The **#New** tag is placed on cards that are **not yet answered** (empty) or have an **incomplete / draft** answer; when the card is brought to the required level, remove **#New** from it. See item 7 for the position of **#New** in the tag line.
+2. Tags are composite and may have 1 or more levels.
+3. Tags define groups and relationships between topics; one document may have multiple tags.
+4. Tags come immediately after the metadata.
+5. Words in tags **start with capital letters**.
+6. Abbreviations are written in **uppercase**.
+7. The **#New** tag is placed at the end.
+8. All cards in the root of the vault have the **#SRS** tag (spaced repetition).
 
 ---
 
-## Модель тегов
+## Tag model
 
-Теги — это **композитные пути** (`Корень/.../Лист`) плюс при необходимости **несколько путей** на одной карточке: так задаются и иерархия темы, и пересечения (например микросервисы и наблюдаемость). На строке тегов сначала идут **тематические** теги, затем **`#SRS`**, затем **`#New`**. Карточки, которые **сравнивают** две сущности, должны нести **оба** соответствующих тематических тега (или эквивалент по смыслу), чтобы выборки по любой стороне были полными. **Не** ставить подряд родителя и дочерний тег с тем же префиксом (например не `#Patterns/Architecture/Microservices` и `#Patterns/Architecture/Microservices/Observability` — достаточно листа `.../Microservices/Observability`).
+Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple paths** on one card: this defines both the topic hierarchy and intersections (for example, microservices and observability). On the tag line, **thematic** tags come first, then **`#SRS`**, then **`#New`**. Cards that **compare** two entities must carry **both** corresponding thematic tags (or an equivalent by meaning), so that selections by either side are complete. **Do not** put a parent and child tag with the same prefix next to each other (for example, do not use `#Patterns/Architecture/Microservices` and `#Patterns/Architecture/Microservices/Observability` — the leaf `.../Microservices/Observability` is sufficient).
 
-**Неполный путь (не лист):** допустимо указать тег **короче**, чем самый глубокий известный префикс в дереве ниже, если **нет дочернего тега**, который по смыслу подошёл бы заметно лучше. Если подходящий лист уже есть в дереве — предпочитай его (и не дублируй вместе с его родителем на одной карточке, см. абзац выше).
+**Incomplete path (not a leaf):** it is acceptable to specify a tag **shorter** than the deepest known prefix in the tree below if there is **no child tag** that would be noticeably more appropriate by meaning. If a suitable leaf already exists in the tree, prefer it (and do not duplicate it together with its parent on the same card, see the paragraph above).
 
-**Расширение:** новые заметки по возможности **расширяют это дерево** (новые подтеги под уже принятыми корнями), а не вводят **параллельные теги-синонимы** одного и того же понятия. Если для сущности уже закреплён путь (например Kubernetes только как `#DevOps/Tools/Kubernetes`), не добавлять второй корень без причины (`#Kubernetes` рядом с тем же смыслом). Для разных видов API используй префикс **`#API/`** и лист **`#API/<Вид>`** (например `#API/REST`), а не отдельные корни вроде `#REST` и не ветку под `Patterns`.
+**Extension:** new notes should, where possible, **extend this tree** (new subtags under already accepted roots), rather than introduce **parallel tags that are synonyms** of the same concept. If a path is already established for an entity (for example, Kubernetes only as `#DevOps/Tools/Kubernetes`), do not add a second root without a reason (`#Kubernetes` alongside the same meaning). For different API types, use the **`#API/`** prefix and the leaf **`#API/<Type>`** (for example, `#API/REST`), rather than separate roots such as `#REST` or a branch under `Patterns`.
 
-**Новый тег, если тема не влезает:** если для карточки **нет подходящего листа** в дереве (нет смысла маскировать тему под «почти подходящий» тег), **не натягивай** ближайший похожий. Добавь в **`Tags.md`** в раздел **«Дерево»** новый префикс под **логичным корнем** (или новый корень, например **`#Databases/SQL/...`** для языка SQL в модели «база данных → SQL») и затем используй этот тег на карточке. Дерево и выборки по тегам должны отражать предмет честно.
+**New tag if the topic does not fit:** if there is **no suitable leaf** in the tree for a card (there is no point in forcing the topic under an “almost suitable” tag), **do not stretch** the nearest similar tag to fit. Add a new prefix under a **logical root** in the **“Tree”** section of `Tags.md` (or a new root, for example **`#Databases/SQL/...`** for the SQL language in the “database → SQL” model), and then use this tag on the card. The tree and tag selections must honestly reflect the subject.
 
-**SQL в дереве:** темы **языка SQL** помечай только как **`#Databases/SQL`** и дочерние пути (например **`#Databases/SQL/Transactions`**); корня **`#SQL`** в хранилище **нет**.
+**SQL in the tree:** topics of the **SQL language** should be tagged only with **`#Databases/SQL`** and child paths (for example, **`#Databases/SQL/Transactions`**); there is **no `#SQL` root** in the vault.
 
-**`#NoSQL`:** **нереляционные** хранилища и модели (документ, ключ-значение, wide-column, граф и т.д.); при гибриде с реляционной частью допустимы **`#Databases/SQL`** и **`#NoSQL`** рядом.
+**`#NoSQL`:** **non-relational** stores and models (document, key-value, wide-column, graph, etc.); for a hybrid with a relational part, **`#Databases/SQL`** and **`#NoSQL`** may be used together.
 
 ---
 
-## Дерево (префиксы в карточках)
+## Tree (prefixes in cards)
 
 ### Java
-- `#Java/Collections`
-- `#Java/Collections/List`
-- `#Java/Collections/Map`
-- `#Java/Collections/Set`
-- `#Java/Collections/Queues`
-- `#Java/Collections/Iteration`
-- `#Java/Collections/Concurrency`
-- `#Java/Streams`
-- `#Java/HashCodeEquals`
-- `#Java/OOP`
-- `#Java/Concurrency`
-- `#Java/Exceptions`
-- `#Java/Language`
-- `#Java/Generics`
-- `#Java/Immutability`
-- `#Java/IO`
-- `#Java/JVM`
-- `#Java/JVM/GarbageCollector`
-- `#Java/JDK`
-- `#Java/Tooling`
-- `#Java/Tooling/Maven`
-- `#Java/Tooling/Gradle`
-- `#Java/JavaEE`
-- `#Java/Servlet`
-- `#Java/CGI`
-- `#Java/Listeners`
-- `#Java/JSP`
-- `#Java/JSP/JSTL`
-- `#Java/Spring`
-- `#Java/Spring/Core`
-- `#Java/Spring/Core/IoC`
-- `#Java/Spring/Framework/AOP`
-- `#Java/Spring/Framework/DataAccess`
-- `#Java/Spring/Framework/WebMvc`
-- `#Java/Spring/Framework/WebSocket`
-- `#Java/Spring/Framework/WebFlux`
-- `#Java/Spring/Framework/Testing`
-- `#Java/Spring/Framework/Instrumentation`
-- `#Java/Spring/Boot`
-- `#Java/Spring/Transactions`
-- `#Java/Spring/Cloud`
-- `#Java/Spring/Cloud/Gateway`
-- `#Java/Spring/Cloud/Config`
-- `#Java/Spring/Cloud/Stream`
-- `#Java/Spring/Cloud/CircuitBreaker`
-- `#Java/Spring/Data`
-- `#Java/Spring/Data/JPA`
-- `#Java/Spring/Data/MongoDB`
-- `#Java/Spring/Data/Redis`
-- `#Java/Spring/Security`
-- `#Java/Spring/Batch`
-- `#Java/Spring/Integration`
-- `#Java/Spring/Session`
-- `#Java/Spring/AI`
-- `#Java/JDBC`
-- `#Java/Persistence`
-- `#Java/Persistence/JPA`
-- `#Java/Persistence/Hibernate`
+
+* `#Java/Collections`
+* `#Java/Collections/List`
+* `#Java/Collections/Map`
+* `#Java/Collections/Set`
+* `#Java/Collections/Queues`
+* `#Java/Collections/Iteration`
+* `#Java/Collections/Concurrency`
+* `#Java/Streams`
+* `#Java/HashCodeEquals`
+* `#Java/OOP`
+* `#Java/Concurrency`
+* `#Java/Exceptions`
+* `#Java/Language`
+* `#Java/Generics`
+* `#Java/Immutability`
+* `#Java/IO`
+* `#Java/JVM`
+* `#Java/JVM/GarbageCollector`
+* `#Java/JDK`
+* `#Java/Tooling`
+* `#Java/Tooling/Maven`
+* `#Java/Tooling/Gradle`
+* `#Java/JavaEE`
+* `#Java/Servlet`
+* `#Java/CGI`
+* `#Java/Listeners`
+* `#Java/JSP`
+* `#Java/JSP/JSTL`
+* `#Java/Spring`
+* `#Java/Spring/Core`
+* `#Java/Spring/Core/IoC`
+* `#Java/Spring/Framework/AOP`
+* `#Java/Spring/Framework/DataAccess`
+* `#Java/Spring/Framework/WebMvc`
+* `#Java/Spring/Framework/WebSocket`
+* `#Java/Spring/Framework/WebFlux`
+* `#Java/Spring/Framework/Testing`
+* `#Java/Spring/Framework/Instrumentation`
+* `#Java/Spring/Boot`
+* `#Java/Spring/Transactions`
+* `#Java/Spring/Cloud`
+* `#Java/Spring/Cloud/Gateway`
+* `#Java/Spring/Cloud/Config`
+* `#Java/Spring/Cloud/Stream`
+* `#Java/Spring/Cloud/CircuitBreaker`
+* `#Java/Spring/Data`
+* `#Java/Spring/Data/JPA`
+* `#Java/Spring/Data/MongoDB`
+* `#Java/Spring/Data/Redis`
+* `#Java/Spring/Security`
+* `#Java/Spring/Batch`
+* `#Java/Spring/Integration`
+* `#Java/Spring/Session`
+* `#Java/Spring/AI`
+* `#Java/JDBC`
+* `#Java/Persistence`
+* `#Java/Persistence/JPA`
+* `#Java/Persistence/Hibernate`
 
 ### Testing
-- `#Testing`
+
+* `#Testing`
 
 ### Kotlin
-- `#Kotlin`
+
+* `#Kotlin`
 
 ### Databases
-- `#Databases`
-- `#Databases/SQL`
-- `#Databases/SQL/Transactions`
-- `#Databases/Indexes`
-- `#Databases/Transactions`
+
+* `#Databases`
+* `#Databases/SQL`
+* `#Databases/SQL/Transactions`
+* `#Databases/Indexes`
+* `#Databases/Transactions`
 
 ### NoSQL
-- `#NoSQL`
+
+* `#NoSQL`
 
 ### Problems
-- `#Problems/Persistence`
+
+* `#Problems/Persistence`
 
 ### DSA
-- `#DSA/Algorithms/Search`
-- `#DSA/DataStructures/Graph`
+
+* `#DSA/Algorithms/Search`
+* `#DSA/DataStructures/Graph`
 
 ### Paradigms
-- `#Paradigms/OOP`
+
+* `#Paradigms/OOP`
 
 ### DistributedSystems
-- `#DistributedSystems/Communication`
+
+* `#DistributedSystems/Communication`
 
 ### Networking
-- `#Networking`
-- `#Networking/TCP`
-- `#Networking/UDP`
-- `#Networking/DNS`
-- `#Networking/Web`
-- `#Networking/Web/Protocols`
-- `#Networking/Web/Protocols/HTTP`
-- `#Networking/Web/Protocols/TLS`
-- `#Networking/Web/Cookies`
-- `#Networking/Web/Caching`
+
+* `#Networking`
+* `#Networking/TCP`
+* `#Networking/UDP`
+* `#Networking/DNS`
+* `#Networking/Web`
+* `#Networking/Web/Protocols`
+* `#Networking/Web/Protocols/HTTP`
+* `#Networking/Web/Protocols/TLS`
+* `#Networking/Web/Cookies`
+* `#Networking/Web/Caching`
 
 ### API
-- `#API/REST`
-- `#API/SOAP`
-- `#API/GraphQL`
-- `#API/GRPC`
-- `#API/RPC`
-- `#API/Gateway`
-- `#API/Webhooks`
+
+* `#API/REST`
+* `#API/SOAP`
+* `#API/GraphQL`
+* `#API/GRPC`
+* `#API/RPC`
+* `#API/Gateway`
+* `#API/Webhooks`
 
 ### Patterns
-- `#Patterns/GoF`
-- `#Patterns/GoF/Creational`
-- `#Patterns/GoF/Structural`
-- `#Patterns/GoF/Behavioral`
-- `#Patterns/GRASP`
-- `#Patterns/Enterprise`
-- `#Patterns/Enterprise/Integration`
-- `#Patterns/Enterprise/Integration/Channels`
-- `#Patterns/Enterprise/Integration/Messages`
-- `#Patterns/Enterprise/Integration/Routing`
-- `#Patterns/Enterprise/Integration/Transformation`
-- `#Patterns/Enterprise/Integration/Endpoints`
-- `#Patterns/Enterprise/Integration/Management`
-- `#Patterns/DistributedSystems`
-- `#Patterns/Cloud`
-- `#Patterns/Architecture/UI`
-- `#Patterns/Architecture/Monolith`
-- `#Patterns/Architecture/Microservices`
-- `#Patterns/Architecture/Microservices/ServiceBoundaries`
-- `#Patterns/Architecture/Microservices/CrossCuttingConcerns`
-- `#Patterns/Architecture/Microservices/CommunicationStyles`
-- `#Patterns/Architecture/Microservices/ExternalAPI`
-- `#Patterns/Architecture/Microservices/ServiceDiscovery`
-- `#Patterns/Architecture/Microservices/Deployment`
-- `#Patterns/Architecture/Microservices/Observability`
+
+* `#Patterns/GoF`
+* `#Patterns/GoF/Creational`
+* `#Patterns/GoF/Structural`
+* `#Patterns/GoF/Behavioral`
+* `#Patterns/GRASP`
+* `#Patterns/Enterprise`
+* `#Patterns/Enterprise/Integration`
+* `#Patterns/Enterprise/Integration/Channels`
+* `#Patterns/Enterprise/Integration/Messages`
+* `#Patterns/Enterprise/Integration/Routing`
+* `#Patterns/Enterprise/Integration/Transformation`
+* `#Patterns/Enterprise/Integration/Endpoints`
+* `#Patterns/Enterprise/Integration/Management`
+* `#Patterns/DistributedSystems`
+* `#Patterns/Cloud`
+* `#Patterns/Architecture/UI`
+* `#Patterns/Architecture/Monolith`
+* `#Patterns/Architecture/Microservices`
+* `#Patterns/Architecture/Microservices/ServiceBoundaries`
+* `#Patterns/Architecture/Microservices/CrossCuttingConcerns`
+* `#Patterns/Architecture/Microservices/CommunicationStyles`
+* `#Patterns/Architecture/Microservices/ExternalAPI`
+* `#Patterns/Architecture/Microservices/ServiceDiscovery`
+* `#Patterns/Architecture/Microservices/Deployment`
+* `#Patterns/Architecture/Microservices/Observability`
 
 ### Methodologies
-- `#Methodologies/DDD`
-- `#Methodologies/Principles`
-- `#Methodologies/Principles/SOLID`
-- `#Methodologies/Principles/DRY`
-- `#Methodologies/Principles/KISS`
-- `#Methodologies/Principles/IoC`
-- `#Methodologies/Principles/DependencyInjection`
-- `#Methodologies/Principles/YAGNI`
-- `#Methodologies/Principles/SeparationOfConcerns`
-- `#Methodologies/Principles/TellDontAsk`
-- `#Methodologies/Principles/LawOfDemeter`
+
+* `#Methodologies/DDD`
+* `#Methodologies/Principles`
+* `#Methodologies/Principles/SOLID`
+* `#Methodologies/Principles/DRY`
+* `#Methodologies/Principles/KISS`
+* `#Methodologies/Principles/IoC`
+* `#Methodologies/Principles/DependencyInjection`
+* `#Methodologies/Principles/YAGNI`
+* `#Methodologies/Principles/SeparationOfConcerns`
+* `#Methodologies/Principles/TellDontAsk`
+* `#Methodologies/Principles/LawOfDemeter`
 
 ### Career
-- `#Career`
-- `#Career/Interview`
-- `#Career/Experience`
-- `#Career/Java`
-- `#Career/Behavioral`
+
+* `#Career`
+* `#Career/Interview`
+* `#Career/Experience`
+* `#Career/Java`
+* `#Career/Behavioral`
 
 ### Build
-- `#Build/Tools`
-- `#Build/Tools/Maven`
-- `#Build/Tools/Gradle`
-- `#Build/Tools/Ant`
-- `#Build/Tools/CMake`
+
+* `#Build/Tools`
+* `#Build/Tools/Maven`
+* `#Build/Tools/Gradle`
+* `#Build/Tools/Ant`
+* `#Build/Tools/CMake`
 
 ### DevOps
-- `#DevOps/Tools/Docker`
-- `#DevOps/Tools/Kubernetes`
-- `#DevOps/Containerisation`
-- `#DevOps/Virtualisation`
-- `#DevOps/Orchestration`
-- `#DevOps/Configuration`
-- `#DevOps/Cloud`
-- `#DevOps/Deployment`
-- `#DevOps/Deployment/Strategies`
+
+* `#DevOps/Tools/Docker`
+* `#DevOps/Tools/Kubernetes`
+* `#DevOps/Containerisation`
+* `#DevOps/Virtualisation`
+* `#DevOps/Orchestration`
+* `#DevOps/Configuration`
+* `#DevOps/Cloud`
+* `#DevOps/Deployment`
+* `#DevOps/Deployment/Strategies`
 
 ### SystemDesign
-- `#SystemDesign`
-- `#SystemDesign/Scalability`
-- `#SystemDesign/Reliability`
-- `#SystemDesign/Performance`
-- `#SystemDesign/Availability`
-- `#SystemDesign/Consistency`
-- `#SystemDesign/Architecture`
 
-### Системные
-- `#SRS`
-- `#New`
+* `#SystemDesign`
+* `#SystemDesign/Scalability`
+* `#SystemDesign/Reliability`
+* `#SystemDesign/Performance`
+* `#SystemDesign/Availability`
+* `#SystemDesign/Consistency`
+* `#SystemDesign/Architecture`
+
+### System
+
+* `#SRS`
+* `#New`
