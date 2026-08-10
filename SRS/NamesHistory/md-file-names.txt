@@ -1,4 +1,4 @@
-﻿- [x] Can a column referenced by a foreign key be NULL.md
+- [x] Can a column referenced by a foreign key be NULL.md
 - [x] Can a HashMap contain two equal keys at the same time.md
 - [x] Can a Java interface declare a constructor.md
 - [x] Can a Java interface declare private fields or variables.md
@@ -339,55 +339,58 @@
 - [x] How would you explain concurrency in software systems.md
 - [x] How would you explain configuration styles for Spring applications.md
 - [x] How would you explain consistency in distributed systems and data stores.md
-- [ ] How would you explain constructors in Java.md
-- [ ] How would you explain Consumer DoubleConsumer IntConsumer and LongConsumer.md
-- [ ] How would you explain continuous integration and continuous delivery CI CD.md
-- [ ] How would you explain copy constructors or defensive copying in Java.md
+- [x] How would you explain constructors in Java.md
+- [x] How would you explain Consumer DoubleConsumer IntConsumer and LongConsumer.md
+- [x] How would you explain continuous integration and continuous delivery CI CD.md
+- [x] How would you explain copy constructors or defensive copying in Java.md
 - [x] What are CopyOnWriteArrayList thread safety tradeoffs.md
-- [ ] How would you explain core functional interfaces in java.util.function.md
-- [ ] How would you explain covariance of generic and return types in Java.md
-- [ ] How would you explain CREATE TABLE syntax in SQL.md
-- [ ] How would you explain criticisms of checked exceptions in Java.md
-- [ ] How would you explain daemon threads in Java.md
+- [x] How would you explain core functional interfaces in java.util.function.md
+- [x] How would you explain covariance of generic and return types in Java.md
+- [x] How would you explain CREATE TABLE syntax in SQL.md
+- [x] How would you explain criticisms of checked exceptions in Java.md
+- [x] How would you explain daemon threads in Java.md
 - [x] What are database cursors in JDBC and SQL.md
-- [ ] How would you explain database replication strategies.md
-- [ ] How would you explain database triggers in SQL.md
-- [ ] How would you explain DDL DML and DCL in SQL.md
-- [ ] How would you explain deadlock between threads or resources.md
-- [ ] How would you explain deep versus shallow copying in Java.md
-- [ ] How would you explain default equals and hashCode inherited from Object.md
-- [ ] How would you explain default interface methods since Java 8.md
-- [ ] How would you explain default modifiers for fields and methods inside interfaces.md
-- [ ] How would you explain denormalization tradeoffs in relational databases.md
+- [x] How would you explain database replication strategies.md
+- [x] How would you explain MySQL replication strategies.md
+- [x] How would you explain PostgreSQL replication strategies.md
+- [x] How would you explain Oracle replication strategies.md
+- [x] How would you explain database triggers in SQL.md
+- [x] How would you explain DDL DML and DCL in SQL.md
+- [x] How would you explain deadlock between threads or resources.md
+- [x] How would you explain deep versus shallow copying in Java.md
+- [x] How would you explain default equals and hashCode inherited from Object.md
+- [x] How would you explain default interface methods since Java 8.md
+- [x] How would you explain default modifiers for fields and methods inside interfaces.md
+- [x] How would you explain denormalization tradeoffs in relational databases.md
 - [x] How would you explain dependency injection.md
 - [x] How would you explain dependency inversion as a design principle.md
 - [x] What are dirty reads in transaction isolation.md
-- [ ] How would you explain disadvantages of adding database indexes.md
+- [x] How would you explain disadvantages of adding database indexes.md
 - [x] What are the distinctive features of Spring Boot.md
 - [x] How would you explain distinctive traits of dependency injection.md
-- [ ] How would you explain distinctive traits of the Java platform.md
-- [ ] How would you explain distinctive traits of the Java programming language.md
-- [ ] How would you explain distributed caching and cache hierarchies at a high level.md
+- [x] How would you explain distinctive traits of the Java platform.md
+- [x] How would you explain distinctive traits of the Java programming language.md
+- [x] How would you explain distributed caching and cache hierarchies at a high level.md
 - [x] What is the distributed tracing pattern in microservices.md
-- [ ] How would you explain DML versus DDL in SQL.md
+- [x] How would you explain DML versus DDL in SQL.md
 - [x] What are Docker containers and images at a high level.md
 - [x] What is the domain-specific boundary pattern in microservice design.md
-- [ ] How would you explain drawbacks of the legacy Hashtable class.md
-- [ ] How would you explain dynamic runtime polymorphism in Java.md
-- [ ] How would you explain encapsulation in object oriented design.md
+- [x] How would you explain drawbacks of the legacy Hashtable class.md
+- [x] How would you explain dynamic runtime polymorphism in Java.md
+- [x] How would you explain encapsulation in object oriented design.md
 - [x] How would you explain error context attributes in servlet error handling.md
-- [ ] How would you explain errors that surface at the JVM level.md
-- [ ] How would you explain Euler diagrams compared with Venn diagrams.md
-- [ ] How would you explain exceptions and error handling in Java.md
+- [x] How would you explain errors that surface at the JVM level.md
+- [x] How would you explain Euler diagrams compared with Venn diagrams.md
+- [x] How would you explain exceptions and error handling in Java.md
 - [x] What is the externalized configuration pattern for microservices.md
 - [x] What is fail-fast iterator behavior in Java collections.md
-- [ ] How would you explain fetch and add FAA in concurrent programming.md
-- [ ] How would you explain first normal form in relational databases.md
-- [ ] How would you explain foreign keys in relational databases.md
-- [ ] How would you explain Function DoubleFunction IntFunction and LongFunction variants.md
-- [ ] How would you explain futex based userspace locking on Linux.md
-- [ ] How would you explain FutureTask in Java concurrency.md
-- [ ] How would you explain Hamming distance in coding and binary strings.md
+- [x] How would you explain fetch and add FAA in concurrent programming.md
+- [x] How would you explain first normal form in relational databases.md
+- [x] How would you explain foreign keys in relational databases.md
+- [x] How would you explain Function DoubleFunction IntFunction and LongFunction variants.md
+- [x] How would you explain futex based userspace locking on Linux.md
+- [x] How would you explain FutureTask in Java concurrency.md
+- [x] How would you explain Hamming distance in coding and binary strings.md
 - [x] What are hash collisions in HashMap bucket chains.md
 - [x] What are heterogeneous collections and generic variance in Java.md
 - [x] What is Hibernate as an ORM framework.md
@@ -398,28 +401,28 @@
 - [x] What is Hibernate Query Language HQL.md
 - [x] What is Hibernate second level cache and its main components.md
 - [x] What is Hibernate SessionFactory.md
-- [ ] How would you explain horizontal database sharding.md
+- [x] How would you explain horizontal database sharding.md
 - [x] How would you explain HTTP cookies.md
 - [x] How would you explain HTTP sessions in servlet based applications.md
 - [x] How would you explain idempotent HTTP methods in REST APIs.md
-- [ ] How would you explain immutability and its benefits.md
-- [ ] How would you explain immutable classes in Java.md
-- [ ] How would you explain immutable objects and why they matter.md
-- [ ] How would you explain indexing as a general retrieval acceleration idea.md
+- [x] How would you explain immutability and its benefits in Java.md
+- [x] How would you explain immutable classes in Java.md
+- [x] How would you explain immutable objects and why they matter.md
+- [x] How would you explain indexing as a general retrieval acceleration idea.md
 - [x] What is initial capacity in Java collections such as HashMap.md
-- [ ] How would you explain instance initializer blocks versus constructors.md
-- [ ] How would you explain integration testing and how it differs from unit tests.md
+- [x] How would you explain instance initializer blocks versus constructors.md
+- [x] How would you explain integration testing and how it differs from unit tests.md
 - [x] Which interaction styles do you know in microservices.md
-- [ ] How would you explain intermediate operations on Java streams.md
-- [ ] How would you explain internationalization and localization in applications.md
-- [ ] How would you explain InterruptedException in Java threads.md
+- [x] How would you explain intermediate operations on Java streams.md
+- [x] How would you explain internationalization and localization in applications.md
+- [x] How would you explain InterruptedException in Java threads.md
 - [x] How would you explain inversion of control versus dependency injection.md
-- [ ] How would you explain is-a versus has-a relationships in object oriented design.md
-- [ ] How would you explain Java access modifiers and visibility rules.md
-- [ ] How would you explain Java arrays and their limitations.md
-- [ ] How would you explain Java atomic types in java.util.concurrent.atomic.md
-- [ ] How would you explain Java binary serialization.md
-- [ ] How would you explain Java class loaders and dynamic class loading.md
+- [x] How would you explain is-a versus has-a relationships in object oriented design.md
+- [x] How would you explain Java access modifiers and visibility rules.md
+- [x] How would you explain Java arrays and their limitations.md
+- [x] How would you explain Java atomic types in java.util.concurrent.atomic.md
+- [x] How would you explain Java binary serialization.md
+- [x] How would you explain Java class loaders and dynamic class loading.md
 - [x] What are Java CopyOnWrite collections.md
 - [ ] How would you explain Java data types primitives and references.md
 - [ ] How would you explain Java enum types.md

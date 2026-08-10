@@ -33,8 +33,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Collections`
 * `#Java/Collections/List`
 * `#Java/Collections/Map`
+* `#Java/Collections/Map/Hashtable`
 * `#Java/Collections/Set`
 * `#Java/Collections/Queues`
+* `#Java/Collections/Queues/PriorityQueue`
 * `#Java/Collections/Iteration`
 * `#Java/Collections/Sorting`
 * `#Java/Collections/Concurrency`
@@ -46,6 +48,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Async`
 * `#Java/Exceptions`
 * `#Java/Language`
+* `#Java/Arrays`
 * `#Java/String`
 * `#Java/Lambdas`
 * `#Java/FunctionalInterfaces`
@@ -58,10 +61,16 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Logging`
 * `#Java/JVM`
 * `#Java/JVM/GarbageCollector`
+* `#Java/JVM/ClassLoaders`
 * `#Java/Runtime`
 * `#Java/Bytecode`
 * `#Java/JMM`
 * `#Java/JDK`
+* `#Java/Versions`
+* `#Java/Versions/8`
+* `#Java/Versions/11`
+* `#Java/Versions/17`
+* `#Java/Versions/21`
 * `#Java/Tooling`
 * `#Java/Tooling/Maven`
 * `#Java/Tooling/Gradle`
@@ -112,9 +121,13 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### Databases
 * `#Databases`
 * `#Databases/SQL`
+* `#Databases/SQL/DDL`
+* `#Databases/SQL/DML`
+* `#Databases/SQL/DCL`
 * `#Databases/SQL/Transactions`
 * `#Databases/Indexes`
 * `#Databases/Keys`
+* `#Databases/NormalForms`
 * `#Databases/Transactions`
 * `#Databases/MySQL`
 * `#Databases/PostgreSQL`
@@ -142,16 +155,36 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### Problems
 * `#Problems/Persistence`
 
+### Internationalization
+* `#Internationalization`
+
+### Math
+* `#Math`
+
 ### DSA
 * `#DSA/Algorithms/Search`
 * `#DSA/Algorithms/String`
 * `#DSA/Complexity`
 * `#DSA/DataStructures/Graph`
 * `#DSA/DataStructures/LinkedList`
+* `#DSA/DataStructures/Set`
 
 ### Paradigms
 * `#Paradigms/OOP`
+* `#Paradigms/Functional`
 * `#Paradigms/Async`
+
+### DataAndState
+* `#DataAndState`
+* `#DataAndState/Values`
+* `#DataAndState/Objects`
+* `#DataAndState/State`
+* `#DataAndState/Mutability`
+* `#DataAndState/Mutability/Mutable`
+* `#DataAndState/Mutability/Immutable`
+* `#DataAndState/ValueSemantics`
+* `#DataAndState/ReferenceSemantics`
+* `#DataAndState/MemoryManagement`
 
 ### DistributedSystems
 * `#DistributedSystems`
@@ -273,6 +306,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DevOps/Cloud`
 * `#DevOps/Deployment`
 * `#DevOps/Deployment/Strategies`
+* `#DevOps/CICD`
 
 ### Debugging
 * `#Debugging`
@@ -284,6 +318,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#OperatingSystems/IO/Streams`
 * `#OperatingSystems/IO/Files`
 * `#OperatingSystems/Concurrency`
+* `#OperatingSystems/Linux`
 
 ### Caching
 * `#Caching`
