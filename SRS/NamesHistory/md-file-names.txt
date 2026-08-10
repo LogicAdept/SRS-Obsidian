@@ -289,55 +289,56 @@
 - [x] How would you briefly summarize projects you have worked on.md
 - [x] How would you briefly summarize your programming successes.md
 - [x] How would you describe abstraction in programming.md
-- [ ] How would you design a 100 million row table with fast lookup by int32.md
-- [ ] How would you design a delete operation or endpoint.md
+- [x] How would you design a 100 million row table with fast lookup by int32.md
+- [x] How would you design a delete operation or endpoint.md
 - [x] What advantages does Hibernate provide over plain JDBC.md
-- [ ] How would you explain advantages of composition in object oriented design.md
-- [ ] How would you explain advantages of Java NIO over classic blocking IO.md
+- [x] How would you explain advantages of composition in object oriented design.md
+- [x] How would you explain advantages of Java NIO over classic blocking IO.md
 - [x] What are the advantages of programming directly with JDBC.md
-- [ ] How would you explain alternate or secondary keys in relational databases.md
+- [x] How would you explain alternate or secondary keys in relational databases.md
 - [x] What annotations are used to configure a Spring application context.md
-- [ ] How would you explain anonymous classes in Java and typical use cases.md
-- [ ] How would you explain Apache Maven.md
-- [ ] How would you explain application level error handling approaches.md
+- [x] How would you explain anonymous classes in Java and typical use cases.md
+- [x] How would you explain Apache Maven.md
+- [x] How would you catch an exception in your application.md
+- [x] How would you track down an error in a running application.md
 - [x] What is aspect oriented programming AOP.md
-- [ ] How would you explain asymptotic time complexity notation.md
-- [ ] How would you explain asynchronous messaging between systems.md
-- [ ] How would you explain asynchronous programming and execution.md
+- [x] How would you explain asymptotic time complexity notation.md
+- [x] How would you explain asynchronous messaging between systems.md
+- [x] How would you explain asynchronous programming and execution.md
 - [x] What is atomicity in ACID transactions.md
-- [ ] How would you explain behavior driven development BDD.md
-- [ ] How would you explain benefits of buffered input and output.md
-- [ ] How would you explain big design up front BDUF.md
-- [ ] How would you explain BinaryOperator DoubleBinaryOperator IntBinaryOperator and LongBinaryOperator.md
-- [ ] How would you explain bitwise operators on integers in Java.md
-- [ ] How would you explain blocking versus non blocking methods in IO and concurrency.md
-- [ ] How would you explain boxing and unboxing in Java.md
-- [ ] How would you explain buffered streams in Java IO.md
-- [ ] How would you explain busy spin or busy waiting in concurrent code.md
-- [ ] How would you explain cache hit rate and cache miss rate.md
-- [ ] How would you explain caching concepts in applications.md
-- [ ] How would you explain candidate keys in relational databases.md
-- [ ] How would you explain categories of design patterns creational structural behavioral.md
-- [ ] How would you explain categories of Java classes such as nested and anonymous.md
+- [x] How would you explain behavior driven development BDD.md
+- [x] How would you explain benefits of buffered input and output.md
+- [x] How would you explain big design up front BDUF.md
+- [x] How would you explain BinaryOperator DoubleBinaryOperator IntBinaryOperator and LongBinaryOperator.md
+- [x] How would you explain bitwise operators on integers in Java.md
+- [x] How would you explain blocking versus non blocking methods in IO and concurrency.md
+- [x] How would you explain boxing and unboxing in Java.md
+- [x] How would you explain buffered streams in Java IO.md
+- [x] How would you explain busy spin or busy waiting in concurrent code.md
+- [x] How would you explain cache hit rate and cache miss rate.md
+- [x] How would you explain caching concepts in applications.md
+- [x] How would you explain candidate keys in relational databases.md
+- [x] How would you explain categories of design patterns creational structural behavioral.md
+- [x] How would you explain categories of Java classes such as nested and anonymous.md
 - [x] What is the centralized exception tracking pattern in microservices.md
-- [ ] How would you explain class inheritance in Java and tradeoffs.md
-- [ ] How would you explain classic functional style interfaces before java.util.function.md
-- [ ] How would you explain client side service discovery.md
-- [ ] How would you explain client side UI composition for micro frontends.md
-- [ ] How would you explain common guidelines for using inheritance in OOP.md
+- [x] How would you explain class inheritance in Java and tradeoffs.md
+- [x] How would you explain classic functional style interfaces before java.util.function.md
+- [x] How would you explain client side service discovery.md
+- [x] How would you explain client side UI composition for micro frontends.md
+- [x] How would you explain common guidelines for using inheritance in OOP.md
 - [x] How would you explain common HTTP request methods.md
-- [ ] How would you explain common levels and kinds of software testing.md
-- [ ] How would you explain common principles for scaling software systems.md
-- [ ] How would you explain common software design anti patterns.md
-- [ ] How would you explain common ways to optimize SQL queries.md
-- [ ] How would you explain compare and swap CAS and fetch and add FAA.md
-- [ ] How would you explain compare and swap CAS in concurrent algorithms.md
-- [ ] How would you explain CompletableFuture for composing async work.md
-- [ ] How would you explain composite keys in relational databases.md
-- [ ] How would you explain composition in object oriented design.md
-- [ ] How would you explain concurrency in software systems.md
+- [x] How would you explain common levels and kinds of software testing.md
+- [x] How would you explain common principles for scaling software systems.md
+- [x] How would you explain common software design anti patterns.md
+- [x] How would you explain common ways to optimize SQL queries.md
+- [x] How would you explain compare and swap CAS and fetch and add FAA.md
+- [x] How would you explain compare and swap CAS in concurrent algorithms.md
+- [x] How would you explain CompletableFuture for composing async work.md
+- [x] How would you explain composite keys in relational databases.md
+- [x] How would you explain composition in object oriented design.md
+- [x] How would you explain concurrency in software systems.md
 - [x] How would you explain configuration styles for Spring applications.md
-- [ ] How would you explain consistency in distributed systems and data stores.md
+- [x] How would you explain consistency in distributed systems and data stores.md
 - [ ] How would you explain constructors in Java.md
 - [ ] How would you explain Consumer DoubleConsumer IntConsumer and LongConsumer.md
 - [ ] How would you explain continuous integration and continuous delivery CI CD.md

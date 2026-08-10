@@ -55,6 +55,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Immutability`
 * `#Java/IO`
 * `#Java/NIO`
+* `#Java/Logging`
 * `#Java/JVM`
 * `#Java/JVM/GarbageCollector`
 * `#Java/Runtime`
@@ -113,6 +114,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases/SQL`
 * `#Databases/SQL/Transactions`
 * `#Databases/Indexes`
+* `#Databases/Keys`
 * `#Databases/Transactions`
 * `#Databases/MySQL`
 * `#Databases/PostgreSQL`
@@ -143,11 +145,13 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### DSA
 * `#DSA/Algorithms/Search`
 * `#DSA/Algorithms/String`
+* `#DSA/Complexity`
 * `#DSA/DataStructures/Graph`
 * `#DSA/DataStructures/LinkedList`
 
 ### Paradigms
 * `#Paradigms/OOP`
+* `#Paradigms/Async`
 
 ### DistributedSystems
 * `#DistributedSystems`
@@ -155,6 +159,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Messaging
 * `#Messaging`
+* `#Messaging/Async`
 * `#Messaging/Tools`
 * `#Messaging/Tools/Kafka`
 
@@ -178,8 +183,11 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#API/RPC`
 * `#API/Gateway`
 * `#API/Webhooks`
+* `#API/Contracts`
+* `#API/Idempotency`
 
 ### Patterns
+* `#Patterns/AntiPatterns`
 * `#Patterns/GoF`
 * `#Patterns/GoF/Creational`
 * `#Patterns/GoF/Structural`
@@ -196,6 +204,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/DistributedSystems`
 * `#Patterns/Cloud`
 * `#Patterns/Architecture/UI`
+* `#Patterns/Architecture/UI/MicroFrontends`
 * `#Patterns/Architecture/Monolith`
 * `#Patterns/Architecture/Microservices`
 * `#Patterns/Architecture/Microservices/ServiceBoundaries`
@@ -208,6 +217,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Methodologies
 * `#Methodologies/DDD`
+* `#Methodologies/BDD`
+* `#Methodologies/BDUF`
 * `#Methodologies/Principles`
 * `#Methodologies/Principles/SOLID`
 * `#Methodologies/Principles/DRY`
@@ -218,6 +229,20 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Methodologies/Principles/SeparationOfConcerns`
 * `#Methodologies/Principles/TellDontAsk`
 * `#Methodologies/Principles/LawOfDemeter`
+
+### ProjectManagement
+* `#ProjectManagement`
+* `#ProjectManagement/Agile`
+* `#ProjectManagement/Planning`
+* `#ProjectManagement/Estimation`
+* `#ProjectManagement/Delivery`
+
+### EngineeringLeadership
+* `#EngineeringLeadership`
+* `#EngineeringLeadership/TechLead`
+* `#EngineeringLeadership/Architect`
+* `#EngineeringLeadership/CTO`
+* `#EngineeringLeadership/DecisionMaking`
 
 ### Career
 * `#Career`
@@ -249,6 +274,26 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DevOps/Deployment`
 * `#DevOps/Deployment/Strategies`
 
+### Debugging
+* `#Debugging`
+
+### OperatingSystems
+* `#OperatingSystems`
+* `#OperatingSystems/IO`
+* `#OperatingSystems/IO/Buffered`
+* `#OperatingSystems/IO/Streams`
+* `#OperatingSystems/IO/Files`
+* `#OperatingSystems/Concurrency`
+
+### Caching
+* `#Caching`
+
+### Logging
+* `#Logging`
+
+### Observability
+* `#Observability`
+
 ### SystemDesign
 * `#SystemDesign`
 * `#SystemDesign/Scalability`
@@ -257,6 +302,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#SystemDesign/Availability`
 * `#SystemDesign/Consistency`
 * `#SystemDesign/Architecture`
+* `#SystemDesign/Microservices`
+* `#SystemDesign/Tradeoffs`
 
 ### System
 * `#SRS`
