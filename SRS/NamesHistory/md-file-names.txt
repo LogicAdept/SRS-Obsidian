@@ -195,40 +195,40 @@
 - [x] How do you write a web application in Java.md
 - [x] How does a database query run.md
 - [x] How are database query results processed in JDBC.md
-- [ ] How does a doubly linked list differ structurally from a singly linked list.md
+- [x] How does a doubly linked list differ structurally from a singly linked list.md
 - [x] What is the difference between a plain Java object and a Spring bean.md
 - [x] How does a prototype Spring bean behave when injected into a singleton.md
 - [x] How does a servlet container manage the servlet lifecycle.md
 - [x] How does a Spring application call another service.md
 - [x] What is the difference between a Spring configuration class and a component class.md
 - [x] What is the relationship between a Spring stereotype component and a Spring bean.md
-- [ ] How does cloning work for objects arrays and two-dimensional arrays in Java.md
+- [x] How does cloning work for objects arrays and two-dimensional arrays in Java.md
 - [x] How does close behave when using a JDBC connection pool.md
-- [ ] How does composition differ from inheritance.md
-- [ ] How does data move between the stack and the heap in Java.md
+- [x] How does composition differ from inheritance.md
+- [x] How does data move between the stack and the heap in Java.md
 - [x] How does DispatcherServlet choose which handler method to invoke.md
 - [x] How does Docker differ from Kubernetes.md
-- [ ] How does garbage collection treat cyclic references between live objects.md
-- [ ] How does garbage collection work on the JVM.md
-- [ ] How does Git rebase differ from merge.md
-- [ ] How does GROUP BY handle NULL in SQL.md
+- [x] How does garbage collection treat cyclic references between live objects.md
+- [x] How does garbage collection work on the JVM.md
+- [x] How does Git rebase differ from merge.md
+- [x] How does GROUP BY handle NULL in SQL.md
 - [x] How does HashMap access elements internally.md
 - [x] How does HashSet differ from LinkedHashSet.md
 - [x] How does Hashtable differ from ConcurrentHashMap.md
-- [ ] How does Java decide whether two objects are equivalent.md
-- [ ] How does Java model multiple inheritance with interfaces.md
+- [x] How does Java decide whether two objects are equivalent.md
+- [x] How does Java model multiple inheritance with interfaces.md
 - [x] How does JDBC ResultSet behave and what configuration options exist.md
 - [x] What is the difference between JPQL and Hibernate HQL.md
 - [x] How does JSTL handle errors.md
-- [ ] How does Kafka achieve horizontal scalability.md
-- [ ] How does Kafka provide fault tolerance.md
-- [ ] How does LEFT JOIN differ from INNER JOIN in SQL.md
-- [ ] How does Manacher's algorithm work.md
-- [ ] How does multithreading differ from parallelism and async work.md
-- [ ] How does NIO provide non-blocking access to resources.md
-- [ ] How does notify differ from notifyAll in Java.md
-- [ ] How does Object wait with a timeout differ from wait without arguments.md
-- [ ] How does package private visibility relate to encapsulation.md
+- [x] How does Kafka achieve horizontal scalability.md
+- [x] How does Kafka provide fault tolerance.md
+- [x] How does LEFT JOIN differ from INNER JOIN in SQL.md
+- [x] How does Manacher's algorithm work.md
+- [x] How does multithreading differ from parallelism and async work.md
+- [x] How does NIO provide non-blocking access to resources.md
+- [x] How does notify differ from notifyAll in Java.md
+- [x] How does Object wait with a timeout differ from wait without arguments.md
+- [x] How does package private visibility relate to encapsulation.md
 - [x] How does PreparedStatement mitigate SQL injection compared to Statement.md
 - [x] How does putting and getting values in a Map work internally.md
 - [x] How does removing elements from an ArrayList work and how does size change.md
@@ -239,55 +239,56 @@
 - [x] What is the difference between Spring Boot and the core Spring Framework.md
 - [x] What is the difference between Spring Data JPA and using Hibernate directly.md
 - [x] How does Spring work under the hood.md
-- [ ] How does SQL JOIN differ from UNION.md
-- [ ] How does SQL UNION differ from UNION ALL recap.md
-- [ ] How does Supplier differ from Consumer in Java.md
-- [ ] How does the garbage collector decide an object can be collected.md
-- [ ] How does the Java Memory Model define visibility and ordering.md
-- [ ] How does the JVM decide an object is garbage.md
-- [ ] How does the JVM help Java bytecode run across operating systems.md
+- [x] How does SQL JOIN differ from UNION.md
+- [x] How does SQL UNION differ from UNION ALL.md
+- [x] How does Supplier differ from Consumer in Java.md
+- [x] How does the garbage collector decide an object can be collected.md
+- [x] How does the Java Memory Model define visibility and ordering.md
+- [x] How does the JVM decide an object is garbage.md
+- [x] How does the JVM help Java bytecode run across operating systems.md
 - [x] How does the List interface differ from the Set interface.md
 - [x] How does the Queue interface differ from the Deque interface.md
 - [x] What is the Spring application context.md
-- [ ] How does Thread.join work in Java.md
-- [ ] How does Thread.sleep differ from Thread.yield.md
-- [ ] How does trunk based development differ from long lived feature branches.md
-- [ ] How does type erasure work for Java generics.md
-- [ ] How does vertical partitioning differ from horizontal partitioning.md
-- [ ] How does volatile visibility differ from atomicity for compound updates.md
-- [ ] How does well formed XML differ from schema valid XML.md
-- [ ] How have you worked with databases and what are the tradeoffs of each approach.md
+- [x] How does Thread.join work in Java.md
+- [x] How does Thread.sleep differ from Thread.yield.md
+- [x] How does trunk based development differ from long lived feature branches.md
+- [x] How does type erasure work for Java generics.md
+- [x] How does vertical partitioning differ from horizontal partitioning.md
+- [x] How does volatile visibility differ from atomicity for compound updates.md
+- [x] How does well formed XML differ from schema valid XML.md
+- [x] How have you worked with databases and what are the tradeoffs of each approach.md
 - [x] How is an HttpServlet request processed.md
-- [ ] How is data represented in Java memory.md
+- [x] How does Java represent data in memory.md
 - [x] How is HashSet implemented in terms of HashMap.md
-- [ ] How is Java runtime memory organized.md
-- [ ] How is java.lang.String implemented under the hood.md
+- [x] How is Java runtime memory organized.md
+- [x] How is java.lang.String implemented under the hood.md
 - [x] How is JSP configured in the web deployment descriptor.md
 - [x] How is the JSTL tag library organized.md
-- [ ] How long do strings live in the Java string pool.md
-- [ ] How many bits are in one Java byte.md
+- [x] How long do strings live in the Java string pool.md
+- [x] How many bits are in one Java byte.md
 - [x] How many buckets can a HashMap table hold.md
 - [x] How many linked nodes are visited on average for HashMap get with an existing key.md
 - [x] How many new objects may be allocated when inserting a new entry into HashMap.md
-- [ ] How many normal forms are commonly taught for relational databases.md
-- [ ] How many parts does a JWT have.md
+- [x] How many normal forms are commonly taught for relational databases.md
+- [x] How many parts does a JWT have.md
 - [x] How many Spring application contexts can an application have.md
-- [ ] How many years of Java experience do you have in total.md
+- [x] How many years of Java experience do you have in total.md
 - [x] How much extra memory can ArrayList add trigger when resizing.md
 - [x] How much extra memory does LinkedList add allocate per insertion.md
-- [ ] How much logic can a single lambda expression cleanly express.md
-- [ ] How much programming experience do you have.md
-- [ ] How much total Java experience do you have.md
-- [ ] How should you store and handle passwords securely.md
-- [ ] How should you throw and handle exceptions in Java.md
-- [ ] How would you briefly describe migrating a project to Java.md
-- [ ] How would you briefly describe what programming work you have done.md
-- [ ] How would you briefly describe your most interesting project.md
-- [ ] How would you briefly explain why you focus on Java.md
-- [ ] How would you briefly introduce yourself and state your professional goals.md
-- [ ] How would you briefly summarize projects you have worked on.md
-- [ ] How would you briefly summarize your programming successes.md
-- [ ] How would you describe abstraction in programming.md
+- [x] How much logic can a single lambda expression cleanly express.md
+- [x] How much programming experience do you have.md
+- [x] How much total Java experience do you have.md
+- [x] How should you store and handle passwords securely.md
+- [x] How should you store and handle passwords securely in Java.md
+- [x] How should you throw and handle exceptions in Java.md
+- [x] How would you briefly describe migrating a project to Java.md
+- [x] How would you briefly describe what programming work you have done.md
+- [x] How would you briefly describe your most interesting project.md
+- [x] How would you briefly explain why you focus on Java.md
+- [x] How would you briefly introduce yourself and state your professional goals.md
+- [x] How would you briefly summarize projects you have worked on.md
+- [x] How would you briefly summarize your programming successes.md
+- [x] How would you describe abstraction in programming.md
 - [ ] How would you design a 100 million row table with fast lookup by int32.md
 - [ ] How would you design a delete operation or endpoint.md
 - [x] What advantages does Hibernate provide over plain JDBC.md

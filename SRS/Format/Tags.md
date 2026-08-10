@@ -42,17 +42,24 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/HashCodeEquals`
 * `#Java/OOP`
 * `#Java/Concurrency`
+* `#Java/Parallelism`
+* `#Java/Async`
 * `#Java/Exceptions`
 * `#Java/Language`
 * `#Java/String`
 * `#Java/Lambdas`
+* `#Java/FunctionalInterfaces`
 * `#Java/Annotations`
 * `#Java/Serialization`
 * `#Java/Generics`
 * `#Java/Immutability`
 * `#Java/IO`
+* `#Java/NIO`
 * `#Java/JVM`
 * `#Java/JVM/GarbageCollector`
+* `#Java/Runtime`
+* `#Java/Bytecode`
+* `#Java/JMM`
 * `#Java/JDK`
 * `#Java/Tooling`
 * `#Java/Tooling/Maven`
@@ -84,6 +91,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Spring/Data/JPA`
 * `#Java/Spring/Data/MongoDB`
 * `#Java/Spring/Data/Redis`
+* `#Java/Security`
 * `#Java/Spring/Security`
 * `#Java/Spring/Batch`
 * `#Java/Spring/Integration`
@@ -106,6 +114,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases/SQL/Transactions`
 * `#Databases/Indexes`
 * `#Databases/Transactions`
+* `#Databases/MySQL`
+* `#Databases/PostgreSQL`
+* `#Databases/Oracle`
 
 ### NoSQL
 * `#NoSQL`
@@ -113,11 +124,16 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### Serialization
 * `#Serialization`
 
+### DataFormats
+* `#DataFormats`
+* `#DataFormats/XML`
+
 ### Security
 * `#Security`
 * `#Security/Authentication`
 * `#Security/Authorization`
 * `#Security/Cryptography`
+* `#Security/JWT`
 * `#Security/AppSec`
 * `#Security/AppSec/Injection`
 
@@ -126,13 +142,21 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### DSA
 * `#DSA/Algorithms/Search`
+* `#DSA/Algorithms/String`
 * `#DSA/DataStructures/Graph`
+* `#DSA/DataStructures/LinkedList`
 
 ### Paradigms
 * `#Paradigms/OOP`
 
 ### DistributedSystems
+* `#DistributedSystems`
 * `#DistributedSystems/Communication`
+
+### Messaging
+* `#Messaging`
+* `#Messaging/Tools`
+* `#Messaging/Tools/Kafka`
 
 ### Networking
 * `#Networking`
