@@ -7,7 +7,7 @@ For tags, use the following rules:
 5. Words in tags **start with capital letters**.
 6. Abbreviations are written in **uppercase**.
 7. The **#New** tag is placed at the end.
-8. All cards in the root of the vault have the **#SRS** tag (spaced repetition).
+8. Every SRS flashcard note must have the **#SRS** tag (spaced repetition).
 
 ---
 
@@ -43,6 +43,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Concurrency`
 * `#Java/Exceptions`
 * `#Java/Language`
+* `#Java/Annotations`
+* `#Java/Serialization`
 * `#Java/Generics`
 * `#Java/Immutability`
 * `#Java/IO`
@@ -104,6 +106,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### NoSQL
 * `#NoSQL`
+
+### Serialization
+* `#Serialization`
 
 ### Problems
 * `#Problems/Persistence`
@@ -196,6 +201,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### DevOps
 * `#DevOps/Tools/Docker`
 * `#DevOps/Tools/Kubernetes`
+* `#DevOps/VCS/Git`
 * `#DevOps/Containerisation`
 * `#DevOps/Virtualisation`
 * `#DevOps/Orchestration`

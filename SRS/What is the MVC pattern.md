@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/UI #SRS
+#Patterns/Architecture/UI #SRS #New
 
 # What is the MVC pattern
 

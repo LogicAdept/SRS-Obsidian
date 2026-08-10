@@ -96,57 +96,59 @@
 - [x] How do Java for, while, and do-while loops differ.md
 - [x] How do Java methods accept parameters and return values.md
 - [x] How do JDBC interface types such as Statement and PreparedStatement differ.md
-- [ ] How do left, right, and inner SQL joins differ.md
+- [x] How do left, right, and inner SQL joins differ.md
 - [x] What is the difference between optimistic and pessimistic locking in Hibernate.md
 - [x] How do servlet filters Spring MVC interceptors and web listeners differ.md
 - [x] How do servlets work in a multithreaded environment.md
 - [x] What is the difference between Spring Component, Repository, and Service stereotypes.md
 - [x] What is the difference between Spring stereotype component annotations.md
-- [ ] How do static and final fields affect Java serialization.md
-- [ ] How do string literals enter the Java string pool.md
-- [ ] How do the stack and heap differ for multithreading in Java.md
-- [ ] How do you add constraints to a database.md
-- [ ] How do you add validation or database constraints to your data model.md
-- [ ] How do you alter a table in a relational database.md
-- [ ] How do you assess your own skill level.md
+- [+] How do static and final fields affect Java serialization.md
+- [+] How do string literals enter the Java string pool.md
+- [x] How do the stack and heap differ for multithreading in Java.md
+- [x] How do you add constraints to a database.md
+- [x] How do you add constraints in a NoSQL database.md
+- [x] How do you add validation or database constraints to your data model.md
+- [x] How do you alter a table in a relational database.md
+- [x] How do you assess your own skill level.md
 - [x] How do you avoid ConcurrentModificationException while iterating a collection.md
-- [ ] How do you call a stored procedure from Java.md
-- [ ] How do you call superclass methods from a subclass in Java.md
-- [ ] How do you capture a Java thread dump.md
-- [ ] How do you choose a design pattern or strategy.md
-- [ ] How do you choose the size of a thread pool.md
-- [ ] How do you close a database connection properly.md
-- [ ] How do you compare objects for equality in Java.md
-- [ ] How do you compare primitive and wrapper values in Java.md
-- [ ] How do you compare primitive values in Java.md
+- [x] How do you call a stored procedure from Java.md
+- [x] How do you call superclass methods from a subclass in Java.md
+- [x] How do you capture a Java thread dump.md
+- [x] How do you decide whether to use the Strategy pattern.md
+- [x] How do you choose the size of a thread pool.md
+- [x] How do you close a database connection properly.md
+- [x] How do you compare objects for equality in Java.md
+- [x] How do you compare primitive and wrapper values in Java.md
+- [x] How do you compare primitive values in Java.md
 - [x] How do you configure initialization parameters for a JSP.md
-- [ ] How do you connect a local repository to a remote Git repository.md
+- [x] How do you add a remote to a local Git repository.md
 - [x] How do you connect to a database and add logging in a servlet.md
 - [x] How do you convert a HashSet to an ArrayList in one line.md
 - [x] How do you convert an ArrayList to a HashSet in one line.md
 - [x] How do you copy a collection into an array in one line.md
-- [ ] How do you correctly override equals in Java.md
-- [ ] How do you create a database index.md
+- [x] How do you override equals correctly in Java.md
+- [x] How do you create a database index.md
 - [x] How do you create a REST service quickly.md
 - [x] How do you create a singleton Spring bean at application startup.md
 - [x] How do you create a Spring MVC controller.md
-- [ ] How do you create a thread in Java.md
-- [ ] How do you customize Java serialization and deserialization.md
-- [ ] How do you declare a custom annotation in Java.md
-- [ ] How do you declare a static generic method in Java.md
-- [ ] How do you declare constraints in SQL or a relational schema.md
-- [ ] How do you define your own exception class in Java.md
-- [ ] How do you design a custom serialization format.md
-- [ ] How do you diagnose memory pressure and OutOfMemoryError.md
-- [ ] How do you download changes from a remote Git repository.md
-- [ ] How do you emulate RIGHT JOIN using only LEFT JOIN support.md
-- [ ] How do you establish a database connection in Java.md
-- [ ] How do you exclude fields from Java serialization.md
-- [ ] How do you find bugs in a program and avoid mistakes.md
-- [ ] How do you forbid NULL or empty values in a database column.md
+- [x] How do you create a thread in Java.md
+- [x] How do you customize Java serialization and deserialization.md
+- [x] How do you declare a custom annotation in Java.md
+- [x] How do you declare a static generic method in Java.md
+- [x] How do you declare constraints in SQL or a relational schema.md
+- [x] How do you define your own exception class in Java.md
+- [x] How do you design a custom Java serialization format.md
+- [x] How do you design a custom serialization format.md
+- [x] How do you diagnose memory pressure and OutOfMemoryError.md
+- [x] How do you download changes from a remote Git repository.md
+- [x] How do you emulate RIGHT JOIN using only LEFT JOIN support.md
+- [x] How do you establish a database connection in Java.md
+- [x] How do you exclude fields from Java serialization.md
+- [x] How do you find bugs in a program and avoid mistakes.md
+- [x] How do you forbid NULL or empty values in a database column.md
 - [x] How do you handle errors on JSP pages.md
-- [ ] How do you handle exceptions in Java applications.md
-- [ ] How do you handle transaction isolation anomalies.md
+- [x] How do you handle exceptions in Java applications.md
+- [x] How do you handle transaction isolation anomalies.md
 - [ ] How do you identify slow or non performant SQL queries.md
 - [ ] How do you implement a thread-safe singleton in Java.md
 - [ ] How do you implement an immutable class in Java.md
