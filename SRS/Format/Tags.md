@@ -36,6 +36,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Collections/Set`
 * `#Java/Collections/Queues`
 * `#Java/Collections/Iteration`
+* `#Java/Collections/Sorting`
 * `#Java/Collections/Concurrency`
 * `#Java/Streams`
 * `#Java/HashCodeEquals`
@@ -43,6 +44,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Concurrency`
 * `#Java/Exceptions`
 * `#Java/Language`
+* `#Java/String`
+* `#Java/Lambdas`
 * `#Java/Annotations`
 * `#Java/Serialization`
 * `#Java/Generics`
@@ -109,6 +112,14 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Serialization
 * `#Serialization`
+
+### Security
+* `#Security`
+* `#Security/Authentication`
+* `#Security/Authorization`
+* `#Security/Cryptography`
+* `#Security/AppSec`
+* `#Security/AppSec/Injection`
 
 ### Problems
 * `#Problems/Persistence`
@@ -197,11 +208,15 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Build/Tools/Gradle`
 * `#Build/Tools/Ant`
 * `#Build/Tools/CMake`
+* `#Build/Dependencies`
+* `#Build/ArtifactRepositories`
+* `#Build/ArtifactRepositories/Nexus`
 
 ### DevOps
 * `#DevOps/Tools/Docker`
 * `#DevOps/Tools/Kubernetes`
 * `#DevOps/VCS/Git`
+* `#DevOps/Shell`
 * `#DevOps/Containerisation`
 * `#DevOps/Virtualisation`
 * `#DevOps/Orchestration`

@@ -149,51 +149,52 @@
 - [x] How do you handle errors on JSP pages.md
 - [x] How do you handle exceptions in Java applications.md
 - [x] How do you handle transaction isolation anomalies.md
-- [ ] How do you identify slow or non performant SQL queries.md
-- [ ] How do you implement a thread-safe singleton in Java.md
-- [ ] How do you implement an immutable class in Java.md
+- [x] How do you identify slow or non-performant SQL queries.md
+- [x] How do you implement a thread-safe singleton in Java.md
+- [x] How do you implement an immutable class in Java.md
 - [x] How do you insert a line break in HTML from JSP.md
-- [ ] How do you inspect the previous Git commit.md
-- [ ] How do you integrate a database with a Java application.md
-- [ ] How do you invoke a default interface method from an implementing class.md
-- [ ] How do you invoke a static method on a Java interface.md
+- [x] How do you inspect the previous Git commit.md
+- [x] How do you integrate a database with a Java application.md
+- [x] How do you invoke a default interface method from an implementing class.md
+- [x] How do you invoke a static method on a Java interface.md
 - [x] How do you iterate all key value pairs in a Map.md
 - [x] How do you iterate all keys in a Map.md
 - [x] How do you iterate all values in a Map.md
 - [x] How do you iterate the elements of a Java collection.md
-- [ ] How do you make your first Git commit and add all files.md
-- [ ] How do you map or connect a Java class to a database.md
-- [ ] How do you merge two divergent Git branches.md
+- [x] How do you make your first Git commit and add all files.md
+- [x] How do you map or connect a Java class to a database.md
+- [x] How do you merge two divergent Git branches.md
 - [x] How do you obtain a read-only or unmodifiable collection in Java.md
 - [x] How do you obtain synchronized wrappers for standard Java collections.md
 - [x] How do you optimize a high traffic web service.md
-- [ ] How do you organize batch inserts for many rows.md
+- [x] How do you organize batch inserts for many rows.md
 - [x] How do you populate a JavaBean or object attributes from a request.md
-- [ ] How do you predict what a code snippet will do at runtime.md
-- [ ] How do you prevent duplicate message or packet delivery.md
-- [ ] How do you prevent Java object serialization.md
-- [ ] How do you prevent SQL injection in a database.md
-- [ ] How do you propagate an exception up the call stack in Java.md
+- [x] How do you predict what a code snippet will do at runtime.md
+- [x] How do you prevent duplicate message or packet delivery.md
+- [x] How do you prevent Java object serialization.md
+- [x] How do you prevent SQL injection in a database.md
+- [x] How do you propagate an exception up the call stack in Java.md
 - [x] How do you register a JDBC driver.md
 - [x] How do you register a servlet in Spring.md
 - [x] How do you restrict servlet endpoints to users with a valid session.md
-- [ ] How do you run a class instance on its own thread.md
-- [ ] How do you run a command in the shell as a background job.md
-- [ ] How do you search an unsorted int array with millions of elements quickly.md
+- [x] How do you run a class instance on its own thread.md
+- [x] How do you run a command in the shell as a background job.md
+- [x] How do you search an unsorted int array with millions of elements quickly.md
 - [x] How do you search and remove elements in a List.md
 - [x] How do you search for an element in an ArrayList.md
-- [ ] How do you share data between two threads in Java.md
-- [ ] How do you sort a list of strings with a lambda in Java.md
+- [x] How do you share data between two threads in Java.md
+- [x] How do you sort a list of strings with a lambda in Java.md
 - [x] How do you start a servlet when the web application starts.md
-- [ ] How do you stop a Java thread safely.md
-- [ ] How do you synchronize access in a multithreaded Java application.md
+- [x] How do you stop a Java thread safely and what does safely mean.md
+- [x] How do you synchronize access in a multithreaded Java application.md
 - [x] How do you traverse a LinkedList in reverse without using get index.md
-- [ ] How do you turn a Java string into a char array.md
+- [x] How do you turn a Java string into a char array.md
 - [x] How do you use dependency injection in practice.md
-- [ ] How do you use your own library in another Java project.md
+- [x] How do you use your own library in another Java project.md
 - [x] How do you work effectively with the Spring framework.md
 - [x] How do you write a web application in Java.md
-- [ ] How does a database query run and how are results processed.md
+- [x] How does a database query run.md
+- [x] How are database query results processed in JDBC.md
 - [ ] How does a doubly linked list differ structurally from a singly linked list.md
 - [x] What is the difference between a plain Java object and a Spring bean.md
 - [x] How does a prototype Spring bean behave when injected into a singleton.md
