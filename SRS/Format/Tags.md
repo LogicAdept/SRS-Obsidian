@@ -197,6 +197,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### Paradigms
 * `#Paradigms/OOP`
 * `#Paradigms/Functional`
+* `#Paradigms/Procedural`
 * `#Paradigms/Async`
 
 ### DataAndState
@@ -325,6 +326,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### DevOps
 * `#DevOps/Tools/Docker`
 * `#DevOps/Tools/Kubernetes`
+* `#DevOps/VCS`
 * `#DevOps/VCS/Git`
 * `#DevOps/Shell`
 * `#DevOps/Containerisation`

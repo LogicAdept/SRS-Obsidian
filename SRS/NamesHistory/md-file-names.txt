@@ -776,100 +776,100 @@
 - [x] In what order is a given snippet of Java code executed.md
 - [x] In which Java version were generics introduced.md
 - [x] Is a finally block always executed in Java.md
-- [ ] Is a Java array a primitive or an object.md
-- [ ] Is a Java array a static or dynamic data structure.md
-- [ ] Is a primary key implemented as an index and why.md
+- [x] Is a Java array a primitive or an object.md
+- [x] Is a Java array a static or dynamic data structure.md
+- [x] Is a primary key implemented as an index and why.md
 - [x] Is a session object always created on a JSP page and can it be disabled.md
 - [x] Is a Spring bean a class or an object.md
-- [ ] Is caching only used with databases.md
+- [x] Is caching only used with databases.md
 - [x] Is equals invoked when a HashMap bucket contains a single element.md
-- [ ] Is it accurate to say String is backed by a character array internally.md
+- [x] Is it accurate to say String is backed by a character array internally.md
 - [x] Is it safe to use a byte array as a HashMap key.md
-- [ ] Is it true that primitives live on the stack and reference instances live on the heap.md
+- [x] Is it true that primitives live on the stack and reference instances live on the heap.md
 - [x] Is Java LinkedList a singly or doubly linked list.md
 - [x] Is java.util.HashMap thread safe.md
-- [ ] Is StringBuilder faster than StringBuffer without synchronization.md
+- [x] Is StringBuilder faster than StringBuffer without synchronization.md
 - [x] Is the Java Stack class meant for long-term storage.md
-- [ ] Is the Java string pool empty when a JAR application starts.md
-- [ ] Is there a universal fix for race conditions in concurrent code.md
-- [ ] Must every caller catch exceptions declared in a throws clause.md
-- [ ] On which object does a static synchronized method acquire a lock.md
+- [x] Is the Java string pool empty when a JAR application starts.md
+- [x] Is there a universal fix for race conditions in concurrent code.md
+- [x] Must every caller catch exceptions declared in a throws clause.md
+- [x] On which object does a static synchronized method acquire a lock.md
 - [x] Should you define a constructor for a servlet and how should you initialize it.md
-- [ ] Use cases for the final keyword in Java.md
+- [x] What are use cases for the final keyword in Java.md
 - [x] What ACID requirements apply to database transactions.md
 - [x] What advantages do microservices have over a monolith.md
-- [ ] What advantages does ExecutorService offer over creating raw threads.md
-- [ ] What approaches exist for writing or generating XML in Java.md
-- [ ] What approaches handle complex queries with many parameters.md
-- [ ] What architecture did you use on past projects.md
-- [ ] What are alternatives to class inheritance.md
-- [ ] What are autoboxing and unboxing in Java.md
-- [ ] What are common concrete InputStream and OutputStream implementations.md
+- [x] What advantages does ExecutorService offer over creating raw threads.md
+- [x] What approaches exist for writing or generating XML in Java.md
+- [x] What approaches handle complex queries with many parameters.md
+- [x] What architecture did you use on past projects.md
+- [x] What are alternatives to class inheritance.md
+- [x] What are autoboxing and unboxing in Java.md
+- [x] What are common concrete InputStream and OutputStream implementations.md
 - [x] What are common JDBC SQL types and how do they map to Java types.md
-- [ ] What are common kinds of unchecked exceptions in Java.md
+- [x] What are common kinds of unchecked exceptions in Java.md
 - [x] What are common terminal operations on Java streams.md
-- [ ] What are database connection pools for.md
-- [ ] What are downsides of design patterns.md
-- [ ] What are enterprise integration patterns for applications.md
-- [ ] What are examples of behavioral design patterns.md
-- [ ] What are examples of common software anti patterns.md
-- [ ] What are examples of creational design patterns.md
-- [ ] What are examples of iterators with fail safe iteration semantics.md
-- [ ] What are examples of structural design patterns.md
-- [ ] What are examples where checked exceptions are a good fit.md
+- [x] What are database connection pools for.md
+- [x] What are downsides of design patterns.md
+- [x] What are enterprise integration patterns for applications.md
+- [x] What are examples of behavioral design patterns.md
+- [x] What are examples of common software anti patterns.md
+- [x] What are examples of creational design patterns.md
+- [x] What are examples of iterators with fail safe iteration semantics.md
+- [x] What are examples of structural design patterns.md
+- [x] What are examples where checked exceptions are a good fit.md
 - [x] What are flatMap and flatMapToInt for in Java streams.md
-- [ ] What are Future and CompletableFuture for in Java.md
-- [ ] What are Git branches for.md
-- [ ] What are Java threads composed of.md
-- [ ] What are log4j logging levels in order of increasing severity.md
+- [x] What are Future and CompletableFuture for in Java.md
+- [x] What are Git branches for.md
+- [x] What are Java threads composed of.md
+- [x] What are log4j logging levels in order of increasing severity.md
 - [x] What are map and mapToInt for in Java streams.md
 - [x] What are practical guidelines for working with JSP.md
-- [ ] What are programming design patterns for.md
+- [x] What are programming design patterns for.md
 - [x] What are servlet attributes for and how do they work.md
 - [x] What are Spring bean scopes for.md
 - [x] What are the advantages of servlets over CGI.md
-- [ ] What are the advantages of the Builder pattern over constructors.md
+- [x] What are the advantages of the Builder pattern over constructors.md
 - [x] What are the defining properties of a database transaction.md
 - [x] What are the implicit EL scope objects in JSP and how do they differ from servlet scoped objects.md
-- [ ] What are the key base exception types in Java.md
-- [ ] What are the main characteristics of software design patterns.md
-- [ ] What are the main functions of an operating system.md
-- [ ] What are the main groups of SQL commands.md
+- [x] What are the key base exception types in Java.md
+- [x] What are the main characteristics of software design patterns.md
+- [x] What are the main functions of an operating system.md
+- [x] What are the main groups of SQL commands.md
 - [x] What are the main HttpServlet request handling methods.md
 - [x] What are the main Java Collections Framework interfaces and typical implementations.md
 - [x] What are the main Java Map implementations.md
 - [x] What are the main Java Set implementations.md
 - [x] What are the main JDBC steps to work with a database.md
-- [ ] What are the main SQL aggregate functions.md
-- [ ] What are the operating system modes.md
-- [ ] What are the pros and cons of OOP versus procedural and functional programming.md
-- [ ] What are the storage sizes of Java primitive types.md
-- [ ] What are the three core principles of object oriented programming.md
+- [x] What are the main SQL aggregate functions.md
+- [x] What are the operating system modes.md
+- [x] What are the pros and cons of OOP versus procedural and functional programming.md
+- [x] What are the storage sizes of Java primitive types.md
+- [x] What are the three core principles of object oriented programming.md
 - [x] What are the three core Servlet lifecycle methods and their roles.md
-- [ ] What are the two common singleton implementation patterns.md
-- [ ] What are the two fundamental relational data integrity types.md
-- [ ] What are the wrapper types for Java primitives.md
-- [ ] What are three common kinds of database constraints.md
-- [ ] What are version control systems for.md
+- [x] What are the two common singleton implementation patterns.md
+- [x] What are the two fundamental relational data integrity types.md
+- [x] What are the wrapper types for Java primitives.md
+- [x] What are three common kinds of database constraints.md
+- [x] What are version control systems for.md
 - [x] What association types exist in Hibernate.md
 - [x] What backing data structure does ArrayList use internally.md
 - [x] What backs Java parallelStream under the hood.md
-- [ ] What can violating database normalization lead to.md
-- [ ] What can violating SOLID principles lead to.md
-- [ ] What categories of NoSQL databases exist.md
-- [ ] What conditions define a relational database.md
-- [ ] What configuration approaches exist for log4j.md
+- [x] What can violating database normalization lead to.md
+- [x] What can violating SOLID principles lead to.md
+- [x] What categories of NoSQL databases exist.md
+- [x] What conditions define a relational database.md
+- [x] What configuration approaches exist for log4j.md
 - [x] What configuration styles exist in Spring.md
 - [x] What constraints apply to keys in a Java Map.md
-- [ ] What constraints does a primary key impose on a table.md
+- [x] What constraints does a primary key impose on a table.md
 - [x] What core ideas underpin the Spring Framework.md
 - [x] What data structure backs TreeMap in Java.md
-- [ ] What database categories or types do you know.md
-- [ ] What default values do Java fields receive when not explicitly initialized.md
+- [x] What database categories or types do you know.md
+- [x] What default values do Java fields receive when not explicitly initialized.md
 - [x] What design idea does ArrayList implement.md
 - [x] What design idea does LinkedList implement.md
-- [ ] What diagram types are used in software design.md
-- [ ] What difficulties arise when working with caching.md
+- [x] What diagram types are used in software design.md
+- [x] What difficulties arise when working with caching.md
 - [ ] What do checked and unchecked exceptions mean in Java.md
 - [ ] What do INTERSECT and EXCEPT do in Transact-SQL.md
 - [x] What do you know about authoring custom JSP tags.md
