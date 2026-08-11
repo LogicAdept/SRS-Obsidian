@@ -637,51 +637,51 @@
 - [x] What is the JPA Table annotation and its attributes.md
 - [x] How would you explain the JSON data interchange format.md
 - [x] How would you explain the JSP page lifecycle.md
-- [ ] How would you explain the JVM execution engine.md
-- [ ] How would you explain the JVM stack and stack frames.md
+- [x] How would you explain the JVM execution engine.md
+- [x] How would you explain the JVM stack and stack frames.md
 - [x] What is the layered architecture of JDBC.md
-- [ ] How would you explain the layered memory hierarchy from registers to disk.md
-- [ ] How would you explain the Liskov substitution principle in SOLID.md
+- [x] How would you explain the layered memory hierarchy from registers to disk.md
+- [x] How would you explain the Liskov substitution principle in SOLID.md
 - [x] What is the List interface in Java.md
-- [ ] How would you explain the log4j Appender concept.md
-- [ ] How would you explain the log4j Logger abstraction.md
-- [ ] How would you explain the log4j logging pipeline appenders and layouts.md
-- [ ] How would you explain the main ranking functions in Transact-SQL.md
+- [x] How would you explain the log4j Appender concept.md
+- [x] How would you explain the log4j Logger abstraction.md
+- [x] How would you explain the log4j logging pipeline appenders and layouts.md
+- [x] How would you explain the main ranking functions in Transact-SQL.md
 - [x] What is the Map interface in Java.md
-- [ ] How would you explain the Maven build lifecycle.md
+- [x] How would you explain the Maven build lifecycle.md
 - [x] What is the API gateway pattern in microservices.md
 - [x] What is the application metrics pattern in microservices.md
 - [x] What is the audit logging pattern in microservices.md
 - [x] What is the microservice chassis pattern.md
 - [x] What is the third-party registration pattern in microservices.md
-- [ ] How would you explain the most important methods declared on java.lang.Object.md
+- [x] How would you explain the most important methods declared on java.lang.Object.md
 - [x] What is the N plus one problem in Hibernate.md
-- [ ] How would you explain the N plus one query problem in general.md
-- [ ] How would you explain the Nashorn JavaScript engine on the JVM.md
-- [ ] How would you explain the Object clone method and its issues.md
-- [ ] How would you explain the Object equals method contract.md
-- [ ] How would you explain the Object wait method and waiting on monitors.md
-- [ ] How would you explain the open closed principle in SOLID.md
-- [ ] How would you explain the PECS rule for generic method signatures.md
+- [x] How would you explain the N plus one query problem in general.md
+- [x] How would you explain the Nashorn JavaScript engine on the JVM.md
+- [x] How would you explain the Object clone method and its issues.md
+- [x] How would you explain the Object equals method contract.md
+- [x] How would you explain the Object wait method and waiting on monitors.md
+- [x] How would you explain the open closed principle in SOLID.md
+- [x] How would you explain the PECS rule for generic method signatures.md
 - [x] What is the peek method on stacks queues or streams in Java.md
-- [ ] How would you explain the polling publisher pattern.md
-- [ ] How would you explain the PreDestroy lifecycle annotation.md
+- [x] How would you explain the polling publisher pattern.md
+- [x] How would you explain the PreDestroy lifecycle annotation.md
 - [x] What is the Queue interface in Java.md
-- [ ] How would you explain the relational data model and Codd rules basics.md
-- [ ] How would you explain the Runnable interface in Java.md
-- [ ] How would you explain the service mesh pattern.md
+- [x] How would you explain the relational data model and Codd rules basics.md
+- [x] How would you explain the Runnable interface in Java.md
+- [x] How would you explain the service mesh pattern.md
 - [x] What is the service per container pattern.md
-- [ ] How would you explain the service registry pattern.md
+- [x] How would you explain the service registry pattern.md
 - [x] How would you explain the servlet container and its responsibilities.md
 - [x] How would you explain the servlet container lifecycle for servlets.md
 - [x] How would you explain the servlet RequestDispatcher for forward and include.md
 - [x] How would you explain the ServletRequest interface.md
 - [x] How would you explain the ServletResponse interface.md
 - [x] What is the Set interface in Java.md
-- [ ] How would you explain the sidecar pattern.md
-- [ ] How would you explain the single responsibility principle in SOLID.md
-- [ ] How would you explain the Singleton design pattern.md
-- [ ] How would you explain the SOLID design principles as a set.md
+- [x] How would you explain the sidecar pattern.md
+- [x] How would you explain the single responsibility principle in SOLID.md
+- [x] How would you explain the Singleton design pattern.md
+- [x] How would you explain the SOLID design principles as a set.md
 - [x] What is the Spring application context.md
 - [x] What is the Spring application context.md
 - [x] What is the Spring Bean annotation.md
@@ -693,88 +693,88 @@
 - [x] What is the Spring inversion of control container.md
 - [x] What is the Spring Service annotation.md
 - [x] What is the Spring Transactional annotation and its parameters.md
-- [ ] How would you explain the SQL COMMIT statement for transactions.md
-- [ ] How would you explain the SQL DROP statement.md
-- [ ] How would you explain the SQL EXISTS predicate.md
-- [ ] How would you explain the SQL GROUP BY clause.md
-- [ ] How would you explain the SQL HAVING clause.md
-- [ ] How would you explain the SQL JOIN operation in general.md
-- [ ] How would you explain the SQL language role in applications.md
-- [ ] How would you explain the SQL ORDER BY clause.md
-- [ ] How would you explain the SQL SELECT statement.md
-- [ ] How would you explain the SQL UNION operator.md
-- [ ] How would you explain the SQL VACUUM command in PostgreSQL.md
-- [ ] How would you explain the static keyword in Java.md
+- [x] How would you explain the SQL COMMIT statement for transactions.md
+- [x] How would you explain the SQL DROP statement.md
+- [x] How would you explain the SQL EXISTS predicate.md
+- [x] How would you explain the SQL GROUP BY clause.md
+- [x] How would you explain the SQL HAVING clause.md
+- [x] How would you explain the SQL JOIN operation in general.md
+- [x] How would you explain the SQL language role in applications.md
+- [x] How would you explain the SQL ORDER BY clause.md
+- [x] How would you explain the SQL SELECT statement.md
+- [x] How would you explain the SQL UNION operator.md
+- [x] How would you explain the SQL VACUUM command in PostgreSQL.md
+- [x] How would you explain the static keyword in Java.md
 - [x] What is the collect terminal operation in Java streams.md
-- [ ] How would you explain the StringBuilder append method.md
-- [ ] How would you explain the structure of a Maven pom.xml file.md
-- [ ] How would you explain the term plain old Java object POJO.md
-- [ ] How would you explain the ternary conditional operator in Java.md
-- [ ] How would you explain the throws clause for checked exceptions.md
+- [x] How would you explain the StringBuilder append method.md
+- [x] How would you explain the structure of a Maven pom.xml file.md
+- [x] How would you explain the term plain old Java object POJO.md
+- [x] How would you explain the ternary conditional operator in Java.md
+- [x] How would you explain the throws clause for checked exceptions.md
 - [x] What is the Transactional annotation in Spring Data.md
-- [ ] How would you explain the transactional outbox pattern.md
-- [ ] How would you explain the transient field modifier in Java.md
-- [ ] How would you explain the two main JVM memory regions stack and heap.md
+- [x] How would you explain the transactional outbox pattern.md
+- [x] How would you explain the transient field modifier in Java.md
+- [x] How would you explain the two main JVM memory regions stack and heap.md
 - [x] How would you explain the view in MVC web applications.md
-- [ ] How would you explain the Visitor design pattern.md
-- [ ] How would you explain the volatile field modifier in Java.md
-- [ ] How would you explain the XML markup format.md
-- [ ] How would you explain third normal form in relational databases.md
-- [ ] How would you explain thread pools and executor frameworks in Java.md
-- [ ] How would you explain thread safety for shared mutable state.md
-- [ ] How would you explain ThreadLocal variables in Java.md
-- [ ] How would you explain tight versus loose coupling between software modules.md
-- [ ] How would you explain ToDoubleBiFunction ToIntBiFunction and ToLongBiFunction.md
-- [ ] How would you explain ToDoubleFunction ToIntFunction and ToLongFunction.md
-- [ ] How would you explain tradeoffs among relational document and other database types.md
+- [x] How would you explain the Visitor design pattern.md
+- [x] How would you explain the volatile field modifier in Java.md
+- [x] How would you explain the XML markup format.md
+- [x] How would you explain third normal form in relational databases.md
+- [x] How would you explain thread pools and executor frameworks in Java.md
+- [x] How would you explain thread safety for shared mutable state.md
+- [x] How would you explain ThreadLocal variables in Java.md
+- [x] How would you explain tight versus loose coupling between software modules.md
+- [x] How would you explain ToDoubleBiFunction ToIntBiFunction and ToLongBiFunction.md
+- [x] How would you explain ToDoubleFunction ToIntFunction and ToLongFunction.md
+- [x] How would you explain tradeoffs among relational document and other database types.md
 - [x] What are transaction isolation levels in general.md
 - [x] What are transaction isolation levels in Hibernate.md
-- [ ] How would you explain transaction log tailing for integration.md
+- [x] How would you explain transaction log tailing for integration.md
 - [x] What is transaction propagation in Spring Data.md
 - [x] What are transaction propagation semantics in Spring or JTA.md
-- [ ] How would you explain transitive relations in relational algebra.md
-- [ ] How would you explain try catch finally exception handling in Java.md
-- [ ] How would you explain try with resources in Java.md
-- [ ] How would you explain tuning garbage collector settings on the JVM.md
+- [x] How would you explain transitive relations in relational algebra.md
+- [x] How would you explain try catch finally exception handling in Java.md
+- [x] How would you explain try with resources in Java.md
+- [x] How would you explain tuning garbage collector settings on the JVM.md
 - [x] What is Hibernate performance tuning.md
-- [ ] How would you explain type erasure for Java generics.md
-- [ ] How would you explain types of test doubles such as mocks and stubs.md
-- [ ] How would you explain UI frames in desktop Java or legacy web framesets.md
-- [ ] How would you explain UML diagrams notation and metamodel ideas.md
-- [ ] How would you explain UnaryOperator DoubleUnaryOperator IntUnaryOperator and LongUnaryOperator.md
-- [ ] How would you explain unit testing goals and practices.md
+- [x] How would you explain type erasure for Java generics.md
+- [x] How would you explain types of test doubles such as mocks and stubs.md
+- [x] How would you explain UI frames in desktop Java or legacy web framesets.md
+- [x] How would you explain UML diagrams notation and metamodel ideas.md
+- [x] How would you explain UnaryOperator DoubleUnaryOperator IntUnaryOperator and LongUnaryOperator.md
+- [x] How would you explain unit testing goals and practices.md
 - [x] How would you explain URL rewriting for session tracking.md
-- [ ] How would you explain Venn diagrams for set intersections.md
-- [ ] How would you explain what a database management system provides.md
-- [ ] How would you explain what a Git branch is.md
-- [ ] How would you explain what a JVM stack frame represents.md
-- [ ] How would you explain what a primary key is in relational databases.md
+- [x] How would you explain Venn diagrams for set intersections.md
+- [x] How would you explain what a database management system provides.md
+- [x] How would you explain what a Git branch is.md
+- [x] How would you explain what a JVM stack frame represents.md
+- [x] How would you explain what a primary key is in relational databases.md
 - [x] What is a Spring bean.md
-- [ ] How would you explain what an inversion of control container is.md
-- [ ] How would you explain what counts as garbage from the JVM perspective.md
-- [ ] How would you explain what software design patterns are for.md
-- [ ] How would you explain which design pattern ideas appear in StringBuilder and StringBuffer.md
-- [ ] How would you explain which fields should be included when implementing hashCode.md
-- [ ] How would you explain which Java language constructs can be marked static.md
-- [ ] How would you explain widening and narrowing casts between Java primitive types.md
-- [ ] How would you explain wildcard bounded and unbounded types in Java generics.md
-- [ ] How would you explain XML DTD.md
-- [ ] How would you explain XML namespaces and qualified names.md
-- [ ] How would you explain XSD schema validation for XML.md
-- [ ] How would you explain XSLT transformations of XML.md
-- [ ] How would you explain your technical background in a few sentences.md
-- [ ] How would you give a brief personal introduction.md
-- [ ] How would you ideally organize a CI CD pipeline.md
-- [ ] How would you implement integration testing.md
-- [ ] How would you notify a client when a transaction might roll back.md
-- [ ] How would you orchestrate communication between multiple services.md
-- [ ] How would you summarize your relevant work experience briefly.md
-- [ ] If calling method A will throw an exception what should you do.md
-- [ ] In a business context must equals consider all entity fields.md
-- [ ] In SQL does the engine conceptually apply JOIN or WHERE filtering first.md
+- [x] How would you explain what an inversion of control container is.md
+- [x] How would you explain what counts as garbage from the JVM perspective.md
+- [x] How would you explain what software design patterns are for.md
+- [x] How would you explain which design pattern ideas appear in StringBuilder and StringBuffer.md
+- [x] How would you explain which fields should be included when implementing hashCode in Java.md
+- [x] How would you explain which Java language constructs can be marked static.md
+- [x] How would you explain widening and narrowing casts between Java primitive types.md
+- [x] How would you explain wildcard bounded and unbounded types in Java generics.md
+- [x] How would you explain XML DTD.md
+- [x] How would you explain XML namespaces and qualified names.md
+- [x] How would you explain XSD schema validation for XML.md
+- [x] How would you explain XSLT transformations of XML.md
+- [x] How would you explain your technical background in a few sentences.md
+- [x] How would you give a brief personal introduction.md
+- [x] How would you ideally organize a CI CD pipeline.md
+- [x] How would you implement integration testing.md
+- [x] How would you notify a client when a transaction might roll back.md
+- [x] How would you orchestrate communication between multiple services.md
+- [x] How would you summarize your relevant work experience briefly.md
+- [x] If calling method A will throw an exception what should you do.md
+- [x] In a business context must equals consider all entity fields.md
+- [x] In SQL does the engine conceptually apply JOIN or WHERE filtering first.md
 - [x] In what order does Spring initialize a bean and its dependencies.md
-- [ ] In what order is a given snippet of Java code executed.md
-- [ ] In which Java version were generics introduced.md
+- [x] In what order is a given snippet of Java code executed.md
+- [x] In which Java version were generics introduced.md
 - [x] Is a finally block always executed in Java.md
 - [ ] Is a Java array a primitive or an object.md
 - [ ] Is a Java array a static or dynamic data structure.md

@@ -55,6 +55,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/StringJoiner`
 * `#Java/Optional`
 * `#Java/Library`
+* `#Java/Library/Nashorn`
 * `#Java/Time`
 * `#Java/Time/LocalDateTime`
 * `#Java/Time/ZonedDateTime`
@@ -73,6 +74,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/JVM/Memory`
 * `#Java/JVM/GarbageCollector`
 * `#Java/JVM/ClassLoaders`
+* `#Java/JVM/Tuning`
 * `#Java/Runtime`
 * `#Java/Bytecode`
 * `#Java/JMM`
@@ -127,6 +129,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### Testing
 * `#Testing`
 * `#Testing/Mocking`
+* `#Testing/Integration`
 
 ### Kotlin
 * `#Kotlin`
@@ -304,6 +307,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### Career
 * `#Career`
 * `#Career/Interview`
+* `#Career/Interview/Exercises`
 * `#Career/Experience`
 * `#Career/Java`
 * `#Career/Behavioral`
@@ -337,6 +341,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### OperatingSystems
 * `#OperatingSystems`
+* `#OperatingSystems/MemoryHierarchy`
 * `#OperatingSystems/IO`
 * `#OperatingSystems/IO/Buffered`
 * `#OperatingSystems/IO/Streams`
