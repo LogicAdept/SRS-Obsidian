@@ -557,85 +557,85 @@
 - [x] How would you explain static typing in Java.md
 - [x] What is calling stored procedures from JDBC.md
 - [x] How would you explain symmetry requirements for the equals contract in Java.md
-- [ ] How would you explain synchronization with synchronized and locks in Java.md
-- [ ] How would you explain synchronized blocks in Java and common pitfalls.md
-- [ ] How would you explain table or index partitioning in databases.md
+- [x] How would you explain synchronization with synchronized and locks in Java.md
+- [x] How would you explain synchronized blocks in Java and common pitfalls.md
+- [x] How would you explain table or index partitioning in databases.md
 - [x] What is target method and advice binding in Spring AOP.md
-- [ ] How would you explain TCP or UDP sockets in Java networking.md
-- [ ] How would you explain test driven development TDD.md
-- [ ] How would you explain test fixtures in JUnit.md
-- [ ] How would you explain the abstract keyword in Java.md
-- [ ] How would you explain the abstraction principle in software engineering.md
+- [x] How would you explain TCP or UDP sockets in Java networking.md
+- [x] How would you explain test driven development TDD.md
+- [x] How would you explain test fixtures in JUnit.md
+- [x] How would you explain the abstract keyword in Java.md
+- [x] How would you explain the abstraction principle in software engineering.md
 - [x] What are the ACID properties of database transactions.md
-- [ ] How would you explain the Adapter design pattern.md
-- [ ] How would you explain the AutoCloseable interface in Java.md
-- [ ] How would you explain the backends for frontends pattern.md
-- [ ] How would you explain the BiConsumer functional interface.md
-- [ ] How would you explain the BiFunction functional interface.md
-- [ ] How would you explain the BiPredicate functional interface.md
-- [ ] How would you explain the Builder design pattern.md
-- [ ] How would you explain the Callable interface in Java.md
-- [ ] How would you explain the CAP theorem.md
-- [ ] How would you explain the chain of responsibility design pattern.md
-- [ ] How would you explain the circuit breaker pattern for resilient calls.md
-- [ ] How would you explain the Command design pattern.md
-- [ ] How would you explain the Command pattern as an object oriented action.md
+- [x] How would you explain the Adapter design pattern.md
+- [x] How would you explain the AutoCloseable interface in Java.md
+- [x] How would you explain the backends for frontends pattern.md
+- [x] How would you explain the BiConsumer functional interface.md
+- [x] How would you explain the BiFunction functional interface.md
+- [x] How would you explain the BiPredicate functional interface.md
+- [x] How would you explain the Builder design pattern.md
+- [x] How would you explain the Callable interface in Java.md
+- [x] How would you explain the CAP theorem.md
+- [x] How would you explain the chain of responsibility design pattern.md
+- [x] How would you explain the circuit breaker pattern for resilient calls.md
+- [x] How would you explain the Command design pattern.md
+- [x] How would you explain the Command pattern as an object oriented action.md
 - [x] What is the Comparable interface in Java.md
-- [ ] How would you explain the core principles of object oriented programming.md
-- [ ] How would you explain the database per service pattern.md
-- [ ] How would you explain the Decorator design pattern.md
-- [ ] How would you explain the default constructor synthesized by the compiler.md
-- [ ] How would you explain the Dependency Inversion Principle in SOLID.md
+- [x] How would you explain the core principles of object oriented programming.md
+- [x] How would you explain the database per service pattern.md
+- [x] How would you explain the Decorator design pattern.md
+- [x] How would you explain the default constructor synthesized by the Java compiler.md
+- [x] How would you explain the Dependency Inversion Principle in SOLID.md
 - [x] What is the Deque interface in Java.md
-- [ ] How would you explain the enhanced for each loop in Java.md
-- [ ] How would you explain the equals and hashCode contract together.md
-- [ ] How would you explain the event sourcing pattern.md
-- [ ] How would you explain the ExecutorService interface in Java.md
-- [ ] How would you explain the final keyword in Java.md
-- [ ] How would you explain the final modifier on a static method in Java.md
-- [ ] How would you explain the finalize method and why it is discouraged.md
-- [ ] How would you explain the finally block in Java.md
-- [ ] How would you explain the full syntax of a SQL SELECT statement.md
-- [ ] How would you explain the functional programming paradigm.md
-- [ ] How would you explain the Future interface in java.util.concurrent.md
-- [ ] How would you explain the Git merge command.md
-- [ ] How would you explain the happens-before guarantee in the Java Memory Model.md
-- [ ] How would you explain the hashCode method contract in Java.md
+- [x] How would you explain the enhanced for each loop in Java.md
+- [x] How would you explain the equals and hashCode contract together in Java.md
+- [x] How would you explain the event sourcing pattern.md
+- [x] How would you explain the ExecutorService interface in Java.md
+- [x] How would you explain the final keyword in Java.md
+- [x] How would you explain the final modifier on a static method in Java.md
+- [x] How would you explain the finalize method in Java and why it is discouraged.md
+- [x] How would you explain the finally block in Java.md
+- [x] How would you explain the full syntax of a SQL SELECT statement.md
+- [x] How would you explain the functional programming paradigm.md
+- [x] How would you explain the Future interface in java.util.concurrent.md
+- [x] How would you explain the Git merge command.md
+- [x] How would you explain the happens-before guarantee in the Java Memory Model.md
+- [x] How would you explain the hashCode method contract in Java.md
 - [x] What is the health check API pattern.md
 - [x] How would you explain the HTTP protocol at a high level.md
 - [x] What are the initial capacity and load factor parameters of HashMap.md
-- [ ] How would you explain the Interface Segregation Principle in SOLID.md
+- [x] How would you explain the Interface Segregation Principle in SOLID.md
 - [x] What is the internal structure of HashMap.md
 - [x] What is the Iterable interface in Java.md
 - [x] What is the Iterator design pattern in Java.md
 - [x] What is the Iterator interface and why do Java collections use it.md
-- [ ] How would you explain the JAR manifest file and common entries.md
-- [ ] How would you explain the Java class loader.md
-- [ ] How would you explain the Java classpath.md
+- [x] How would you explain the JAR manifest file and common entries.md
+- [x] How would you explain the Java class loader.md
+- [x] How would you explain the Java classpath.md
 - [x] What is the Java Collections Framework interface hierarchy.md
 - [x] What is the Java Collections Framework.md
-- [ ] How would you explain the Java Development Kit JDK.md
+- [x] How would you explain the Java Development Kit JDK.md
 - [x] How would you explain the Java EE web deployment descriptor.md
-- [ ] How would you explain the Java exception type hierarchy.md
-- [ ] How would you explain the Java ForkJoin framework.md
-- [ ] How would you explain the Java garbage collector.md
-- [ ] How would you explain the Java main method entry point.md
+- [x] How would you explain the Java exception type hierarchy.md
+- [x] How would you explain the Java ForkJoin framework.md
+- [x] How would you explain the Java garbage collector.md
+- [x] How would you explain the Java main method entry point.md
 - [x] What is the Java Persistence API JPA.md
-- [ ] How would you explain the Java Runtime Environment JRE.md
-- [ ] How would you explain the Java stack and heap.md
+- [x] How would you explain the Java Runtime Environment JRE.md
+- [x] How would you explain the Java stack and heap.md
 - [x] What is the Java Stream API.md
-- [ ] How would you explain the Java string pool.md
-- [ ] How would you explain the Java Virtual Machine JVM.md
-- [ ] How would you explain the java.io.File class and path representation.md
-- [ ] How would you explain the java.lang.Error type hierarchy.md
-- [ ] How would you explain the java.lang.Exception type hierarchy.md
-- [ ] How would you explain the java.util.concurrent package.md
-- [ ] How would you explain the jjs command line tool for Nashorn.md
+- [x] How would you explain the Java string pool.md
+- [x] How would you explain the Java Virtual Machine JVM.md
+- [x] How would you explain the java.io.File class and path representation.md
+- [x] How would you explain the java.lang.Error type hierarchy.md
+- [x] How would you explain the java.lang.Exception type hierarchy.md
+- [x] How would you explain the java.util.concurrent package.md
+- [x] How would you explain the jjs command line tool for Nashorn.md
 - [x] What is the JPA Column annotation.md
 - [x] What is the JPA Criteria API.md
 - [x] What is the JPA Id annotation.md
 - [x] What is the JPA Table annotation and its attributes.md
-- [ ] How would you explain the JSON data interchange format.md
+- [x] How would you explain the JSON data interchange format.md
 - [x] How would you explain the JSP page lifecycle.md
 - [ ] How would you explain the JVM execution engine.md
 - [ ] How would you explain the JVM stack and stack frames.md

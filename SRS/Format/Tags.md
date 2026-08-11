@@ -67,6 +67,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Immutability`
 * `#Java/IO`
 * `#Java/NIO`
+* `#Java/Networking`
 * `#Java/Logging`
 * `#Java/JVM`
 * `#Java/JVM/Memory`
@@ -140,6 +141,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases/SQL/DCL`
 * `#Databases/SQL/Transactions`
 * `#Databases/Indexes`
+* `#Databases/Partitioning`
 * `#Databases/Keys`
 * `#Databases/Transactions`
 * `#Databases/MySQL`
@@ -156,6 +158,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### DataFormats
 * `#DataFormats`
 * `#DataFormats/XML`
+* `#DataFormats/JSON`
 
 ### Security
 * `#Security`
@@ -271,6 +274,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Methodologies/DDD`
 * `#Methodologies/BDD`
 * `#Methodologies/BDUF`
+* `#Methodologies/TDD`
 * `#Methodologies/DesignByContract`
 * `#Methodologies/Principles`
 * `#Methodologies/Principles/SOLID`
@@ -358,6 +362,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#SystemDesign/Performance`
 * `#SystemDesign/Availability`
 * `#SystemDesign/Consistency`
+* `#SystemDesign/PartitionTolerance`
 * `#SystemDesign/Architecture`
 * `#SystemDesign/Microservices`
 * `#SystemDesign/Tradeoffs`
