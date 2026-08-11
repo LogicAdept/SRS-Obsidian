@@ -32,6 +32,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### Java
 * `#Java/Collections`
 * `#Java/Collections/List`
+* `#Java/Collections/List/Vector`
 * `#Java/Collections/Map`
 * `#Java/Collections/Map/Hashtable`
 * `#Java/Collections/Set`
@@ -50,7 +51,15 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Language`
 * `#Java/Arrays`
 * `#Java/String`
+* `#Java/StringBuilder`
+* `#Java/StringJoiner`
+* `#Java/Optional`
+* `#Java/Library`
+* `#Java/Time`
+* `#Java/Time/LocalDateTime`
+* `#Java/Time/ZonedDateTime`
 * `#Java/Lambdas`
+* `#Java/MethodReferences`
 * `#Java/FunctionalInterfaces`
 * `#Java/Annotations`
 * `#Java/Serialization`
@@ -60,12 +69,14 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/NIO`
 * `#Java/Logging`
 * `#Java/JVM`
+* `#Java/JVM/Memory`
 * `#Java/JVM/GarbageCollector`
 * `#Java/JVM/ClassLoaders`
 * `#Java/Runtime`
 * `#Java/Bytecode`
 * `#Java/JMM`
 * `#Java/JDK`
+* `#Java/Legacy`
 * `#Java/Versions`
 * `#Java/Versions/8`
 * `#Java/Versions/11`
@@ -114,24 +125,27 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Testing
 * `#Testing`
+* `#Testing/Mocking`
 
 ### Kotlin
 * `#Kotlin`
 
 ### Databases
 * `#Databases`
+* `#Databases/RelationalAlgebra`
 * `#Databases/SQL`
+* `#Databases/SQL/NormalForms`
 * `#Databases/SQL/DDL`
 * `#Databases/SQL/DML`
 * `#Databases/SQL/DCL`
 * `#Databases/SQL/Transactions`
 * `#Databases/Indexes`
 * `#Databases/Keys`
-* `#Databases/NormalForms`
 * `#Databases/Transactions`
 * `#Databases/MySQL`
 * `#Databases/PostgreSQL`
 * `#Databases/Oracle`
+* `#Databases/MSSQL`
 
 ### NoSQL
 * `#NoSQL`
@@ -154,12 +168,17 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Problems
 * `#Problems/Persistence`
+* `#Problems/Concurrency`
 
 ### Internationalization
 * `#Internationalization`
+* `#Localization`
 
 ### Math
 * `#Math`
+
+### UML
+* `#UML`
 
 ### DSA
 * `#DSA/Algorithms/Search`
@@ -252,6 +271,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Methodologies/DDD`
 * `#Methodologies/BDD`
 * `#Methodologies/BDUF`
+* `#Methodologies/DesignByContract`
 * `#Methodologies/Principles`
 * `#Methodologies/Principles/SOLID`
 * `#Methodologies/Principles/DRY`
@@ -318,6 +338,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#OperatingSystems/IO/Streams`
 * `#OperatingSystems/IO/Files`
 * `#OperatingSystems/Concurrency`
+* `#OperatingSystems/Concurrency/NonBlocking`
+* `#OperatingSystems/Concurrency/LockFree`
 * `#OperatingSystems/Linux`
 
 ### Caching
