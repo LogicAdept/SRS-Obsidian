@@ -1079,8 +1079,8 @@
 - [x] What is the difference between Docker containers and virtual machines.md
 - [x] What is the difference between dynamic and static content in JSP.md
 - [x] What is the difference between Enumeration and Iterator in Java.md
-- [ ] What is the difference between equals and hashCode contracts.md
-- [ ] What is the difference between final finally and finalize.md
+- [x] What is the difference between equals and hashCode contracts.md
+- [x] What is the difference between final finally and finalize.md
 - [x] What is the difference between GenericServlet and HttpServlet.md
 - [x] What is the difference between HashMap and HashSet.md
 - [x] What is the difference between HashMap and Hashtable.md
@@ -1089,138 +1089,138 @@
 - [x] What is the difference between HashMap put and computeIfAbsent.md
 - [x] What is the difference between HTTP GET and POST.md
 - [x] What is the difference between HTTP request methods.md
-- [ ] What is the difference between inheritance and polymorphism.md
-- [ ] What is the difference between interrupted and isInterrupted in Java.md
-- [ ] What is the difference between Java Collection APIs and streams.md
-- [ ] What is the difference between java.lang.Error and java.lang.Exception.md
+- [x] What is the difference between inheritance and polymorphism.md
+- [x] What is the difference between interrupted and isInterrupted in Java.md
+- [x] What is the difference between Java Collection APIs and streams.md
+- [x] What is the difference between java.lang.Error and java.lang.Exception.md
 - [x] What is the difference between JPA as a specification and Hibernate.md
 - [x] What is the difference between JPA FetchType lazy and eager.md
 - [x] What is the difference between JspWriter and servlet PrintWriter.md
-- [ ] What is the difference between object oriented and functional programming styles.md
+- [x] What is the difference between object oriented and functional programming styles.md
 - [x] What is the difference between PreparedStatement and Statement in JDBC.md
-- [ ] What is the difference between PRIMARY KEY and UNIQUE constraints.md
-- [ ] What is the difference between primitive and reference types in Java.md
-- [ ] What is the difference between Project Reactor Mono and Flux.md
-- [ ] What is the difference between reference types and primitives in Java.md
+- [x] What is the difference between PRIMARY KEY and UNIQUE constraints.md
+- [x] What is the difference between primitive and reference types in Java.md
+- [x] What is the difference between Project Reactor Mono and Flux.md
+- [x] What is the difference between reference types and primitives in Java.md
 - [x] What is the difference between Repository Component Controller and Service annotations.md
-- [ ] What is the difference between RequestMapping and PutMapping.md
+- [x] What is the difference between RequestMapping and PutMapping.md
 - [x] What is the difference between save and saveAll in Spring Data.md
 - [x] What is the difference between ServletContext and ServletConfig.md
-- [ ] What is the difference between SoftReference and WeakReference.md
+- [x] What is the difference between SoftReference and WeakReference.md
 - [x] What is the difference between Spring Boot auto configuration and plain Spring context.md
 - [x] What is the difference between Spring RestController and Controller.md
 - [x] What is the difference between Spring Service Repository and Controller annotations.md
-- [ ] What is the difference between SQL and NoSQL data stores.md
-- [ ] What is the difference between SQL char and varchar types.md
-- [ ] What is the difference between SQL DATETIME and TIMESTAMP.md
-- [ ] What is the difference between SQL DELETE and TRUNCATE.md
-- [ ] What is the difference between SQL UNION and UNION ALL.md
-- [ ] What is the difference between SQL WHERE and HAVING clauses.md
-- [ ] What is the difference between static and dynamic binding in Java.md
-- [ ] What is the difference between Stream map and flatMap.md
-- [ ] What is the difference between String and StringBuilder.md
-- [ ] What is the difference between StringBuilder and naive string concatenation.md
-- [ ] What is the difference between StringBuilder and StringBuffer.md
-- [ ] What is the difference between submit and execute on an executor service.md
-- [ ] What is the difference between synchronized and ReentrantLock.md
-- [ ] What is the difference between synchronized blocks and java.util.concurrent locks.md
-- [ ] What is the difference between test stubs and mocks.md
-- [ ] What is the difference between the Builder and Facade design patterns.md
+- [x] What is the difference between SQL and NoSQL data stores.md
+- [x] What is the difference between SQL char and varchar types.md
+- [x] What is the difference between SQL DATETIME and TIMESTAMP.md
+- [x] What is the difference between SQL DELETE and TRUNCATE.md
+- [x] What is the difference between SQL UNION and UNION ALL.md
+- [x] What is the difference between SQL WHERE and HAVING clauses.md
+- [x] What is the difference between static and dynamic binding in Java.md
+- [x] What is the difference between Stream map and flatMap.md
+- [x] What is the difference between String and StringBuilder.md
+- [x] What is the difference between StringBuilder and naive string concatenation.md
+- [x] What is the difference between StringBuilder and StringBuffer.md
+- [x] What is the difference between submit and execute on an executor service.md
+- [x] What is the difference between synchronized and ReentrantLock.md
+- [x] What is the difference between synchronized blocks and java.util.concurrent locks.md
+- [x] What is the difference between test stubs and mocks.md
+- [x] What is the difference between the Builder and Facade design patterns.md
 - [x] What is the difference between the Collection interface and the Collections utility class.md
 - [x] What is the difference between the Java List and Set interfaces.md
-- [ ] What is the difference between the JDK and the JRE.md
-- [ ] What is the difference between the JVM and the JDK.md
-- [ ] What is the difference between the short primitive and the Short wrapper.md
-- [ ] What is the difference between the Singleton and Prototype design patterns.md
-- [ ] What is the difference between the Strategy and State design patterns.md
+- [x] What is the difference between the JDK and the JRE.md
+- [x] What is the difference between the JVM and the JDK.md
+- [x] What is the difference between the short primitive and the Short wrapper.md
+- [x] What is the difference between the Singleton and Prototype design patterns.md
+- [x] What is the difference between the Strategy and State design patterns.md
 - [x] What is the difference between thread safe and non thread safe collections.md
 - [x] What is the difference between TreeSet and HashSet.md
-- [ ] What is the difference between unit tests and integration tests.md
-- [ ] What is the difference between volatile fields and atomic variables.md
-- [ ] What is the Diffie-Hellman algorithm.md
-- [ ] What is the Durable Subscriber pattern.md
-- [ ] What is the Dynamic Router pattern.md
-- [ ] What is the edit distance algorithm.md
-- [ ] What is the Edmonds-Karp algorithm.md
-- [ ] What is the Envelope Wrapper pattern.md
-- [ ] What is the Event Message pattern.md
-- [ ] What is the Event-Driven Consumer pattern.md
-- [ ] What is the Fibonacci sequence.md
-- [ ] What is the Floyd-Warshall algorithm.md
-- [ ] What is the Ford-Fulkerson method.md
-- [ ] What is the Format Indicator pattern.md
-- [ ] What is the fractional knapsack problem.md
-- [ ] What is the Guaranteed Delivery pattern.md
-- [ ] What is the heap problem pattern.md
-- [ ] What is the Idempotent Receiver pattern.md
-- [ ] What is the instanceof operator for in Java.md
-- [ ] What is the interior-point method.md
-- [ ] What is the Invalid Message Channel pattern.md
-- [ ] What is the job shop scheduling problem.md
-- [ ] What is the JUnit Ignore annotation for.md
-- [ ] What is the k-nearest neighbors method.md
-- [ ] What is the knapsack problem.md
-- [ ] What is the Knuth-Morris-Pratt algorithm.md
-- [ ] What is the Levenshtein distance.md
-- [ ] What is the longest common subsequence problem.md
-- [ ] What is the longest increasing subsequence problem.md
-- [ ] What is the main idea of reflection in Java.md
-- [ ] What is the main purpose of caching in an ORM.md
+- [x] What is the difference between unit tests and integration tests.md
+- [x] What is the difference between volatile fields and atomic variables.md
+- [x] What is the Diffie-Hellman algorithm.md
+- [x] What is the Durable Subscriber pattern.md
+- [x] What is the Dynamic Router pattern.md
+- [x] What is the edit distance algorithm.md
+- [x] What is the Edmonds-Karp algorithm.md
+- [x] What is the Envelope Wrapper pattern.md
+- [x] What is the Event Message pattern.md
+- [x] What is the Event-Driven Consumer pattern.md
+- [x] What is the Fibonacci sequence.md
+- [x] What is the Floyd-Warshall algorithm.md
+- [x] What is the Ford-Fulkerson method.md
+- [x] What is the Format Indicator pattern.md
+- [x] What is the fractional knapsack problem.md
+- [x] What is the Guaranteed Delivery pattern.md
+- [x] What is the heap problem pattern.md
+- [x] What is the Idempotent Receiver pattern.md
+- [x] What is the instanceof operator for in Java.md
+- [x] What is the interior-point method.md
+- [x] What is the Invalid Message Channel pattern.md
+- [x] What is the job shop scheduling problem.md
+- [x] What is the JUnit Ignore annotation for.md
+- [x] What is the k-nearest neighbors method.md
+- [x] What is the knapsack problem.md
+- [x] What is the Knuth-Morris-Pratt algorithm.md
+- [x] What is the Levenshtein distance.md
+- [x] What is the longest common subsequence problem.md
+- [x] What is the longest increasing subsequence problem.md
+- [x] What is the main idea of reflection in Java.md
+- [x] What is the main purpose of caching in an ORM.md
 - [x] What is the main purpose of the Map interface.md
-- [ ] What is the Manhattan norm.md
-- [ ] What is the MapReduce algorithm.md
-- [ ] What is the matrix chain multiplication problem.md
-- [ ] What is the Message Broker pattern.md
-- [ ] What is the Message Bus pattern.md
-- [ ] What is the Message Channel pattern.md
-- [ ] What is the Message Dispatcher pattern.md
-- [ ] What is the Message Endpoint pattern.md
-- [ ] What is the Message Expiration pattern.md
-- [ ] What is the Message Filter pattern.md
-- [ ] What is the Message History pattern.md
-- [ ] What is the Message pattern.md
-- [ ] What is the Message Router pattern.md
-- [ ] What is the Message Sequence pattern.md
-- [ ] What is the Message Store pattern.md
-- [ ] What is the Message Translator pattern.md
-- [ ] What is the Messaging Bridge pattern.md
-- [ ] What is the Messaging Gateway pattern.md
-- [ ] What is the Messaging Mapper pattern.md
-- [ ] What is the most efficient way to copy an array in Java.md
-- [ ] What is the Normalizer pattern.md
-- [ ] What is the order of constructors and initializer blocks in a class hierarchy.md
-- [ ] What is the partition problem.md
-- [ ] What is the Pipes and Filters pattern.md
-- [ ] What is the Polling Consumer pattern.md
-- [ ] What is the Process Manager pattern.md
-- [ ] What is the program counter register.md
-- [ ] What is the Publish-Subscribe Channel pattern.md
-- [ ] What is the purpose of type bounds in Java generics.md
-- [ ] What is the quickselect algorithm.md
-- [ ] What is the Rabin-Karp algorithm.md
-- [ ] What is the Request-Reply pattern.md
-- [ ] What is the Resequencer pattern.md
-- [ ] What is the Return Address pattern.md
-- [ ] What is the reverse-delete algorithm.md
-- [ ] What is the rod cutting problem.md
-- [ ] What is the role of serialVersionUID in Java serialization.md
-- [ ] What is the Routing Slip pattern.md
-- [ ] What is the Scatter-Gather pattern.md
-- [ ] What is the Selective Consumer pattern.md
-- [ ] What is the Service Activator pattern.md
-- [ ] What is the shortest path problem.md
-- [ ] What is the Sidecar pattern.md
-- [ ] What is the simplex method.md
-- [ ] What is the singleton serialization problem.md
-- [ ] What is the smallest schedulable unit of work in Java threads.md
-- [ ] What is the Smart Proxy pattern.md
-- [ ] What is the Splitter pattern.md
+- [x] What is the Manhattan norm.md
+- [x] What is the MapReduce algorithm.md
+- [x] What is the matrix chain multiplication problem.md
+- [x] What is the Message Broker pattern.md
+- [x] What is the Message Bus pattern.md
+- [x] What is the Message Channel pattern.md
+- [x] What is the Message Dispatcher pattern.md
+- [x] What is the Message Endpoint pattern.md
+- [x] What is the Message Expiration pattern.md
+- [x] What is the Message Filter pattern.md
+- [x] What is the Message History pattern.md
+- [x] What is the Message pattern.md
+- [x] What is the Message Router pattern.md
+- [x] What is the Message Sequence pattern.md
+- [x] What is the Message Store pattern.md
+- [x] What is the Message Translator pattern.md
+- [x] What is the Messaging Bridge pattern.md
+- [x] What is the Messaging Gateway pattern.md
+- [x] What is the Messaging Mapper pattern.md
+- [x] What is the most efficient way to copy an array in Java.md
+- [x] What is the Normalizer pattern.md
+- [x] What is the order of constructors and initializer blocks in a class hierarchy.md
+- [x] What is the partition problem.md
+- [x] What is the Pipes and Filters pattern.md
+- [x] What is the Polling Consumer pattern.md
+- [x] What is the Process Manager pattern.md
+- [x] What is the program counter register.md
+- [x] What is the Publish-Subscribe Channel pattern.md
+- [x] What is the purpose of type bounds in Java generics.md
+- [x] What is the quickselect algorithm.md
+- [x] What is the Rabin-Karp algorithm.md
+- [x] What is the Request-Reply pattern.md
+- [x] What is the Resequencer pattern.md
+- [x] What is the Return Address pattern.md
+- [x] What is the reverse-delete algorithm.md
+- [x] What is the rod cutting problem.md
+- [x] What is the role of serialVersionUID in Java serialization.md
+- [x] What is the Routing Slip pattern.md
+- [x] What is the Scatter-Gather pattern.md
+- [x] What is the Selective Consumer pattern.md
+- [x] What is the Service Activator pattern.md
+- [x] What is the shortest path problem.md
+- [x] What is the Sidecar pattern.md
+- [x] What is the simplex method.md
+- [x] What is the singleton serialization problem.md
+- [x] What is the smallest schedulable unit of work in Java threads.md
+- [x] What is the Smart Proxy pattern.md
+- [x] What is the Splitter pattern.md
 - [x] What is the Spring Framework for.md
 - [x] What is the Spring IoC container in practice.md
-- [ ] What is the Strategy pattern used for.md
-- [ ] What is the sweep line algorithm.md
-- [ ] What is the synchronized keyword for in Java.md
-- [ ] What is the Test Message pattern.md
+- [x] What is the Strategy pattern used for.md
+- [x] What is the sweep line algorithm.md
+- [x] What is the synchronized keyword for in Java.md
+- [x] What is the Test Message pattern.md
 - [x] What is the time complexity of appending to an ArrayList.md
 - [x] What is the time complexity of contains in a HashSet.md
 - [x] What is the time complexity of finding an element in a LinkedList.md
@@ -1228,24 +1228,24 @@
 - [x] What is the time complexity of lookup by key in a TreeMap.md
 - [x] What is the time complexity of random access by index in a LinkedList.md
 - [x] What is the time complexity of searching in an ArrayList.md
-- [ ] What is the Transactional Client pattern.md
-- [ ] What is the two pointers technique.md
-- [ ] What is the union-find data structure.md
+- [x] What is the Transactional Client pattern.md
+- [x] What is the two pointers technique.md
+- [x] What is the union-find data structure.md
 - [x] What is the value of Spring Boot.md
-- [ ] What is the value range of the Java short type.md
-- [ ] What is the Wire Tap pattern.md
+- [x] What is the value range of the Java short type.md
+- [x] What is the Wire Tap pattern.md
 - [x] What is the worst case time complexity of add on a LinkedList.md
 - [x] What is the worst case time complexity of add on an ArrayList.md
 - [x] What is the worst case time complexity of contains on a LinkedList when the element exists.md
 - [x] What is the worst case time complexity of contains on an ArrayList when the element exists.md
 - [x] What is the worst case time complexity of get on a HashMap when the key is absent.md
 - [x] What is the worst case time complexity of get on a HashMap when the key is present.md
-- [ ] What is Timsort.md
-- [ ] What is unsupervised learning.md
-- [ ] What is untitled placeholder note (1).md
-- [ ] What is untitled placeholder note.md
-- [ ] What is URL encoding and how do you perform it in Java.md
-- [ ] What is virtual memory.md
+- [x] What is Timsort.md
+- [x] What is unsupervised learning.md
+- [x] What is untitled placeholder note (1).md
+- [x] What is untitled placeholder note.md
+- [x] What is URL encoding and how do you perform it in Java.md
+- [x] What is virtual memory.md
 - [x] What is WeakHashMap used for.md
 - [ ] What is your view on checked exceptions in Java.md
 - [ ] What Java books or articles have you read.md

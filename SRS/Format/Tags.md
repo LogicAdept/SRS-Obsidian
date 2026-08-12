@@ -44,11 +44,21 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Streams`
 * `#Java/HashCodeEquals`
 * `#Java/OOP`
+* `#Java/OOP/Initialization`
+* `#Java/OOP/Constructors`
 * `#Java/Concurrency`
+* `#Java/Concurrency/Synchronization`
+* `#Java/Concurrency/Synchronization/SynchronizedKeyword`
+* `#Java/Concurrency/SchedulableUnit`
 * `#Java/Parallelism`
 * `#Java/Async`
 * `#Java/Exceptions`
 * `#Java/Language`
+* `#Java/Language/Assert`
+* `#Java/Language/Primitives`
+* `#Java/Language/Primitives/ShortType`
+* `#Java/Language/Wrappers`
+* `#Java/Language/Reflection`
 * `#Java/Arrays`
 * `#Java/String`
 * `#Java/StringBuilder`
@@ -56,6 +66,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Optional`
 * `#Java/Library`
 * `#Java/Library/Nashorn`
+* `#Java/Library/Reactor`
+* `#Java/Library/Reactor/Mono`
+* `#Java/Library/Reactor/Flux`
 * `#Java/Time`
 * `#Java/Time/LocalDateTime`
 * `#Java/Time/ZonedDateTime`
@@ -64,11 +77,15 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/FunctionalInterfaces`
 * `#Java/Annotations`
 * `#Java/Serialization`
+* `#Java/Serialization/SerialVersionUID`
+* `#Java/Serialization/SingletonSerializationProblem`
 * `#Java/Generics`
+* `#Java/Generics/TypeBounds`
 * `#Java/Immutability`
 * `#Java/IO`
 * `#Java/NIO`
 * `#Java/Networking`
+* `#Java/Networking/UrlEncoding`
 * `#Java/Logging`
 * `#Java/JVM`
 * `#Java/JVM/Memory`
@@ -78,6 +95,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Runtime`
 * `#Java/Bytecode`
 * `#Java/JMM`
+* `#Java/Performance`
 * `#Java/JDK`
 * `#Java/Legacy`
 * `#Java/Versions`
@@ -142,8 +160,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases/SQL/DML`
 * `#Databases/SQL/DCL`
 * `#Databases/SQL/Transactions`
+* `#Databases/SQL/DataTypes`
 * `#Databases/Indexes`
 * `#Databases/Partitioning`
+* `#Databases/Replication`
 * `#Databases/Keys`
 * `#Databases/NormalForms`
 * `#Databases/Transactions`
@@ -177,6 +197,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Problems/Persistence`
 * `#Problems/Concurrency`
 * `#Problems/Optimization`
+* `#Persistence`
+* `#Persistence/ORM`
+* `#Persistence/Caching`
 
 ### Internationalization
 * `#Internationalization`
@@ -186,6 +209,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Math`
 * `#Math/Probability`
 * `#Math/Optimization`
+* `#Math/Optimization/LinearProgramming`
+* `#Math/Optimization/LinearProgramming/SimplexMethod`
+* `#Math/Optimization/Combinatorial`
+* `#Math/Norm`
 
 ### UML
 * `#UML`
@@ -194,27 +221,41 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DSA/Algorithms`
 * `#DSA/Algorithms/Search`
 * `#DSA/Algorithms/String`
+* `#DSA/Algorithms/String/RabinKarp`
 * `#DSA/Algorithms/ErrorCorrection`
 * `#DSA/Algorithms/Greedy`
 * `#DSA/Algorithms/Randomized`
+* `#DSA/Algorithms/Selection`
 * `#DSA/Algorithms/Sorting`
+* `#DSA/Algorithms/Sorting/Timsort`
 * `#DSA/Algorithms/DynamicProgramming`
+* `#DSA/Algorithms/Mathematical`
+* `#DSA/Algorithms/DynamicProgramming/PartitionProblem`
+* `#DSA/Algorithms/DynamicProgramming/RodCuttingProblem`
+* `#DSA/Algorithms/DynamicProgramming/RodCuttingProblem`
 * `#DSA/Algorithms/LinearProgramming`
+* `#DSA/Algorithms/SweepLine`
+* `#DSA/Algorithms/TwoPointersTechnique`
 * `#DSA/Complexity`
 * `#DSA/DataStructures`
 * `#DSA/DataStructures/Graph`
+* `#DSA/Algorithms/Graph/ShortestPath`
+* `#DSA/Algorithms/Graph/ReverseDelete`
 * `#DSA/DataStructures/LinkedList`
 * `#DSA/DataStructures/Set`
 * `#DSA/DataStructures/Tree`
+* `#DSA/DataStructures/UnionFind`
 
 ### MachineLearning
 * `#MachineLearning`
+* `#MachineLearning/UnsupervisedLearning`
 
 ### Simulation
 * `#Simulation`
 
 ### ComputerArchitecture
 * `#ComputerArchitecture`
+* `#ComputerArchitecture/Registers`
 
 ### Methods
 * `#Methods`
@@ -247,12 +288,34 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DistributedSystems/Communication`
 * `#DistributedSystems/Consensus`
 * `#DistributedSystems/Consensus/LeaderElection`
+* `#DistributedSystems/MapReduce`
 
 ### Messaging
 * `#Messaging`
 * `#Messaging/Async`
 * `#Messaging/Tools`
 * `#Messaging/Tools/Kafka`
+* `#Messaging/Bus`
+* `#Messaging/Channel`
+* `#Messaging/Dispatcher`
+* `#Messaging/Endpoint`
+* `#Messaging/Expiration`
+* `#Messaging/Filter`
+* `#Messaging/History`
+* `#Messaging/Message`
+* `#Messaging/Message/Simple`
+* `#Messaging/Router`
+* `#Messaging/Sequence`
+* `#Messaging/Store`
+* `#Messaging/Translator`
+* `#Messaging/Bridge`
+* `#Messaging/Gateway`
+* `#Messaging/Mapper`
+* `#Messaging/PollingConsumer`
+* `#Messaging/Broker`
+* `#Messaging/RequestReply`
+* `#Messaging/Resequencer`
+* `#Messaging/ReturnAddress`
 
 ### Networking
 * `#Networking`
@@ -264,6 +327,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Networking/Web/Protocols/HTTP`
 * `#Networking/Web/Protocols/TLS`
 * `#Networking/Web/Cookies`
+* `#Networking/Web/UrlEncoding`
 * `#Networking/Web/Caching`
 
 ### API
@@ -284,15 +348,38 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/GoF/Creational`
 * `#Patterns/GoF/Structural`
 * `#Patterns/GoF/Behavioral`
+* `#Patterns/GoF/Behavioral/Strategy`
 * `#Patterns/GRASP`
 * `#Patterns/Enterprise`
 * `#Patterns/Enterprise/Integration`
 * `#Patterns/Enterprise/Integration/Channels`
+* `#Patterns/Enterprise/Integration/Channels/PublishSubscribe`
+* `#Patterns/Enterprise/Integration/Channels/InvalidMessageChannel`
 * `#Patterns/Enterprise/Integration/Messages`
+* `#Patterns/Enterprise/Integration/Messages/EnvelopeWrapper`
+* `#Patterns/Enterprise/Integration/Messages/EventMessage`
+* `#Patterns/Enterprise/Integration/Messages/FormatIndicator`
+* `#Patterns/Enterprise/Integration/Messages/TestMessage`
+* `#Patterns/Enterprise/Integration/TransactionalClient`
+* `#Patterns/Enterprise/Integration/WireTap`
 * `#Patterns/Enterprise/Integration/Routing`
+* `#Patterns/Enterprise/Integration/Routing/RoutingSlip`
+* `#Patterns/Enterprise/Integration/Routing/DynamicRouter`
 * `#Patterns/Enterprise/Integration/Transformation`
+* `#Patterns/Enterprise/Integration/Transformation/Normalizer`
+* `#Patterns/Enterprise/Integration/Transformation/PipesAndFilters`
 * `#Patterns/Enterprise/Integration/Endpoints`
+* `#Patterns/Enterprise/Integration/Endpoints/SelectiveConsumer`
+* `#Patterns/Enterprise/Integration/Endpoints/EventDrivenConsumer`
+* `#Patterns/Enterprise/Integration/Endpoints/ServiceActivator`
+* `#Patterns/Enterprise/Integration/SmartProxy`
 * `#Patterns/Enterprise/Integration/Management`
+* `#Patterns/Enterprise/Integration/Management/ProcessManager`
+* `#Patterns/Enterprise/Integration/Messaging`
+* `#Patterns/Enterprise/Integration/Messaging/Splitter`
+* `#Patterns/Enterprise/Integration/Messaging/ScatterGather`
+* `#Patterns/Enterprise/Integration/Messaging/DurableSubscriber`
+* `#Patterns/Enterprise/Integration/Messaging/GuaranteedDelivery`
 * `#Patterns/DistributedSystems`
 * `#Patterns/Cloud`
 * `#Patterns/Architecture/UI`
@@ -305,6 +392,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/Architecture/Microservices/ExternalAPI`
 * `#Patterns/Architecture/Microservices/ServiceDiscovery`
 * `#Patterns/Architecture/Microservices/Deployment`
+* `#Patterns/Architecture/Microservices/Sidecar`
 * `#Patterns/Architecture/Microservices/Observability`
 
 ### Methodologies
@@ -377,6 +465,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### OperatingSystems
 * `#OperatingSystems`
 * `#OperatingSystems/MemoryHierarchy`
+* `#OperatingSystems/MemoryHierarchy/VirtualMemory`
 * `#OperatingSystems/IO`
 * `#OperatingSystems/IO/Buffered`
 * `#OperatingSystems/IO/Streams`
@@ -407,6 +496,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#SystemDesign/Microservices`
 * `#SystemDesign/Tradeoffs`
 * `#SystemDesign/Atomicity`
+
+### ORM
+* `#ORM`
 
 ### System
 * `#SRS`
