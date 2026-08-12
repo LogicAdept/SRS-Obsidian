@@ -870,210 +870,210 @@
 - [x] What design idea does LinkedList implement.md
 - [x] What diagram types are used in software design.md
 - [x] What difficulties arise when working with caching.md
-- [ ] What do checked and unchecked exceptions mean in Java.md
-- [ ] What do INTERSECT and EXCEPT do in Transact-SQL.md
+- [x] What do checked and unchecked exceptions mean in Java.md
+- [x] What do INTERSECT and EXCEPT do in Transact-SQL.md
 - [x] What do you know about authoring custom JSP tags.md
 - [x] What do you know about the JSP Expression Language.md
-- [ ] What does a Java class consist of.md
+- [x] What does a Java class consist of.md
 - [x] What does a typical Java web application project structure look like.md
-- [ ] What does it mean that Java is object oriented.md
-- [ ] What does it mean to put a Java thread to sleep.md
-- [ ] What does Maven provide during a typical Java build.md
-- [ ] What does NULL mean in SQL.md
-- [ ] What does pass by value mean for Java parameters.md
+- [x] What does it mean that Java is object oriented.md
+- [x] What does it mean to put a Java thread to sleep.md
+- [x] What does Maven provide during a typical Java build.md
+- [x] What does NULL mean in SQL.md
+- [x] What does pass by value mean for Java parameters.md
 - [x] What does sorted mean for a SortedMap besides iteration order.md
-- [ ] What does state mean in programming and concurrent systems.md
-- [ ] What does strong typing mean in Java.md
-- [ ] What does the typical structure or form of Java source code look like.md
-- [ ] What does this code snippet print to the console variant three.md
-- [ ] What does this code snippet print to the console variant two.md
-- [ ] What does this code snippet print to the console.md
-- [ ] What does volatile on a reference field guarantee for visibility.md
-- [ ] What error handling approaches exist in Java.md
-- [ ] What fixture annotations exist in JUnit.md
-- [ ] What forms of try catch and try with resources exist in Java.md
-- [ ] What Git branching strategies do you know.md
-- [ ] What goes wrong with indexing every field combination for flexible search.md
+- [x] What does state mean in programming and concurrent systems.md
+- [x] What does strong typing mean in Java.md
+- [x] What does the typical structure or form of Java source code look like.md
+- [x] What does this code snippet print to the console variant three.md
+- [x] What does this code snippet print to the console variant two.md
+- [x] What does this code snippet print to the console.md
+- [x] What does volatile on a reference field guarantee for visibility.md
+- [x] What error handling approaches exist in Java.md
+- [x] What fixture annotations exist in JUnit.md
+- [x] What forms of try catch and try with resources exist in Java.md
+- [x] What Git branching strategies do you know.md
+- [x] What goes wrong with indexing every field combination for flexible search.md
 - [x] What happens between an HTTP client and a Spring REST controller under sustained load.md
 - [x] What happens from Spring Boot startup until the first HTTP request reaches a controller.md
-- [ ] What happens if an exception occurs during class static initialization.md
+- [x] What happens if an exception occurs during class static initialization.md
 - [x] What happens if you call Iterator.next without calling hasNext first.md
 - [x] What happens if you call iterator.remove on a collection.md
-- [ ] What happens if you replace Service with Component or Repository on a service class.md
-- [ ] What happens if you try to change a private field from outside its class.md
-- [ ] What happens in the JVM when a Java application starts.md
+- [x] What happens if you replace Service with Component or Repository on a service class.md
+- [x] What happens if you try to change a private field from outside its class.md
+- [x] What happens in the JVM when a Java application starts.md
 - [x] What happens to an iterator if the backing collection is modified externally.md
-- [ ] What happens to finalization if finalize runs slowly or throws an exception.md
+- [x] What happens to finalization if finalize runs slowly or throws an exception.md
 - [x] What happens to HashMap if all keys share the same hashCode.md
-- [ ] What happens when a second Kafka consumer reads the same topic.md
-- [ ] What happens when a thread pool queue is full and a new task arrives.md
-- [ ] What happens when an uncaught exception escapes a thread run method.md
+- [x] What happens when a second Kafka consumer reads the same topic.md
+- [x] What happens when a thread pool queue is full and a new task arrives.md
+- [x] What happens when an uncaught exception escapes a thread run method.md
 - [x] What happens when one Spring Transactional method calls another.md
-- [ ] What happens when this code runs line by line.md
+- [x] What happens when this code runs line by line.md
 - [x] What happens when you insert elements into a TreeSet in ascending order.md
 - [x] What happens when you request the same singleton bean twice from ApplicationContext.md
-- [ ] What harmful SQL patterns or pitfalls do you know.md
-- [ ] What have you learned or read recently that you would recommend.md
+- [x] What harmful SQL patterns or pitfalls do you know.md
+- [x] What have you learned or read recently that you would recommend.md
 - [x] What HTTP request methods exist.md
-- [ ] What ideas sit at the center of the functional programming paradigm.md
-- [ ] What information should a task from an analyst typically include.md
-- [ ] What interesting engineering problems have you solved.md
+- [x] What ideas sit at the center of the functional programming paradigm.md
+- [x] What information should a task from an analyst typically include.md
+- [x] What interesting engineering problems have you solved.md
 - [x] What interface lets you traverse elements of a Java collection.md
-- [ ] What intermediate stream operations do you know in Java.md
+- [x] What intermediate stream operations do you know in Java.md
 - [x] What internal abstractions power a Java stream pipeline.md
 - [x] What internal structures back HashSet and TreeSet.md
 - [x] What invokes Spring MVC controller methods.md
-- [ ] What is a binomial tree.md
-- [ ] What is a bitmask.md
-- [ ] What is a design matrix.md
-- [ ] What is a feature or predictor.md
-- [ ] What is a greedy algorithm.md
-- [ ] What is a hash collision.md
-- [ ] What is a heuristic algorithm.md
+- [x] What is a binomial tree.md
+- [x] What is a bitmask.md
+- [x] What is a design matrix.md
+- [x] What is a feature or predictor.md
+- [x] What is a greedy algorithm.md
+- [x] What is a hash collision.md
+- [x] What is a heuristic algorithm.md
 - [x] What is a JDBC ResultSet for.md
-- [ ] What is a k-d tree.md
-- [ ] What is a leftist heap.md
-- [ ] What is a lightweight alternative to the Command pattern.md
-- [ ] What is a loss function.md
-- [ ] What is a memory management unit.md
-- [ ] What is a model hyperparameter.md
-- [ ] What is a model in machine learning.md
-- [ ] What is a model parameter.md
-- [ ] What is a Monte Carlo algorithm.md
-- [ ] What is a mutex.md
-- [ ] What is a persistent binary search tree.md
-- [ ] What is a prefix sum.md
-- [ ] What is a query plan in a relational database.md
-- [ ] What is a randomized algorithm.md
-- [ ] What is a regression problem in machine learning.md
-- [ ] What is a regularization term.md
-- [ ] What is a software pipeline.md
-- [ ] What is a special file in Unix.md
-- [ ] What is a superscalar CPU.md
-- [ ] What is a system call.md
-- [ ] What is a target variable in machine learning.md
-- [ ] What is a temporary table in SQL and when is it used.md
-- [ ] What is a unique database constraint for.md
-- [ ] What is a Unix shell.md
-- [ ] What is agent-based simulation.md
+- [x] What is a k-d tree.md
+- [x] What is a leftist heap.md
+- [x] What is a lightweight alternative to the Command pattern.md
+- [x] What is a loss function.md
+- [x] What is a memory management unit.md
+- [x] What is a model hyperparameter.md
+- [x] What is a model in machine learning.md
+- [x] What is a model parameter.md
+- [x] What is a Monte Carlo algorithm.md
+- [x] What is a mutex.md
+- [x] What is a persistent binary search tree.md
+- [x] What is a prefix sum.md
+- [x] What is a query plan in a relational database.md
+- [x] What is a randomized algorithm.md
+- [x] What is a regression problem in machine learning.md
+- [x] What is a regularization term.md
+- [x] What is a software pipeline.md
+- [x] What is a special file in Unix.md
+- [x] What is a superscalar CPU.md
+- [x] What is a system call.md
+- [x] What is a target variable in machine learning.md
+- [x] What is a temporary table in SQL and when is it used.md
+- [x] What is a unique database constraint for.md
+- [x] What is a Unix shell.md
+- [x] What is agent-based simulation.md
 - [x] What is an efficient way to remove a contiguous block from the middle of an ArrayList.md
-- [ ] What is an embedding.md
-- [ ] What is an Euler tour.md
+- [x] What is an embedding.md
+- [x] What is an Euler tour.md
 - [x] What is an example of a one to many relationship in databases or JPA.md
-- [ ] What is an example of a relational database and a non relational database.md
+- [x] What is an example of a relational database and a non relational database.md
 - [x] What is an example of using custom JSP tags.md
-- [ ] What is an observation in machine learning.md
-- [ ] What is an operating system.md
-- [ ] What is automatic identity or autoincrement in different databases.md
-- [ ] What is best-first search.md
-- [ ] What is bidirectional search.md
-- [ ] What is bit manipulation.md
-- [ ] What is BLAKE2.md
-- [ ] What is breadth-first search.md
-- [ ] What is Brent's cycle detection algorithm.md
-- [ ] What is bubble sort.md
-- [ ] What is caching used for.md
+- [x] What is an observation in machine learning.md
+- [x] What is an operating system.md
+- [x] What is automatic identity or autoincrement in different databases.md
+- [x] What is best-first search.md
+- [x] What is bidirectional search.md
+- [x] What is bit manipulation.md
+- [x] What is BLAKE2.md
+- [x] What is breadth-first search.md
+- [x] What is Brent's cycle detection algorithm.md
+- [x] What is bubble sort.md
+- [x] What is caching used for.md
 - [x] What is collect for in Java streams.md
-- [ ] What is CompletableFuture for.md
-- [ ] What is constructor overloading in Java.md
-- [ ] What is continuous simulation.md
-- [ ] What is counting sort.md
-- [ ] What is database denormalization for.md
+- [x] What is CompletableFuture for.md
+- [x] What is constructor overloading in Java.md
+- [x] What is continuous simulation.md
+- [x] What is counting sort.md
+- [x] What is database denormalization for.md
 - [x] What is database transaction isolation.md
 - [x] What is depth-first search.md
-- [ ] What is depth-limited search.md
-- [ ] What is Dijkstra's algorithm.md
-- [ ] What is discrete event simulation.md
-- [ ] What is divide and conquer.md
-- [ ] What is double checked locking for a singleton.md
-- [ ] What is extreme parallel algorithm design.md
-- [ ] What is Fleury's algorithm.md
-- [ ] What is Git for.md
-- [ ] What is Hierholzer's algorithm.md
-- [ ] What is Huffman coding.md
-- [ ] What is HyperLogLog.md
-- [ ] What is identically distributed in probability.md
+- [x] What is depth-limited search.md
+- [x] What is Dijkstra's algorithm.md
+- [x] What is discrete event simulation.md
+- [x] What is divide and conquer.md
+- [x] What is double checked locking for a singleton.md
+- [x] What is extreme parallel algorithm design.md
+- [x] What is Fleury's algorithm.md
+- [x] What is Git for.md
+- [x] What is Hierholzer's algorithm.md
+- [x] What is Huffman coding.md
+- [x] What is HyperLogLog.md
+- [x] What is identically distributed in probability.md
 - [x] What is IdentityHashMap for.md
-- [ ] What is in-order tree traversal.md
-- [ ] What is insertion sort.md
+- [x] What is in-order tree traversal.md
+- [x] What is insertion sort.md
 - [x] What is JDBC, an implementation or a specification.md
-- [ ] What is JWT for.md
-- [ ] What is Kadane's algorithm.md
-- [ ] What is Kosaraju's algorithm.md
-- [ ] What is Kruskal's algorithm.md
+- [x] What is JWT for.md
+- [x] What is Kadane's algorithm.md
+- [x] What is Kosaraju's algorithm.md
+- [x] What is Kruskal's algorithm.md
 - [x] What is limit for in Java streams.md
-- [ ] What is linear programming.md
-- [ ] What is linear regression.md
-- [ ] What is linear search.md
-- [ ] What is Manhattan distance.md
-- [ ] What is MD5.md
-- [ ] What is mean squared error.md
-- [ ] What is memoization.md
-- [ ] What is merge sort.md
-- [ ] What is Prim's algorithm.md
-- [ ] What is quicksort.md
-- [ ] What is rejection sampling.md
+- [x] What is linear programming.md
+- [x] What is linear regression.md
+- [x] What is linear search.md
+- [x] What is Manhattan distance.md
+- [x] What is MD5.md
+- [x] What is mean squared error.md
+- [x] What is memoization.md
+- [x] What is merge sort.md
+- [x] What is Prim's algorithm.md
+- [x] What is quicksort.md
+- [x] What is rejection sampling.md
 - [x] What is REST for.md
-- [ ] What is reverse Polish notation.md
-- [ ] What is SHA-2.md
-- [ ] What is simulation in algorithms.md
-- [ ] What is sorted for in Java streams.md
+- [x] What is reverse Polish notation.md
+- [x] What is SHA-2.md
+- [x] What is simulation in algorithms.md
+- [x] What is sorted for in Java streams.md
 - [x] What is Spring Boot used for.md
 - [x] What is Spring for.md
-- [ ] What is string hashing.md
-- [ ] What is supervised learning.md
-- [ ] What is Swagger for.md
-- [ ] What is tabulation in dynamic programming.md
-- [ ] What is Tarjan's algorithm.md
-- [ ] What is the A star algorithm.md
+- [x] What is string hashing.md
+- [x] What is supervised learning.md
+- [x] What is Swagger for.md
+- [x] What is tabulation in dynamic programming.md
+- [x] What is Tarjan's algorithm.md
+- [x] What is the A star algorithm.md
 - [x] What is the access time to the last element of an ArrayList.md
-- [ ] What is the Aggregator pattern.md
+- [x] What is the Aggregator pattern.md
 - [x] What is the algorithmic complexity of HashMap operations.md
-- [ ] What is the approximate distance between Earth and the Moon.md
+- [x] What is the approximate distance between Earth and the Moon.md
 - [x] What is the approximate memory overhead for one byte stored in a LinkedList.md
 - [x] What is the approximate memory overhead for one byte stored in an ArrayList.md
-- [ ] What is the assert keyword for in Java.md
-- [ ] What is the backtracking algorithm.md
-- [ ] What is the Bellman-Ford algorithm.md
-- [ ] What is the Boyer-Moore algorithm.md
-- [ ] What is the branch and bound algorithm.md
-- [ ] What is the Bully algorithm.md
-- [ ] What is the Canonical Data Model pattern.md
-- [ ] What is the Channel Adapter pattern.md
-- [ ] What is the Channel Purger pattern.md
-- [ ] What is the Claim Check pattern.md
-- [ ] What is the coin change problem.md
-- [ ] What is the Command Message pattern.md
-- [ ] What is the Competing Consumers pattern.md
-- [ ] What is the Composed Message Processor pattern.md
-- [ ] What is the Content Enricher pattern.md
-- [ ] What is the Content Filter pattern.md
-- [ ] What is the Content-Based Router pattern.md
-- [ ] What is the Control Bus pattern.md
-- [ ] What is the Correlation Identifier pattern.md
+- [x] What is the assert keyword for in Java.md
+- [x] What is the backtracking algorithm.md
+- [x] What is the Bellman-Ford algorithm.md
+- [x] What is the Boyer-Moore algorithm.md
+- [x] What is the branch and bound algorithm.md
+- [x] What is the Bully algorithm.md
+- [x] What is the Canonical Data Model pattern.md
+- [x] What is the Channel Adapter pattern.md
+- [x] What is the Channel Purger pattern.md
+- [x] What is the Claim Check pattern.md
+- [x] What is the coin change problem.md
+- [x] What is the Command Message pattern.md
+- [x] What is the Competing Consumers pattern.md
+- [x] What is the Composed Message Processor pattern.md
+- [x] What is the Content Enricher pattern.md
+- [x] What is the Content Filter pattern.md
+- [x] What is the Content-Based Router pattern.md
+- [x] What is the Control Bus pattern.md
+- [x] What is the Correlation Identifier pattern.md
 - [x] What is the cost of accessing the middle element of a LinkedList.md
-- [ ] What is the Datatype Channel pattern.md
-- [ ] What is the Dead Letter Channel pattern.md
+- [x] What is the Datatype Channel pattern.md
+- [x] What is the Dead Letter Channel pattern.md
 - [x] What is the default Spring bean scope.md
 - [x] What is the dependencyManagement section in Maven for.md
-- [ ] What is the Detour pattern.md
-- [ ] What is the difference between a Java interface and an abstract class.md
-- [ ] What is the difference between a race condition and a data race.md
-- [ ] What is the difference between abstraction and polymorphism.md
-- [ ] What is the difference between an abstract class with an abstract method and an interface with an abstract method in Java.md
-- [ ] What is the difference between an instance member and a static member in Java.md
-- [ ] What is the difference between an OS process and a Java thread.md
+- [x] What is the Detour pattern.md
+- [x] What is the difference between a Java interface and an abstract class.md
+- [x] What is the difference between a race condition and a data race.md
+- [x] What is the difference between abstraction and polymorphism.md
+- [x] What is the difference between an abstract class with an abstract method and an interface with an abstract method in Java.md
+- [x] What is the difference between an instance member and a static member in Java.md
+- [x] What is the difference between an OS process and a Java thread.md
 - [x] What is the difference between AOP advice and pointcuts.md
 - [x] What is the difference between ArrayList and LinkedList.md
 - [x] What is the difference between ArrayList and Vector.md
-- [ ] What is the difference between atomicity and consistency.md
-- [ ] What is the difference between authentication and authorization.md
-- [ ] What is the difference between checked and unchecked exceptions.md
-- [ ] What is the difference between clustered and non clustered database indexes.md
-- [ ] What is the difference between compiling and interpreting code.md
-- [ ] What is the difference between constructors and methods.md
-- [ ] What is the difference between CyclicBarrier and CountDownLatch.md
-- [ ] What is the difference between database replication and sharding.md
+- [x] What is the difference between atomicity and consistency.md
+- [x] What is the difference between authentication and authorization.md
+- [x] What is the difference between checked and unchecked exceptions.md
+- [x] What is the difference between clustered and non clustered database indexes.md
+- [x] What is the difference between compiling and interpreting code.md
+- [x] What is the difference between constructors and methods.md
+- [x] What is the difference between CyclicBarrier and CountDownLatch.md
+- [x] What is the difference between database replication and sharding.md
 - [x] What is the difference between dependency injection and dependency inversion.md
 - [x] What is the difference between dependency injection and inversion of control.md
 - [x] What is the difference between Docker containers and virtual machines.md

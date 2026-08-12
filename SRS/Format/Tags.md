@@ -138,7 +138,6 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases`
 * `#Databases/RelationalAlgebra`
 * `#Databases/SQL`
-* `#Databases/SQL/NormalForms`
 * `#Databases/SQL/DDL`
 * `#Databases/SQL/DML`
 * `#Databases/SQL/DCL`
@@ -146,6 +145,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases/Indexes`
 * `#Databases/Partitioning`
 * `#Databases/Keys`
+* `#Databases/NormalForms`
 * `#Databases/Transactions`
 * `#Databases/MySQL`
 * `#Databases/PostgreSQL`
@@ -173,8 +173,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Security/AppSec/Injection`
 
 ### Problems
+* `#Problems`
 * `#Problems/Persistence`
 * `#Problems/Concurrency`
+* `#Problems/Optimization`
 
 ### Internationalization
 * `#Internationalization`
@@ -182,23 +184,50 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Math
 * `#Math`
+* `#Math/Probability`
+* `#Math/Optimization`
 
 ### UML
 * `#UML`
 
 ### DSA
+* `#DSA/Algorithms`
 * `#DSA/Algorithms/Search`
 * `#DSA/Algorithms/String`
+* `#DSA/Algorithms/ErrorCorrection`
+* `#DSA/Algorithms/Greedy`
+* `#DSA/Algorithms/Randomized`
+* `#DSA/Algorithms/Sorting`
+* `#DSA/Algorithms/DynamicProgramming`
+* `#DSA/Algorithms/LinearProgramming`
 * `#DSA/Complexity`
+* `#DSA/DataStructures`
 * `#DSA/DataStructures/Graph`
 * `#DSA/DataStructures/LinkedList`
 * `#DSA/DataStructures/Set`
+* `#DSA/DataStructures/Tree`
+
+### MachineLearning
+* `#MachineLearning`
+
+### Simulation
+* `#Simulation`
+
+### ComputerArchitecture
+* `#ComputerArchitecture`
+
+### Methods
+* `#Methods`
+* `#Methods/Simulation`
+* `#Methods/Simulation/AgentBased`
+* `#Methods/Simulation/MonteCarlo`
 
 ### Paradigms
 * `#Paradigms/OOP`
 * `#Paradigms/Functional`
 * `#Paradigms/Procedural`
 * `#Paradigms/Async`
+* `#Paradigms/Parallelism`
 
 ### DataAndState
 * `#DataAndState`
@@ -211,10 +240,13 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DataAndState/ValueSemantics`
 * `#DataAndState/ReferenceSemantics`
 * `#DataAndState/MemoryManagement`
+* `#DataAndState/Hashing`
 
 ### DistributedSystems
 * `#DistributedSystems`
 * `#DistributedSystems/Communication`
+* `#DistributedSystems/Consensus`
+* `#DistributedSystems/Consensus/LeaderElection`
 
 ### Messaging
 * `#Messaging`
@@ -236,6 +268,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### API
 * `#API/REST`
+* `#API/OpenAPI`
 * `#API/SOAP`
 * `#API/GraphQL`
 * `#API/GRPC`
@@ -373,7 +406,14 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#SystemDesign/Architecture`
 * `#SystemDesign/Microservices`
 * `#SystemDesign/Tradeoffs`
+* `#SystemDesign/Atomicity`
 
 ### System
 * `#SRS`
 * `#New`
+
+### ProgrammingLanguages
+* `#ProgrammingLanguages`
+* `#ProgrammingLanguages/Compilation`
+* `#ProgrammingLanguages/Interpretation`
+* `#ProgrammingLanguages/ExecutionModel`
