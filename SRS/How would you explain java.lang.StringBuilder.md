@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Java/StringBuilder #SRS #New
+#Java/String #SRS #New

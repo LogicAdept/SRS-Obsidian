@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Enterprise/Integration/Endpoints/SelectiveConsumer #SRS #New
+#Patterns/Enterprise/Integration #SRS #New

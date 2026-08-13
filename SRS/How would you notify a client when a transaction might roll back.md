@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL/Transactions #Java/JDBC #SRS #New
+#Databases/Transactions #Java/JDBC #SRS #New

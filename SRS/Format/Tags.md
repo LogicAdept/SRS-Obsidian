@@ -245,6 +245,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DSA/DataStructures/Set`
 * `#DSA/DataStructures/Tree`
 * `#DSA/DataStructures/UnionFind`
+* `#DSA/Problems`
 
 ### MachineLearning
 * `#MachineLearning`

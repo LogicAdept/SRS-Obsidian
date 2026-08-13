@@ -298,7 +298,7 @@ _(Quarkus — в исходном списке вопросов нет)_
 - [ ] How would you explain single service per host deployment.md
 - [ ] How would you explain the service registry pattern.md
 - [ ] How would you explain the backends for frontends pattern.md
-- [ ] How would you explain the sidecar pattern.md
+- [ ] What is the Sidecar pattern.md
 - [ ] How would you explain multiple services per host deployment.md
 - [ ] How would you orchestrate communication between multiple services.md
 
@@ -338,25 +338,20 @@ _(gRPC — в исходном списке вопросов нет)_
 - [ ] What options send data from an HTTP client to a server.md
 ### Практический опыт работы с PostgreSQL / MySQL / Oracle
 - [ ] Can a column referenced by a foreign key be NULL.md
-- [ ] How are indexes implemented in relational databases.md
+- [ ] How do database indexes work at a high level.md
 - [ ] How do you add constraints to a database.md
-- [ ] How do you add validation or database constraints to your data model.md
 - [ ] How do you alter a table in a relational database.md
 - [ ] How do you create a database index.md
-- [ ] How do you declare constraints in SQL or a relational schema.md
 - [ ] How do you forbid NULL or empty values in a database column.md
 - [ ] How do you handle transaction isolation anomalies.md
 - [ ] How do you identify slow or non performant SQL queries.md
 - [ ] How do you integrate a database with a Java application.md
 - [ ] How do you map or connect a Java class to a database.md
 - [ ] How do you organize batch inserts for many rows.md
-- [ ] How do you prevent SQL injection in a database.md
 - [ ] How does a database query run and how are results processed.md
 - [ ] How does GROUP BY handle NULL in SQL.md
-- [ ] How do left, right, and inner SQL joins differ.md
 - [ ] How does LEFT JOIN differ from INNER JOIN in SQL.md
 - [ ] How does SQL JOIN differ from UNION.md
-- [ ] How does SQL UNION differ from UNION ALL recap.md
 - [ ] How have you worked with databases and what are the tradeoffs of each approach.md
 - [ ] How many normal forms are commonly taught for relational databases.md
 - [ ] How would you design a 100 million row table with fast lookup by int32.md
@@ -371,16 +366,10 @@ _(gRPC — в исходном списке вопросов нет)_
 - [ ] How would you explain first normal form in relational databases.md
 - [ ] How would you explain foreign keys in relational databases.md
 - [ ] How would you explain horizontal database sharding.md
-- [ ] How would you explain indexing as a general retrieval acceleration idea.md
-- [ ] How would you explain primary keys foreign keys and common SQL constraints.md
-- [ ] How would you explain relational database indexes and common index structures.md
 - [ ] How would you explain relational database normalization.md
 - [ ] How would you explain simple keys versus composite keys in databases.md
-- [ ] How would you explain SQL constraints such as primary key and foreign key.md
-- [ ] How would you explain SQL grouping with GROUP BY.md
 - [ ] How would you explain SQL IN BETWEEN and LIKE predicates.md
 - [ ] How would you explain SQL injection attacks and defenses.md
-- [ ] How would you explain SQL JOIN types and when each is used.md
 - [ ] How would you explain table or index partitioning in databases.md
 - [ ] How would you explain the full syntax of a SQL SELECT statement.md
 - [ ] How would you explain the SQL COMMIT statement for transactions.md
@@ -388,7 +377,6 @@ _(gRPC — в исходном списке вопросов нет)_
 - [ ] How would you explain the SQL EXISTS predicate.md
 - [ ] How would you explain the SQL GROUP BY clause.md
 - [ ] How would you explain the SQL HAVING clause.md
-- [ ] How would you explain the SQL JOIN operation in general.md
 - [ ] How would you explain the SQL language role in applications.md
 - [ ] How would you explain the SQL ORDER BY clause.md
 - [ ] How would you explain the SQL SELECT statement.md
@@ -399,13 +387,9 @@ _(gRPC — в исходном списке вопросов нет)_
 - [ ] How would you explain what a primary key is in relational databases.md
 - [ ] In SQL does the engine conceptually apply JOIN or WHERE filtering first.md
 - [ ] Is a primary key implemented as an index and why.md
-- [x] What ACID requirements apply to database transactions.md
 - [x] What is atomicity in ACID transactions.md
 - [x] What are the ACID properties of database transactions.md
-- [x] What are the defining properties of a database transaction.md
-- [ ] What are the main groups of SQL commands.md
 - [ ] What are the two fundamental relational data integrity types.md
-- [ ] What are three common kinds of database constraints.md
 - [ ] What conditions define a relational database.md
 - [ ] What database categories or types do you know.md
 - [ ] What does NULL mean in SQL.md
@@ -424,10 +408,8 @@ _(gRPC — в исходном списке вопросов нет)_
 - [ ] What is the difference between SQL WHERE and HAVING clauses.md
 - [ ] What kinds of database constraints exist.md
 - [ ] What kinds of SQL JOIN exist.md
-- [ ] What makes SQL queries fast on large relational tables.md
 - [ ] What merge strategies are important in database development.md
 - [ ] What relationship types exist between database tables.md
-- [ ] What relationship types exist in databases with examples.md
 - [ ] What SQL clauses usually accompany aggregate queries.md
 - [ ] What SQL operators exist.md
 - [ ] What types of database indexes exist.md
@@ -435,7 +417,6 @@ _(gRPC — в исходном списке вопросов нет)_
 - [ ] When does the N plus 1 query problem occur and how do you fix it.md
 - [ ] When is a full table scan cheaper than using an index.md
 - [ ] When should you prefer JOINs versus subqueries in SQL.md
-- [ ] Why can heavy indexing slow down writes and maintenance.md
 - [ ] What is the difference between clustered and non clustered database indexes.md
 - [ ] What is the difference between database replication and sharding.md
 - [ ] What problem does database sharding solve.md
@@ -516,7 +497,6 @@ _(JOOQ — в исходном списке вопросов нет)_
 - [ ] What are database connection pools for.md
 - [x] What are SQL transaction isolation levels.md
 - [x] What are dirty reads in transaction isolation.md
-- [x] What are transaction isolation levels in general.md
 - [x] What is transaction propagation in Spring Data.md
 - [x] What are transaction propagation semantics in Spring or JTA.md
 
@@ -637,11 +617,9 @@ _(в исходном списке вопросов нет)_
 
 ### Опыт работы с Redis или другими решениями кэширования
 _(кэш второго уровня Hibernate — в разделе Hibernate выше)_
-- [ ] How would you explain caching concepts in applications.md
 - [ ] How would you explain distributed caching and cache hierarchies at a high level.md
 - [ ] What simple approach would you use to implement an in memory cache.md
 - [ ] What difficulties arise when working with caching.md
-- [ ] What problems commonly appear when using caching.md
 - [ ] What is caching used for.md
 
 ### Опыт реализации OAuth2 / JWT

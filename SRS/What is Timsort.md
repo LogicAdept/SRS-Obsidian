@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#DSA/Algorithms/Sorting/Timsort #SRS #New
+#DSA/Algorithms/Sorting #SRS #New
