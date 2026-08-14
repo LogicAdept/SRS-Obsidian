@@ -148,6 +148,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Testing`
 * `#Testing/Mocking`
 * `#Testing/Integration`
+* `#Testing/Performance`
 
 ### Kotlin
 * `#Kotlin`
@@ -237,13 +238,18 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DSA/Algorithms/SweepLine`
 * `#DSA/Algorithms/TwoPointersTechnique`
 * `#DSA/Complexity`
+* `#DSA/Algorithms/NP`
 * `#DSA/DataStructures`
+* `#DSA/DataStructures/Heap`
 * `#DSA/DataStructures/Graph`
 * `#DSA/Algorithms/Graph/ShortestPath`
 * `#DSA/Algorithms/Graph/ReverseDelete`
 * `#DSA/DataStructures/LinkedList`
 * `#DSA/DataStructures/Set`
 * `#DSA/DataStructures/Tree`
+* `#DSA/DataStructures/Tree/BTree`
+* `#DSA/DataStructures/Tree/RedBlack`
+* `#DSA/DataStructures/Tree/AVL`
 * `#DSA/DataStructures/UnionFind`
 * `#DSA/Problems`
 
@@ -393,7 +399,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/DistributedSystems`
 * `#Patterns/Cloud`
 * `#Patterns/Architecture/UI`
+* `#Patterns/Architecture/UI/MVC`
+* `#Patterns/Architecture/UI/MVVM`
 * `#Patterns/Architecture/UI/MicroFrontends`
+* `#Patterns/Architecture/CQRS`
 * `#Patterns/Architecture/Monolith`
 * `#Patterns/Architecture/Microservices`
 * `#Patterns/Architecture/Microservices/ServiceBoundaries`
@@ -516,6 +525,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### ProgrammingLanguages
 * `#ProgrammingLanguages`
+* `#ProgrammingLanguages/CSharp`
 * `#ProgrammingLanguages/Compilation`
 * `#ProgrammingLanguages/Interpretation`
 * `#ProgrammingLanguages/ExecutionModel`

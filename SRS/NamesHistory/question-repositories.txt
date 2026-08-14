@@ -1,0 +1,4 @@
+Interview question repositories used as SRS sources.
+
+- https://github.com/enhorse/java-interview
+- https://github.com/d1mnewz/interviews
