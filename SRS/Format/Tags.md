@@ -270,6 +270,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Paradigms/Procedural`
 * `#Paradigms/Async`
 * `#Paradigms/Parallelism`
+* `#Paradigms/Reactive`
 
 ### DataAndState
 * `#DataAndState`
@@ -296,6 +297,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Messaging/Async`
 * `#Messaging/Tools`
 * `#Messaging/Tools/Kafka`
+* `#Messaging/Tools/RabbitMQ`
+* `#Messaging/Tools/Flume`
+* `#Messaging/Tools/Flink`
 * `#Messaging/Bus`
 * `#Messaging/Channel`
 * `#Messaging/Dispatcher`
@@ -324,9 +328,13 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Networking/UDP`
 * `#Networking/DNS`
 * `#Networking/Web`
+* `#Networking/Web/HTML`
+* `#Networking/Web/CSS`
 * `#Networking/Web/Protocols`
 * `#Networking/Web/Protocols/HTTP`
 * `#Networking/Web/Protocols/TLS`
+* `#Networking/Web/Protocols/FTP`
+* `#Networking/Web/Protocols/WebSocket`
 * `#Networking/Web/Cookies`
 * `#Networking/Web/UrlEncoding`
 * `#Networking/Web/Caching`
@@ -350,6 +358,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/GoF/Structural`
 * `#Patterns/GoF/Behavioral`
 * `#Patterns/GoF/Behavioral/Strategy`
+* `#Patterns/GoF/Behavioral/Observer`
 * `#Patterns/GRASP`
 * `#Patterns/Enterprise`
 * `#Patterns/Enterprise/Integration`
