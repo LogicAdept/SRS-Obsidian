@@ -34,11 +34,16 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Collections/List`
 * `#Java/Collections/List/Vector`
 * `#Java/Collections/Map`
+* `#Java/Collections/Map/ConcurrentHashMap`
+* `#Java/Collections/Map/EnumMap`
 * `#Java/Collections/Map/HashMap`
 * `#Java/Collections/Map/Hashtable`
 * `#Java/Collections/Map/IdentityHashMap`
+* `#Java/Collections/Map/LinkedHashMap`
 * `#Java/Collections/Map/TreeMap`
+* `#Java/Collections/Map/WeakHashMap`
 * `#Java/Collections/Set`
+* `#Java/Collections/Set/HashSet`
 * `#Java/Collections/Queues`
 * `#Java/Collections/Queues/PriorityQueue`
 * `#Java/Collections/Iteration`
