@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map #Java/HashCodeEquals #SRS
+#Java/Collections/Map/HashMap #Java/HashCodeEquals #SRS
 
 # Is `equals` invoked when a HashMap bucket contains a single element?
 

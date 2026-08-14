@@ -34,7 +34,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Collections/List`
 * `#Java/Collections/List/Vector`
 * `#Java/Collections/Map`
+* `#Java/Collections/Map/HashMap`
 * `#Java/Collections/Map/Hashtable`
+* `#Java/Collections/Map/IdentityHashMap`
+* `#Java/Collections/Map/TreeMap`
 * `#Java/Collections/Set`
 * `#Java/Collections/Queues`
 * `#Java/Collections/Queues/PriorityQueue`
@@ -55,15 +58,17 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Exceptions`
 * `#Java/Language`
 * `#Java/Language/Assert`
+* `#Java/Language/Enum`
+* `#Java/Language/Optional`
 * `#Java/Language/Primitives`
 * `#Java/Language/Primitives/ShortType`
-* `#Java/Language/Wrappers`
+* `#Java/Language/Records`
 * `#Java/Language/Reflection`
+* `#Java/Language/Wrappers`
 * `#Java/Arrays`
 * `#Java/String`
 * `#Java/StringBuilder`
 * `#Java/StringJoiner`
-* `#Java/Optional`
 * `#Java/Library`
 * `#Java/Library/Nashorn`
 * `#Java/Library/Reactor`
@@ -101,6 +106,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Versions`
 * `#Java/Versions/8`
 * `#Java/Versions/11`
+* `#Java/Versions/16`
 * `#Java/Versions/17`
 * `#Java/Versions/21`
 * `#Java/Tooling`
@@ -220,6 +226,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### DSA
 * `#DSA/Algorithms`
+* `#DSA/Algorithms/Hashing`
 * `#DSA/Algorithms/Search`
 * `#DSA/Algorithms/String`
 * `#DSA/Algorithms/String/RabinKarp`
