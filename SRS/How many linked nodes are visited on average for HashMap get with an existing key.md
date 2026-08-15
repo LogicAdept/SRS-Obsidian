@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/HashMap #Java/HashCodeEquals #DSA/Complexity #Math/Probability #SRS
+#Java/Collections/Map/HashMap #Java/HashCodeEquals #Math/Probability #SRS
 
 # How many linked nodes are visited on average for `HashMap` `get` with an existing key?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/HashMap #Java/Collections/Map/LinkedHashMap #Java/Collections/Map/TreeMap #Java/HashCodeEquals #DSA/Complexity #SRS
+#Java/Collections/Map/HashMap #Java/Collections/Map/LinkedHashMap #Java/Collections/Map/TreeMap #Java/HashCodeEquals #SRS
 
 # How do `HashMap`, `TreeMap`, and `LinkedHashMap` differ at a high level?
 

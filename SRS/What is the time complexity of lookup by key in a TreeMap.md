@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/TreeMap #Java/Collections/Map/HashMap #DSA/Complexity #DSA/DataStructures/Tree/RedBlack #SRS
+#Java/Collections/Map/TreeMap #Java/Collections/Map/HashMap #DSA/DataStructures/Tree/RedBlack #SRS
 
 # What is the time complexity of lookup by key in a `TreeMap`?
 

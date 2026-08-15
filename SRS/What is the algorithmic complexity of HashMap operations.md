@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/HashMap #Java/Collections/Map/TreeMap #Java/HashCodeEquals #DSA/Complexity #Java/Versions/8 #SRS
+#Java/Collections/Map/HashMap #Java/Collections/Map/TreeMap #Java/HashCodeEquals #Java/Versions/8 #SRS
 
 # What is the algorithmic complexity of `HashMap` operations?
 
