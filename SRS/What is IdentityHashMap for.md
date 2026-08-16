@@ -64,3 +64,26 @@ It is not a `Set` of values. `get(new Key(id))` misses if that `new` is not the 
 
 > [!tip] Interview answer
 > **`IdentityHashMap` is for identity-sensitive tables: graph copy, serialization node maps, per-instance proxies. Keys match with `==` and `identityHashCode`. It implements `Map` but admits it violates the `equals` contract. Default maps stay `HashMap`.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Как устроена HashMap внутри?**
+
+Массив бакетов (table). По хэшу ключа определяется индекс бакета (примерно: hash mod capacity). В бакете — связный список узлов Node (hash + key + value + next). С Java 8: если в одном бакете ≥ 8 элементов И размер таблицы ≥ 64 — связный список превращается в красно-чёрное дерево (treeify). Это защита от плохих хэшей. Когда бакет уменьшается до 6 — дерево разворачивается обратно в список.
+
+**Почему ключ HashMap должен быть иммутабельным?**
+
+Если изменить поле, участвующее в hashCode — объект окажется в «неправильном» bucket. contains() вернёт false. Объект потерян — ни найти, ни удалить. Утечка памяти. Решение: immutable-ключи (String, Integer, record).
+
+**HashMap: расчёт бакета на примере.**
+
+Формула: (n-1) & hash(key). Если capacity=16 (n=16): (15) & hash. 15 в бинарном = 1111. hash = 2_000_000_000: 2000000000 & 15 = 0 (последние 4 бита = 0000). Результат: bucket 0. Поэтому capacity — степень двойки, и hash дополнительно перемешивается (XOR верхних бит с нижними).
+
+**Entity как ключ HashMap — что может пойти не так?**
+
+Если equals/hashCode используют lazy-связи (ManyToOne, OneToMany) — при первом вызове hashCode загрузится N связанных сущностей (N+1). Хуже: если связи двусторонние — StackOverflowError (бесконечная рекурсия). Решение: equals/hashCode только по @Id (или бизнес-ключу без связей). Lombok @EqualsAndHashCode(onlyExplicitlyIncluded=true).
+
+**HashMap — устройство.**
+
+Node<K,V>[]. Размер — степень двойки (default 16). Индекс: (n-1) & hash(key). Коллизии — список. Java 8+: TREEIFY_THRESHOLD=8 И capacity ≥ 64 → red-black tree.

@@ -62,3 +62,10 @@ Bounded, application-defined eviction is [[How do you build a cache with invalid
 
 > [!tip] Interview answer
 > **There is no JDK `SoftHashMap` because soft refs are a cache GC policy, not a “don’t pin the key” map. `WeakHashMap` drops entries when the key is otherwise unused. Soft refs may keep softly reachable objects until memory is tight, and the documented cache is strong refs for hot entries plus `SoftReference`s (or `LinkedHashMap` size eviction), not a clone of `WeakHashMap`.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**В `WeakHashMap` используются WeakReferences. А почему бы не создать `SoftHashMap` на SoftReferences?**
+
+`SoftHashMap` представлена в сторонних библиотеках, например, в `Apache Commons`.

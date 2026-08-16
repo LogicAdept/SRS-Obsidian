@@ -64,3 +64,14 @@ Neither is LRU. `LinkedHashMap.removeEldestEntry` evicts on insert/size. `WeakHa
 
 > [!tip] Interview answer
 > **`HashMap` keeps strong refs to keys, so entries stay until you remove them. `WeakHashMap` keeps weak key refs, so the GC can delete mappings; `size`/`get`/`containsKey` are not stable. Values are strong in both. Same nulls, same unsynchronized hash table, similar expected lookup. Use `WeakHashMap` only when the map must not pin the key.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**В чем разница между `HashMap` и `WeakHashMap`? Для чего используется `WeakHashMap`?**
+
+В Java существует 4 типа ссылок: _сильные (strong reference)_, _мягкие (SoftReference)_, _слабые (WeakReference)_ и _фантомные (PhantomReference)_. Особенности каждого типа ссылок связаны с работой Garbage Collector. Если объект можно достичь только с помощью цепочки WeakReference (то есть на него отсутствуют сильные и мягкие ссылки), то данный объект будет помечен на удаление.
+
+`WeakHashMap` - это структура данных, реализующая интерфейс `Mindmap` и основанная на использовании WeakReference для хранения ключей. Таким образом, пара «ключ-значение» будет удалена из `WeakHashMap`, если на объект-ключ более не имеется сильных ссылок.
+
+В качестве примера использования такой структуры данных можно привести следующую ситуацию: допустим имеются объекты, которые необходимо расширить дополнительной информацией, при этом изменение класса этих объектов нежелательно либо невозможно. В этом случае добавляем каждый объект в `WeakHashMap` в качестве ключа, а в качестве значения - нужную информацию. Таким образом, пока на объект имеется сильная ссылка (либо мягкая), можно проверять хэш-таблицу и извлекать информацию. Как только объект будет удален, то WeakReference для этого ключа будет помещен в ReferenceQueue и затем соответствующая запись для этой слабой ссылки будет удалена из `WeakHashMap`.

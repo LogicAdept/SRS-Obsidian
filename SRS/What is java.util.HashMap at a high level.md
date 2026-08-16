@@ -59,3 +59,18 @@ Capacity and load factor only matter once you care about **when** the table grow
 
 > [!tip] Interview answer
 > **At a high level `HashMap` is hash-to-bucket, then `equals` in that bucket. Unspecified order, expected constant-time if hashes spread, iteration over capacity plus size. Reach for `LinkedHashMap` or `TreeMap` when order is the point.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Иерархия исключений в Java.**
+
+Throwable → Error (системные, не ловим) и Exception. От Exception → checked и RuntimeException (unchecked).
+
+**Способы создать поток в Java.**
+
+extends Thread, implements Runnable, через Callable + ExecutorService, через CompletableFuture. На Java 21+ — Virtual Threads.
+
+**Способы создать поток в Java.**
+
+extends Thread, implements Runnable / Callable, ExecutorService, CompletableFuture, Virtual Thread (Java 21+).

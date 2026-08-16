@@ -66,3 +66,22 @@ A constant `hashCode` still obeys its contract and wrecks dispersion. A constant
 
 > [!tip] Interview answer
 > **`equals` is the equivalence test (five boolean rules). `hashCode` is a 32-bit hint for hash tables (three integer rules). Equal objects must share a hash; a shared hash does not mean the objects are equal. Override them together when you change value equality; never use `hashCode` as a substitute for `equals`.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Что сломается, если hashCode() вернёт константу?**
+
+Все объекты попадут в один bucket HashMap. Java 7: связный список O(n). Java 8+: при 8 коллизиях И capacity ≥ 64 — перестройка в red-black tree O(log n). Это лучше O(n), но деградация по сравнению с O(1).
+
+**Что сломается, если hashCode() вернуть константу?**
+
+Все объекты попадут в один bucket HashMap. В Java 8+ при 8 коллизиях список превращается в red-black tree, но O(log n) вместо O(1) — всё равно деградация производительности.
+
+**Что сломается, если hashCode() — константа?**
+
+Все в одном bucket. Java 8+: при 8 коллизиях И capacity ≥ 64 → red-black tree O(log n) вместо O(1).
+
+**Что сломается, если hashCode() — константа?**
+
+Все объекты в одном bucket. Java 7: список O(n). Java 8+: при 8 коллизиях И capacity ≥ 64 — red-black tree O(log n). Деградация по сравнению с O(1).

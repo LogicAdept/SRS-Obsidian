@@ -84,3 +84,10 @@ new key in a tree bin           1 TreeNode
 
 > [!tip] Interview answer
 > **A new mapping is normally one `Node`. Overwrite is zero. The first `put` also allocates the table array; a resize allocates a larger array and reuses nodes. Treeifying a bin allocates a `TreeNode` for every entry in that bucket. Keys and values are not copied.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Сколько создается новых объектов, когда вы добавляете новый элемент в `HashMap`?**
+
+__Один__ новый объект статического вложенного класса `Entry<K,V>`.

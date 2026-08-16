@@ -89,3 +89,26 @@ OpenJDK `HashMap` keeps a `size` field, so `size()` and `isEmpty()` do not scan.
 
 > [!tip] Interview answer
 > **`get`/`put`/`containsKey`/`remove` are expected constant-time if `hashCode` spreads keys; a rehashing `put` and a colliding bin are the exceptions. Iteration is O(capacity + size). `containsValue` scans. `TreeMap` is the map with a guaranteed log(n) lookup. Java 8 trees are a backstop for a bad bin, not a new contract.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Сложность операций HashMap.**
+
+put, get, remove — O(1) в среднем. В худшем случае O(log n) благодаря дереву (Java 8+).
+
+**Сложность операций HashMap.**
+
+put, get, remove — O(1) в среднем. В худшем случае O(log n) благодаря дереву (Java 8+).
+
+**Какая сложность операций в HashMap?**
+
+Среднее: get / put / containsKey — O(1). Худший случай при плохих хэшах: O(log n) при treeified бакете, O(n) если treeify ещё не сработал.
+
+**Какая сложность у HashMap.get?**
+
+O(1) в среднем. O(log n) худший случай при treeified бакете (с Java 8). O(n) при катастрофически плохом hashCode.
+
+**Сложность операций HashMap: put, get, remove.**
+
+Амортизированная O(1), в худшем случае O(log n) (Java 8+) или O(n) (Java 7).

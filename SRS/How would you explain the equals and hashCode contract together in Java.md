@@ -128,3 +128,38 @@ The hash implementation may use fewer fields than `equals` and still satisfy the
 
 > [!tip] Interview answer
 > **`equals` defines logical equality, while `hashCode` lets hash-based collections narrow the candidate set. If two objects are equal, they must have the same hash code, but the same hash does not mean they are equal. Therefore, override both methods consistently, base them on stable logical identity, and remember that collisions between unequal objects are valid.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Контракт equals/hashCode.**
+
+Если a.equals(b) == true, то a.hashCode() == b.hashCode(). Обратное необязательно (коллизии допустимы). equals(null) → false. Переопределяешь один — переопределяй оба. Практический пример: положить объект в HashSet, изменить поле в hashCode — объект потеряется, contains() вернёт false.
+
+**Контракт equals/hashCode.**
+
+1) Если a.equals(b), то a.hashCode() == b.hashCode(). 2) Если хэшкоды разные — объекты точно не равны. Если переопределяешь один — переопределяй и второй.
+
+**Контракт equals/hashCode.**
+
+Если a.equals(b), то a.hashCode() == b.hashCode(). Обратное не обязательно. Переопределяешь один — переопределяй и второй.
+
+**Расскажи контракт equals и hashCode.**
+
+Контракт equals: рефлексивность (a.equals(a) = true), симметричность (a.equals(b) ⇔ b.equals(a)), транзитивность (a=b и b=c → a=c), консистентность (повторный вызов даёт тот же результат), equals(null) = false. Главное правило связки: если a.equals(b), то a.hashCode() == b.hashCode(). Обратное не обязано выполняться.
+
+**Контракт equals/hashCode. Что сломается при нарушении?**
+
+Если a.equals(b), то hashCode совпадают. Иначе HashMap/HashSet теряют объекты.
+
+**Расскажите про контракт equals/hashCode. Что случится с HashMap при константном hashCode?**
+
+Если a.equals(b), то hashCode одинаков. Обратное необязательно. При константном hashCode — все в одном bucket: Java 7 — список O(n), Java 8+ при 8 коллизиях — red-black tree O(log n). Деградация. При рандомном — объект «потеряется» при get().
+
+**Контракт equals/hashCode.**
+
+a.equals(b) → hashCode одинаков. Обратное необязательно. Переопределяешь один — переопределяй оба. Нарушение ломает HashMap/HashSet: объект «теряется» при изменении поля в hashCode.
+
+**Контракт equals/hashCode.**
+
+Если a.equals(b), то hashCode одинаков. Обратное необязательно. Рефлексивность, симметричность, транзитивность. equals(null) → false. Переопределяешь один — переопределяй оба. Нарушение ломает HashMap/HashSet.

@@ -106,3 +106,14 @@ See also [[When does a hashCode collision occur in a HashMap]] and [[How does Ha
 
 > [!tip] Interview answer
 > **Yes. Different `hashCode()` values can still map to the same `HashMap` bucket, so that bucket can contain a linked collision chain. In Java 8+, once a bin becomes sufficiently crowded and the table is large enough, `HashMap` can convert it into a red-black tree, so severe collisions do not necessarily leave you with a long linked-list lookup.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Чем отличаются soft link и hard link?**
+
+Soft (ln -s) — указатель на путь, работает через каталоги. Hard — второе имя для того же inode, нельзя через каталоги и на другую файловую систему.
+
+**Зачем переопределять hashCode и equals для ключа HashMap?**
+
+HashMap использует hashCode для бакета и equals для разрешения коллизий. Если по умолчанию (Object) — каждый объект уникален, два «равных по смыслу» User'а с одинаковым id будут в разных бакетах. Чтобы карта работала «по содержимому» — нужно переопределить оба метода согласованно.

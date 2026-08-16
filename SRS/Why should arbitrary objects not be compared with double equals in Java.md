@@ -59,3 +59,26 @@ Primitive `==` is a different operator: numeric / boolean equality. For `double`
 
 > [!tip] Interview answer
 > **`==` on objects asks “same reference?”, not “same value?”. The JLS says even two `String`s with the same characters are `==` only if they are the same object; use `equals`. Wrappers, lists, and domain values override `equals` for content. `==` stays identity and will lie for copies.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Разница между == и equals() для строк.**
+
+== сравнивает ссылки. equals() сравнивает содержимое. Для строк, созданных литералом, == может вернуть true из-за String Pool, но полагаться на это нельзя.
+
+**Разница между == и equals() для строк.**
+
+== сравнивает ссылки, equals() — содержимое. Для литералов == может дать true из-за String Pool, но полагаться на это нельзя.
+
+**== vs equals для строк. Почему String immutable?**
+
+== сравнивает ссылки (один объект в памяти?). equals — содержимое. String immutable: безопасность (ключи HashMap, передача в файлы/БД), потокобезопасность, кэширование hashCode, String Pool.
+
+**== vs equals для строк?**
+
+== сравнивает ссылки. equals — содержимое. Из-за String Pool два литерала "abc" == "abc" дадут true, но new String("abc") == "abc" — false (new создаёт новый объект вне пула). На собесе всегда отвечать «equals для содержимого».
+
+**Разница между == и equals(). Что вернёт someObj.equals(null)?**
+
+== сравнивает ссылки; equals(null) по контракту должен возвращать false.

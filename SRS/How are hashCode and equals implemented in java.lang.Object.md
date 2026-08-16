@@ -45,3 +45,10 @@ These two `Object` methods already obey “equal objects, equal hashes”: the o
 
 > [!tip] Interview answer
 > **`Object.equals` is `==`. `Object.hashCode` aims at a distinct `int` per instance, as far as practical, and is what `System.identityHashCode` still reports after you override. The algorithm is not specified as an address. Together they are a consistent identity pair; value classes replace both.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Что будет, если переопределить только equals, но не hashCode?**
+
+Сломаются hash-структуры: HashMap, HashSet, Hashtable. Положили объект — посчитался один hashCode, переопределённый equals говорит «они равны», но другой hashCode значит другой бакет. Не найдёшь, что положил. Поэтому при переопределении equals — обязательно переопределяй hashCode.

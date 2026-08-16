@@ -2,5 +2,5 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Data/JPA #Java/Persistence/JPA #Java/Persistence/Hibernate #SRS #New
+#Java/Spring/Framework/Data #Java/Persistence/JPA #Java/Persistence/Hibernate #SRS #New
 

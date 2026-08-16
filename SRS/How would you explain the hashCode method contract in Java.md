@@ -115,3 +115,13 @@ The return type is `int`, so every `int` value is a legal hash. Distribution qua
 
 > [!tip] Interview answer
 > **`hashCode` must be stable while `equals` state is unchanged, and equal objects must share the same integer. Unequal objects are allowed to collide. Hash tables use the integer only to pick a bin; they still confirm the key with identity or `equals`. Distinct hashes help speed, but they are not required by the contract.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Для чего нужен метод `hashCode()`?**
+
+Метод `hashCode()` необходим для вычисления хэш кода переданного в качестве входного параметра объекта. В Java это целое число, в более широком смысле - битовая строка фиксированной длины, полученная из массива произвольной длины. Этот метод реализован таким образом, что для одного и того же входного объекта, хэш код всегда будет одинаковым. Следует понимать, что в Java множество возможных хэш кодов ограничено типом `int`, а множество объектов ничем не ограничено. Из-за этого, вполне возможна ситуация, что хэш коды разных объектов могут совпасть:
+
++ если хэш коды разные, то и объекты гарантированно разные;
++ если хэш коды равны, то объекты могут не обязательно равны.

@@ -61,3 +61,34 @@ Identical `hashCode()` values still slow the table no matter how large you set c
 
 > [!tip] Interview answer
 > **Initial capacity is starting bucket count (default 16). Load factor is how full before doubling (default 0.75). Size capacity from expected entries / load factor to skip rehash. Oversized capacity hurts iteration. Negative capacity or nonpositive load factor is `IllegalArgumentException`.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**load factor и resize.**
+
+Порог 0.75 по умолчанию. При size >= capacity * loadFactor — resize: массив вдвое + перехеширование ВСЕХ элементов (дорого!). Совет: если знаешь количество элементов — задай initialCapacity = expectedSize / 0.75 + 1.
+
+**Что такое load factor?**
+
+Порог заполнения, по умолчанию 0.75. При size >= capacity * loadFactor происходит resize: новый массив вдвое больше + перехеширование всех элементов.
+
+**Что такое load factor?**
+
+Порог заполнения, по умолчанию 0.75. При size >= capacity * loadFactor — resize: новый массив вдвое больше + перехеширование всех элементов.
+
+**Что такое load factor?**
+
+Соотношение size / capacity, при котором происходит расширение таблицы. По умолчанию 0.75. То есть когда size превышает 75% от capacity, таблица расширяется в 2 раза и все элементы перехэшируются. Уменьшение load factor — меньше коллизий, больше памяти. Увеличение — наоборот.
+
+**Что такое load factor?**
+
+Порог заполнения (по умолчанию 0.75), при котором происходит resize — удвоение массива и rehashing всех элементов.
+
+**load factor и resize.**
+
+0.75 по умолчанию. size >= capacity * loadFactor → resize (вдвое + перехеширование всех). Совет: initialCapacity = expectedSize / 0.75 + 1.
+
+**load factor и resize.**
+
+Порог 0.75. При size >= capacity * loadFactor — resize: массив вдвое + перехеширование ВСЕХ элементов. Совет: initialCapacity = expectedSize / 0.75 + 1.

@@ -78,3 +78,10 @@ loc -> miss
 
 > [!tip] Interview answer
 > **`get`/`put` locate one mapping by `equals` (hash maps may skip `equals` when hashes differ; `TreeMap` compares; `IdentityHashMap` uses `==`). Hit: `get` returns the value, `put` overwrites it and returns the old value. Miss: `get` returns `null`, `put` inserts. `HashMap` does that in a bin; `TreeMap` in a red-black tree. `null` from `get` or `put` is not automatically “absent.”**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Как работает put / get в HashMap?**
+
+put: вычислили hashCode ключа → определили бакет → в бакете ищем по equals существующий ключ. Если нашли — обновляем значение. Если нет — добавляем новый Node. После добавления проверяем условия для resize (size > capacity * 0.75) и для treeify. get: hashCode → бакет → перебор по equals → значение.

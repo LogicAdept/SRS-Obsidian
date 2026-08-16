@@ -67,3 +67,10 @@ Both are unsynchronized. The documented wrappers differ: `Collections.synchroniz
 
 > [!tip] Interview answer
 > **Use `HashMap` unless you need keys in sorted order or range queries: expected constant-time lookup if `hashCode` spreads, unspecified iteration order. Use `TreeMap` for a red-black `NavigableMap`: guaranteed log(n) `get`/`put`/`remove`, ordered by `Comparable`/`Comparator`, no hash table. Speed versus order is the tradeoff; `LinkedHashMap` is the third option if the order you want is insertion or access.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Почему B-tree, а не Hash?**
+
+Hash: O(1) только =. B-tree: O(log n) но поддерживает <, >, BETWEEN, ORDER BY, LIKE 'abc%'. Поэтому B-tree — default.

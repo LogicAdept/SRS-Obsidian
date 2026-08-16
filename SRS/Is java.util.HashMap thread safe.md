@@ -67,3 +67,26 @@ Fail-fast iterators throw `ConcurrentModificationException` if the map is struct
 
 > [!tip] Interview answer
 > **`HashMap` is not thread-safe. Concurrent structural updates need an external lock or `Collections.synchronizedMap`. For a concurrent hash table use `ConcurrentHashMap` (no nulls). `Hashtable` is the legacy synchronized map. Fail-fast iterators are a bug detector, not a memory model.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**HashMap vs ConcurrentHashMap.**
+
+HashMap: не потокобезопасен, допускает 1 null-ключ, null-значения. ConcurrentHashMap: потокобезопасен. Java 7 — Segment. Java 8+ — CAS + synchronized на головах бакетов (лучше параллелизм). null-ключи и null-значения ЗАПРЕЩЕНЫ. computeIfAbsent — атомарная «проверь и вставь».
+
+**HashMap vs ConcurrentHashMap.**
+
+HashMap не потокобезопасен. ConcurrentHashMap потокобезопасен: в Java 7 — Segment-блокировки, в Java 8+ — CAS + synchronized на головах бакетов.
+
+**HashMap vs ConcurrentHashMap — ключевые различия.**
+
+HashMap не потокобезопасен, допускает null-ключ/значение. ConcurrentHashMap потокобезопасен, не допускает null, в Java 7 использовал сегментную блокировку, в Java 8+ — CAS + synchronized на головах бакетов.
+
+**HashMap vs ConcurrentHashMap.**
+
+HashMap: не потокобезопасен, null-ключ. ConcurrentHashMap: Java 8+ CAS + synchronized на головах бакетов. null запрещён. computeIfAbsent атомарен.
+
+**HashMap vs ConcurrentHashMap.**
+
+HashMap: не потокобезопасен, допускает null-ключ. ConcurrentHashMap: Java 7 — Segment-блокировки, Java 8+ — CAS + synchronized на головах бакетов. null запрещён. computeIfAbsent — атомарная операция.

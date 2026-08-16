@@ -2,7 +2,6 @@
 reps: 0
 priority: 0
 -->
-
 #Java/Exceptions #SRS
 
 # Is a `finally` block always executed in Java?
@@ -94,3 +93,10 @@ This is generally safer because Java handles resource closing even when an excep
 
 > [!example] Mental model
 > Think of `finally` as **“run this when leaving the `try`/`catch` construct”**, not **“the JVM guarantees this code will always run.”**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Всегда ли исполняется блок `finally`?**
+
+Код в блоке `finally` будет выполнен всегда, независимо от того, выброшено исключение или нет.

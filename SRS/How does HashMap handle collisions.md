@@ -85,3 +85,10 @@ Tree bins are ordered **primarily by the stored hash**. On a hash tie, if both k
 
 > [!tip] Interview answer
 > **`HashMap` resolves collisions by chaining: the bucket holds a list of nodes, and `equals` decides replace versus append. Java 8+ can convert a bin into a red-black tree when you add to a list that already has at least 8 nodes, but only if the table capacity is at least 64; a smaller table resizes first. Tree lookup is O(log n) when hashes differ or keys are `Comparable`, not in every collision scenario.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Что поменялось в HashMap с Java 8?**
+
+При 8 элементах в бакете и размере таблицы ≥ 64 список превращается в red-black tree. Поиск становится O(log n) вместо O(n) в худшем случае.

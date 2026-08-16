@@ -1,0 +1,39 @@
+# Очередь тем для последующей отработки (импорт вопросов в SRS).
+# Снимай галочку, когда тема разобрана тем же методом, что Kafka / PostgreSQL / ClickHouse.
+
+- [ ] Spring Security
+- [ ] Spring Boot Actuator
+- [ ] Docker
+- [ ] JUnit
+- [ ] Mockito
+- [ ] TestContainers
+- [ ] Prometheus
+- [ ] Grafana
+- [ ] Terraform
+- [ ] Cassandra
+- [ ] AWS
+- [ ] Spring Cloud
+- [ ] Cockroach
+- [ ] Kubernetes
+- [ ] Gradle
+- [ ] GitLab
+- [ ] SOAP
+- [ ] Microservices
+- [ ] SystemDesign
+- [ ] Spark
+- [ ] Helm
+- [ ] Iceberg
+- [ ] Redis
+- [ ] MongoDB
+- [ ] Kotlin
+- [ ] Python
+- [ ] Go
+- [ ] Profiling
+- [ ] OpenShift
+- [ ] TeamCity
+- [ ] ArtemisMQ
+- [ ] ActiveMQ
+- [ ] Spring WebFlux
+- [ ] Web (HTTP, MIME, etc. WebSockets, TCP, UDP)
+- [ ] OAuth 2.0
+- [ ] Docker Compose

@@ -77,3 +77,27 @@ Java 21 also documents inspecting/removing the current eldest with `firstEntry` 
 
 > [!tip] Interview answer
 > **For an LRU cache: `new LinkedHashMap<>(cap, 0.75f, true)` and override `removeEldestEntry` to `return size() > max`. Access-order makes eldest the least recently used; the hook runs after each new `put`/`putAll`. Insertion-order gives FIFO. Default `removeEldestEntry` never evicts. Not thread-safe.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Как, используя LinkedHashMap, сделать кэш c «invalidation policy»?**
+
+Необходимо использовать _LRU-алгоритм (Least Recently Used algorithm)_ и `LinkedHashMap` с access-order. В этом случае при обращении к элементу он будет перемещаться в конец списка, а наименее используемые элементы будут постепенно группироваться в начале списка. Так же в стандартной реализации `LinkedHashMap` есть метод `removeEldestEntries()`, который возвращает `true`, если текущий объект `LinkedHashMap` должен удалить наименее используемый элемент из коллекции при использовании методов `put()` и `putAll()`.
+
+```java
+public class LRUCache<K, V> extends LinkedHashMap<K, V> {
+    private static final int MAX_ENTRIES = 10;
+
+    public LRUCache(int initialCapacity) {
+        super(initialCapacity, 0.85f, true);
+    }
+
+    @Override
+    protected boolean removeEldestEntry(Mindmap.Entry<K, V> eldest) {
+        return size() > MAX_ENTRIES;
+    }
+}
+```
+
+Стоит заметить, что `LinkedHashMap` не позволяет полностью реализовать LRU-алгоритм, поскольку при вставке уже имеющегося в коллекции элемента порядок итерации по элементам не меняется.

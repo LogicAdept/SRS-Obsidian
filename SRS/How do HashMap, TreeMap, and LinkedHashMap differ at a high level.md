@@ -76,3 +76,22 @@ enc -> hm: no
 
 > [!tip] Interview answer
 > **`HashMap`: hash table, unspecified order, expected O(1) if hashes spread. `LinkedHashMap`: same table plus a doubly-linked list for insertion-order (or access-order) iteration in O(size). `TreeMap`: red-black `NavigableMap`, sorted keys, guaranteed log(n). Choose by whether you need no order, encounter order, or sort order.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**HashMap vs TreeMap vs LinkedHashMap.**
+
+HashMap — быстрый, без порядка. TreeMap — отсортирован по ключам, O(log n). LinkedHashMap — сохраняет порядок вставки или access order.
+
+**HashMap vs TreeMap vs LinkedHashMap.**
+
+HashMap — хэш, без порядка, O(1). TreeMap — красно-чёрное дерево, отсортирован по ключам, O(log n). LinkedHashMap — сохраняет порядок вставки или access order.
+
+**HashMap vs TreeMap vs LinkedHashMap — когда что?**
+
+HashMap — быстрый доступ без порядка. TreeMap — сортировка ключей, O(log n). LinkedHashMap — сохраняет порядок вставки или access order.
+
+**HashMap vs Hashtable vs LinkedHashMap vs WeakHashMap.**
+
+HashMap: не потокобезопасен, null-ключ. Hashtable: потокобезопасен (synchronized на всё), устаревший, нет null. LinkedHashMap: порядок вставки (или access order для LRU). WeakHashMap: ключи через WeakReference — GC собирает неиспользуемые записи (для кэшей). ConcurrentHashMap — замена Hashtable.

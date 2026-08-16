@@ -59,3 +59,10 @@ Negative capacity is `IllegalArgumentException` on `ArrayList`, `HashMap`, `Hash
 
 > [!tip] Interview answer
 > **Initial capacity pre-sizes storage; it is not the current size. On `ArrayList` it is array slots (default 10). On `HashMap`/`HashSet` it is buckets (default 16), so expected keys need the load factor or `newHashMap`/`newHashSet`. `Hashtable` defaults to 11 buckets.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**CAP-теорема. В финтехе что важнее?**
+
+При партиционировании выбираем между Consistency и Availability. В платежах обычно C > A (лучше отказать, чем списать дважды).

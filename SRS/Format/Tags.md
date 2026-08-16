@@ -101,6 +101,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/JVM/Memory`
 * `#Java/JVM/GarbageCollector`
 * `#Java/JVM/ClassLoaders`
+* `#Java/JVM/JIT`
 * `#Java/JVM/Tuning`
 * `#Java/Runtime`
 * `#Java/Bytecode`
@@ -127,13 +128,14 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Spring/Core`
 * `#Java/Spring/Core/IoC`
 * `#Java/Spring/Framework/AOP`
+* `#Java/Spring/Framework/Cache`
 * `#Java/Spring/Framework/DataAccess`
 * `#Java/Spring/Framework/WebMvc`
 * `#Java/Spring/Framework/WebSocket`
 * `#Java/Spring/Framework/WebFlux`
 * `#Java/Spring/Framework/Testing`
 * `#Java/Spring/Framework/Instrumentation`
-* `#Java/Spring/Boot`
+* `#Java/Spring/Framework/Boot`
 * `#Java/Spring/Transactions`
 * `#Java/Spring/Cloud`
 * `#Java/Spring/Cloud/Gateway`
@@ -145,9 +147,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Spring/Data/MongoDB`
 * `#Java/Spring/Data/Redis`
 * `#Java/Security`
-* `#Java/Spring/Security`
+* `#Java/Spring/Framework/Security`
 * `#Java/Spring/Batch`
 * `#Java/Spring/Integration`
+* `#Java/Spring/AMQP`
 * `#Java/Spring/Session`
 * `#Java/Spring/AI`
 * `#Java/JDBC`
@@ -183,6 +186,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases/PostgreSQL`
 * `#Databases/Oracle`
 * `#Databases/MSSQL`
+* `#Databases/ClickHouse`
+* `#Databases/Snowflake`
+* `#Databases/Druid`
+* `#Databases/Pinot`
 
 ### NoSQL
 * `#NoSQL`
@@ -225,6 +232,22 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Math/Optimization/LinearProgramming/SimplexMethod`
 * `#Math/Optimization/Combinatorial`
 * `#Math/Norm`
+
+### Machine Learning
+* `#MachineLearning`
+* `#MachineLearning/Supervised`
+* `#MachineLearning/Unsupervised`
+* `#MachineLearning/Reinforcement`
+* `#MachineLearning/Metrics`
+* `#MachineLearning/Optimization`
+* `#MachineLearning/Regularization`
+* `#MachineLearning/Ensembles`
+* `#MachineLearning/DeepLearning`
+* `#MachineLearning/DeepLearning/CNN`
+* `#MachineLearning/DeepLearning/RNN`
+* `#MachineLearning/DeepLearning/Transformers`
+* `#MachineLearning/LLM`
+* `#MachineLearning/MLOps`
 
 ### UML
 * `#UML`

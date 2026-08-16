@@ -79,3 +79,10 @@ Map<String, Integer> s = entries.stream()
 
 > [!tip] Interview answer
 > **Yes. Copy a `Map` with `putAll` or the copy constructor. For literals, `Map.of` (≤10 pairs) or `Map.ofEntries(Map.entry(k, v), …)` give an unmodifiable map (Java 9; `copyOf` in 10). A collection of entries is not a constructor argument — loop `put` or `Collectors.toMap`. Factories reject duplicate keys; `put`/`putAll` replace.**
+
+> [!warning] Черновик без доверия
+> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+
+**Почему Map отдельно от Collection?**
+
+Collection хранит элементы — единичные значения. Map хранит ПАРЫ ключ-значение, у неё другой API: put(key, value), get(key), entrySet(). Хотя по сути обе — структуры данных.
