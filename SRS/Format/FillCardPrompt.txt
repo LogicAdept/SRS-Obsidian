@@ -51,6 +51,8 @@ Rules:
   OLAP / columnar → #Databases/OLAP/... (ClickHouse, Snowflake, Druid, Pinot)
   Kubernetes → #DevOps/Tools/Kubernetes (not #Kubernetes)
   Kafka → #Messaging/Tools/Kafka
+  AMQP protocol → #Messaging/AMQP (RabbitMQ stays the broker)
+  Messaging EIPs (Message Bus, Channel, Request-Reply, …) → #Patterns/Enterprise/Integration/... (not #Messaging/Bus etc.)
   Java test libraries (JUnit, Mockito, Testcontainers, WireMock, Cucumber, Gherkin) → #Java/Testing/...
 • If nothing in the tree fits, do not stretch a near-match. Pick the closest honest shorter prefix and, after the card, propose a new leaf under an existing root. Do not silently create a new top-level root.
 • #NoSQL is not a root. Non-relational stores → #Databases/NoSQL/... Store-family comparison cards use #Databases/Relational and #Databases/NoSQL (or product leaves). OLTP vs OLAP uses #Databases/Relational and #Databases/OLAP.
@@ -361,32 +363,15 @@ DistributedSystems
 Messaging
 #Messaging
 #Messaging/Async
+#Messaging/AMQP
+#Messaging/MQTT
 #Messaging/Tools
 #Messaging/Tools/Kafka
 #Messaging/Tools/RabbitMQ
+#Messaging/Tools/ActiveMQ
+#Messaging/Tools/Artemis
 #Messaging/Tools/Flume
 #Messaging/Tools/Flink
-#Messaging/Bus
-#Messaging/Channel
-#Messaging/Dispatcher
-#Messaging/Endpoint
-#Messaging/Expiration
-#Messaging/Filter
-#Messaging/History
-#Messaging/Message
-#Messaging/Message/Simple
-#Messaging/Router
-#Messaging/Sequence
-#Messaging/Store
-#Messaging/Translator
-#Messaging/Bridge
-#Messaging/Gateway
-#Messaging/Mapper
-#Messaging/PollingConsumer
-#Messaging/Broker
-#Messaging/RequestReply
-#Messaging/Resequencer
-#Messaging/ReturnAddress
 
 Networking
 #Networking

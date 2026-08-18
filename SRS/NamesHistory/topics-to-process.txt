@@ -75,6 +75,11 @@
 - [ ] RxJava
 - [ ] Coroutine
 - [ ] Python
+- [ ] PyTorch
+- [ ] Hugging Face
+- [ ] MLflow
+- [ ] MLOps
+- [ ] GPT
 - [ ] Go
 - [ ] Spark
 - [ ] Apache Flink
@@ -95,5 +100,12 @@
 - [ ] vector DB
 - [ ] RAG
 - [ ] retrieval pipeline
+- [ ] ArgoCD
+
+
+- [ ] Bytecode
+- [ ] Classloader
+- [ ] GarbageCollector
+- [ ] ArgoCD
 
 - Реальный практический кейс из опыта на каждую технологию

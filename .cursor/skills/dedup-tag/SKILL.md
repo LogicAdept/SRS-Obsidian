@@ -79,6 +79,16 @@ Do **not** splice two GoldStandard bodies. Do **not** copy dump prose into a fil
 - Grep `[[…]]` for the deleted title; point them at the kept cue. No extra markup on the wikilink.
 - Only fix a kept card’s tag line if it is an invalid path vs `Tags.md`. Do not rewrite other tags.
 
+## Coverage index
+
+After you create, fill, retag, or delete SRS cards (or edit the Tags.md tree), run:
+
+```
+python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
+```
+
+Skip this on `--dry-run`.
+
 ## Do not
 
 - Delete merely related cards.

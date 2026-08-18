@@ -89,6 +89,14 @@ priority: 0
 
 If the dump has a question and no answer: still create the file with the trust warning and empty body after it.
 
+## Coverage index
+
+After you create, fill, retag, or delete SRS cards (or edit the Tags.md tree), run:
+
+```
+python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
+```
+
 ## Do not
 
 - Run `/fill-tag` quality bar or strip `#New`.

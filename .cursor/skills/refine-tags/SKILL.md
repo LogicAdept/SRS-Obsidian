@@ -26,7 +26,14 @@ Language: English only — this skill, `Tags.md` edits, and the chat report.
 ## Read first
 
 - `SRS/Format/Tags.md` (canonical rules + Tree)
-- Grep actual tag lines in `SRS/*.md` (skip `SRS/Format/` and `SRS/NamesHistory/`)
+
+**Do not invent a Python walker or a one-off retagger.** After the prefix is chosen, run:
+
+```
+python .cursor/skills/refine-tags/scripts/tag-audit.py Java/Spring
+```
+
+That prints unused tree paths, tags used on cards but missing from `Tags.md`, and cards that carry a parent and its child. Cue titles: `python .cursor/skills/process-topic/scripts/inventory-tag.py Java/Spring`. Pass prefixes **without** a leading `#` (PowerShell treats `#…` as a comment).
 
 Do not use the TREE copy inside `SRS/Format/FillCardPrompt.txt`. If it disagrees with `Tags.md`, `Tags.md` wins; mention the drift in chat only.
 
@@ -41,6 +48,8 @@ Do not use the TREE copy inside `SRS/Format/FillCardPrompt.txt`. If it disagrees
   - OLAP / columnar → `#Databases/OLAP/...` (ClickHouse, Snowflake, Druid, Pinot)
   - Kubernetes → `#DevOps/Tools/Kubernetes`
   - Kafka → `#Messaging/Tools/Kafka`
+  - AMQP protocol → `#Messaging/AMQP` (RabbitMQ stays the broker leaf)
+  - Hohpe EIP (Message Bus, Channel, Request-Reply, …) → `#Patterns/Enterprise/Integration/...`, not `#Messaging/Bus` etc.
   - JUnit / Mockito / Testcontainers / WireMock / Cucumber / Gherkin → `#Java/Testing/...`
 - `#NoSQL` is not a root. Non-relational stores are `#Databases/NoSQL` and children. Store-family comparison cards use `#Databases/Relational` and `#Databases/NoSQL` (or product leaves). Language/search vs SQL stays `#Databases/SQL`. OLTP vs OLAP uses `#Databases/Relational` and `#Databases/OLAP`.
 - Prefer a deeper honest leaf; do **not** put a parent and its child on the same card.
@@ -61,16 +70,32 @@ Do **not**: rename for style, split a leaf because a blog has a finer heading, o
 
 ## Pipeline
 
-1. Inventory: tags in `Tags.md` vs tags used on cards.
-2. Classify: unused tree entries, used-but-missing-from-tree, synonym pairs, parent+child on the same card, stretched near-matches.
-3. Plan a **minimal** patch. If several layouts are reasonable, apply only the unambiguous merges/fixes and list the rest as options in chat — do not guess a controversial re-parent.
-4. Edit `SRS/Format/Tags.md` Tree (and the short rules only if a real policy changed).
-5. Retag affected **card** files: replace old paths, keep thematic → `#SRS` → `#New` order, drop parent+child duplicates.
-6. Do not retag Format notes except `Tags.md`. Do not rewrite card bodies.
-7. Chat report: before/after paths, files touched, unused entries left in the tree on purpose, open taxonomy questions.
+1. Inventory: run `tag-audit.py` (and `inventory-tag.py` if you need cue titles). Classify from that output: unused tree entries, used-but-missing-from-tree, synonym pairs, parent+child on the same card, stretched near-matches.
+2. Plan a **minimal** patch. If several layouts are reasonable, apply only the unambiguous merges/fixes and list the rest as options in chat — do not guess a controversial re-parent.
+3. Edit `SRS/Format/Tags.md` Tree (and the short rules only if a real policy changed).
+4. Retag affected **card** files with `retag-prefix.py` — not a throwaway script:
+
+```
+python .cursor/skills/refine-tags/scripts/retag-prefix.py --from Java/Spring/Framework/Boot --to Java/Spring/Boot
+python .cursor/skills/refine-tags/scripts/retag-prefix.py --map Java/Spring/Framework/Boot=Java/Spring/Boot --map Java/Spring/Framework/Security=Java/Spring/Security
+python .cursor/skills/refine-tags/scripts/retag-prefix.py --from Old/Leaf --to New/Leaf --only "Some cue.md"
+```
+
+`--from/--to` also rewrites children (`Old/Leaf/X` → `New/Leaf/X`). Only cards that actually carry the old prefix are touched. The script keeps thematic → `#SRS` → `#New` and drops parent+child duplicates on the same line. Use `--dry-run` first when the mapping is easy to get wrong. Do not retag Format notes except `Tags.md`. Do not rewrite card bodies.
+5. Chat report: before/after paths, files touched, unused entries left in the tree on purpose, open taxonomy questions.
+6. Rebuild the coverage index (see below).
+
+## Coverage index
+
+After you create, fill, retag, or delete SRS cards (or edit the Tags.md tree), run:
+
+```
+python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
+```
 
 ## Do not
 
+- Invent a one-off Python/`python -c` walker or retagger; use `tag-audit.py` and `retag-prefix.py`.
 - Silently create a new top-level root.
 - Duplicate the whole tree into FillCardPrompt or a skill file.
 - Fill or create cards (`/import-repo`, `/cover-tag`, `/fill-tag`).

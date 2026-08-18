@@ -1,3 +1,38 @@
+- [+] How can you emulate CountDownLatch with Phaser.md
+- [+] How do you use CountDownLatch so several threads start together.md
+- [+] How does CyclicBarrier run a barrier action when all parties arrive.md
+- [+] How does Exchanger swap data between two threads.md
+- [+] How does Phaser differ from CyclicBarrier.md
+- [+] What does the fair flag on Semaphore change.md
+- [+] What Phaser methods register arrive and awaitAdvance do.md
+- [+] How do you get a concurrent Set in Java.md
+- [+] How do you implement producer-consumer with a BlockingQueue.md
+- [+] What is a DelayQueue.md
+- [+] What is a PriorityBlockingQueue.md
+- [+] What is a SynchronousQueue.md
+- [+] What is ConcurrentLinkedQueue.md
+- [+] What is ConcurrentSkipListSet.md
+- [+] What is CopyOnWriteArraySet.md
+- [+] What is the difference between ArrayBlockingQueue and LinkedBlockingQueue.md
+- [+] What is the difference between ArrayList Vector and CopyOnWriteArrayList.md
+- [+] What is the difference between ConcurrentLinkedQueue and a BlockingQueue.md
+- [+] What makes a BlockingQueue blocking.md
+- [+] Why use concurrent collections instead of Collections synchronized wrappers.md
+- [+] Can you modify a collection while iterating with a for-each loop.md
+- [+] How do you iterate a List in reverse using ListIterator.md
+- [+] How do you remove an element from a collection while iterating.md
+- [+] In which Java version was Iterator introduced.md
+- [+] Is Enumeration fail-fast.md
+- [+] What counts as a structural modification for fail-fast iterators.md
+- [+] What types of iterators or cursors exist in Java.md
+- [+] Why is there no add method on Iterator.md
+- [+] How do you convert a HashMap to an ArrayList.md
+- [+] How do you convert a String array to an ArrayList.md
+- [+] How do you remove duplicates from an ArrayList.md
+- [+] How do you reverse a List in Java.md
+- [+] What is the difference between an array and an ArrayList.md
+- [+] What is the difference between ArrayDeque and LinkedList as a Deque.md
+- [+] What is the difference between CopyOnWriteArrayList and ArrayList.md
 - [+] How do static and final fields affect Java serialization.md
 - [+] How do string literals enter the Java string pool.md
 - [x] Can a column referenced by a foreign key be NULL.md
@@ -2992,3 +3027,273 @@
 - [x] Why was WebSecurityConfigurerAdapter removed.md
 - [x] Will I communicate with the client and how much English is used daily.md
 - [x] Will remote work be possible and how often.md
+- [+] How do you limit nested query depth in GraphQL.md
+- [+] How do you paginate a GraphQL list.md
+- [+] How do you version a GraphQL schema.md
+- [+] How does DataLoader batch GraphQL resolver calls.md
+- [+] How does the GraphQL execution engine resolve a query.md
+- [+] What is GraphQL.md
+- [+] What is GraphQL introspection.md
+- [+] What is the difference between a GraphQL query a mutation and a subscription.md
+- [+] What is the difference between GraphQL and REST.md
+- [+] What is the N plus 1 problem in GraphQL.md
+- [+] Why does GraphQL often return HTTP 200 when a field errors.md
+- [+] Why is HTTP caching harder with GraphQL than REST.md
+- [+] How do GraphQL subscriptions work over WebSockets.md
+- [+] How do you authenticate and authorize a GraphQL request.md
+- [+] How do you handle file uploads in GraphQL.md
+- [+] How does a default GraphQL resolver work.md
+- [+] How does a federated GraphQL gateway plan a query.md
+- [+] How does null bubbling work when a GraphQL field is null.md
+- [+] Is GraphQL a database technology.md
+- [+] What are GraphQL scalar types.md
+- [+] What are persisted queries in GraphQL.md
+- [+] What are the four arguments passed to a GraphQL resolver.md
+- [+] What do the include skip and deprecated GraphQL directives do.md
+- [+] What is a GraphQL fragment.md
+- [+] What is a GraphQL schema.md
+- [+] What is GraphQL execution context.md
+- [+] What is over-fetching and under-fetching compared with REST.md
+- [+] What is query complexity analysis in GraphQL.md
+- [+] What is Schema Definition Language in GraphQL.md
+- [+] What is the difference between a GraphQL interface and a union.md
+- [+] What is the difference between GraphQL and gRPC.md
+- [+] What is the difference between GraphQL federation and schema stitching.md
+- [+] What is the difference between GraphQL list and non-null modifiers.md
+- [+] What is the difference between schema-first and code-first GraphQL.md
+- [+] When do you use aliases in a GraphQL query.md
+- [+] When should you not use GraphQL.md
+- [+] Which GraphQL schema changes are breaking.md
+- [+] Why disable GraphQL introspection in production.md
+- [+] Why do GraphQL mutations run serially while queries can run in parallel.md
+- [+] Why do GraphQL mutations use input types instead of object types.md
+- [+] Why is rate limiting harder in GraphQL than REST.md
+- [+] Why prefer GraphQL variables over inlined values.md
+- [+] What happens on integer overflow in Java.md
+- [+] Why is 0.1 plus 0.2 not equal to 0.3 in Java.md
+- [+] How does numeric promotion work in Java arithmetic expressions.md
+- [+] Why does adding two byte values not compile as a byte in Java.md
+- [+] What happens when a ternary operator unboxes a null Integer in Java.md
+- [+] How do numeric suffixes and bases work for Java literals.md
+- [+] What is the difference between Integer.parseInt and Integer.valueOf.md
+- [+] Why cannot a Java primitive variable be null.md
+- [+] What is the difference between float and double in Java.md
+- [+] What is the difference between int and Integer in Java.md
+- [+] What is the difference between char and String in Java.md
+- [+] What is the difference between double and BigDecimal for decimal calculations.md
+- [+] What is the value range of the Java byte type.md
+- [+] What is the value range of the Java char type.md
+- [+] What is the value range of the Java int type.md
+- [+] What is the value range of the Java long type.md
+- [+] Is the Java char type signed or unsigned.md
+- [+] How does the Java char type relate to int.md
+- [+] What happens when you use Integer as a loop accumulator in Java.md
+- [+] Why does multiplying two int values overflow before assignment to a long.md
+- [+] Why should you construct BigDecimal from a String instead of a double.md
+- [+] What are the autoboxing rules when assigning a primitive to a wrapper.md
+- [+] What is the difference between signed right shift and unsigned right shift in Java.md
+- [+] What default values do wrapper-typed fields receive in Java.md
+- [+] Why must a local primitive variable be initialized before use in Java.md
+- [+] Why does integer division of 5 by 2 equal 2 in Java.md
+- [+] Why does adding two char values not concatenate them in Java.md
+- [+] What is a compile-time constant in Java.md
+- [+] Are Java wrapper types immutable.md
+- [+] What happens when you increment an Integer with plus plus in Java.md
+- [+] How does the Boolean wrapper interpret a String argument.md
+- [+] How do you parse an int from a binary String in Java.md
+- [+] Can wrapping a primitive let a Java method change the caller value.md
+- [+] Why is the Java char type 16 bits.md
+- [+] What are the different ways of creating a Java wrapper instance.md
+- [+] Why prefer primitives over wrappers in hot loops in Java.md
+- [+] What is the default type of a Java floating-point literal.md
+- [+] How do you convert a wrapper to a primitive with xxxValue methods.md
+- [+] Why does Character reject an int constructor argument.md
+- [+] Why are wrapper classes needed in Java.md
+- [+] Why cannot Java collections store primitive types.md
+- [+] How does adding an int to an ArrayList of Integer autobox.md
+- [+] What method does the compiler insert when unboxing an Integer.md
+- [+] What method does the compiler insert when autoboxing an int.md
+- [+] Why does autoboxing exist in Java.md
+- [+] What is the difference between Integer.valueOf and new Integer.md
+- [+] How do you avoid NullPointerException when unboxing a Map value.md
+- [+] Is autoboxing always a performance problem in Java.md
+- [+] How can you extend the Integer autobox cache maximum.md
+- [+] Which wrapper types besides Integer cache boxed values.md
+- [+] In which Java version were autoboxing and unboxing introduced.md
+- [+] What is a custom wrapper class in Java.md
+- [+] Why use wrapper types for JavaBean properties.md
+- [+] How do you convert an int to a binary hex or octal String.md
+- [+] How much memory does an Integer object use compared with int.md
+- [+] Why does type erasure prevent a List of int in Java.md
+- [+] What are Boolean.TRUE and Boolean.FALSE.md
+- [+] Why were Integer constructors deprecated.md
+- [+] When does autoboxing occur in Java.md
+- [+] In which Java version were records standardized.md
+- [+] What methods does the compiler generate for a Java record.md
+- [+] What is the difference between a Java record and a regular class.md
+- [+] Are Java record fields final.md
+- [+] What is a canonical constructor in a Java record.md
+- [+] What is a compact constructor in a Java record.md
+- [+] Can a Java record declare additional constructors.md
+- [+] Can a Java record declare static members and instance methods.md
+- [+] Can you override a record accessor method.md
+- [+] What is the difference between a Java record and Lombok Value.md
+- [+] How do you serialize a Java record with Jackson.md
+- [+] How do records work with pattern matching in switch.md
+- [+] How does Java serialization treat record classes.md
+- [+] Can a Java record be generic.md
+- [+] Why are Java records good HashMap keys.md
+- [+] Can you declare a record inside a Java method.md
+- [+] How do you implement Singleton with a Java record.md
+- [+] Can you use a Java record as a JPA entity.md
+- [+] How do you inspect a Java record with reflection.md
+- [+] Where do annotations on Java record components apply.md
+- [+] How does the JVM represent a Java record.md
+- [+] In which Java version were enums introduced.md
+- [+] Can a Java enum implement an interface.md
+- [+] Can a Java enum extend a class.md
+- [+] Can you create a Java enum instance with new.md
+- [+] Can you declare a constructor inside a Java enum.md
+- [+] When is a Java enum constructor invoked.md
+- [+] What does ordinal do on a Java enum.md
+- [+] What is the difference between ordinal and compareTo on a Java enum.md
+- [+] How do you iterate over all Java enum constants.md
+- [+] How do you convert a String to a Java enum.md
+- [+] What is the difference between name and toString on a Java enum.md
+- [+] Can you override toString on a Java enum.md
+- [+] Can you use a Java enum in a switch.md
+- [+] Can you use a Java enum with TreeSet or TreeMap.md
+- [+] What is the difference between comparing enums with == and equals.md
+- [+] What is the advantage of a Java enum over int and String constant patterns.md
+- [+] How do you create a Java enum with no instances.md
+- [+] What is the difference between enum Enum and Enumeration.md
+- [+] Can you declare a Java enum inside a method.md
+- [+] Can a Java enum have abstract methods.md
+- [+] How does an enum provide a Singleton.md
+- [+] How does Java serialization treat enum constants.md
+- [+] Why prefer EnumMap when the keys are enum constants.md
+- [+] When would you use a sealed class instead of an enum.md
+- [+] Can you override compareTo on a Java enum.md
+- [+] Can you add constants to a Java enum at runtime.md
+- [+] What happens when you pass null to Optional.of.md
+- [+] What are Optional.ofNullable and Optional.empty.md
+- [+] What do isPresent and isEmpty do on Optional.md
+- [+] Why should you avoid calling get on an Optional.md
+- [+] What does Optional.ifPresent do.md
+- [+] What is Optional.ifPresentOrElse.md
+- [+] How does Optional.map work.md
+- [+] When do you use Optional.flatMap instead of map.md
+- [+] What does Optional.filter do.md
+- [+] What does orElseThrow do on Optional.md
+- [+] What does Optional.or do.md
+- [+] How does Optional.stream bridge to the Stream API.md
+- [+] What are OptionalInt OptionalLong and OptionalDouble.md
+- [+] Why should you not use Optional as a field or method parameter.md
+- [+] Why should you not wrap a collection in Optional.md
+- [+] Why should a method that returns Optional never return null.md
+- [+] Is Optional serializable.md
+- [+] What is the performance cost of Optional.md
+- [+] What are some use cases of Java reflection.md
+- [+] What is the Class class in Java reflection.md
+- [+] How can you get the Class object in Java.md
+- [+] What is the difference between getClass and Class.forName.md
+- [+] What does Class.forName do and what are its overloads.md
+- [+] How can you create an instance of a class using reflection.md
+- [+] What is the difference between getField and getDeclaredField.md
+- [+] What is the difference between getMethod and getDeclaredMethod.md
+- [+] How can you invoke a method using reflection.md
+- [+] How do you invoke overloaded methods using reflection.md
+- [+] How can you access constructors using reflection.md
+- [+] How do you invoke a private constructor using reflection.md
+- [+] What does setAccessible do in the Reflection API.md
+- [+] How do you access static fields using reflection.md
+- [+] Can you change the value of a final field using reflection.md
+- [+] What are the drawbacks of using Java reflection.md
+- [+] What is a dynamic proxy in Java reflection.md
+- [+] How can you determine if a Class represents an array.md
+- [+] How do you inspect a class superclass and interfaces with reflection.md
+- [+] What is the difference between ClassNotFoundException and NoClassDefFoundError.md
+- [+] How do you enable Java assertions at runtime.md
+- [+] How do you disable Java assertions at runtime.md
+- [+] How do you enable Java assertions for a package or class.md
+- [+] What is the difference between -ea and -esa.md
+- [+] What happens when a Java assert statement fails.md
+- [+] Why must Java assert expressions be free of side effects.md
+- [+] Why should you not use assert to validate public method arguments.md
+- [+] What are the two forms of the Java assert statement.md
+- [+] In which Java version was the assert keyword introduced.md
+- [+] When is the assert detail expression evaluated.md
+- [+] Can the assert detail expression be a void method.md
+- [+] Why are Java assertions disabled by default.md
+- [+] Should you catch AssertionError.md
+- [+] Can you use assert as an identifier after Java 1.4.md
+- [+] When is it appropriate to use Java assertions.md
+- [+] How are Java assertion flags combined on the command line.md
+- [+] Is AssertionError a subclass of Exception.md
+- [+] How does EnumMap store mappings internally.md
+- [+] What is the difference between EnumMap and HashMap.md
+- [+] Does EnumMap allow null keys or null values.md
+- [+] Is EnumMap synchronized.md
+- [+] In what order does EnumMap iterate.md
+- [+] Must EnumMap keys all come from the same enum type.md
+- [+] In which Java version was EnumMap introduced.md
+- [+] How do you create an EnumMap.md
+- [+] What special collections exist for Java enums.md
+- [+] Are EnumMap iterators fail-fast.md
+- [+] What is the difference between EnumMap and EnumSet.md
+- [+] Can TreeMap have null keys or null values.md
+- [+] What interfaces does TreeMap implement.md
+- [+] How do you customize TreeMap key order.md
+- [+] Why must TreeMap ordering be consistent with equals.md
+- [+] How do you synchronize a TreeMap.md
+- [+] How do you get a range or neighbor key from a TreeMap.md
+- [+] How does TreeMap decide whether two keys are the same.md
+- [+] What types can you use as TreeMap keys.md
+- [+] What happens if you mutate a TreeMap key after insertion.md
+- [+] When was NavigableMap introduced for TreeMap.md
+- [+] What is the difference between TreeMap and ConcurrentSkipListMap.md
+- [+] Are TreeMap iterators fail-fast.md
+- [+] Is TreeSet implemented using TreeMap.md
+- [+] In which Java version was TreeMap introduced.md
+- [+] Does Hashtable allow null keys or values.md
+- [+] What is java.util.Dictionary and how does Hashtable relate to it.md
+- [+] Are Hashtable enumerations fail-fast.md
+- [+] Why is ConcurrentHashMap faster than Hashtable.md
+- [+] Can you unsynchronize a Hashtable.md
+- [+] In which Java version was Hashtable introduced.md
+- [+] Is Hashtable deprecated.md
+- [+] What is the difference between HashMap and LinkedHashMap.md
+- [+] Does LinkedHashMap allow null keys or values.md
+- [+] Is LinkedHashMap synchronized.md
+- [+] Does LinkedHashMap extend HashMap.md
+- [+] Does putting an existing key change LinkedHashMap iteration order.md
+- [+] Can LinkedHashMap fully implement an LRU cache.md
+- [+] Does LinkedHashMap override HashMap put.md
+- [+] What is the difference between HashMap and ConcurrentHashMap.md
+- [+] Does ConcurrentHashMap allow null keys or values.md
+- [+] How does ConcurrentHashMap use Segment locks in Java 7.md
+- [+] Why did ConcurrentHashMap drop segment locks in Java 8.md
+- [+] How does ConcurrentHashMap use CAS and synchronized in Java 8.md
+- [+] Are ConcurrentHashMap iterators fail-fast.md
+- [+] In which Java version was ConcurrentHashMap introduced.md
+- [+] How does ConcurrentHashMap size work.md
+- [+] Why should you use computeIfAbsent on ConcurrentHashMap.md
+- [+] Does ConcurrentHashMap get lock the whole table.md
+- [+] What is concurrencyLevel in ConcurrentHashMap.md
+- [+] How do you avoid a check-then-act race on ConcurrentHashMap.md
+- [+] Does IdentityHashMap use the hashCode method.md
+- [+] How does IdentityHashMap decide whether two keys are the same.md
+- [+] Must IdentityHashMap keys be immutable.md
+- [+] What happens if you mutate an IdentityHashMap key after insertion.md
+- [+] Does IdentityHashMap allow null keys or values.md
+- [+] Is IdentityHashMap synchronized.md
+- [+] Are IdentityHashMap iterators fail-fast.md
+- [+] In which Java version was IdentityHashMap introduced.md
+- [+] How does IdentityHashMap resolve collisions.md
+- [+] What is the default expected maximum size of IdentityHashMap.md
+- [+] What is the difference between IdentityHashMap and WeakHashMap.md
+- [+] Does overriding equals change IdentityHashMap lookup.md
+- [+] Can IdentityHashMap be used as a cache.md
+- [+] Why can IdentityHashMap be faster than HashMap.md
+- [+] Does IdentityHashMap violate the Map contract.md
+- [+] Can two equal String objects both be keys in an IdentityHashMap.md

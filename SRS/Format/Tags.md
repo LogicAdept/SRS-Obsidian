@@ -29,6 +29,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **OLAP in the tree:** analytical / columnar engines live under **`#Databases/OLAP`** and child paths (for example **`#Databases/OLAP/ClickHouse`**). Do not put them under Relational or NoSQL. OLTP vs OLAP cards carry **`#Databases/Relational`** and **`#Databases/OLAP`** (or the product leaves). Do not put **`#Databases`** next to **`#Databases/OLAP`** on the same card.
 
+**Messaging in the tree:** protocols and brokers live under **`#Messaging`** (`#Messaging/AMQP`, `#Messaging/MQTT`, `#Messaging/Tools/Kafka`, …). Hohpe/Woolf **EIP pattern names** (Message Bus, Channel, Broker, Request-Reply, …) live under **`#Patterns/Enterprise/Integration/...`**, not as `#Messaging/Bus` and similar. A pattern card that is also about messaging carries **`#Messaging`** plus the Patterns leaf — do not duplicate the pattern name under Messaging.
+
+**Spring in the tree:** **`#Java/Spring/Framework/...`** is for **Spring Framework** modules (Web MVC, WebFlux, AOP, Cache, DataAccess, Testing, …). **Spring Boot** and **Spring Security** are separate projects: **`#Java/Spring/Boot`** and **`#Java/Spring/Security`**, not under Framework. Spring Data / Cloud / Batch / Integration / AMQP / Kafka stay as siblings under **`#Java/Spring`**. Java-language crypto and auth concepts stay **`#Java/Security`**, not Spring Security. Do not put **`#Java/Spring`** next to a more specific **`#Java/Spring/...`** child on the same card.
+
 ---
 
 ## Tree (prefixes in cards)
@@ -147,9 +151,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Spring/Framework/WebFlux`
 * `#Java/Spring/Framework/Testing`
 * `#Java/Spring/Framework/Instrumentation`
-* `#Java/Spring/Framework/Boot`
-* `#Java/Spring/Framework/Boot/Actuator`
-* `#Java/Spring/Framework/Boot/Admin`
+* `#Java/Spring/Boot`
+* `#Java/Spring/Boot/Actuator`
+* `#Java/Spring/Boot/Admin`
 * `#Java/Spring/Transactions`
 * `#Java/Spring/Cloud`
 * `#Java/Spring/Cloud/Gateway`
@@ -161,10 +165,11 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Spring/Data/MongoDB`
 * `#Java/Spring/Data/Redis`
 * `#Java/Security`
-* `#Java/Spring/Framework/Security`
+* `#Java/Spring/Security`
 * `#Java/Spring/Batch`
 * `#Java/Spring/Integration`
 * `#Java/Spring/AMQP`
+* `#Java/Spring/Kafka`
 * `#Java/Spring/Session`
 * `#Java/Spring/AI`
 * `#Java/JDBC`
@@ -287,10 +292,15 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#MachineLearning/DeepLearning/RNN`
 * `#MachineLearning/DeepLearning/Transformers`
 * `#MachineLearning/LLM`
+* `#MachineLearning/LLM/GPT`
 * `#MachineLearning/Embeddings`
 * `#MachineLearning/RAG`
 * `#MachineLearning/RAG/Retrieval`
 * `#MachineLearning/MLOps`
+* `#MachineLearning/MLOps/MLflow`
+* `#MachineLearning/Tools`
+* `#MachineLearning/Tools/PyTorch`
+* `#MachineLearning/Tools/HuggingFace`
 
 ### UML
 * `#UML`
@@ -390,27 +400,6 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Messaging/Tools/Artemis`
 * `#Messaging/Tools/Flume`
 * `#Messaging/Tools/Flink`
-* `#Messaging/Bus`
-* `#Messaging/Channel`
-* `#Messaging/Dispatcher`
-* `#Messaging/Endpoint`
-* `#Messaging/Expiration`
-* `#Messaging/Filter`
-* `#Messaging/History`
-* `#Messaging/Message`
-* `#Messaging/Message/Simple`
-* `#Messaging/Router`
-* `#Messaging/Sequence`
-* `#Messaging/Store`
-* `#Messaging/Translator`
-* `#Messaging/Bridge`
-* `#Messaging/Gateway`
-* `#Messaging/Mapper`
-* `#Messaging/PollingConsumer`
-* `#Messaging/Broker`
-* `#Messaging/RequestReply`
-* `#Messaging/Resequencer`
-* `#Messaging/ReturnAddress`
 
 ### Networking
 * `#Networking`

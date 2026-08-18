@@ -117,6 +117,14 @@ If any checklist line is FAIL, fix before finishing. If you cannot fix without g
 
 When `--limit` is 2–3: finish and self-check one card before the next.
 
+## Coverage index
+
+After you create, fill, retag, or delete SRS cards (or edit the Tags.md tree), run:
+
+```
+python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
+```
+
 ## Do not
 
 - Fill from dump/blog wording without official verification.
