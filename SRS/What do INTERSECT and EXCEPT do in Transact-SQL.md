@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/MSSQL #SRS #New
+#Databases/SQL #Databases/Relational/MSSQL #SRS #New

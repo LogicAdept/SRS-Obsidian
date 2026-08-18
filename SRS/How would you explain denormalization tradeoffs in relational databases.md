@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #SystemDesign/Tradeoffs #SystemDesign/Performance #SystemDesign/Scalability #SystemDesign/Consistency #SRS #New
+#Databases/Relational #SystemDesign/Tradeoffs #SystemDesign/Performance #SystemDesign/Scalability #SystemDesign/Consistency #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из шпаргалок Хабра (MishaBucha, 2025). Не сверен с официальной документацией. Не считать ответом для ревью.

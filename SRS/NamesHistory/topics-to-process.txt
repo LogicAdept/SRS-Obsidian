@@ -1,39 +1,99 @@
 # Очередь тем для последующей отработки (импорт вопросов в SRS).
+# Порядок — приоритет подготовки к собесу Java / Spring backend (частота + рычаг).
 # Снимай галочку, когда тема разобрана тем же методом, что Kafka / PostgreSQL / ClickHouse.
 
+## P0 — почти на каждом собесе
+
+- [ ] Web (HTTP, MIME, etc. WebSockets, TCP, UDP, OSI, TLS)
+- [ ] Java Versions updates
+- [ ] ORM
+- [ ] Spring AOP
 - [ ] Spring Security
+- [ ] OAuth 2.0
+- [ ] OIDC
 - [ ] Spring Boot Actuator
-- [ ] Docker
 - [ ] JUnit
 - [ ] Mockito
 - [ ] TestContainers
+- [ ] TDD
+- [ ] BDD
+- [ ] Redis
+- [ ] Docker
+- [ ] Docker Compose
+- [ ] Kubernetes
+- [ ] DevOps patterns (blue-green, canary, rolling)
+- [ ] Microservices
+- [ ] MSA
+- [ ] DDD
+- [ ] Event Driven
+- [ ] SystemDesign
+- [ ] Spring Cloud
+- [ ] Gradle
+- [ ] Linux
+- [ ] OperatingSystems
+- [ ] Profiling
+- [ ] AMQP
+- [ ] Nginx
+- [ ] gRPC
+- [ ] Protobuf
 - [ ] Prometheus
 - [ ] Grafana
-- [ ] Terraform
+
+## P1 — часто в JD, закрывает типичные follow-up
+
+- [ ] Keycloak
+- [ ] SAML 2.0
+- [ ] ActiveDirectory
+- [ ] Elasticsearch
+- [ ] MongoDB
 - [ ] Cassandra
 - [ ] AWS
-- [ ] Spring Cloud
-- [ ] Cockroach
-- [ ] Kubernetes
-- [ ] Gradle
-- [ ] GitLab
-- [ ] SOAP
-- [ ] Microservices
-- [ ] SystemDesign
-- [ ] Spark
 - [ ] Helm
-- [ ] Iceberg
-- [ ] Redis
-- [ ] MongoDB
+- [ ] OpenShift
+- [ ] Spring WebFlux
+- [ ] Project Reactor
 - [ ] Kotlin
+- [ ] GraphQL
+- [ ] Webhooks
+- [ ] WireMock
+- [ ] GitLab
+- [ ] Jenkins
+- [ ] Cockroach
+- [ ] infinispan
+- [ ] SBA
+- [ ] JOOQ
+- [ ] Cucumber
+- [ ] Gherkin
+
+## P2 — по вакансии / второй стек, не ядро Java-собеса
+
+- [ ] Terraform
+- [ ] SOAP
+- [ ] SOA
+- [ ] Spring Integration
+- [ ] Quarkus
+- [ ] RxJava
+- [ ] Coroutine
 - [ ] Python
 - [ ] Go
-- [ ] Profiling
-- [ ] OpenShift
-- [ ] TeamCity
+- [ ] Spark
+- [ ] Apache Flink
+- [ ] Hadoop
+- [ ] Iceberg
+- [ ] ScyllaDB
 - [ ] ArtemisMQ
 - [ ] ActiveMQ
-- [ ] Spring WebFlux
-- [ ] Web (HTTP, MIME, etc. WebSockets, TCP, UDP)
-- [ ] OAuth 2.0
-- [ ] Docker Compose
+- [ ] Camunda
+- [ ] TeamCity
+- [ ] BitBucket
+- [ ] Nexus
+- [ ] cloudevents
+- [ ] MQTT
+- [ ] ModBus
+- [ ] DeepLearning
+- [ ] embeddings
+- [ ] vector DB
+- [ ] RAG
+- [ ] retrieval pipeline
+
+- Реальный практический кейс из опыта на каждую технологию

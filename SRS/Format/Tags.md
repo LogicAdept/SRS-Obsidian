@@ -21,15 +21,20 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **New tag if the topic does not fit:** if there is **no suitable leaf** in the tree for a card (there is no point in forcing the topic under an “almost suitable” tag), **do not stretch** the nearest similar tag to fit. Add a new prefix under a **logical root** in the **“Tree”** section of `Tags.md` (or a new root, for example **`#Databases/SQL/...`** for the SQL language in the “database → SQL” model), and then use this tag on the card. The tree and tag selections must honestly reflect the subject.
 
-**SQL in the tree:** topics of the **SQL language** should be tagged only with **`#Databases/SQL`** and child paths (for example, **`#Databases/SQL/Transactions`**); there is **no `#SQL` root** in the vault.
+**SQL in the tree:** topics of the **SQL language** should be tagged only with **`#Databases/SQL`** and child paths (for example, **`#Databases/SQL/Transactions`**); there is **no `#SQL` root** in the vault. SQL is the language, not the relational store family.
 
-**`#NoSQL`:** **non-relational** stores and models (document, key-value, wide-column, graph, etc.); for a hybrid with a relational part, **`#Databases/SQL`** and **`#NoSQL`** may be used together.
+**Relational in the tree:** classic RDBMS products live under **`#Databases/Relational`** and child paths (for example **`#Databases/Relational/PostgreSQL`**). Comparison cards (relational vs NoSQL **store types**) carry **`#Databases/Relational`** and **`#Databases/NoSQL`** (or the product leaves). Do not put **`#Databases`** next to **`#Databases/Relational`** on the same card.
+
+**NoSQL in the tree:** non-relational stores (document, key-value, wide-column, graph, vector, search) live under **`#Databases/NoSQL`** and child paths (for example **`#Databases/NoSQL/Redis`**). There is **no `#NoSQL` root**. Comparison cards (relational vs NoSQL store types) carry **`#Databases/Relational`** and **`#Databases/NoSQL`** (or the product leaves). Do not put **`#Databases`** next to **`#Databases/NoSQL`** on the same card.
+
+**OLAP in the tree:** analytical / columnar engines live under **`#Databases/OLAP`** and child paths (for example **`#Databases/OLAP/ClickHouse`**). Do not put them under Relational or NoSQL. OLTP vs OLAP cards carry **`#Databases/Relational`** and **`#Databases/OLAP`** (or the product leaves). Do not put **`#Databases`** next to **`#Databases/OLAP`** on the same card.
 
 ---
 
 ## Tree (prefixes in cards)
 
 ### Java
+* `#Java`
 * `#Java/Collections`
 * `#Java/Collections/List`
 * `#Java/Collections/List/Vector`
@@ -75,10 +80,14 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/StringBuilder`
 * `#Java/StringJoiner`
 * `#Java/Library`
+* `#Java/Library/JAXP`
+* `#Java/Library/Log4j`
+* `#Java/Library/Lombok`
 * `#Java/Library/Nashorn`
 * `#Java/Library/Reactor`
 * `#Java/Library/Reactor/Mono`
 * `#Java/Library/Reactor/Flux`
+* `#Java/Library/RxJava`
 * `#Java/Time`
 * `#Java/Time/LocalDateTime`
 * `#Java/Time/ZonedDateTime`
@@ -108,9 +117,12 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/JMM`
 * `#Java/Performance`
 * `#Java/JDK`
+* `#Java/JRE`
 * `#Java/Legacy`
 * `#Java/Versions`
+* `#Java/Versions/5`
 * `#Java/Versions/8`
+* `#Java/Versions/9`
 * `#Java/Versions/11`
 * `#Java/Versions/16`
 * `#Java/Versions/17`
@@ -136,6 +148,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Spring/Framework/Testing`
 * `#Java/Spring/Framework/Instrumentation`
 * `#Java/Spring/Framework/Boot`
+* `#Java/Spring/Framework/Boot/Actuator`
+* `#Java/Spring/Framework/Boot/Admin`
 * `#Java/Spring/Transactions`
 * `#Java/Spring/Cloud`
 * `#Java/Spring/Cloud/Gateway`
@@ -157,6 +171,15 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Persistence`
 * `#Java/Persistence/JPA`
 * `#Java/Persistence/Hibernate`
+* `#Java/Persistence/JOOQ`
+* `#Java/Quarkus`
+* `#Java/Testing`
+* `#Java/Testing/JUnit`
+* `#Java/Testing/Mockito`
+* `#Java/Testing/Testcontainers`
+* `#Java/Testing/WireMock`
+* `#Java/Testing/Cucumber`
+* `#Java/Testing/Gherkin`
 
 ### Testing
 * `#Testing`
@@ -166,6 +189,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Kotlin
 * `#Kotlin`
+* `#Kotlin/Coroutines`
 
 ### Databases
 * `#Databases`
@@ -178,21 +202,29 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases/SQL/DataTypes`
 * `#Databases/Indexes`
 * `#Databases/Partitioning`
+* `#Databases/Sharding`
 * `#Databases/Replication`
 * `#Databases/Keys`
 * `#Databases/NormalForms`
 * `#Databases/Transactions`
-* `#Databases/MySQL`
-* `#Databases/PostgreSQL`
-* `#Databases/Oracle`
-* `#Databases/MSSQL`
-* `#Databases/ClickHouse`
-* `#Databases/Snowflake`
-* `#Databases/Druid`
-* `#Databases/Pinot`
-
-### NoSQL
-* `#NoSQL`
+* `#Databases/Relational`
+* `#Databases/Relational/MySQL`
+* `#Databases/Relational/PostgreSQL`
+* `#Databases/Relational/Oracle`
+* `#Databases/Relational/MSSQL`
+* `#Databases/Relational/CockroachDB`
+* `#Databases/OLAP`
+* `#Databases/OLAP/ClickHouse`
+* `#Databases/OLAP/Snowflake`
+* `#Databases/OLAP/Druid`
+* `#Databases/OLAP/Pinot`
+* `#Databases/NoSQL`
+* `#Databases/NoSQL/Redis`
+* `#Databases/NoSQL/MongoDB`
+* `#Databases/NoSQL/Cassandra`
+* `#Databases/NoSQL/Elasticsearch`
+* `#Databases/NoSQL/ScyllaDB`
+* `#Databases/NoSQL/Vector`
 
 ### Serialization
 * `#Serialization`
@@ -201,6 +233,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DataFormats`
 * `#DataFormats/XML`
 * `#DataFormats/JSON`
+* `#DataFormats/Protobuf`
+* `#DataFormats/CloudEvents`
+* `#DataFormats/Iceberg`
 
 ### Security
 * `#Security`
@@ -208,6 +243,11 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Security/Authorization`
 * `#Security/Cryptography`
 * `#Security/JWT`
+* `#Security/OAuth2`
+* `#Security/OIDC`
+* `#Security/SAML`
+* `#Security/Keycloak`
+* `#Security/ActiveDirectory`
 * `#Security/AppSec`
 * `#Security/AppSec/Injection`
 
@@ -247,6 +287,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#MachineLearning/DeepLearning/RNN`
 * `#MachineLearning/DeepLearning/Transformers`
 * `#MachineLearning/LLM`
+* `#MachineLearning/Embeddings`
+* `#MachineLearning/RAG`
+* `#MachineLearning/RAG/Retrieval`
 * `#MachineLearning/MLOps`
 
 ### UML
@@ -332,13 +375,19 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DistributedSystems/Consensus`
 * `#DistributedSystems/Consensus/LeaderElection`
 * `#DistributedSystems/MapReduce`
+* `#DistributedSystems/Spark`
+* `#DistributedSystems/Hadoop`
 
 ### Messaging
 * `#Messaging`
 * `#Messaging/Async`
+* `#Messaging/AMQP`
+* `#Messaging/MQTT`
 * `#Messaging/Tools`
 * `#Messaging/Tools/Kafka`
 * `#Messaging/Tools/RabbitMQ`
+* `#Messaging/Tools/ActiveMQ`
+* `#Messaging/Tools/Artemis`
 * `#Messaging/Tools/Flume`
 * `#Messaging/Tools/Flink`
 * `#Messaging/Bus`
@@ -365,12 +414,15 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Networking
 * `#Networking`
+* `#Networking/OSI`
 * `#Networking/TCP`
 * `#Networking/UDP`
 * `#Networking/DNS`
+* `#Networking/Modbus`
 * `#Networking/Web`
 * `#Networking/Web/HTML`
 * `#Networking/Web/CSS`
+* `#Networking/Web/MIME`
 * `#Networking/Web/Protocols`
 * `#Networking/Web/Protocols/HTTP`
 * `#Networking/Web/Protocols/TLS`
@@ -402,6 +454,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/GoF/Behavioral/Observer`
 * `#Patterns/GRASP`
 * `#Patterns/Enterprise`
+* `#Patterns/Enterprise/BPM`
+* `#Patterns/Enterprise/BPM/Camunda`
 * `#Patterns/Enterprise/Integration`
 * `#Patterns/Enterprise/Integration/Channels`
 * `#Patterns/Enterprise/Integration/Channels/PublishSubscribe`
@@ -439,6 +493,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/Architecture/UI/MicroFrontends`
 * `#Patterns/Architecture/CQRS`
 * `#Patterns/Architecture/Monolith`
+* `#Patterns/Architecture/SOA`
+* `#Patterns/Architecture/EventDriven`
 * `#Patterns/Architecture/Microservices`
 * `#Patterns/Architecture/Microservices/ServiceBoundaries`
 * `#Patterns/Architecture/Microservices/CrossCuttingConcerns`
@@ -500,21 +556,35 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### DevOps
 * `#DevOps/Tools/Docker`
+* `#DevOps/Tools/Docker/Compose`
 * `#DevOps/Tools/Kubernetes`
+* `#DevOps/Tools/Helm`
+* `#DevOps/Tools/OpenShift`
+* `#DevOps/Tools/Nginx`
+* `#DevOps/Tools/Terraform`
 * `#DevOps/VCS`
 * `#DevOps/VCS/Git`
+* `#DevOps/VCS/BitBucket`
 * `#DevOps/Shell`
 * `#DevOps/Containerisation`
 * `#DevOps/Virtualisation`
 * `#DevOps/Orchestration`
 * `#DevOps/Configuration`
 * `#DevOps/Cloud`
+* `#DevOps/Cloud/AWS`
 * `#DevOps/Deployment`
 * `#DevOps/Deployment/Strategies`
+* `#DevOps/Deployment/Strategies/BlueGreen`
+* `#DevOps/Deployment/Strategies/Canary`
+* `#DevOps/Deployment/Strategies/Rolling`
 * `#DevOps/CICD`
+* `#DevOps/CICD/Jenkins`
+* `#DevOps/CICD/GitLab`
+* `#DevOps/CICD/TeamCity`
 
 ### Debugging
 * `#Debugging`
+* `#Debugging/Profiling`
 
 ### OperatingSystems
 * `#OperatingSystems`
@@ -531,12 +601,15 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Caching
 * `#Caching`
+* `#Caching/Infinispan`
 
 ### Logging
 * `#Logging`
 
 ### Observability
 * `#Observability`
+* `#Observability/Prometheus`
+* `#Observability/Grafana`
 
 ### SystemDesign
 * `#SystemDesign`
@@ -561,6 +634,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 ### ProgrammingLanguages
 * `#ProgrammingLanguages`
 * `#ProgrammingLanguages/CSharp`
+* `#ProgrammingLanguages/Python`
+* `#ProgrammingLanguages/Go`
 * `#ProgrammingLanguages/Compilation`
 * `#ProgrammingLanguages/Interpretation`
 * `#ProgrammingLanguages/ExecutionModel`

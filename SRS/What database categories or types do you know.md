@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Databases #NoSQL #SRS #New
+#Databases/Relational #Databases/NoSQL #Databases/OLAP #SRS #New

@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #NoSQL #SystemDesign/Tradeoffs #SRS #New
+#Databases/Relational #Databases/NoSQL #SystemDesign/Tradeoffs #SRS #New

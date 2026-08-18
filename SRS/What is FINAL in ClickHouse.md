@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Databases/ClickHouse #SystemDesign/Performance #SRS #New
+#Databases/OLAP/ClickHouse #SystemDesign/Performance #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст собран из публичных списков вопросов по ClickHouse (2026). Не сверен с официальной документацией ClickHouse. Не считать ответом для ревью.

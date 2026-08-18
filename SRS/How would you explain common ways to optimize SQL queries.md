@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/MySQL #Databases/PostgreSQL #Databases/Oracle #SystemDesign/Performance #SRS #New
+#Databases/SQL #Databases/Relational/MySQL #Databases/Relational/PostgreSQL #Databases/Relational/Oracle #SystemDesign/Performance #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст собран из публичных списков вопросов по PostgreSQL (2026). Не сверен с официальной документацией PostgreSQL. Не считать ответом для ревью.

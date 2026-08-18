@@ -47,10 +47,13 @@ Rules:
 • Do not invent parallel synonym roots. Established mappings:
   REST → #API/REST (not #REST)
   SQL language → #Databases/SQL/... (there is NO #SQL root)
+  Relational RDBMS → #Databases/Relational/... (SQL stays the language)
+  OLAP / columnar → #Databases/OLAP/... (ClickHouse, Snowflake, Druid, Pinot)
   Kubernetes → #DevOps/Tools/Kubernetes (not #Kubernetes)
   Kafka → #Messaging/Tools/Kafka
+  Java test libraries (JUnit, Mockito, Testcontainers, WireMock, Cucumber, Gherkin) → #Java/Testing/...
 • If nothing in the tree fits, do not stretch a near-match. Pick the closest honest shorter prefix and, after the card, propose a new leaf under an existing root. Do not silently create a new top-level root.
-• #NoSQL = non-relational stores. Hybrid topics may use #Databases/SQL and #NoSQL together.
+• #NoSQL is not a root. Non-relational stores → #Databases/NoSQL/... Store-family comparison cards use #Databases/Relational and #Databases/NoSQL (or product leaves). OLTP vs OLAP uses #Databases/Relational and #Databases/OLAP.
 • No commentary on the tag line.
 
 TREE (only these prefixes, plus a proposed new if needed):
@@ -181,6 +184,15 @@ Java
 #Java/Persistence/JPA
 #Java/Persistence/Hibernate
 
+#Java/Quarkus
+#Java/Testing
+#Java/Testing/JUnit
+#Java/Testing/Mockito
+#Java/Testing/Testcontainers
+#Java/Testing/WireMock
+#Java/Testing/Cucumber
+#Java/Testing/Gherkin
+
 Testing
 #Testing
 #Testing/Mocking
@@ -205,13 +217,24 @@ Databases
 #Databases/Keys
 #Databases/NormalForms
 #Databases/Transactions
-#Databases/MySQL
-#Databases/PostgreSQL
-#Databases/Oracle
-#Databases/MSSQL
-
-NoSQL
-#NoSQL
+#Databases/Relational
+#Databases/Relational/MySQL
+#Databases/Relational/PostgreSQL
+#Databases/Relational/Oracle
+#Databases/Relational/MSSQL
+#Databases/Relational/CockroachDB
+#Databases/OLAP
+#Databases/OLAP/ClickHouse
+#Databases/OLAP/Snowflake
+#Databases/OLAP/Druid
+#Databases/OLAP/Pinot
+#Databases/NoSQL
+#Databases/NoSQL/Redis
+#Databases/NoSQL/MongoDB
+#Databases/NoSQL/Cassandra
+#Databases/NoSQL/Elasticsearch
+#Databases/NoSQL/ScyllaDB
+#Databases/NoSQL/Vector
 
 Serialization
 #Serialization

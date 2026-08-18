@@ -41,6 +41,7 @@ Do not use the TREE copy inside `SRS/Format/FillCardPrompt.txt`. If it disagrees
   - OLAP / columnar → `#Databases/OLAP/...` (ClickHouse, Snowflake, Druid, Pinot)
   - Kubernetes → `#DevOps/Tools/Kubernetes`
   - Kafka → `#Messaging/Tools/Kafka`
+  - JUnit / Mockito / Testcontainers / WireMock / Cucumber / Gherkin → `#Java/Testing/...`
 - `#NoSQL` is not a root. Non-relational stores are `#Databases/NoSQL` and children. Store-family comparison cards use `#Databases/Relational` and `#Databases/NoSQL` (or product leaves). Language/search vs SQL stays `#Databases/SQL`. OLTP vs OLAP uses `#Databases/Relational` and `#Databases/OLAP`.
 - Prefer a deeper honest leaf; do **not** put a parent and its child on the same card.
 - Incomplete shorter prefix is allowed when no child is a better fit.

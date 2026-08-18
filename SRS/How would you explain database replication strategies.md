@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Databases #SystemDesign/Reliability #SystemDesign/Availability #DistributedSystems #SRS #New
+#Databases/Replication #SystemDesign/Reliability #SystemDesign/Availability #DistributedSystems #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из шпаргалок Хабра (MishaBucha, 2025). Не сверен с официальной документацией. Не считать ответом для ревью.
