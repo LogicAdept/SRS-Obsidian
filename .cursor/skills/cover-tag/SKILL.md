@@ -3,8 +3,9 @@ name: cover-tag
 description: >-
   Widens SRS coverage for a tag by mining interview-question GitHub repos and
   compilation pages, then creating #New cards — untrusted drafts when the
-  source has an answer, empty stubs when it does not. If the tag has children,
-  walks leaves first (post-order), then the invoked tag. Use when the user
+  source has an answer, empty stubs when it does not. Enforces a strict
+  interview-value gate and writes a structured result for orchestrated runs.
+  If the tag has children, walks leaves first (post-order). Use when the user
   invokes /cover-tag or asks to expand a tag with more possible interview
   questions.
 disable-model-invocation: true
@@ -28,14 +29,15 @@ Language: English only — this skill, filenames, tag lines, card bodies, and th
 ## Invoke
 
 ```
-/cover-tag <tag> [--limit N] [--per-node M] [--max-nodes K] [--flat]
+/cover-tag <tag> [--limit N] [--per-node M] [--max-nodes K] [--flat] [--result-file PATH]
 ```
 
 - `<tag>` required: a tree path (`#Java/Collections/Map`) or a short name (`HashMap`). Resolve it in `SRS/Format/Tags.md` (leaf or parent).
-- `--limit` optional: max **new** card files this run. Default **12** when the walk has children; **Maximum coverage, senior level** on a leaf or with `--flat`.
+- `--limit` optional: hard maximum of **new** card files, never a target. Default **50**. Write fewer whenever fewer strong, distinct candidates survive the quality gate.
 - `--per-node` optional: max new files per visited node. Default: even split of `--limit`, leftover slots on the invoked tag. If set, the invoked tag is reserved first so a wide walk does not starve it.
 - `--max-nodes` optional: max tree nodes to visit. Default **12**. Ignored with `--flat`.
 - `--flat` optional: cover only the resolved prefix (old behavior). Still treat child cues as already covered so you do not duplicate them on the parent.
+- `--result-file` optional for interactive use and **mandatory when supplied by an orchestrator**. It must be repository-local and is written through `write_cover_batch` in `write_drafts.py`, never by hand. Orchestrated use combines it with `--flat` on one leaf.
 
 ## Read first
 
@@ -56,7 +58,33 @@ Interviewers do not only ask definitions. Prefer gaps in this order:
 4. Procedures / “how do you …”
 5. Definitions only if the vault has no card for the term
 
-Skip trivia, company-HR, and near-duplicates of cues already in the vault.
+For the structured result, evaluate these finite dimensions without card-count
+quotas: `definition` (required only if the term lacks one), `mechanism`,
+`failure_version_lie`, `comparison`, `procedure_operations`, and
+`missing_definition_gaps`. Each dimension records `required`, `satisfied`, and
+brief evidence. A dimension can be satisfied by an existing cue; do not create a
+weaker duplicate merely to tick a box.
+
+## Candidate quality gate
+
+Every new cue must pass all checks:
+
+1. It comes from a real interview-question repository or question-compilation page.
+2. It is independently answerable later from official documentation. Search and
+   record the relevant official documentation URL in the structured result, but do
+   not put URLs or source names in the card.
+3. It adds a distinct definition gap, mechanism, failure/version/popular-lie,
+   comparison, or procedure/operations angle.
+4. It is not a semantic duplicate or near-duplicate of any existing basename or
+   card created in this run.
+5. It is not source-meta wording ("what does the dump/source say/equate/claim").
+6. It is not an incidental vendor/product mention whose mechanism belongs elsewhere,
+   obsolete trivia without current practical value, or a question better owned by
+   another tag.
+
+Candidates owned by a sibling or another tag are **deferred and reported**. Do not
+create them, retag them, edit sibling cards, or mutate sibling tags during this leaf
+run. Taxonomy and retagging belong exclusively to `/refine-tags`.
 
 ## Walk (do not invent a walker)
 
@@ -77,26 +105,34 @@ If the name is ambiguous, pick the Tags.md path and say so in chat **before** ru
 For **each** `cover_next` node, until quotas are spent:
 
 1. Collect existing cues for **this node and its descendants** (cards already in the vault **plus files created earlier in this run**), plus related lines in `md-file-names.txt`.
-2. **Collect question/answer pairs** for this node. Record every URL in **chat**, never in the card file. Reuse repos/pages already fetched in this run; do not re-clone.
+2. **Collect question/answer pairs** for this node. Record every URL in **chat** and in the structured result's source lists, never in a card file. Reuse repos/pages already fetched in this run; do not re-clone.
    - Open `question-repositories.txt`. Fetch `+` GitHub repos/files that match this node (raw markdown / `gh` / clone to a temp dir **outside** the vault; do not add the clone to this repo). Skip `-` URLs.
    - Search GitHub for further interview-question repos or files on this topic (`interview questions`, topic name). Same fetch rule.
    - Search the web for **compilation pages** (question lists), not generic tutorials. Official “frequently asked” pages count only as *question* sources.
    - If a new GitHub collection was actually used and is not in `question-repositories.txt`, append `+ <url>`.
 3. Normalize each candidate to an English cue per `Naming.md`.
-4. Drop semantic duplicates of existing basenames (vault + this run).
+4. Apply the full Candidate quality gate above, including semantic duplicate,
+   source-meta, incidental-product, obsolete-trivia, and wrong-owner rejection.
 5. **Honest leaf:** tag the new card with this node only when no child of this node is a better fit. On a **parent** node, keep comparisons, interface contracts, and “which X when” — not a child’s mechanism. No parent+child pair on the same card.
-6. Create at most this node’s **quota** files via the generator below: **draft** if any used source has an answer for that cue; **empty stub** if not. Stop the whole run when the global `--limit` is reached.
+6. Create at most this node’s **quota** files via the generator below: **draft** if any used source has an answer for that cue; **empty stub** if not. Stop the whole run when the global `--limit` is reached. Never add weak candidates to reach the quota.
 7. The generator appends `- [+] <Cue>.md` to `md-file-names.txt`. Do not append by hand.
 
-Then: chat report, then rebuild the coverage index once (see below). Do not overwrite a card that lacks `#New`. Do not rewrite an existing `#New` card that already has a body.
+Cover must not change any existing card's tags or edit `Tags.md`. Then: write the
+structured result if requested, chat report, and rebuild the coverage index once.
+Do not overwrite a card that lacks `#New`. Do not rewrite an existing `#New` card
+that already has a body.
 
 ## Generate files
 
 Do **not** rewrite meta, callouts, `write()`, or the names-file append. Do not `Write()` dozens of `.md` files by hand.
 
 1. Copy `.cursor/skills/cover-tag/scripts/_gen_tag.py` → `_gen_<slug>.py` in the **same** folder.
-2. Fill `CARDS` in visit order (comment `# --- Leaf ---` per node). Draft = `body` + optional `traps`. Stub = omit both.
-3. Run (PowerShell: no leading `#`, no `&&`):
+2. Fill `TAG`, `RESULT_FILE` (when requested), `LIMIT`, `CARDS`, `DIMENSIONS`, `SOURCES`,
+   exhaustion, budget, and deferred-candidate fields. Draft = compact `body` plus
+   optional concise `traps`; stub = omit both. Keep only claims and traps useful to
+   a later `/fill-tag`; do not copy verbose dump prose.
+3. Call `write_cover_batch(...)` exactly as the template demonstrates, then run
+   (PowerShell: no leading `#`, no `&&`):
 
 ```
 python .cursor/skills/cover-tag/scripts/_gen_<slug>.py
@@ -104,7 +140,31 @@ python .cursor/skills/cover-tag/scripts/_gen_<slug>.py
 
 4. Delete `_gen_<slug>.py` after a successful run. Keep `_gen_tag.py` and `write_drafts.py`.
 
-`write_drafts.py` refuses to overwrite an existing file, checks `#SRS` / trailing `#New`, and rejects `?` and other illegal basename characters.
+`write_drafts.py` refuses overwrites, checks `#SRS` / trailing `#New`, rejects
+illegal/source-meta basenames, and atomically writes the result JSON after cards.
+Do not hand-write JSON. Zero cards is valid through `write_cover_batch` when the
+search genuinely exhausted all strong candidates.
+
+## Structured result contract
+
+When `--result-file` is present, a successful run must write schema version 1 with:
+
+- exact resolved `tag`;
+- `created_count` and `created_cues` (derived by the helper);
+- all six `coverage_dimensions`, each with booleans `required` and `satisfied`
+  plus concise non-empty `evidence`;
+- `sources_searched.interview` and `.official` URL arrays;
+- booleans `candidate_search_exhausted` and `budget_hit`;
+- `deferred_candidates` for strong cues owned by other tags.
+
+An unsatisfied required dimension is a valid result, but it keeps the node dirty;
+record the missing angle and evidence honestly instead of inventing a weak card.
+Set `candidate_search_exhausted=true` only after prescribed interview repositories
+and compilation pages have no further strong, in-scope candidates. Set
+`budget_hit=true` exactly when the hard limit was reached. Hitting the limit is not
+proof of exhaustion. If fewer than the limit survive, write fewer. The orchestrator
+fails closed when the file is absent, malformed, inconsistent with created files,
+or claims the wrong budget state.
 
 Python quoting: triple-quote every `body`. If a trap contains `"`, wrap that item in **single** quotes (`'setAllowedOrigins("*")'`). Never nest `"` inside a double-quoted Python string.
 
@@ -168,6 +228,9 @@ python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
 - Process a parent before its listed children, or skip `subtree-order.py`.
 - Spawn subagents for child tags (this run is one loop).
 - Stretch a child topic onto the parent tag (or the reverse).
+- Retag an existing card, edit Tags.md, or create a sibling/other-tag candidate.
+- Ask what a dump, source, article, or interview list says.
+- Preserve obsolete trivia or incidental vendor mentions with no practical mechanism.
 - Reimplement `write_drafts.py` (meta, callouts, names-file). Copy `_gen_tag.py`.
 - Commit the cloned upstream repo.
 ---
