@@ -3,10 +3,29 @@ $ErrorActionPreference = "Stop"
 $image = "srs-cover-vault:local"
 $repo = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $dockerfile = Join-Path $PSScriptRoot "Dockerfile"
-$isDryRun = $args -contains "--dry-run"
+$runsRoot = Join-Path $PSScriptRoot "runs"
+$resumeWorkspace = $null
+$forwardArgs = [System.Collections.Generic.List[string]]::new()
+
+for ($i = 0; $i -lt $args.Count; $i++) {
+    if ($args[$i] -eq "--workspace") {
+        if ($i + 1 -ge $args.Count) {
+            throw "--workspace requires a run directory."
+        }
+        $i++
+        $resumeWorkspace = $args[$i]
+        continue
+    }
+    $forwardArgs.Add($args[$i])
+}
+
+$isDryRun = $forwardArgs.Contains("--dry-run")
 
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
     throw "Docker Desktop is required. Install it, start the engine, and retry."
+}
+if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+    throw "Git is required to create an isolated disposable clone."
 }
 
 & docker info *> $null
@@ -18,12 +37,64 @@ if (-not $isDryRun -and [string]::IsNullOrWhiteSpace($env:CURSOR_API_KEY)) {
     throw "Set CURSOR_API_KEY before a real run."
 }
 
+$dirty = @(& git -C $repo status --porcelain)
+if ($LASTEXITCODE -ne 0) {
+    throw "Cannot read the source repository state."
+}
+if ($dirty.Count -ne 0) {
+    throw "The source repository must be clean and committed before creating or resuming an agent run."
+}
+
 & docker build --tag $image --file $dockerfile $PSScriptRoot
 if ($LASTEXITCODE -ne 0) {
     throw "Failed to build the isolated SRS coverage image."
 }
 
-$repoMount = "type=bind,source=$repo,target=/workspace"
+New-Item -ItemType Directory -Force -Path $runsRoot | Out-Null
+$runsRoot = (Resolve-Path $runsRoot).Path
+
+if ($null -eq $resumeWorkspace) {
+    $sourceBranch = (& git -C $repo branch --show-current).Trim()
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($sourceBranch)) {
+        throw "The source repository must be on a named branch."
+    }
+    $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
+    $suffix = [guid]::NewGuid().ToString("N").Substring(0, 8)
+    $runName = "$stamp-$suffix"
+    $runWorkspace = Join-Path $runsRoot $runName
+    $agentBranch = "agent/cover-$runName"
+
+    & git clone --no-local --no-hardlinks --single-branch --branch $sourceBranch $repo $runWorkspace
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to create the disposable repository clone."
+    }
+    & git -C $runWorkspace switch -c $agentBranch
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to create the isolated agent branch."
+    }
+}
+else {
+    $runWorkspace = (Resolve-Path $resumeWorkspace).Path
+    $runsPrefix = $runsRoot.TrimEnd("\") + "\"
+    if (-not $runWorkspace.StartsWith(
+        $runsPrefix,
+        [System.StringComparison]::OrdinalIgnoreCase
+    )) {
+        throw "--workspace must point inside $runsRoot"
+    }
+    if (-not (Test-Path (Join-Path $runWorkspace ".git"))) {
+        throw "--workspace is not a disposable Git clone."
+    }
+    $agentBranch = (& git -C $runWorkspace branch --show-current).Trim()
+    if ($LASTEXITCODE -ne 0 -or -not $agentBranch.StartsWith("agent/cover-")) {
+        throw "--workspace is not on an agent/cover-* branch."
+    }
+}
+
+Write-Host "Agent branch:    $agentBranch"
+Write-Host "Agent workspace: $runWorkspace"
+
+$repoMount = "type=bind,source=$runWorkspace,target=/workspace"
 $dockerArgs = @(
     "run",
     "--rm",
@@ -46,7 +117,20 @@ if (-not [string]::IsNullOrWhiteSpace($env:CURSOR_API_KEY)) {
 }
 
 $dockerArgs += $image
-$dockerArgs += $args
+$dockerArgs += $forwardArgs.ToArray()
 
 & docker @dockerArgs
-exit $LASTEXITCODE
+$containerExitCode = $LASTEXITCODE
+
+Write-Host ""
+Write-Host "The source vault was not modified."
+Write-Host "Review:"
+Write-Host "  git -C `"$runWorkspace`" status --short"
+Write-Host "  git -C `"$runWorkspace`" diff"
+Write-Host "Resume:"
+Write-Host "  ./.cursor/sdk/run_cover_vault.ps1 --workspace `"$runWorkspace`" <agent args>"
+Write-Host "Reject:"
+Write-Host "  Remove-Item -LiteralPath `"$runWorkspace`" -Recurse -Force"
+Write-Host "Accept after reviewing: commit in the clone, then fetch/cherry-pick $agentBranch."
+
+exit $containerExitCode

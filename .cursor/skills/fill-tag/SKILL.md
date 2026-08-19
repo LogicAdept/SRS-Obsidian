@@ -2,8 +2,9 @@
 name: fill-tag
 description: >-
   Fills existing SRS cards for a chosen tag to GoldStandard using official
-  documentation, Naming, and Tags. Use when the user invokes /fill-tag or asks
-  to complete #New cards under a tag from primary docs.
+  documentation, Naming, and Tags, auditing any untrusted dump draft
+  claim-by-claim before replacing it. Use when the user invokes /fill-tag or
+  asks to complete #New cards under a tag from primary docs.
 disable-model-invocation: true
 ---
 
@@ -11,7 +12,9 @@ disable-model-invocation: true
 
 ## Purpose
 
-Fill cards for a chosen tag to GoldStandard, Naming, and Tags. Always rely on official documentation.
+Fill cards for a chosen tag to GoldStandard, Naming, and Tags. Input may be an
+empty stub or an untrusted draft produced by `/cover-tag`; always rely on
+official documentation.
 
 ## Invoke
 
@@ -44,6 +47,10 @@ Skip personal/HR/biography cues: leave the stub; human fills those.
 
 If the user names explicit cues, use those instead of scanning the tag.
 
+Otherwise process cards with an `Untrusted draft` body before empty stubs. A
+draft contains more claims that can be lost or accidentally trusted; auditing
+it is part of filling the card, not optional cleanup.
+
 ## Official sources only
 
 Before writing, **search and fetch** official/original docs for that cue. Memory is not evidence. If the web is unreachable, keep `#New` and stop.
@@ -58,15 +65,55 @@ Not primary: Baeldung, Medium, Wikipedia, Stack Overflow, interview dumps, blogs
 
 Read the defining section (contract, spec paragraph, implementation), not a snippet. Note version.
 
-## Drafts are clues, not facts
+## Draft-aware workflow
 
-If the card has an untrusted-draft warning (`Untrusted draft`, or a legacy Russian equivalent) or dump text:
+A `#New` card has one of two inputs:
 
-1. Treat every claim — especially dump traps / “gotchas” — as a hypothesis.
-2. Verify each against official docs or original source.
-3. Keep a trap only when it is real; rewrite it as a precise `warning`.
-4. Drop dump prose. The finished card must not say it was copied from a dump.
-5. Fine points omitted by docs (implementation branches, self-invocation, hash vs index) are allowed **only** after reading the implementation or spec that shows them.
+- **Empty stub:** meta + tags, with no proposed answer. Research the cue from
+  scratch.
+- **Untrusted draft:** an `Untrusted draft` warning (or a legacy Russian
+  equivalent), dump prose/code, and possibly `Unverified traps from the dump`.
+  This is a **claim inventory**, never a source.
+
+For an untrusted draft, do not erase or rewrite it before auditing it. First
+make a scratch **claim ledger** (chat-only, never in the card) containing every
+substantive item:
+
+1. direct-answer claims
+2. mechanism or ordering claims
+3. defaults, thresholds, versions, and API contracts
+4. code examples and their implied behavior
+5. traps, gotchas, and every `always` / `never` / `cannot` statement
+
+Research the cue **and each ledger item** in official docs or original source.
+Assign exactly one disposition:
+
+- **VERIFIED** — official text/source establishes the claim and its conditions
+- **CORRECTED** — the draft has a useful idea but wrong wording, scope,
+  default, version, or mechanism
+- **REJECTED** — contradicted, irrelevant to the cue, or a popular falsehood
+- **UNRESOLVED** — primary evidence was not found
+
+Then build the GoldStandard body:
+
+1. Rewrite verified material in precise card language; do not preserve dump
+   wording or attribution.
+2. Replace corrected claims with the evidenced version.
+3. Remove rejected claims. Do not hedge them into the finished answer.
+4. A verified trap becomes a specific normal `> [!warning] ...` block.
+   Rejected traps disappear.
+5. Re-check draft code against the stated version. Replace or fix it; never
+   carry an uncompiled dump listing forward.
+6. Fine points omitted by reference docs (implementation branches,
+   self-invocation, hash vs index) are allowed only after reading original
+   implementation/spec text that shows them.
+7. If an **essential** claim is unresolved, keep `#New`. A nonessential,
+   unresolved aside may be dropped only when the remaining official evidence
+   fully answers the cue; report the omission in chat.
+
+When `#New` is removed, no draft residue may remain: delete the `Untrusted
+draft` / `Unverified traps` callouts, legacy equivalents, `Dump:` labels, and
+sentences saying text came from a dump.
 
 ## File shape (finished card)
 
@@ -96,6 +143,10 @@ Preserve existing `reps` / `priority` if already non-zero.
 
 Forbidden in the `.md`: nested callouts, `[^footnotes]`, HTML styling, URLs, “according to the JLS”, NOTES/SOURCES/REFERENCES, cite tokens, empty “it depends”.
 
+Draft-clean gate: a card cannot lose `#New` if a substantive draft claim lacks
+a ledger disposition, an essential item is unresolved, or any untrusted-draft
+marker remains.
+
 Depth: HashMap/equals gold example, not an 8-line stub. Yes/no language cues may match gold example 1.
 
 Adversarial pass (FillCardPrompt §E): counterexample every `always`/`never`; implementation claims from real branches; listings compile or are labeled Conceptual; immutability/thresholds include preconditions.
@@ -108,10 +159,13 @@ Write the complete `.md` into `SRS/<Cue>.md` (cue already is the basename). Then
 
 1. Filename
 2. CHECKLIST PASS/FAIL per FillCardPrompt §G line, with a short quote proving each PASS
-3. LINKS TO VERIFY — every `[[wikilink]]` basename
-4. TAGS — tag line plus any proposed new leaf
-5. DOCS READ — official URLs actually opened, version/section. If none, the card is incomplete
-6. UNCERTAINTIES — if any remain, **keep `#New`** and list them
+3. DRAFT AUDIT — one compact line per ledger item:
+   `VERIFIED`, `CORRECTED`, `REJECTED`, or `UNRESOLVED`, plus what changed.
+   For an empty stub, write `DRAFT AUDIT — empty stub; no inherited claims`.
+4. LINKS TO VERIFY — every `[[wikilink]]` basename
+5. TAGS — tag line plus any proposed new leaf
+6. DOCS READ — official URLs actually opened, version/section. If none, the card is incomplete
+7. UNCERTAINTIES — if any remain, **keep `#New`** and list them
 
 If any checklist line is FAIL, fix before finishing. If you cannot fix without guessing, keep `#New`.
 
@@ -128,6 +182,10 @@ python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
 ## Do not
 
 - Fill from dump/blog wording without official verification.
+- Treat a draft as evidence, silently omit one of its substantive claims, or
+  report only the claims retained in the final answer.
+- Leave `Untrusted draft`, `Unverified traps`, `Dump:`, or legacy draft markers
+  after removing `#New`.
 - Strip `#New` while uncertainties remain.
 - Import new questions (`/import-repo`) or invent extra cues (`/cover-tag`).
 - Edit `Tags.md` except proposing a leaf in chat.

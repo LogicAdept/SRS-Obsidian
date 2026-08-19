@@ -40,6 +40,9 @@
 - [ ] Protobuf
 - [ ] Prometheus
 - [ ] Grafana
+- [ ] Java EE
+- [ ] Quarkus
+- [ ] Wildfly
 
 ## P1 — часто в JD, закрывает типичные follow-up
 

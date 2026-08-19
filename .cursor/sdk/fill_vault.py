@@ -10,8 +10,9 @@ Build and run from the vault repo root (PowerShell):
 Does not invoke /fill-tag. Cards stay #New drafts until a later fill pass.
 
 Real runs are accepted only in the hardened Docker launcher. The container root is
-read-only; the repository is the only host path mounted read/write; Docker's socket is
-not mounted. Internet access remains enabled. Direct host execution is dry-run only.
+read-only; a disposable Git clone is the only host path mounted read/write; Docker's
+socket and the source vault are not mounted. Internet access remains enabled. Direct
+host execution is dry-run only.
 
 For each path, refine and cover repeat until the tree is stable and a cover pass adds
 zero cards. Newly created paths are inserted into the same post-order work queue.
