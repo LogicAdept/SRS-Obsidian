@@ -222,6 +222,7 @@ def _require_container_boundary() -> None:
         Path("/etc/hostname"),
         Path("/etc/hosts"),
         Path("/etc/resolv.conf"),
+        Path("/usr/sbin/docker-init"),
     }
     allowed_mount_prefixes = (
         CONTAINER_WORKSPACE,
