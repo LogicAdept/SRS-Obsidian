@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/List #Java/Collections/Map/HashMap #Java/Collections/Map/Hashtable #Java/Collections/Set/HashSet #SRS
+#Java/Collections/List/ArrayList #Java/Collections/Map/HashMap #Java/Collections/Map/Hashtable #Java/Collections/Set/HashSet #SRS
 
 # What is initial capacity in Java collections such as `HashMap`?
 

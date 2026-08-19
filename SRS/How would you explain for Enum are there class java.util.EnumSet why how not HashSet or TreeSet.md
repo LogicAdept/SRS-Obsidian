@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections #SRS #New
+#Java/Collections/Set/EnumSet #Java/Collections/Set/HashSet #Java/Collections/Set/TreeSet #Java/Language/Enum #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

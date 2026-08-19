@@ -31,7 +31,15 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **Messaging in the tree:** protocols and brokers live under **`#Messaging`** (`#Messaging/AMQP`, `#Messaging/MQTT`, `#Messaging/Tools/Kafka`, …). Hohpe/Woolf **EIP pattern names** (Message Bus, Channel, Broker, Request-Reply, …) live under **`#Patterns/Enterprise/Integration/...`**, not as `#Messaging/Bus` and similar. A pattern card that is also about messaging carries **`#Messaging`** plus the Patterns leaf — do not duplicate the pattern name under Messaging.
 
-**Spring in the tree:** **`#Java/Spring/Framework/...`** is for **Spring Framework** modules (Web MVC, WebFlux, AOP, Cache, DataAccess, Testing, …). **Spring Boot** and **Spring Security** are separate projects: **`#Java/Spring/Boot`** and **`#Java/Spring/Security`**, not under Framework. Spring Data / Cloud / Batch / Integration / AMQP / Kafka stay as siblings under **`#Java/Spring`**. Java-language crypto and auth concepts stay **`#Java/Security`**, not Spring Security. Do not put **`#Java/Spring`** next to a more specific **`#Java/Spring/...`** child on the same card.
+**Indexes in the tree:** **`#Databases/Indexes`** is the index idea (when to index, B-tree vs hash/GIN/GiST, clustered vs not, plans). **Covering** is INCLUDE / index-only covering. **Partial** is `WHERE` on the index. **Functional** is expression / function-based indexes (`lower(email)`, JSON path). **Composite** is a multi-column key (leftmost prefix). Comparison of composite vs INCLUDE carries **Covering** and **Composite**. Do not put **`#Databases/Indexes`** next to a more specific **`#Databases/Indexes/...`** child on the same card.
+
+**Spring in the tree:** **`#Java/Spring/Framework/...`** is for **Spring Framework** modules (Web MVC, WebFlux, AOP, Cache, DataAccess, Testing, …). **Spring Boot** and **Spring Security** are separate projects: **`#Java/Spring/Boot`** and **`#Java/Spring/Security`**, not under Framework. Spring Data / Cloud / Batch / Integration / AMQP / Kafka stay as siblings under **`#Java/Spring`**. Java-language crypto and auth concepts stay **`#Java/Security`**, not Spring Security. **`#Java/Spring/Core`** is framework identity, versions, and ecosystem. The IoC container, beans, DI, `BeanFactory`/`ApplicationContext`, `FactoryBean`, circular dependencies, and context events live under **`#Java/Spring/Core/IoC`**. Bean **scopes** (including scoped proxies / `@Lookup`), **lifecycle** (`@PostConstruct` / destroy / `BeanPostProcessor`), **stereotypes** (`@Component` / `@Service` / `@Repository` / `@Controller`), **configuration** (XML vs Java vs annotations, `@Bean`, `@ComponentScan`, `@Profile`, `@Import`), and **SpEL** (`@Value`, `@PropertySource`, `Environment`) live under the matching **`#Java/Spring/Core/IoC/...`** child. **`#Java/Spring/Boot`** is Boot identity (what Boot is, `@SpringBootApplication`, Initializr, DevTools, AOT, Modulith, version deltas) and Boot-flavored how-tos that already carry another honest leaf. **Auto-configuration** (starters, `ConditionalOn*`, custom starters) is **`#Java/Spring/Boot/AutoConfiguration`**. **Externalized config** (`application.properties`/`yml`, property order, `@ConfigurationProperties`, Boot profiles) is **`#Java/Spring/Boot/Properties`**. **Embedded servlet container**, jar vs WAR as a *runtime* choice (external container, `SpringBootServletInitializer`), and server SSL/compression are **`#Java/Spring/Boot/Embedded`**. **Build** (Maven/Gradle parent, BOM, fat/executable JAR, how you ship the app) is **`#Java/Spring/Boot/Build`**. **Actuator** and **Admin** stay their leaves. **Filter chain** (`FilterChainProxy`, `SecurityFilterChain`, `HttpSecurity`, named servlet filters, `addFilterBefore`/`After`) is **`#Java/Spring/Security/FilterChain`**. **Method security** (`@PreAuthorize`, `@Secured`, `@EnableMethodSecurity` / `@EnableGlobalMethodSecurity`, `@PreFilter`/`@PostFilter`) is **`#Java/Spring/Security/MethodSecurity`**. OAuth2 / JWT / OIDC / SAML / Keycloak stay dual-tagged with **`#Security/...`**, not Spring children. Password encoding stays on **`#Java/Spring/Security`** (and **`#Security/Cryptography`** when the cue is hashing/encoders). Tests dual-tag **`#Java/Spring/Framework/Testing`**. Reactive HTTP security dual-tags **`#Java/Spring/Framework/WebFlux`**, not FilterChain. Do not put **`#Java/Spring`** next to a more specific **`#Java/Spring/...`** child, **`#Java/Spring/Core`** next to **`#Java/Spring/Core/IoC`**, **`#Java/Spring/Core/IoC`** next to a more specific **`#Java/Spring/Core/IoC/...`** child, **`#Java/Spring/Boot`** next to a more specific **`#Java/Spring/Boot/...`** child, or **`#Java/Spring/Security`** next to a more specific **`#Java/Spring/Security/...`** child.
+
+**Annotations in the tree:** **`#Java/Annotations`** is the Java annotation mechanism (declaration, retention, repeatable, records, marker-interface replacement). A card about a **Spring-specific annotation** (`@Autowired`, `@Bean`, `@Transactional`, `@SpringBootApplication`, …) carries the honest **`#Java/Spring/...`** leaf **and** **`#Java/Annotations`**. Do not put **`#Java/Annotations`** on Spring cards that are not about an annotation (container identity, scopes, circular dependencies, XML-only wiring). JPA / JUnit annotation cards likewise carry their persistence or testing leaf **and** **`#Java/Annotations`**.
+
+**Concurrency in the tree:** **`#Java/Concurrency`** is the Java threading model. Child leaves: **`Threads`** (lifecycle, `Thread`/`Runnable`, join/sleep/interrupt/daemon), **`Executors`** (pools, `Future`/`Callable`/`CompletableFuture`, ForkJoin), **`Synchronizers`** (`CountDownLatch`, `CyclicBarrier`, `Phaser`, `Semaphore`, `Exchanger`), **`Atomics`** (`java.util.concurrent.atomic`, CAS), **`VirtualThreads`**, **`Synchronization`** (monitors, locks, wait/notify) and **`Synchronization/SynchronizedKeyword`**. Concurrent collections stay **`#Java/Collections/Concurrency`**. The Java Memory Model stays **`#Java/JMM`**. Do not put **`#Java/Concurrency`** next to a more specific **`#Java/Concurrency/...`** child on the same card.
+
+**Collections in the tree:** **`#Java/Collections`** is the framework (interfaces, `Collection` vs `Collections`, unmodifiable views). Implementations live under **`List`**, **`Map`**, **`Set`**, **`Queues`**. List impls: **`ArrayList`**, **`LinkedList`**, **`Vector`**. Set impls: **`HashSet`**, **`LinkedHashSet`**, **`TreeSet`**, **`EnumSet`**. Queue impls: **`ArrayDeque`**, **`PriorityQueue`**, **`BlockingQueue`**. Concurrent collections stay **`#Java/Collections/Concurrency`**. Iterators stay **`#Java/Collections/Iteration`**. Do not put **`#Java/Collections`** or a family tag (`List`/`Set`/`Map`/`Queues`) next to a more specific child on the same card. Comparison cards carry both implementation leaves.
 
 ---
 
@@ -41,6 +49,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java`
 * `#Java/Collections`
 * `#Java/Collections/List`
+* `#Java/Collections/List/ArrayList`
+* `#Java/Collections/List/LinkedList`
 * `#Java/Collections/List/Vector`
 * `#Java/Collections/Map`
 * `#Java/Collections/Map/ConcurrentHashMap`
@@ -53,8 +63,13 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Collections/Map/WeakHashMap`
 * `#Java/Collections/Set`
 * `#Java/Collections/Set/HashSet`
+* `#Java/Collections/Set/LinkedHashSet`
+* `#Java/Collections/Set/TreeSet`
+* `#Java/Collections/Set/EnumSet`
 * `#Java/Collections/Queues`
+* `#Java/Collections/Queues/ArrayDeque`
 * `#Java/Collections/Queues/PriorityQueue`
+* `#Java/Collections/Queues/BlockingQueue`
 * `#Java/Collections/Iteration`
 * `#Java/Collections/Sorting`
 * `#Java/Collections/Concurrency`
@@ -64,9 +79,13 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/OOP/Initialization`
 * `#Java/OOP/Constructors`
 * `#Java/Concurrency`
+* `#Java/Concurrency/Threads`
+* `#Java/Concurrency/Executors`
+* `#Java/Concurrency/Synchronizers`
+* `#Java/Concurrency/Atomics`
+* `#Java/Concurrency/VirtualThreads`
 * `#Java/Concurrency/Synchronization`
 * `#Java/Concurrency/Synchronization/SynchronizedKeyword`
-* `#Java/Concurrency/SchedulableUnit`
 * `#Java/Parallelism`
 * `#Java/Async`
 * `#Java/Exceptions`
@@ -143,6 +162,11 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Spring`
 * `#Java/Spring/Core`
 * `#Java/Spring/Core/IoC`
+* `#Java/Spring/Core/IoC/Scopes`
+* `#Java/Spring/Core/IoC/Lifecycle`
+* `#Java/Spring/Core/IoC/Stereotypes`
+* `#Java/Spring/Core/IoC/Configuration`
+* `#Java/Spring/Core/IoC/SpEL`
 * `#Java/Spring/Framework/AOP`
 * `#Java/Spring/Framework/Cache`
 * `#Java/Spring/Framework/DataAccess`
@@ -154,6 +178,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Spring/Boot`
 * `#Java/Spring/Boot/Actuator`
 * `#Java/Spring/Boot/Admin`
+* `#Java/Spring/Boot/AutoConfiguration`
+* `#Java/Spring/Boot/Properties`
+* `#Java/Spring/Boot/Embedded`
+* `#Java/Spring/Boot/Build`
 * `#Java/Spring/Transactions`
 * `#Java/Spring/Cloud`
 * `#Java/Spring/Cloud/Gateway`
@@ -166,6 +194,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Spring/Data/Redis`
 * `#Java/Security`
 * `#Java/Spring/Security`
+* `#Java/Spring/Security/FilterChain`
+* `#Java/Spring/Security/MethodSecurity`
 * `#Java/Spring/Batch`
 * `#Java/Spring/Integration`
 * `#Java/Spring/AMQP`
@@ -206,6 +236,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Databases/SQL/Transactions`
 * `#Databases/SQL/DataTypes`
 * `#Databases/Indexes`
+* `#Databases/Indexes/Covering`
+* `#Databases/Indexes/Partial`
+* `#Databases/Indexes/Functional`
+* `#Databases/Indexes/Composite`
 * `#Databases/Partitioning`
 * `#Databases/Sharding`
 * `#Databases/Replication`

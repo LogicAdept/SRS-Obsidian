@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/WebMvc #Java/Spring/Core #SRS #New
+#Java/Spring/Framework/WebMvc #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

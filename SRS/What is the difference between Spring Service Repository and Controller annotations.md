@@ -2,5 +2,5 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core #Java/Spring/Framework/WebMvc #SRS #New
+#Java/Spring/Core/IoC/Stereotypes #Java/Spring/Framework/WebMvc #Java/Annotations #SRS #New
 

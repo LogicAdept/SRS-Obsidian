@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Testing/JUnit #SRS #New
+#Java/Testing/JUnit #Java/Annotations #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

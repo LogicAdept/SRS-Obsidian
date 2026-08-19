@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Boot #Java/Spring/Framework/DataAccess #SRS #New
+#Java/Spring/Boot/AutoConfiguration #Java/Spring/Framework/DataAccess #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст собран из публичных списков вопросов по Spring (2026). Не сверен с официальной документацией Spring. Не считать ответом для ревью.

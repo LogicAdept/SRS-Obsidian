@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core #SRS #New
+#Java/Spring/Core/IoC/Stereotypes #Java/Annotations #Java/Spring/Core/IoC/Configuration #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

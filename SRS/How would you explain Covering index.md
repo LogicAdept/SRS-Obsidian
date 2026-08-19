@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language #SRS #New
+#Databases/Indexes/Covering #Databases/Relational/PostgreSQL #Databases/Indexes/Composite #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

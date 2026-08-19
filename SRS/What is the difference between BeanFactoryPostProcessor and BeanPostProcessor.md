@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core #SRS #New
+#Java/Spring/Core/IoC/Lifecycle #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из шпаргалок Хабра (MishaBucha, 2025). Не сверен с официальной документацией. Не считать ответом для ревью.

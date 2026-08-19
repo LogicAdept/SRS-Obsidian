@@ -104,11 +104,110 @@ def iter_card_files(cards_root: Path) -> list[Path]:
     return files
 
 
+def path_in_prefix(path: str, prefix: str) -> bool:
+    return path == prefix or path.startswith(prefix + "/")
+
+
 def matches_prefix(tags: set[str] | frozenset[str], prefix: str) -> bool:
-    for t in tags:
-        if t == prefix or t.startswith(prefix + "/"):
-            return True
-    return False
+    return any(path_in_prefix(t, prefix) for t in tags)
+
+
+def subtree_nodes(tree_paths: list[str], prefix: str) -> list[str]:
+    """Prefix plus descendants, including implied grouping nodes missing from Tags.md."""
+    if not prefix:
+        return []
+    seen: set[str] = set()
+    out: list[str] = []
+
+    def add(path: str) -> None:
+        if path in seen or not path_in_prefix(path, prefix):
+            return
+        parent, sep, _ = path.rpartition("/")
+        if sep:
+            add(parent)
+        seen.add(path)
+        out.append(path)
+
+    add(prefix)
+    for path in tree_paths:
+        if path_in_prefix(path, prefix):
+            add(path)
+    return out
+
+
+def subtree_post_order(tree_paths: list[str], prefix: str) -> list[str]:
+    """Deepest first, Tags.md order among the same depth. Invoked prefix is last."""
+    index = {path: i for i, path in enumerate(tree_paths)}
+    nodes = subtree_nodes(tree_paths, prefix)
+    return sorted(nodes, key=lambda path: (-path.count("/"), index.get(path, 10**9), path.lower()))
+
+
+def node_role(path: str, nodes: list[str] | set[str]) -> str:
+    prefix = path + "/"
+    if any(other != path and other.startswith(prefix) for other in nodes):
+        return "parent"
+    return "leaf"
+
+
+def assign_visit_quotas(
+    visit: list[str],
+    limit: int | None,
+    per_node: int | None = None,
+) -> list[int | None]:
+    """New-card budget per visit node. None means unlimited (leaf / --flat, no --limit).
+
+    Extra slots after an even split go to the last node (the invoked prefix).
+    If limit < node count, keep 1 for the invoked prefix and give 1 to the earliest leaves.
+    With per_node, reserve the last node first so a wide walk does not starve it.
+    """
+    n = len(visit)
+    if n == 0:
+        return []
+    if limit is None and per_node is None:
+        return [None] * n
+    if per_node is not None and per_node < 1:
+        raise ValueError("per_node must be >= 1")
+    if limit is None:
+        return [per_node] * n
+    if limit < 0:
+        raise ValueError("limit must be >= 0")
+    if limit == 0:
+        return [0] * n
+    if per_node is not None:
+        quotas = [0] * n
+        remaining = limit
+        parent_take = min(per_node, remaining)
+        quotas[-1] = parent_take
+        remaining -= parent_take
+        for i in range(n - 1):
+            if remaining <= 0:
+                break
+            take = min(per_node, remaining)
+            quotas[i] = take
+            remaining -= take
+        return quotas
+    base, extra = divmod(limit, n)
+    if base >= 1:
+        return [base] * (n - 1) + [base + extra]
+    quotas = [0] * n
+    quotas[-1] = 1
+    leftover = limit - 1
+    for i in range(leftover):
+        quotas[i] = 1
+    return quotas
+
+
+def truncate_visit(order: list[str], prefix: str, max_nodes: int) -> tuple[list[str], list[str]]:
+    """Keep earliest post-order nodes plus the invoked prefix. Returns (visit, remaining)."""
+    if max_nodes < 1:
+        raise ValueError("max_nodes must be >= 1")
+    if len(order) <= max_nodes:
+        return order, []
+    others = [path for path in order if path != prefix]
+    visit = others[: max_nodes - 1] + [prefix]
+    chosen = set(visit)
+    remaining = [path for path in order if path not in chosen]
+    return visit, remaining
 
 
 def scan_cards(vault: Path) -> tuple[int, list[Card]]:
@@ -157,7 +256,11 @@ def drop_parent_child_tags(tags_in_order: list[str]) -> list[str]:
     return out
 
 
-def rebuild_tag_line(tag_line: str, mappings: list[tuple[str, str]]) -> str:
+def rebuild_tag_line(
+    tag_line: str,
+    mappings: list[tuple[str, str]],
+    extra_tags: list[str] | None = None,
+) -> str:
     """Rewrite thematic tags, drop parent+child dupes, keep #SRS then #New last."""
     ordered = [m.group(1) for m in TAG_TOKEN_RE.finditer(tag_line)]
     has_srs = "SRS" in ordered
@@ -172,6 +275,12 @@ def rebuild_tag_line(tag_line: str, mappings: list[tuple[str, str]]) -> str:
             continue
         seen.add(tag)
         thematic.append(tag)
+    for extra in extra_tags or []:
+        extra_n = normalize_prefix(extra)
+        if not extra_n or extra_n in ("SRS", "New") or extra_n in seen:
+            continue
+        seen.add(extra_n)
+        thematic.append(extra_n)
     thematic = drop_parent_child_tags(thematic)
     parts = [f"#{t}" for t in thematic]
     if has_srs:

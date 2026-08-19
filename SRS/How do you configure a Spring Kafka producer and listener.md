@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Messaging/Tools/Kafka #Java/Spring/Boot #SRS #New
+#Messaging/Tools/Kafka #Java/Spring/Boot #Java/Spring/Kafka #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст собран из публичных списков вопросов по Kafka (2026). Не сверен с официальной документацией Apache Kafka. Не считать ответом для ревью.

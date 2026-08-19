@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency #Java/Async #SRS #New
+#Java/Concurrency/Executors #Java/Async #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

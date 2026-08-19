@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency #SRS #New
+#Java/Concurrency/Synchronizers #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

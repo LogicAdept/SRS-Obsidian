@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Methodologies/Principles/IoC #Java/Spring/Core #SRS #New
+#Methodologies/Principles/IoC #Java/Spring/Core/IoC #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

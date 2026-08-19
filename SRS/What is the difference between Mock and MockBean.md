@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Testing/Mocking #Java/Spring/Framework/Testing #SRS #New
+#Testing/Mocking #Java/Spring/Framework/Testing #Java/Annotations #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

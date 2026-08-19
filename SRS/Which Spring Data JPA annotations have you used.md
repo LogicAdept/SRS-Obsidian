@@ -2,5 +2,5 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Data/JPA #SRS #New
+#Java/Spring/Data/JPA #Java/Annotations #SRS #New
 

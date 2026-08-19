@@ -6,6 +6,8 @@
 
 - [ ] Web (HTTP, MIME, etc. WebSockets, TCP, UDP, OSI, TLS)
 - [ ] Java Versions updates
+- [ ] Java Collection Framework
+- [ ] Java Exceptions hierarchy
 - [ ] ORM
 - [ ] Spring AOP
 - [ ] Spring Security

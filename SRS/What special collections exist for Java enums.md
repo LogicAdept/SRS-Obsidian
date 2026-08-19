@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/EnumMap #Java/Language/Enum #SRS #New
+#Java/Collections/Map/EnumMap #Java/Collections/Set/EnumSet #Java/Language/Enum #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

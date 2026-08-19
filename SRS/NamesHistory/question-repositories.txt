@@ -8,10 +8,15 @@ Interview question repositories used as SRS sources.
 + https://github.com/DEBAGanov/interview_questions/blob/main/C%D0%BE%D0%B1%D0%B5%D1%81%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20Java.%20Spring%20Framework.md
 + https://github.com/timmson/java-interview/blob/main/011-spring.md
 + https://github.com/Ilinich/java-interview-1/blob/master/011-spring.md
++ https://github.com/anjitagargi/JavaSpringBoot_Interview_Questions
++ https://github.com/alitalhacoban/backend-interview-questions-2026
++ https://github.com/Venkatesh-Bharath/Java-Full-Stack-interview-questions-3-to-10-years-experience/blob/main/SpringBoot.md
 + https://github.com/Devinterview-io/graphql-interview-questions
 + https://github.com/FAQGURU/FAQGURU
 + https://github.com/WeKnow-io/java-interview-questions
 + https://github.com/Devinterview-io/java-interview-questions
++ https://github.com/Devinterview-io/spring-interview-questions
++ https://github.com/rahulmoundekar/Spring-Framework-Interview-Question
 + https://github.com/in28minutes/JavaInterviewQuestionsAndAnswers
 + https://github.com/in28minutes/JavaTutorialForBeginners
 + https://github.com/sudheerj/java-interview-questions
@@ -24,5 +29,14 @@ Interview question repositories used as SRS sources.
 + https://github.com/snowdream/115-Java-Interview-Questions-and-Answers
 + https://github.com/apachecn/howtodoinjava-zh
 + https://github.com/anton-liauchuk/java-interview
++ https://github.com/in28minutes/spring-interview-guide
++ https://github.com/diojin/mockingjay
++ https://github.com/bikkimahato/spring-interview-questions
++ https://github.com/Sathish2905/spring_interview_questions
+
++ https://github.com/kiransagar1/Java-Interview-Questions-and-Answers-
+
++ https://github.com/marcelogdomingues/medium-articles
++ https://github.com/rhidoyhasanmahmud/The-Anatomy-of-Redis
 
 - https://github.com/owaresabd/spring-interview-questions/blob/spring/spring-multiple-choice-questions.md

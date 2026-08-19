@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/List #Java/Collections/Map/HashMap #SRS #New
+#Java/Collections/List/ArrayList #Java/Collections/Map/HashMap #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

@@ -63,15 +63,19 @@ Apply a change only if it does at least one of:
 
 - merges two tags that mean the same thing
 - moves a leaf under the parent interviewers would actually filter by
-- adds a leaf that cards already need and currently stretch a near-match
+- **adds a leaf that cards already need** and currently stretch a near-match (or sit on a parent that is too coarse to filter)
 - removes a tree entry that no card uses **and** that is not a planned parent of existing children
+
+**Adding needed leaves is part of the job**, not an optional follow-up. If inventory shows a **cluster** of cards (not a single one-off) that interviewers would filter as a distinct topic, and no existing child is honest, **add the leaf to `Tags.md` and retag those cards in the same run**. Do not leave that cluster on the parent and only mention the leaf in “open questions.”
+
+Open questions in chat are for **controversial re-parents** (two equally honest parents, synonym roots, whether two clusters are the same topic). They are not a parking lot for obvious missing filters.
 
 Do **not**: rename for style, split a leaf because a blog has a finer heading, or create a tag for a single one-off card when the parent already names the topic.
 
 ## Pipeline
 
-1. Inventory: run `tag-audit.py` (and `inventory-tag.py` if you need cue titles). Classify from that output: unused tree entries, used-but-missing-from-tree, synonym pairs, parent+child on the same card, stretched near-matches.
-2. Plan a **minimal** patch. If several layouts are reasonable, apply only the unambiguous merges/fixes and list the rest as options in chat — do not guess a controversial re-parent.
+1. Inventory: run `tag-audit.py` (and `inventory-tag.py` if you need cue titles). Classify from that output: unused tree entries, used-but-missing-from-tree, synonym pairs, parent+child on the same card, stretched near-matches, **parent-only clusters that need a child**.
+2. Plan a **minimal** patch: unambiguous merges/fixes **and** the needed new leaves from step 1. List only genuine taxonomy forks as options in chat — do not skip adding a leaf that the cards already require.
 3. Edit `SRS/Format/Tags.md` Tree (and the short rules only if a real policy changed).
 4. Retag affected **card** files with `retag-prefix.py` — not a throwaway script:
 
@@ -79,6 +83,7 @@ Do **not**: rename for style, split a leaf because a blog has a finer heading, o
 python .cursor/skills/refine-tags/scripts/retag-prefix.py --from Java/Spring/Framework/Boot --to Java/Spring/Boot
 python .cursor/skills/refine-tags/scripts/retag-prefix.py --map Java/Spring/Framework/Boot=Java/Spring/Boot --map Java/Spring/Framework/Security=Java/Spring/Security
 python .cursor/skills/refine-tags/scripts/retag-prefix.py --from Old/Leaf --to New/Leaf --only "Some cue.md"
+python .cursor/skills/refine-tags/scripts/retag-prefix.py --add Java/Annotations --only "What is the Lazy annotation in Spring.md"
 ```
 
 `--from/--to` also rewrites children (`Old/Leaf/X` → `New/Leaf/X`). Only cards that actually carry the old prefix are touched. The script keeps thematic → `#SRS` → `#New` and drops parent+child duplicates on the same line. Use `--dry-run` first when the mapping is easy to get wrong. Do not retag Format notes except `Tags.md`. Do not rewrite card bodies.

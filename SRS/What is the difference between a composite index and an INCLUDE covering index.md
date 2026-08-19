@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Databases/Indexes #Databases/Relational/PostgreSQL #SRS #New
+#Databases/Indexes/Covering #Databases/Relational/PostgreSQL #Databases/Indexes/Composite #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из шпаргалок Хабра (MishaBucha, 2025). Не сверен с официальной документацией. Не считать ответом для ревью.

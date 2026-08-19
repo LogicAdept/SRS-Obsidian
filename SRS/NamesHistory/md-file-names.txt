@@ -3297,3 +3297,696 @@
 - [+] Why can IdentityHashMap be faster than HashMap.md
 - [+] Does IdentityHashMap violate the Map contract.md
 - [+] Can two equal String objects both be keys in an IdentityHashMap.md
+- [+] Does HashSet allow a null element.md
+- [+] Is HashSet synchronized.md
+- [+] What is EnumSet.md
+- [+] Does EnumSet allow null.md
+- [+] What is the difference between TreeSet and SortedSet.md
+- [+] How do HashSet and TreeSet decide whether two elements are duplicates.md
+- [+] What NavigableSet operations does TreeSet provide.md
+- [+] What is the difference between PriorityQueue and TreeSet.md
+- [+] How do you create a HashMap from a HashSet of Map entries.md
+- [+] When should you choose HashSet LinkedHashSet or TreeSet.md
+- [+] What is the difference between List and Set.md
+- [+] What does Set.of return and what happens with duplicates.md
+- [+] What is the difference between SortedSet and NavigableSet.md
+- [+] What do TreeSet headSet tailSet and subSet return.md
+- [+] How do you iterate a TreeSet in reverse order.md
+- [+] How do you compute union intersection and difference of two Sets.md
+- [+] What are the two method families on Queue.md
+- [+] What are the First and Last methods on Deque.md
+- [+] How do you use a Deque as a stack.md
+- [+] Why do most Queue implementations forbid null.md
+- [+] Does iterating a PriorityQueue return elements in sorted order.md
+- [+] How do you build a max-heap with PriorityQueue.md
+- [+] Does PriorityQueue allow null.md
+- [+] Is PriorityQueue thread-safe.md
+- [+] What does PriorityQueue require of its elements.md
+- [+] What is the difference between a bounded and an unbounded queue.md
+- [+] How can you iterate a Deque in both directions.md
+- [+] What is the difference between a Queue and a Stack.md
+- [+] Do Queue and Deque implementations override equals.md
+- [+] What are the time complexities of PriorityQueue operations.md
+- [+] What happens when two PriorityQueue elements have equal priority.md
+- [+] How do you choose among several matching beans with Primary and Qualifier.md
+- [+] What is the Lookup annotation in Spring.md
+- [+] What is the difference between Autowired Resource and Inject.md
+- [+] How do you inject a Spring bean into a static field.md
+- [+] How do you shut down a Spring ApplicationContext.md
+- [+] What is the Conditional annotation in Spring.md
+- [+] What is the difference between Value and ConfigurationProperties.md
+- [+] What is Spring Boot property source precedence.md
+- [+] How do you create a non-web Spring Boot application.md
+- [+] How do you configure multiple data sources in Spring Boot.md
+- [+] How do you enable HTTPS in a Spring Boot application.md
+- [+] What is Spring Boot Admin.md
+- [+] How does form binding work in Spring MVC.md
+- [+] What is a ViewResolver in Spring MVC.md
+- [+] What is a MultipartResolver in Spring MVC.md
+- [+] How do you localize a Spring MVC application.md
+- [+] What is the difference between Spring AOP and AspectJ.md
+- [+] What is the difference between programmatic and declarative transaction management in Spring.md
+- [+] What is UserDetails and UserDetailsService in Spring Security.md
+- [+] What is SecurityContextHolder.md
+- [+] What is the difference between a role and an authority in Spring Security.md
+- [+] What is PasswordEncoder in Spring Security.md
+- [+] What is FilterChainProxy and DelegatingFilterProxy.md
+- [+] What is the difference between antMatchers mvcMatchers and requestMatchers.md
+- [+] What is the difference between Secured RolesAllowed and PreAuthorize.md
+- [+] What is the difference between HTTP 401 and 403 in Spring Security.md
+- [+] What is Spring Cloud Config.md
+- [+] What is the difference between application.properties and bootstrap.properties.md
+- [+] What is the difference between Lettuce and Jedis in Spring Data Redis.md
+- [+] Why should you avoid JdkSerializationRedisSerializer.md
+- [+] What is the difference between RedisHash and RedisTemplate.md
+- [+] How does Spring Session with Redis enable horizontal scaling.md
+- [+] What is RedisLockRegistry in Spring Integration.md
+- [+] What is FactoryBean and how do you retrieve the factory itself.md
+- [+] What is the Lazy annotation in Spring.md
+- [+] What is the DependsOn annotation in Spring.md
+- [+] Is a singleton Spring bean thread-safe.md
+- [+] What XML autowiring modes exist in Spring.md
+- [+] What are the limitations of XML autowiring in Spring.md
+- [+] How do you inject all beans of a given type as a collection or map.md
+- [+] What Aware interfaces does Spring invoke during bean initialization.md
+- [+] Which ApplicationContext implementations are commonly used.md
+- [+] What is the difference between close and refresh on ApplicationContext.md
+- [+] What is Spring Expression Language.md
+- [+] How does the Value annotation inject properties.md
+- [+] What is the PropertySource annotation in Spring.md
+- [+] What is bean wiring in Spring.md
+- [+] What design patterns does the Spring Framework use.md
+- [+] How does ApplicationContext publish events.md
+- [+] What does Autowired required false do.md
+- [+] What is the difference between a Spring bean id and a bean alias.md
+- [+] How does Import register beans in Spring.md
+- [+] What is the difference between BeanFactory and FactoryBean.md
+- [+] How do you call a method after a Spring bean is initialized.md
+- [+] In what order do PostConstruct InitializingBean and init-method run.md
+- [+] What destroy callbacks does Spring invoke when a bean is destroyed.md
+- [+] What is the Spring Environment.md
+- [+] How does a Spring singleton differ from the Gang of Four Singleton pattern.md
+- [+] What is a Spring inner bean.md
+- [+] What is the Profile annotation in Spring.md
+- [+] What is the Required annotation in Spring.md
+- [+] Can you inject null and empty string values in Spring.md
+- [+] What is BeanDefinitionRegistryPostProcessor.md
+- [+] What is PropertySourcesPlaceholderConfigurer.md
+- [+] Does Spring support interface injection.md
+- [+] What is MessageSource in Spring.md
+- [+] How do ComponentScan include and exclude filters work.md
+- [+] What does context annotation-config register.md
+- [+] Can Qualifier be used on a class instead of a Component name.md
+- [+] How do you register a custom Spring bean scope.md
+- [+] What is the Configurable annotation in Spring.md
+- [+] Which well-known types can Autowired inject without a matching bean.md
+- [+] Is it good practice to define an interface for a Spring bean.md
+- [+] What is global-session bean scope in Spring.md
+- [+] What is the Front Controller pattern in Spring MVC.md
+- [+] What is the difference between Model 1 and Model 2 architectures.md
+- [+] What is the difference between DispatcherServlet and ContextLoaderListener.md
+- [+] What is a WebApplicationContext in Spring MVC.md
+- [+] What is the difference between ApplicationContext and WebApplicationContext.md
+- [+] What is HandlerMapping in Spring MVC.md
+- [+] What is HandlerAdapter in Spring MVC.md
+- [+] What is a HandlerInterceptor in Spring MVC.md
+- [+] How do you register a HandlerInterceptor in Spring MVC.md
+- [+] What is BindingResult in Spring MVC.md
+- [+] What is a form backing object in Spring MVC.md
+- [+] What is the InitBinder annotation in Spring MVC.md
+- [+] What is the difference between SessionAttributes and SessionAttribute.md
+- [+] What is the EnableWebMvc annotation.md
+- [+] What is the difference between RequestParam and PathVariable.md
+- [+] What is the difference between RequestBody and ResponseBody.md
+- [+] What does the ExceptionHandler annotation do.md
+- [+] What is HandlerExceptionResolver in Spring MVC.md
+- [+] What is the difference between Model ModelMap and ModelAndView.md
+- [+] What is HttpMessageConverter in Spring MVC.md
+- [+] How do you configure message converters in Spring MVC.md
+- [+] What is the difference between RequestMapping and GetMapping.md
+- [+] What is FlashMap in Spring MVC.md
+- [+] What is LocaleResolver in Spring MVC.md
+- [+] What is the CookieValue annotation in Spring MVC.md
+- [+] What is the RequestHeader annotation in Spring MVC.md
+- [+] What is the ResponseStatus annotation in Spring MVC.md
+- [+] What is the MatrixVariable annotation in Spring MVC.md
+- [+] What is WebApplicationInitializer in Spring MVC.md
+- [+] What is ContentNegotiationManager in Spring MVC.md
+- [+] How do you implement asynchronous request processing in Spring MVC.md
+- [+] What is the default scope of a Spring MVC controller.md
+- [+] How do you return JSON from a Spring MVC controller.md
+- [+] What is WebMvcConfigurer in Spring MVC.md
+- [+] How do you map HTTP methods in Spring MVC.md
+- [+] How do you redirect after a form POST in Spring MVC.md
+- [+] What are Spring form tags.md
+- [+] How do you set a default date format in Spring MVC.md
+- [+] What is an Aspect in Spring AOP.md
+- [+] What is a JoinPoint in Spring AOP.md
+- [+] What is a Pointcut in Spring AOP.md
+- [+] What is Advice in Spring AOP.md
+- [+] What is weaving in AOP.md
+- [+] What is the difference between static and dynamic weaving.md
+- [+] What is the difference between compile-time and load-time weaving.md
+- [+] What is Introduction in Spring AOP.md
+- [+] What is a Target object in Spring AOP.md
+- [+] What is an AOP proxy in Spring.md
+- [+] What is a cross-cutting concern.md
+- [+] What is an Advisor in Spring AOP.md
+- [+] How does Spring AOP work internally.md
+- [+] How do you enable AOP in a Spring application.md
+- [+] What is the EnableAspectJAutoProxy annotation.md
+- [+] What is the Aspect annotation used for.md
+- [+] What is the Pointcut annotation used for.md
+- [+] What is the difference between After AfterReturning and AfterThrowing advice.md
+- [+] What is the purpose of the JoinPoint interface in Spring AOP.md
+- [+] What is ProceedingJoinPoint in Around advice.md
+- [+] How do you define a pointcut expression in Spring AOP.md
+- [+] How do you implement a custom annotation for AOP.md
+- [+] How do you control the order of multiple aspects.md
+- [+] How do you pass parameters to advice methods.md
+- [+] Can you access the return value in AfterReturning advice.md
+- [+] How do you apply AOP to a specific Spring bean.md
+- [+] Can you use Spring AOP with beans not managed by Spring.md
+- [+] What is the DeclareParents annotation in Spring AOP.md
+- [+] Can Around advice modify method arguments.md
+- [+] How do you combine multiple pointcut expressions.md
+- [+] How would you exclude a method from being advised.md
+- [+] What is the difference between Aspect and Component annotations.md
+- [+] Can Spring AOP advise private methods.md
+- [+] Why does a self-invocation skip Spring AOP advice.md
+- [+] Can you use Spring AOP with Spring Boot.md
+- [+] How do you use AOP to manage transactions.md
+- [+] What is MockMvc.md
+- [+] What is the WebMvcTest annotation.md
+- [+] What is the difference between WebMvcTest and SpringBootTest.md
+- [+] How do you test a Spring MVC controller in isolation.md
+- [+] How do you write a MockMvc test.md
+- [+] What is JSONAssert.md
+- [+] How do you write a Spring Boot integration test.md
+- [+] What is LocalServerPort.md
+- [+] What is TestRestTemplate.md
+- [+] What is the ContextConfiguration annotation.md
+- [+] What is the DataJpaTest annotation.md
+- [+] What is TestEntityManager.md
+- [+] What is the TestConfiguration annotation.md
+- [+] How do you test REST endpoints end to end.md
+- [+] What is Transactional used for in tests.md
+- [+] What is the difference between DirtiesContext and Transactional in tests.md
+- [+] What is DirtiesContext.md
+- [+] What is SpyBean.md
+- [+] What is the JsonTest annotation.md
+- [+] What is the RestClientTest annotation.md
+- [+] What is DynamicPropertySource.md
+- [+] What is AutoConfigureMockMvc.md
+- [+] What is SpringRunner.md
+- [+] How do you test the service layer in Spring.md
+- [+] What is the difference between MockitoBean and MockBean.md
+- [+] How do you mock external HTTP APIs in Spring tests.md
+- [+] How do you ensure the Spring application context loads in a test.md
+- [+] What types of tests does Spring Boot support.md
+- [+] How do you handle test data in Spring integration tests.md
+- [+] What is the Sql annotation in Spring tests.md
+- [+] How do you test JPA repositories in Spring.md
+- [+] What is SpringBootTest WebEnvironment.md
+- [+] How do you test Spring Security in MockMvc tests.md
+- [+] What is the Spring TestContext Framework.md
+- [+] What is the ActiveProfiles annotation.md
+- [+] What is the TestPropertySource annotation.md
+- [+] What is the difference between ActiveProfiles and TestPropertySource.md
+- [+] What is WebTestClient.md
+- [+] What is the difference between MockMvc TestRestTemplate and WebTestClient.md
+- [+] What is the WebFluxTest annotation.md
+- [+] How does the Spring TestContext framework cache the ApplicationContext.md
+- [+] What is the difference between MockBean and SpyBean.md
+- [+] What is SpringExtension.md
+- [+] What is the JdbcTest annotation.md
+- [+] What is ContextHierarchy.md
+- [+] What is the difference between Commit and Rollback in Spring tests.md
+- [+] What is Spring JDBC.md
+- [+] What are the key components of Spring JDBC.md
+- [+] Which classes are present in the Spring JDBC API.md
+- [+] How do you configure a DataSource in Spring.md
+- [+] How do you configure JdbcTemplate as a bean.md
+- [+] What is NamedParameterJdbcTemplate.md
+- [+] What is the difference between JdbcTemplate and NamedParameterJdbcTemplate.md
+- [+] What is a RowMapper in Spring JDBC.md
+- [+] What is BeanPropertyRowMapper.md
+- [+] What is ResultSetExtractor.md
+- [+] What is RowCallbackHandler.md
+- [+] What is the difference between RowCallbackHandler and ResultSetExtractor.md
+- [+] How can you fetch records with JdbcTemplate.md
+- [+] What is the difference between query and queryForObject in JdbcTemplate.md
+- [+] What is queryForMap in JdbcTemplate.md
+- [+] What is queryForList in JdbcTemplate.md
+- [+] What is the difference between JDBC and Spring JDBC.md
+- [+] What is the DataAccessException hierarchy.md
+- [+] How does Spring JDBC translate SQLException.md
+- [+] What is BatchPreparedStatementSetter.md
+- [+] How does JdbcTemplate batchUpdate work.md
+- [+] What is SimpleJdbcInsert.md
+- [+] What is SimpleJdbcCall.md
+- [+] How do you call stored procedures in Spring JDBC.md
+- [+] What is the Spring StoredProcedure class.md
+- [+] How do you fetch auto-generated keys with JdbcTemplate.md
+- [+] Is JdbcTemplate thread-safe.md
+- [+] How do you execute DDL with JdbcTemplate.md
+- [+] What is connection pooling in Spring JDBC.md
+- [+] What is Spring DAO support.md
+- [+] What is JdbcDaoSupport.md
+- [+] What is the difference between Spring JDBC and Spring Data JPA.md
+- [+] When would you use JDBC instead of Hibernate in Spring.md
+- [+] How do you use NamedParameterJdbcTemplate with SqlParameterSource.md
+- [+] What is JdbcClient.md
+- [+] How do you use a Tomcat JNDI DataSource in Spring.md
+- [+] What is SimpleJdbcTemplate.md
+- [+] What is Spring WebFlux.md
+- [+] What is the difference between Spring MVC and Spring WebFlux.md
+- [+] What is WebClient.md
+- [+] Is WebClient thread-safe.md
+- [+] What is bodyToMono.md
+- [+] What is bodyToFlux.md
+- [+] What are router functions in WebFlux.md
+- [+] What is a HandlerFunction in WebFlux.md
+- [+] What are the main components of Spring WebFlux.md
+- [+] Can you use Spring MVC and WebFlux in the same application.md
+- [+] What is Reactor Netty.md
+- [+] What is the difference between Spring MVC async and WebFlux.md
+- [+] What are the benefits of Spring WebFlux.md
+- [+] What are the disadvantages of using reactive streams with WebFlux.md
+- [+] How do you handle errors in Spring WebFlux.md
+- [+] What is the EnableWebFlux annotation.md
+- [+] How do you configure a WebFlux application.md
+- [+] How do you implement a reactive REST controller in WebFlux.md
+- [+] How do you implement Server-Sent Events in WebFlux.md
+- [+] What is the difference between Project Reactor and WebFlux.md
+- [+] How does the WebFlux event loop work.md
+- [+] What happens if you call block on a WebFlux event loop.md
+- [+] When should you not use WebFlux.md
+- [+] How does Spring WebFlux handle backpressure.md
+- [+] How do you call an external API from a WebFlux application.md
+- [+] What is the difference between WebClient and WebTestClient.md
+- [+] Why should you not use JDBC on the WebFlux event loop.md
+- [+] How do you offload blocking work in WebFlux.md
+- [+] How do you implement functional endpoints in WebFlux.md
+- [+] What are common WebFlux performance mistakes.md
+- [+] How do you test a WebFlux endpoint.md
+- [+] What is a WebFilter in WebFlux.md
+- [+] What is DispatcherHandler in WebFlux.md
+- [+] What is the Spring cache abstraction.md
+- [+] What is the EnableCaching annotation.md
+- [+] How do you implement caching in Spring.md
+- [+] What is CacheManager.md
+- [+] Which CacheManager does Spring Boot configure by default.md
+- [+] What is ConcurrentMapCacheManager.md
+- [+] What is the CachePut annotation.md
+- [+] What is the difference between Cacheable and CachePut.md
+- [+] What is the CacheEvict annotation.md
+- [+] What is the Caching annotation.md
+- [+] What is the CacheConfig annotation.md
+- [+] What is the difference between condition and unless on Cacheable.md
+- [+] How does Spring generate a cache key by default.md
+- [+] How do you set a Spring cache key with SpEL.md
+- [+] How does Cacheable work internally.md
+- [+] Why might the Cacheable annotation not work.md
+- [+] What is cache stampede in Spring Cache.md
+- [+] What is the sync attribute on Cacheable.md
+- [+] What cache providers does Spring Cache support.md
+- [+] How do you use Redis as a Spring CacheManager.md
+- [+] What serialization problems happen with Redis Spring Cache.md
+- [+] Can you use Cacheable with WebFlux.md
+- [+] What is the difference between cache-aside and write-through in Spring.md
+- [+] How do you invalidate Spring Cache in a cluster.md
+- [+] How do you implement multi-level caching in Spring Boot.md
+- [+] How do you test Spring caching.md
+- [+] What is beforeInvocation on CacheEvict.md
+- [+] What is allEntries on CacheEvict.md
+- [+] How do you configure TTL for Spring Cache.md
+- [+] What is spring-boot-starter-cache.md
+- [+] How do you choose a Spring Cache provider.md
+- [+] What is CacheResolver.md
+- [+] What is CachingConfigurer.md
+- [+] What is STOMP in Spring WebSocket.md
+- [+] Why use STOMP instead of raw WebSocket in Spring.md
+- [+] What is SockJS.md
+- [+] What is the EnableWebSocket annotation.md
+- [+] What is the EnableWebSocketMessageBroker annotation.md
+- [+] What is the difference between EnableWebSocket and EnableWebSocketMessageBroker.md
+- [+] How do you configure a STOMP broker in Spring.md
+- [+] What is the difference between the app prefix and topic prefix.md
+- [+] What is the MessageMapping annotation.md
+- [+] What is the SendTo annotation.md
+- [+] What is the SendToUser annotation.md
+- [+] What is SimpMessagingTemplate.md
+- [+] How do you send a message to one user with Spring WebSocket.md
+- [+] How do you implement a raw WebSocket handler in Spring.md
+- [+] What is TextWebSocketHandler.md
+- [+] What is WebSocketSession.md
+- [+] What is a simple broker versus a STOMP broker relay.md
+- [+] How do you scale Spring WebSocket across instances.md
+- [+] How do you secure Spring WebSocket.md
+- [+] What is a HandshakeInterceptor for WebSocket.md
+- [+] How does the WebSocket handshake work in Spring.md
+- [+] How do you keep a Spring WebSocket connection alive.md
+- [+] How do you handle STOMP errors in Spring.md
+- [+] What is spring-boot-starter-websocket.md
+- [+] What is the difference between WebSocket and Server-Sent Events.md
+- [+] How do you register a STOMP endpoint with CORS.md
+- [+] What is AbstractSecurityWebSocketMessageBrokerConfigurer.md
+- [+] What is WebSocketConfigurer.md
+- [+] What is WebSocketMessageBrokerConfigurer.md
+- [+] What is MessageExceptionHandler for STOMP.md
+- [+] What is SubscribeMapping.md
+- [+] What is SimpUserRegistry.md
+- [+] How do you perform load-time weaving with AspectJ in a Spring application.md
+- [+] What is the EnableLoadTimeWeaving annotation.md
+- [+] What is aop.xml for load-time weaving.md
+- [+] Why do you need a Java agent for load-time weaving.md
+- [+] What is a load-time weaver in Spring.md
+- [+] What is the difference between EnableLoadTimeWeaving and EnableAspectJAutoProxy.md
+- [+] Which Actuator endpoints are exposed over HTTP by default.md
+- [+] What is the difference between enabling and exposing an Actuator endpoint.md
+- [+] How does the Actuator health endpoint aggregate status.md
+- [+] How do you write a custom HealthIndicator in Spring Boot.md
+- [+] How do you change log levels at runtime with Actuator.md
+- [+] How do you secure a Spring Boot Admin server.md
+- [+] What is the difference between Spring Boot Actuator and Spring Boot Admin.md
+- [+] How does Spring Boot find auto-configuration classes.md
+- [+] What is the EnableAutoConfiguration annotation.md
+- [+] How do ConditionalOn annotations drive auto-configuration.md
+- [+] How do you disable a specific auto-configuration class.md
+- [+] How can you debug which auto-configuration classes applied.md
+- [+] Why can you omit library versions in a Spring Boot project.md
+- [+] What is relaxed binding in Spring Boot.md
+- [+] What is the difference between application.properties and application.yml.md
+- [+] How do you activate a Spring profile.md
+- [+] How do profile-specific property files work in Spring Boot.md
+- [+] What happens if you misspell a ConfigurationProperties key.md
+- [+] How do you switch the embedded server from Tomcat to Jetty.md
+- [+] How do you change the port of the embedded server.md
+- [+] How do you deploy a Spring Boot application as a WAR.md
+- [+] What ApplicationContext type does Spring Boot create for a web app.md
+- [+] What is the SpringApplication class.md
+- [+] How do you deploy a Spring Boot application.md
+- [+] What is spring-boot-starter-parent.md
+- [+] Why should the SpringBootApplication class sit in the root package.md
+- [+] What is an executable JAR in Spring Boot.md
+- [+] What is Spring Data JPA.md
+- [+] What is the difference between save and saveAndFlush in Spring Data JPA.md
+- [+] What are derived query methods in Spring Data JPA.md
+- [+] What is the Modifying annotation in Spring Data JPA.md
+- [+] What is the difference between findById and getOne in Spring Data JPA.md
+- [+] What are Spring Data JPA projections.md
+- [+] How do you implement auditing in Spring Data JPA.md
+- [+] How do you define a native query in Spring Data JPA.md
+- [+] How do you implement soft deletes in Spring Data JPA.md
+- [+] What are the pros and cons of EntityManager versus Spring Data JPA repositories.md
+- [+] How do you handle dynamic queries in Spring Data JPA.md
+- [+] How do you apply pessimistic locking in a Spring Data JPA repository.md
+- [+] What is MongoRepository.md
+- [+] How do you map a Java class to a MongoDB document in Spring Data.md
+- [+] What is the difference between MongoRepository and MongoTemplate.md
+- [+] How do you write custom queries with Query and MongoTemplate.md
+- [+] How do you perform aggregation with Spring Data MongoDB.md
+- [+] How do you use multi-document transactions in Spring Data MongoDB.md
+- [+] How does Spring Data MongoDB differ from Spring Data JPA.md
+- [+] What is MongoTemplate.md
+- [+] What are derived query methods in Spring Data MongoDB.md
+- [+] How do you use the Query annotation on a MongoRepository.md
+- [+] How do you build a dynamic Mongo query with Criteria.md
+- [+] What are best practices for MongoDB with Spring Boot in production.md
+- [+] What is RedisTemplate.md
+- [+] What is the difference between RedisTemplate and StringRedisTemplate.md
+- [+] What serialization strategy should you use with RedisTemplate.md
+- [+] How do Indexed fields work in a Spring Data Redis repository.md
+- [+] What is the TimeToLive annotation in Spring Data Redis.md
+- [+] What is the difference between Redis Pub Sub and Redis Streams.md
+- [+] How do you implement Redis Pub Sub with Spring Data Redis.md
+- [+] How do you handle Redis connection failures in Spring.md
+- [+] When should you use Redis Streams versus Apache Kafka.md
+- [+] How do you use opsForValue with RedisTemplate.md
+- [+] How do you store a Redis value with a TTL.md
+- [+] How does Spring Data Redis store a RedisHash entity.md
+- [+] Why do you need Spring Data.md
+- [+] What is the Spring Data Repository marker interface.md
+- [+] What is a CrudRepository.md
+- [+] What is a PagingAndSortingRepository.md
+- [+] What is the difference between CrudRepository and PagingAndSortingRepository.md
+- [+] How do you implement a custom repository method.md
+- [+] What is Query by Example in Spring Data.md
+- [+] What is QuerydslPredicateExecutor in Spring Data.md
+- [+] What is Spring Data REST.md
+- [+] What is the RepositoryRestResource annotation.md
+- [+] How can you customize Spring Data REST endpoints.md
+- [+] How do you hide a Spring Data REST endpoint.md
+- [+] How do Spring Data repository domain events work.md
+- [+] What is Spring Data Commons.md
+- [+] What is HttpSecurity in Spring Security.md
+- [+] What is SecurityContext in Spring Security.md
+- [+] What is GrantedAuthority in Spring Security.md
+- [+] What is the purpose of EnableWebSecurity.md
+- [+] How do you configure HTTP Basic authentication in Spring Security.md
+- [+] How do you create a custom login form in Spring Security.md
+- [+] What is the default login URL in Spring Security.md
+- [+] What is the default username and password in Spring Boot Security.md
+- [+] How do you implement logout in Spring Security.md
+- [+] How do you configure remember-me in Spring Security.md
+- [+] How do you restrict URL access by role in Spring Security.md
+- [+] How do you configure LDAP authentication in Spring Security.md
+- [+] How do you create a custom UserDetailsService in Spring Security.md
+- [+] How do you require HTTPS with Spring Security.md
+- [+] How do you handle session fixation in Spring Security.md
+- [+] How do you configure session management in Spring Security.md
+- [+] How do you configure multiple AuthenticationProviders in Spring Security.md
+- [+] How do you configure a custom AuthenticationProvider in Spring Security.md
+- [+] How do you handle authentication exceptions in Spring Security.md
+- [+] How do you customize the access denied page in Spring Security.md
+- [+] How do you integrate Spring Security with Thymeleaf.md
+- [+] What is the purpose of WithMockUser in Spring Security tests.md
+- [+] How do you handle CSRF tokens in AJAX requests in Spring Security.md
+- [+] What authentication mechanisms does Spring Security support.md
+- [+] How do you implement two-factor authentication in Spring Security.md
+- [+] What are Spring Security expressions.md
+- [+] How does Spring Security work with WebFlux.md
+- [+] What is ReactiveAuthenticationManager.md
+- [+] How do you implement a custom security filter in Spring Security.md
+- [+] What is AbstractSecurityInterceptor in Spring Security.md
+- [+] What is SecurityContextRepository in Spring Security.md
+- [+] How do you implement ABAC with PermissionEvaluator in Spring Security.md
+- [+] How do you implement custom token-based authentication in Spring Security.md
+- [+] What is SecurityExpressionHandler in Spring Security.md
+- [+] What is SecurityWebFilterChain.md
+- [+] What is ProviderManager in Spring Security.md
+- [+] What is the difference between hasRole and hasAnyRole in Spring Security.md
+- [+] What is the difference between ROLE_USER and ROLE_ANONYMOUS.md
+- [+] How do you configure JDBC authentication in Spring Security.md
+- [+] What is AuthenticationSuccessHandler in Spring Security.md
+- [+] What is digest authentication in Spring Security.md
+- [+] What is the OAuth2 authorization code grant in Spring Security.md
+- [+] What is the OAuth2 client credentials grant in Spring Security.md
+- [+] How do you implement OAuth2 login in Spring Security.md
+- [+] How do you get the currently authenticated user in Spring Security.md
+- [+] How do you ignore static resources in Spring Security.md
+- [+] What is PreFilter and PostFilter in Spring Security.md
+- [+] What is SessionCreationPolicy in Spring Security.md
+- [+] How do you configure in-memory authentication in Spring Security.md
+- [+] What is ExceptionTranslationFilter in Spring Security.md
+- [+] What is a principal in Spring Security.md
+- [+] How does form login work internally in Spring Security.md
+- [+] What is UsernamePasswordAuthenticationFilter.md
+- [+] Why does authorization matcher order matter in Spring Security.md
+- [+] At what levels can Spring Security enforce access control.md
+- [+] What is the springSecurityFilterChain bean name.md
+- [+] Which default security headers does Spring Security add.md
+- [+] What is JwtDecoder in Spring Security.md
+- [+] How do you debug a silent 401 from an OAuth2 resource server.md
+- [+] What is JWT clock skew in Spring Security.md
+- [+] Why should you not catch Exception when validating a JWT.md
+- [+] How do you deny all URLs in Spring Security.md
+- [+] What is salting in Spring Security password encoding.md
+- [+] How do you integrate Keycloak with Spring Security.md
+- [+] What is SecurityEvaluationContextExtension.md
+- [+] What is JwtAccessTokenConverter.md
+- [+] How do you implement security auditing in Spring Security.md
+- [+] How do you configure multi-tenant authentication in Spring Security.md
+- [+] How do you implement a custom AccessDecisionManager.md
+- [+] What is PostAuthorize in Spring Security.md
+- [+] Which Spring Security annotations support SpEL.md
+- [+] What is CookieCsrfTokenRepository.md
+- [+] How do you implement security for a server-sent events endpoint.md
+- [+] What is the difference between CORS and CSRF in Spring Security.md
+- [+] What happens if two SecurityFilterChain beans have no Order.md
+- [+] Is security a cross-cutting concern.md
+- [+] Does intercept-url order matter in Spring Security.md
+- [+] How do you configure authorizeHttpRequests in Spring Security 6.md
+- [+] What is AuthorizationFilter in Spring Security.md
+- [+] How do you test method security without replacing SecurityFilterChain.md
+- [+] What is the OAuth2 password grant in Spring Security.md
+- [+] How do you refresh an expired JWT in Spring Security.md
+- [+] How does Spring Security mitigate XSS CSRF and clickjacking.md
+- [+] What PasswordEncoder implementations does Spring Security provide.md
+- [+] What is NoOpPasswordEncoder.md
+- [+] What is Argon2PasswordEncoder.md
+- [+] What is CorsFilter in Spring Security.md
+- [+] What is CsrfFilter in Spring Security.md
+- [+] What is BearerTokenAuthenticationFilter.md
+- [+] What is the difference between Authentication and AuthenticationManager.md
+- [+] What is NimbusJwtDecoder.md
+- [+] What is opaque token introspection in Spring Security.md
+- [+] Why does addFilterBefore target filter choice matter.md
+- [+] How do you handle security for a Spring Batch application.md
+- [+] What is Pbkdf2PasswordEncoder.md
+- [+] What is DaoAuthenticationProvider.md
+- [+] What is FilterSecurityInterceptor.md
+- [+] What is ConcurrentSessionFilter.md
+- [+] What is SecurityContextPersistenceFilter.md
+- [+] How do you configure CORS on HttpSecurity.md
+- [+] What is SAML 2.0 support in Spring Security.md
+- [+] What is CAS authentication in Spring Security.md
+- [+] What is the difference between hashed and persistent remember-me tokens.md
+- [+] What is JAAS support in Spring Security.md
+- [+] What is X.509 authentication in Spring Security.md
+- [+] What is DefaultLoginPageGeneratingFilter.md
+- [+] What is GenericFilterBean in Spring Security.md
+- [+] What is BasicAuthenticationFilter.md
+- [+] What is RememberMeAuthenticationFilter.md
+- [+] What is the BCrypt work factor in Spring Security.md
+- [+] What are the core components of Spring Security.md
+- [+] How does Spring Security authenticate an HTTP request end to end.md
+- [+] What are the essential features of Spring Security.md
+- [+] What is password hashing in Spring Security.md
+- [+] What is AbstractSecurityWebApplicationInitializer.md
+- [+] What is SecurityContextLogoutHandler.md
+- [+] What is EnableOAuth2Sso.md
+- [+] How do you handle password reset in Spring Security.md
+- [+] How do you secure microservices with Spring Security.md
+- [+] How do you register a custom OAuth2 identity provider.md
+- [+] What is MapReactiveUserDetailsService.md
+- [+] What is ServerHttpSecurity.md
+- [+] What is User.withDefaultPasswordEncoder.md
+- [+] What is UsernamePasswordAuthenticationToken.md
+- [+] What is spring-boot-starter-security.md
+- [+] What is OncePerRequestFilter.md
+- [+] What is addFilterAfter in Spring Security.md
+- [+] What is SessionFixationProtectionStrategy.md
+- [+] When should you use HTTP Basic versus form login.md
+- [+] What is JdbcUserDetailsManager.md
+- [+] What is intercept-url in Spring Security.md
+- [+] What is IS_AUTHENTICATED_ANONYMOUSLY.md
+- [+] What is SecurityExpressionRoot.md
+- [+] What is AnonymousAuthenticationFilter.md
+- [+] What is EnableResourceServer.md
+- [+] What is EnableGlobalMethodSecurity.md
+- [+] What is jsr250Enabled in method security.md
+- [+] What account status flags does UserDetails expose.md
+- [+] What is UsernameNotFoundException.md
+- [+] What is WithUserDetails in Spring Security tests.md
+- [+] What is SecurityMockMvcRequestPostProcessors.md
+- [+] How do you send a CSRF token in a JSON request.md
+- [+] What is AccessDecisionManager.md
+- [+] What is EnableWebFluxSecurity.md
+- [+] What is authorizeExchange in WebFlux security.md
+- [+] What is UserDetailsRepositoryReactiveAuthenticationManager.md
+- [+] What is loginPage in form login.md
+- [+] What is hasRole versus hasAuthority in Spring Security.md
+- [+] What is InMemoryUserDetailsManager.md
+- [+] What is pathMatchers in WebFlux security.md
+- [+] What is SecurityFilterChain.md
+- [+] What is securityMatcher in Spring Security.md
+- [+] What happens if no SecurityFilterChain matches a request.md
+- [+] Can Spring Security run with zero SecurityFilterChain beans.md
+- [+] What is the difference between addFilterBefore addFilterAfter and addFilterAt.md
+- [+] What is LogoutFilter.md
+- [+] What is HeaderWriterFilter.md
+- [+] What is SecurityContextHolderFilter.md
+- [+] What is the difference between SecurityContextHolderFilter and SecurityContextPersistenceFilter.md
+- [+] What is WebSecurityCustomizer.md
+- [+] What is the difference between permitAll and web ignoring.md
+- [+] What is RequestCacheAwareFilter.md
+- [+] What is VirtualFilterChain in Spring Security.md
+- [+] How do you configure a SecurityFilterChain bean in Spring Security 6.md
+- [+] What is SessionManagementFilter.md
+- [+] What happens if two SecurityFilterChain beans share the same Order.md
+- [+] What is EnableMethodSecurity.md
+- [+] What is the difference between EnableMethodSecurity and EnableGlobalMethodSecurity.md
+- [+] How do you enable method security in Spring Security 6.md
+- [+] What is PreAuthorize.md
+- [+] Why does method security skip self-invocation.md
+- [+] Can method security protect private methods.md
+- [+] What is prePostEnabled in method security.md
+- [+] What is securedEnabled in method security.md
+- [+] What happens if you mix EnableMethodSecurity and EnableGlobalMethodSecurity.md
+- [+] Why might PreAuthorize stop working after a Spring Boot 3 upgrade.md
+- [+] What is MethodSecurityInterceptor.md
+- [+] What exception does a failed method-security check throw.md
+- [+] What is hasPermission in Spring Security method expressions.md
+- [+] What is Secured in Spring Security.md
+- [+] What is RolesAllowed in Spring Security.md
+- [+] When should you use AspectJ mode for method security.md
+- [+] What is DelegatingPasswordEncoder.md
+- [+] What is PasswordEncoderFactories.md
+- [+] Why does SecurityContextHolder use ThreadLocal.md
+- [+] What is MODE_INHERITABLETHREADLOCAL in SecurityContextHolder.md
+- [+] How do you propagate SecurityContext to async threads.md
+- [+] What is DelegatingSecurityContextExecutor.md
+- [+] What is the difference between a principal and credentials in Spring Security.md
+- [+] When should you use OAuth2 login versus form login.md
+- [+] What is the difference between an OAuth2 client and a resource server.md
+- [+] What is the difference between AuthenticationException and AccessDeniedException.md
+- [+] What is AuthenticationEntryPoint.md
+- [+] What is AccessDeniedHandler.md
+- [+] What is SimpleGrantedAuthority.md
+- [+] What is SessionAuthenticationStrategy.md
+- [+] What is RequestCache in Spring Security.md
+- [+] How do you choose among InMemoryUserDetailsManager JdbcUserDetailsManager and a custom UserDetailsService.md
+- [+] What is the difference between encode and matches on PasswordEncoder.md
+- [+] Why do two identical passwords hash to different strings with BCrypt.md
+- [+] What is DisableEncodeUrlFilter.md
+- [+] What is WebAsyncManagerIntegrationFilter.md
+- [+] What is DefaultLogoutPageGeneratingFilter.md
+- [+] What is OAuth2AuthorizationRequestRedirectFilter.md
+- [+] What is SecurityContextHolderAwareRequestFilter.md
+- [+] How do you enable Spring Security debug logging for the filter chain.md
+- [+] What does an empty Security filter chain debug log mean.md
+- [+] What is the difference between securityMatcher and requestMatchers.md
+- [+] How do you configure JWT and form login as two SecurityFilterChain beans.md
+- [+] How do you disable form login on a SecurityFilterChain.md
+- [+] What is AbstractAuthenticationProcessingFilter.md
+- [+] What is ChannelProcessingFilter.md
+- [+] What is X509AuthenticationFilter.md
+- [+] What is FilterOrderRegistration.md
+- [+] Why must a JWT filter run before AnonymousAuthenticationFilter.md
+- [+] What is the difference between AuthorizationFilter and FilterSecurityInterceptor.md
+- [+] What is filterObject in method security SpEL.md
+- [+] Can PreAuthorize use method parameters.md
+- [+] What is authentication in method-security SpEL.md
+- [+] What is the difference between EnableWebSecurity and EnableMethodSecurity.md
+- [+] Why does method security still matter if URL rules exist.md
+- [+] What is GlobalMethodSecurityConfiguration.md
+- [+] What is AuthorizationManager in method security.md
+- [+] What is WithAnonymousUser.md
+- [+] What is the difference between WithMockUser and WithUserDetails.md
+- [+] What is the difference between returnObject and filterObject.md
+- [+] Why is PostFilter a performance trap.md
+- [+] What is hasRole in PreAuthorize versus Secured.md
+- [+] What happens if MethodSecurityInterceptor is missing.md
+- [+] Can method security run without a SecurityFilterChain.md
+- [+] What is permitAll in a method-security expression.md
+- [+] What is denyAll in a method-security expression.md
+- [+] What is AuthenticationPrincipal.md
+- [+] What is the difference between AuthenticationPrincipal and SecurityContextHolder.md
+- [+] What changed between Spring Security 5 and 6.md
+- [+] What is UserDetailsManager versus UserDetailsService.md
+- [+] What is AuthenticationFailureHandler.md
+- [+] What is the noop password encoder id.md
+- [+] What is AnonymousAuthenticationToken.md
+- [+] What is maximumSessions in Spring Security.md
+- [+] What is maxSessionsPreventsLogin.md
+- [+] What is RememberMeServices.md
+- [+] What is the OAuth2 implicit grant.md
+- [+] What is the OAuth2 refresh token grant.md
+- [+] What is an authenticated versus unauthenticated UsernamePasswordAuthenticationToken.md
+- [+] What is the difference between defaultSuccessUrl and AuthenticationSuccessHandler.md
+- [+] What is CsrfToken.md
+- [+] What is SavedRequest.md
+- [+] What is the difference between Principal and UserDetails.md
+- [+] What is WebAuthenticationDetails.md

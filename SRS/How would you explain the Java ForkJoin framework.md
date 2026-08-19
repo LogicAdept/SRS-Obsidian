@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency #Java/Parallelism #SRS #New
+#Java/Concurrency/Executors #Java/Parallelism #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из шпаргалок Хабра (MishaBucha, 2025). Не сверен с официальной документацией. Не считать ответом для ревью.

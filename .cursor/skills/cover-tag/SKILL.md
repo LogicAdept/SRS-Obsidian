@@ -3,8 +3,10 @@ name: cover-tag
 description: >-
   Widens SRS coverage for a tag by mining interview-question GitHub repos and
   compilation pages, then creating #New cards — untrusted drafts when the
-  source has an answer, empty stubs when it does not. Use when the user invokes
-  /cover-tag or asks to expand a tag with more possible interview questions.
+  source has an answer, empty stubs when it does not. If the tag has children,
+  walks leaves first (post-order), then the invoked tag. Use when the user
+  invokes /cover-tag or asks to expand a tag with more possible interview
+  questions.
 disable-model-invocation: true
 ---
 
@@ -26,11 +28,14 @@ Language: English only — this skill, filenames, tag lines, card bodies, and th
 ## Invoke
 
 ```
-/cover-tag <tag> [--limit N]
+/cover-tag <tag> [--limit N] [--per-node M] [--max-nodes K] [--flat]
 ```
 
-- `<tag>` required: a tree path (`#Java/Collections/Map/HashMap`) or a short name (`HashMap`). Resolve it to a leaf in `SRS/Format/Tags.md`.
-- `--limit` optional: max **new** card files this run. Default **Maximum coverage, senior level**.
+- `<tag>` required: a tree path (`#Java/Collections/Map`) or a short name (`HashMap`). Resolve it in `SRS/Format/Tags.md` (leaf or parent).
+- `--limit` optional: max **new** card files this run. Default **12** when the walk has children; **Maximum coverage, senior level** on a leaf or with `--flat`.
+- `--per-node` optional: max new files per visited node. Default: even split of `--limit`, leftover slots on the invoked tag. If set, the invoked tag is reserved first so a wide walk does not starve it.
+- `--max-nodes` optional: max tree nodes to visit. Default **12**. Ignored with `--flat`.
+- `--flat` optional: cover only the resolved prefix (old behavior). Still treat child cues as already covered so you do not duplicate them on the parent.
 
 ## Read first
 
@@ -53,23 +58,57 @@ Interviewers do not only ask definitions. Prefer gaps in this order:
 
 Skip trivia, company-HR, and near-duplicates of cues already in the vault.
 
+## Walk (do not invent a walker)
+
+Cursor does not invoke this skill as a function. Recursion is a **post-order loop in this run**: children before parents, invoked tag last.
+
+After `<tag>` is resolved, run (PowerShell: no leading `#`):
+
+```
+python .cursor/skills/cover-tag/scripts/subtree-order.py Java/Collections/Map
+```
+
+Pass through `--limit`, `--per-node`, `--max-nodes`, `--flat` when the user set them. The script prints `cover_next` (node + quota) and `remaining`. Follow `cover_next` in order. Do not spawn subagents.
+
+If the name is ambiguous, pick the Tags.md path and say so in chat **before** running the script.
+
 ## Pipeline
 
-1. Resolve `<tag>` to one or more tree prefixes. If the name is ambiguous, pick the Tags.md leaf and say so in chat.
-2. Collect existing cues: grep the tag (and child paths) in `SRS/`, plus related lines in `md-file-names.txt`.
-3. **Collect question/answer pairs.** Record every URL in **chat**, never in the card file.
-   - Open `question-repositories.txt`. Fetch `+` GitHub repos/files that match this tag (raw markdown / `gh` / clone to a temp dir **outside** the vault; do not add the clone to this repo). Skip `-` URLs.
+For **each** `cover_next` node, until quotas are spent:
+
+1. Collect existing cues for **this node and its descendants** (cards already in the vault **plus files created earlier in this run**), plus related lines in `md-file-names.txt`.
+2. **Collect question/answer pairs** for this node. Record every URL in **chat**, never in the card file. Reuse repos/pages already fetched in this run; do not re-clone.
+   - Open `question-repositories.txt`. Fetch `+` GitHub repos/files that match this node (raw markdown / `gh` / clone to a temp dir **outside** the vault; do not add the clone to this repo). Skip `-` URLs.
    - Search GitHub for further interview-question repos or files on this topic (`interview questions`, topic name). Same fetch rule.
    - Search the web for **compilation pages** (question lists), not generic tutorials. Official “frequently asked” pages count only as *question* sources.
    - If a new GitHub collection was actually used and is not in `question-repositories.txt`, append `+ <url>`.
-4. Normalize each candidate to an English cue per `Naming.md`.
-5. Drop semantic duplicates of existing basenames.
-6. Keep the best `--limit` gaps. Create one file each: **draft** if any used source has an answer for that cue; **empty stub** if not.
-7. Append `- [+] <Cue>.md` to `md-file-names.txt` for new cues.
-8. Chat report: existing coverage count, new cues, **drafts vs empty stubs**, skipped dupes, suggested follow-up tags, **GitHub repos and compilation pages used**.
-9. Rebuild the coverage index (see below).
+3. Normalize each candidate to an English cue per `Naming.md`.
+4. Drop semantic duplicates of existing basenames (vault + this run).
+5. **Honest leaf:** tag the new card with this node only when no child of this node is a better fit. On a **parent** node, keep comparisons, interface contracts, and “which X when” — not a child’s mechanism. No parent+child pair on the same card.
+6. Create at most this node’s **quota** files via the generator below: **draft** if any used source has an answer for that cue; **empty stub** if not. Stop the whole run when the global `--limit` is reached.
+7. The generator appends `- [+] <Cue>.md` to `md-file-names.txt`. Do not append by hand.
 
-Do not overwrite a card that lacks `#New`. Do not rewrite an existing `#New` card that already has a body.
+Then: chat report, then rebuild the coverage index once (see below). Do not overwrite a card that lacks `#New`. Do not rewrite an existing `#New` card that already has a body.
+
+## Generate files
+
+Do **not** rewrite meta, callouts, `write()`, or the names-file append. Do not `Write()` dozens of `.md` files by hand.
+
+1. Copy `.cursor/skills/cover-tag/scripts/_gen_tag.py` → `_gen_<slug>.py` in the **same** folder.
+2. Fill `CARDS` in visit order (comment `# --- Leaf ---` per node). Draft = `body` + optional `traps`. Stub = omit both.
+3. Run (PowerShell: no leading `#`, no `&&`):
+
+```
+python .cursor/skills/cover-tag/scripts/_gen_<slug>.py
+```
+
+4. Delete `_gen_<slug>.py` after a successful run. Keep `_gen_tag.py` and `write_drafts.py`.
+
+`write_drafts.py` refuses to overwrite an existing file, checks `#SRS` / trailing `#New`, and rejects `?` and other illegal basename characters.
+
+Python quoting: triple-quote every `body`. If a trap contains `"`, wrap that item in **single** quotes (`'setAllowedOrigins("*")'`). Never nest `"` inside a double-quoted Python string.
+
+Chat report: visit order with per-node created counts, **remaining** nodes (suggest `/cover-tag` for those), existing coverage, new cues, **drafts vs empty stubs**, skipped dupes, suggested follow-up tags, **GitHub repos and compilation pages used**.
 
 ## File shape
 
@@ -125,6 +164,10 @@ python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
 - Put URLs, bibliographies, or “source:” lines in the `.md`.
 - Treat a random tutorial as a question source when a GitHub list or compilation page exists.
 - Stretch a near-match tag onto a different topic.
-- Create more than `--limit` files.
+- Create more than `--limit` files, or more than a node’s quota.
+- Process a parent before its listed children, or skip `subtree-order.py`.
+- Spawn subagents for child tags (this run is one loop).
+- Stretch a child topic onto the parent tag (or the reverse).
+- Reimplement `write_drafts.py` (meta, callouts, names-file). Copy `_gen_tag.py`.
 - Commit the cloned upstream repo.
 ---

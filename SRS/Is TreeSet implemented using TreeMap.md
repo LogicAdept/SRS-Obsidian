@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/TreeMap #Java/Collections/Set #SRS #New
+#Java/Collections/Map/TreeMap #Java/Collections/Set/TreeSet #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

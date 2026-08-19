@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Enum #Java/Collections/Set #Java/Collections/Map/TreeMap #SRS #New
+#Java/Language/Enum #Java/Collections/Set/TreeSet #Java/Collections/Map/TreeMap #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

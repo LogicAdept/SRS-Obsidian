@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/AOP #Java/Async #SRS #New
+#Java/Spring/Framework/AOP #Java/Async #Java/Annotations #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст собран из публичных списков вопросов по Spring (2026). Не сверен с официальной документацией Spring. Не считать ответом для ревью.

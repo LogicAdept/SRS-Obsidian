@@ -1,2 +1,6 @@
 # Obsidian config (vault folder SRS)
 SRS/.obsidian/
+
+# Local Cursor SDK coverage checkpoint
+.cursor/sdk/cover-state.json
+.cursor/sdk/cover-state.json.tmp

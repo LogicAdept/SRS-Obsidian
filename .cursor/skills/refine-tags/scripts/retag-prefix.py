@@ -6,8 +6,10 @@ Use from /refine-tags. Do not write a one-off retagger.
   python .cursor/skills/refine-tags/scripts/retag-prefix.py --from Java/Spring/Framework/Boot --to Java/Spring/Boot
   python .cursor/skills/refine-tags/scripts/retag-prefix.py --map Java/Spring/Framework/Boot=Java/Spring/Boot --map Java/Spring/Framework/Security=Java/Spring/Security
   python .cursor/skills/refine-tags/scripts/retag-prefix.py --from Java/Spring/Boot --to Java/Spring/Boot/Actuator --only "How do you monitor an application with Spring Boot Actuator.md"
+  python .cursor/skills/refine-tags/scripts/retag-prefix.py --add Java/Annotations --only "What is the Lazy annotation in Spring.md"
 
 Pass paths without a leading # (PowerShell treats # as a comment).
+--add without --from/--map requires --only so it cannot dual-tag the whole vault.
 """
 
 from __future__ import annotations
@@ -60,6 +62,13 @@ def main() -> int:
         metavar="FILE.md",
         help="Limit to these card basenames. Repeatable.",
     )
+    parser.add_argument(
+        "--add",
+        action="append",
+        default=[],
+        metavar="TAG",
+        help="Add a thematic tag (dual-tag). Repeatable. Without --from/--map, requires --only.",
+    )
     parser.add_argument("--dry-run", action="store_true", help="Print changes; do not write files.")
     parser.add_argument("--repo", default=None, help="Git repo root.")
     args = parser.parse_args()
@@ -71,11 +80,15 @@ def main() -> int:
         mappings.append((normalize_prefix(args.src), normalize_prefix(args.dst)))
     for raw in args.map:
         mappings.append(parse_map(raw))
-    if not mappings:
-        raise SystemExit("Need --from/--to or --map OLD=NEW.")
+    extra = [normalize_prefix(t) for t in args.add if t.strip()]
+    extra = [t for t in extra if t and t not in ("SRS", "New")]
+    only = {name.strip() for name in args.only if name.strip()}
+    if not mappings and not extra:
+        raise SystemExit("Need --from/--to, --map OLD=NEW, or --add TAG.")
+    if extra and not mappings and not only:
+        raise SystemExit("--add without --from/--map requires --only FILE.md.")
     mappings.sort(key=lambda pair: len(pair[0]), reverse=True)
 
-    only = {name.strip() for name in args.only if name.strip()}
     repo = Path(args.repo).resolve() if args.repo else repo_root_from_script()
     vault = vault_dir(repo)
     changed = 0
@@ -86,13 +99,16 @@ def main() -> int:
         tag_line = extract_tag_line(text)
         if not tag_line:
             continue
-        if not any(
+        tags = card_tags(tag_line)
+        mapped = any(
             apply_tag_maps(tag, mappings) != tag
-            for tag in card_tags(tag_line)
+            for tag in tags
             if tag not in ("SRS", "New")
-        ):
+        ) if mappings else False
+        missing_extra = any(t not in tags for t in extra)
+        if not mapped and not missing_extra:
             continue
-        new_line = rebuild_tag_line(tag_line, mappings)
+        new_line = rebuild_tag_line(tag_line, mappings, extra_tags=extra)
         if new_line == tag_line:
             continue
         changed += 1

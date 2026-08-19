@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency #OperatingSystems/Concurrency #SRS #New
+#Java/Concurrency/Threads #OperatingSystems/Concurrency #SRS #New

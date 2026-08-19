@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core #Java/Annotations #SRS #New
+#Java/Spring/Core/IoC/Lifecycle #Java/Annotations #SRS #New

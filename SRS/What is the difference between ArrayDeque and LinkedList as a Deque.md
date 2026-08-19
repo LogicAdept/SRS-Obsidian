@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/List #Java/Collections/Queues #SRS #New
+#Java/Collections/List/LinkedList #Java/Collections/Queues/ArrayDeque #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

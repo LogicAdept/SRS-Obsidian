@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Databases/Relational/PostgreSQL #Databases/Indexes #SRS #New
+#Databases/Relational/PostgreSQL #Databases/Indexes/Functional #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст собран из публичных списков вопросов по PostgreSQL (2026). Не сверен с официальной документацией PostgreSQL. Не считать ответом для ревью.

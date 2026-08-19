@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency #Java/Collections/List #SRS #New
+#Java/Concurrency/Atomics #Java/Collections/List/ArrayList #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

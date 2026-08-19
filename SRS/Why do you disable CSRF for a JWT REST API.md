@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security #SRS #New
+#Java/Spring/Security #Security/JWT #Security/AppSec #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст собран из публичных списков вопросов по Spring (2026). Не сверен с официальной документацией Spring. Не считать ответом для ревью.
