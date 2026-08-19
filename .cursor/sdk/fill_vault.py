@@ -293,7 +293,23 @@ def _run_agent(
     prompt: str,
     max_retries: int,
 ) -> str:
-    from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
+    from cursor_sdk import (
+        Agent,
+        AgentOptions,
+        CursorAgentError,
+        LocalAgentOptions,
+        ModelParameterValue,
+        ModelSelection,
+    )
+
+    model_selection: str | ModelSelection = model
+    if model == "grok-4-6":
+        model_selection = ModelSelection(
+            id=model,
+            params=(
+                ModelParameterValue(id="reasoning_effort", value="high"),
+            ),
+        )
 
     result = None
     for attempt in range(max_retries + 1):
@@ -302,7 +318,7 @@ def _run_agent(
                 prompt,
                 AgentOptions(
                     api_key=api_key,
-                    model=model,
+                    model=model_selection,
                     name=name,
                     local=LocalAgentOptions(**_local_options()),
                 ),
@@ -430,7 +446,11 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument("--dry-run", action="store_true", help="Print the queue and exit.")
-    parser.add_argument("--model", default="composer-2.5")
+    parser.add_argument(
+        "--model",
+        default="grok-4-6",
+        help="Cursor SDK model ID; grok-4-6 runs at high reasoning effort.",
+    )
     parser.add_argument("--cover-limit", type=int, default=12)
     parser.add_argument(
         "--max-tags",
