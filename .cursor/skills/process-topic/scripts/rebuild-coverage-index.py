@@ -149,7 +149,9 @@ def render_index(
         "Row color in the HTML tree: **green** ≥50% filled · **yellow** some filled · **red** cards exist but none filled · **gray** unused (`n=0`).",
         "",
         "Order: siblings (HTML) and this table are sorted by `n` descending. "
-        "HTML row buttons copy `/process-topic`, `/cover-tag`, `/fill-tag`, `/dedup-tag --dry-run`, `/refine-tags` for that tag.",
+        "HTML row buttons: **Agent** starts the Docker cover run for that leaf, or the leaves under that parent "
+        "(needs `python .cursor/sdk/cover_ui.py`); **Process/Cover/Fill/Dedup/Refine** "
+        "copy slash commands for Cursor chat.",
         "",
         "## Counts",
         "",
@@ -179,14 +181,17 @@ def _html_node(node: Node, depth: int) -> str:
         meta = "unused"
     bar = f'<span class="bar" title="{html.escape(meta)}"><i style="width:{pct}%"></i></span>'
     tag = "#" + path
+    launch = f"./.cursor/sdk/run_cover_vault.ps1 {path}"
     cmds = "".join(
-        f'<button type="button" class="copy" data-cmd="{html.escape(cmd, quote=True)}" title="{html.escape(cmd, quote=True)}">{label_}</button>'
-        for label_, cmd in (
-            ("Process", f"/process-topic {tag}"),
-            ("Cover", f"/cover-tag {tag} --limit 12"),
-            ("Fill", f"/fill-tag {tag} --limit 1"),
-            ("Dedup", f"/dedup-tag {tag} --dry-run"),
-            ("Refine", f"/refine-tags {tag}"),
+        f'<button type="button" class="copy{extra}" data-cmd="{html.escape(cmd, quote=True)}" '
+        f'data-tag="{html.escape(path, quote=True)}" title="{html.escape(cmd, quote=True)}">{label_}</button>'
+        for label_, cmd, extra in (
+            ("Agent", launch, " agent"),
+            ("Process", f"/process-topic {tag}", ""),
+            ("Cover", f"/cover-tag {tag} --limit 12", ""),
+            ("Fill", f"/fill-tag {tag} --limit 1", ""),
+            ("Dedup", f"/dedup-tag {tag} --dry-run", ""),
+            ("Refine", f"/refine-tags {tag}", ""),
         )
     )
     label = (
@@ -358,6 +363,7 @@ button.copy {{
 }}
 button.copy:hover {{ border-color: var(--accent); color: var(--accent); }}
 button.copy.copied {{ border-color: var(--green-bar); color: var(--green-bar); }}
+button.agent {{ font-weight: 600; }}
 li.node.hidden {{ display: none; }}
 .empty-msg {{ display: none; color: var(--muted); padding: 24px; }}
 </style>
@@ -365,8 +371,10 @@ li.node.hidden {{ display: none; }}
 <body>
 <header>
   <h1>SRS coverage index</h1>
-  <div class="sub">Generated {html.escape(generated_at)} · {len(tree_paths)} tree paths · {cards_with_tags} tagged cards ({cards_scanned} files scanned). Siblings ordered by card count, highest first. Row buttons copy a slash command — paste it into Cursor chat. Do not hand-edit; re-run the rebuild script.</div>
+  <div class="sub">Generated {html.escape(generated_at)} · {len(tree_paths)} tree paths · {cards_with_tags} tagged cards ({cards_scanned} files scanned). Siblings ordered by card count, highest first. <b>Agent</b> starts a background Docker cover run for that tag. Other buttons copy a slash command for Cursor chat. Do not hand-edit; re-run the rebuild script.</div>
   <dl class="skills">
+    <dt>Agent</dt>
+    <dd>Docker: <code>./.cursor/sdk/run_cover_vault.ps1 &lt;tag&gt;</code> — refine + cover that leaf, or the leaves under that parent. Never covers parent nodes. Needs <code>python .cursor/sdk/cover_ui.py</code> running (and <code>CURSOR_API_KEY</code>). If the helper is down, the button copies the command.</dd>
     <dt>Process</dt>
     <dd><code>/process-topic</code> — куда относится тег, что уже покрыто и каких тем не хватает; рекомендует <em>один</em> следующий скилл. Карточки не создаёт, не заполняет и не ретегает.</dd>
     <dt>Cover</dt>
@@ -389,7 +397,7 @@ li.node.hidden {{ display: none; }}
     <span class="pill"><span class="dot yellow"></span><b>{tallies["yellow"]}</b> some filled</span>
     <span class="pill"><span class="dot red"></span><b>{tallies["red"]}</b> cards, 0 filled</span>
     <span class="pill"><span class="dot unused"></span><b>{tallies["unused"]}</b> unused (n=0)</span>
-    <span>n = this tag or a child · filled = n minus #New · buttons copy skill prompts</span>
+    <span>n = this tag or a child · filled = n minus #New · Agent launches Docker · other buttons copy chat prompts</span>
   </div>
 </header>
 <main>
@@ -464,14 +472,38 @@ document.querySelector("main").addEventListener("click", async (e) => {{
   e.stopPropagation();
   const cmd = btn.dataset.cmd;
   if (!cmd) return;
-  const ok = await copyCmd(cmd);
   const prev = btn.textContent;
-  btn.textContent = ok ? "Copied" : "Failed";
-  btn.classList.toggle("copied", ok);
-  setTimeout(() => {{
-    btn.textContent = prev;
-    btn.classList.remove("copied");
-  }}, 1200);
+  const flash = (text, ok) => {{
+    btn.textContent = text;
+    btn.classList.toggle("copied", ok);
+    setTimeout(() => {{
+      btn.textContent = prev;
+      btn.classList.remove("copied");
+    }}, 1600);
+  }};
+  if (btn.classList.contains("agent")) {{
+    const tag = btn.dataset.tag;
+    try {{
+      const res = await fetch("http://127.0.0.1:8765/launch", {{
+        method: "POST",
+        headers: {{ "Content-Type": "application/json" }},
+        body: JSON.stringify({{ tag }}),
+      }});
+      const body = await res.json().catch(() => ({{}}));
+      if (res.ok && body.ok) {{
+        flash("Started", true);
+        return;
+      }}
+      flash(body.error || "Failed", false);
+      return;
+    }} catch (err) {{
+      const ok = await copyCmd(cmd);
+      flash(ok ? "Copied" : "Start helper", ok);
+      return;
+    }}
+  }}
+  const ok = await copyCmd(cmd);
+  flash(ok ? "Copied" : "Failed", ok);
 }}, true);
 </script>
 </body>

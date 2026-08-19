@@ -32,7 +32,11 @@ from vault_cards import (  # noqa: E402
 def main() -> int:
     parser = argparse.ArgumentParser(description="Post-order Tags.md walk for /cover-tag.")
     parser.add_argument("tag", help="Tree prefix, with or without leading #.")
-    parser.add_argument("--flat", action="store_true", help="Visit only the resolved prefix.")
+    parser.add_argument(
+        "--flat",
+        action="store_true",
+        help="If the prefix is a leaf, visit that leaf. If it is a parent, visit its descendant leaves only.",
+    )
     parser.add_argument(
         "--limit",
         type=int,
@@ -74,22 +78,27 @@ def main() -> int:
     order = subtree_post_order(tree, prefix)
     if prefix not in order:
         order = [prefix]
+    leaves = [path for path in order if node_role(path, tree) == "leaf"]
     full_count = len(order)
     has_children = full_count > 1
 
-    if args.flat or not has_children:
-        visit, remaining = [prefix], [p for p in order if p != prefix]
-        mode = "flat"
+    if args.flat:
+        visit = [prefix] if node_role(prefix, tree) == "leaf" else list(leaves)
+        remaining = [p for p in leaves if p not in visit]
+        mode = "leaves"
+    elif not has_children:
+        visit, remaining = list(leaves) or [prefix], []
+        mode = "leaves"
     else:
-        visit, remaining = truncate_visit(order, prefix, args.max_nodes)
-        mode = "post-order"
+        visit, remaining = truncate_visit(leaves, prefix, args.max_nodes)
+        mode = "leaves-post-order"
 
     limit = args.limit
-    if limit is None and mode == "post-order":
+    if limit is None and mode == "leaves-post-order":
         limit = 12
 
     quotas = assign_visit_quotas(visit, limit, args.per_node)
-    roles = {path: node_role(path, order) for path in order}
+    roles = {path: node_role(path, tree) for path in order}
     skip = [path for path, q in zip(visit, quotas) if q == 0]
     active = [(path, q) for path, q in zip(visit, quotas) if q != 0]
 

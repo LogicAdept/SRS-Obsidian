@@ -21,7 +21,7 @@ _PROCESS = Path(__file__).resolve().parents[2] / "process-topic" / "scripts"
 if str(_PROCESS) not in sys.path:
     sys.path.insert(0, str(_PROCESS))
 
-from vault_cards import vault_dir  # noqa: E402
+from vault_cards import node_role, parse_tree_paths, vault_dir  # noqa: E402
 
 META = """<!--
 reps: 0
@@ -222,6 +222,9 @@ def write_cover_batch(
     if budget_hit != (len(cards) == limit):
         raise SystemExit("budget_hit must be true exactly when the card limit is reached")
     normalized_tag = tag.lstrip("#")
+    tags_md = vault_dir(Path(__file__).resolve().parents[4]) / "Format" / "Tags.md"
+    if tags_md.is_file() and node_role(normalized_tag, parse_tree_paths(tags_md)) == "parent":
+        raise SystemExit(f"cover never writes cards for parent tag {normalized_tag}")
     for card in cards:
         if f"#{normalized_tag}" not in card["tags"].split():
             raise SystemExit(f"card is not assigned to current leaf {normalized_tag}: {card['name']}")

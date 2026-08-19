@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Refine and cover technical Tags.md leaves with reviewable persistent progress.
+"""Cover one chosen Tags.md path in an isolated Docker clone.
 
-The runtime queue is rebuilt from Tags.md and the tracked
-SRS/NamesHistory/coverage-progress.json file on every invocation. New or dirty
-leaves run first (empty, fewer-card, deeper leaves first); branches only perform
-taxonomy/aggregate validation after their relevant children complete.
+Pick a tag with --only. Cover runs on that leaf, or on descendant leaves if the
+chosen path is a parent. Parent nodes and ancestors are never covered. Real runs
+require --only (or --continue-tag).
 
 Each eligible leaf gets at most one /cover-tag call per run. --cover-limit is an
 upper budget, never a target. Cover must write a validated machine-readable result;
@@ -84,6 +83,7 @@ Hard constraints:
 - Read and write only inside this workspace. Fetch individual source files; do not clone.
 - Do not commit, checkout, reset, clean, push, or run any destructive git command.
 - /cover-tag creates compact #New drafts only; never invoke /fill-tag.
+- Cover only leaf tags. Never write cards for a parent node.
 - Cover may create fewer files than its limit. The limit is a hard cap, not a target.
 - Cover must not retag existing cards, edit Tags.md, or mutate sibling tags.
 - The structured --result-file is mandatory and must be written through write_drafts.py.
@@ -345,7 +345,7 @@ def build_runtime_queue(
     max_tags: int | None,
     continue_tags: tuple[str, ...] = (),
 ) -> tuple[list[str], tuple[str, ...], int]:
-    """Derive the queue and max-tags seed leaves; never persist the queue."""
+    """Derive a leaf-only queue; never persist it. Parents are never covered."""
     continued = set(continue_tags)
 
     def runnable(tag: str) -> bool:
@@ -356,7 +356,6 @@ def build_runtime_queue(
             return tag in continued
         return True
 
-    scoped_set = set(scoped_paths)
     leaves = [
         tag for tag in scoped_paths if not _is_parent(tag, tree_paths) and runnable(tag)
     ]
@@ -368,24 +367,14 @@ def build_runtime_queue(
         limited_out = max(0, len(ordered_leaves) - len(seeds))
         selected = [
             path
-            for path in scoped_paths
-            if runnable(path)
-            and any(
-                path_in_prefix(path, seed) or path_in_prefix(seed, path)
-                for seed in seeds
-            )
+            for path in ordered_leaves
+            if any(path_in_prefix(path, seed) for seed in seeds)
         ]
     else:
         seeds = tuple(ordered_leaves)
         limited_out = 0
-        selected = [path for path in scoped_paths if runnable(path)]
-    return (
-        _sort_runtime_paths(
-            selected, tree_paths=tree_paths, assignments=assignments, nodes=nodes
-        ),
-        seeds,
-        limited_out,
-    )
+        selected = list(ordered_leaves)
+    return selected, seeds, limited_out
 
 
 def _resolve_state_path(raw: str) -> Path:
@@ -755,8 +744,8 @@ def _run_agent(
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Build a deterministic leaf-first queue from Tags.md and tracked progress. "
-            "Each leaf receives at most one cover call per run."
+            "Run refine+cover for a chosen leaf, or the leaves under a chosen parent. "
+            "Parent nodes are never covered. Each leaf receives at most one cover call per run."
         )
     )
     parser.add_argument("--dry-run", action="store_true", help="Print the derived queue.")
@@ -786,11 +775,17 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Tracked repository-local progress state.",
     )
     parser.add_argument("--fresh", action="store_true")
-    parser.add_argument("--only", action="append", default=[], metavar="TAG")
+    parser.add_argument(
+        "--only",
+        action="append",
+        default=[],
+        metavar="TAG",
+        help="Cover this leaf, or the leaves under this parent. Never parents or ancestors. Required for a real run. Repeatable.",
+    )
     parser.add_argument(
         "--prefix",
-        default="Java",
-        help="Restrict to this Tags.md path and its descendants. Empty string for all technical paths.",
+        default="",
+        help="Restrict to this Tags.md path and its descendants. Ignored when --only is set.",
     )
     parser.add_argument("--exclude", action="append", default=[], metavar="PREFIX")
     parser.add_argument("--skip-refine", action="store_true")
@@ -857,13 +852,15 @@ def main(argv: list[str] | None = None) -> int:
     if not TAGS_MD.is_file():
         raise SystemExit(f"missing Tags.md: {TAGS_MD}")
 
-    prefix = normalize_prefix(args.prefix)
     only = tuple(normalize_prefix(item) for item in args.only)
     continue_tags = tuple(normalize_prefix(item) for item in args.continue_tag)
     if any(not item for item in only):
         raise SystemExit("--only cannot be empty")
     if any(not item for item in continue_tags):
         raise SystemExit("--continue-tag cannot be empty")
+    if not args.dry_run and not only and not continue_tags:
+        raise SystemExit("choose a tag with --only TAG (ancestors are not processed)")
+    prefix = "" if only else normalize_prefix(args.prefix)
     excluded = [normalize_prefix(item) for item in args.exclude]
     if not args.include_nontechnical:
         excluded.extend(NONTECH_PREFIXES)
@@ -965,17 +962,21 @@ def main(argv: list[str] | None = None) -> int:
             paths = [
                 path
                 for path in paths
-                if any(
-                    path_in_prefix(path, seed) or path_in_prefix(seed, path)
-                    for seed in seed_prefixes
-                )
+                if any(path_in_prefix(path, seed) for seed in seed_prefixes)
             ]
         return paths
 
+    def coverable_leaves(current_tree: list[str]) -> list[str]:
+        return [
+            path
+            for path in currently_scoped(current_tree)
+            if not _is_parent(path, current_tree)
+        ]
+
     def refresh_queue(current_tree: list[str], current_assignments: CardAssignments) -> None:
-        allowed = currently_scoped(current_tree)
-        candidates: list[str] = list(queue)
-        for path in allowed:
+        allowed = set(coverable_leaves(current_tree))
+        candidates = [path for path in queue if path in allowed]
+        for path in coverable_leaves(current_tree):
             if path in pending or path in finished_this_run or path in failures:
                 continue
             record = nodes.get(path)
@@ -1006,6 +1007,11 @@ def main(argv: list[str] | None = None) -> int:
         assignments = _card_assignments()
         if tag not in tree_paths or tag not in currently_scoped(tree_paths):
             nodes.pop(tag, None)
+            refresh_queue(tree_paths, assignments)
+            continue
+        if _is_parent(tag, tree_paths):
+            print(f"skip #{tag}: cover never runs on parent tags")
+            finished_this_run.add(tag)
             refresh_queue(tree_paths, assignments)
             continue
         existing = _reconcile_record(nodes.get(tag), tag, tree_paths, assignments)
@@ -1105,10 +1111,21 @@ def main(argv: list[str] | None = None) -> int:
                 blocked.add(tag)
                 print("taxonomy changed; blocking node and rebuilding child-first queue")
                 refresh_queue(tree_after, assignments_after)
-                if tag not in pending:
+                if not _is_parent(tag, tree_after) and tag not in pending:
                     queue.append(tag)
                     pending.add(tag)
                 _save_state(state_path, state)
+                continue
+
+            if _is_parent(tag, tree_after):
+                record["status"] = "blocked"
+                record["last_error"] = "cover never runs on parent tags"
+                blocked.add(tag)
+                finished_this_run.add(tag)
+                print("cover skipped: parent tags are never covered")
+                nodes[tag] = record
+                _save_state(state_path, state)
+                refresh_queue(tree_after, assignments_after)
                 continue
 
             children = _immediate_children(tag, tree_after)

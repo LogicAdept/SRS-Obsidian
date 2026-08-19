@@ -5,10 +5,13 @@ $repo = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $dockerfile = Join-Path $PSScriptRoot "Dockerfile"
 $runsRoot = Join-Path $PSScriptRoot "runs"
 $resumeWorkspace = $null
+$wait = $false
 $forwardArgs = [System.Collections.Generic.List[string]]::new()
+$positionalTag = $null
 
 for ($i = 0; $i -lt $args.Count; $i++) {
-    if ($args[$i] -eq "--workspace") {
+    $arg = $args[$i]
+    if ($arg -eq "--workspace") {
         if ($i + 1 -ge $args.Count) {
             throw "--workspace requires a run directory."
         }
@@ -16,10 +19,28 @@ for ($i = 0; $i -lt $args.Count; $i++) {
         $resumeWorkspace = $args[$i]
         continue
     }
-    $forwardArgs.Add($args[$i])
+    if ($arg -eq "--wait") {
+        $wait = $true
+        continue
+    }
+    if (-not $arg.StartsWith("-") -and $null -eq $positionalTag -and $arg -ne "--") {
+        $positionalTag = $arg.TrimStart("#")
+        continue
+    }
+    $forwardArgs.Add($arg)
+}
+
+if ($null -ne $positionalTag) {
+    $forwardArgs.Add("--only")
+    $forwardArgs.Add($positionalTag)
 }
 
 $isDryRun = $forwardArgs.Contains("--dry-run")
+$hasOnly = $forwardArgs.Contains("--only")
+$hasContinue = $forwardArgs.Contains("--continue-tag")
+if (-not $isDryRun -and -not $hasOnly -and -not $hasContinue) {
+    throw "Choose a tag: ./.cursor/sdk/run_cover_vault.ps1 Java/Language/Primitives/ShortType"
+}
 
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
     throw "Docker Desktop is required. Install it, start the engine, and retry."
@@ -89,15 +110,18 @@ else {
     if ($LASTEXITCODE -ne 0 -or -not $agentBranch.StartsWith("agent/cover-")) {
         throw "--workspace is not on an agent/cover-* branch."
     }
+    $runName = Split-Path $runWorkspace -Leaf
 }
 
 Write-Host "Agent branch:    $agentBranch"
 Write-Host "Agent workspace: $runWorkspace"
 
+$containerName = "srs-cover-$runName"
 $repoMount = "type=bind,source=$runWorkspace,target=/workspace"
 $dockerArgs = @(
     "run",
     "--rm",
+    "--name", $containerName,
     "--init",
     "--read-only",
     "--network", "bridge",
@@ -119,18 +143,37 @@ if (-not [string]::IsNullOrWhiteSpace($env:CURSOR_API_KEY)) {
 $dockerArgs += $image
 $dockerArgs += $forwardArgs.ToArray()
 
-& docker @dockerArgs
-$containerExitCode = $LASTEXITCODE
+function Write-ReviewHints {
+    Write-Host ""
+    Write-Host "The source vault is not modified."
+    Write-Host "Log:"
+    Write-Host "  Get-Content `"$logFile`" -Wait"
+    Write-Host "Review:"
+    Write-Host "  git -C `"$runWorkspace`" status --short"
+    Write-Host "  git -C `"$runWorkspace`" diff"
+    Write-Host "Reject:"
+    Write-Host "  docker rm -f $containerName; Remove-Item -LiteralPath `"$runWorkspace`" -Recurse -Force"
+    Write-Host "Accept after reviewing: commit in the clone, then fetch/cherry-pick $agentBranch."
+}
 
-Write-Host ""
-Write-Host "The source vault was not modified."
-Write-Host "Review:"
-Write-Host "  git -C `"$runWorkspace`" status --short"
-Write-Host "  git -C `"$runWorkspace`" diff"
-Write-Host "Resume:"
-Write-Host "  ./.cursor/sdk/run_cover_vault.ps1 --workspace `"$runWorkspace`" <agent args>"
-Write-Host "Reject:"
-Write-Host "  Remove-Item -LiteralPath `"$runWorkspace`" -Recurse -Force"
-Write-Host "Accept after reviewing: commit in the clone, then fetch/cherry-pick $agentBranch."
+$logFile = Join-Path $runWorkspace "cover-run.log"
+if ($isDryRun -or $wait) {
+    & docker @dockerArgs
+    $containerExitCode = $LASTEXITCODE
+    Write-ReviewHints
+    exit $containerExitCode
+}
 
-exit $containerExitCode
+$quoted = foreach ($item in $dockerArgs) {
+    if ($item -match '[\s"]') {
+        '"' + ($item -replace '"', '\"') + '"'
+    }
+    else {
+        $item
+    }
+}
+$command = "docker $($quoted -join ' ') > `"$logFile`" 2>&1"
+Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $command -WindowStyle Hidden | Out-Null
+Write-Host "Started in background as $containerName"
+Write-ReviewHints
+exit 0

@@ -5,7 +5,7 @@ description: >-
   compilation pages, then creating #New cards — untrusted drafts when the
   source has an answer, empty stubs when it does not. Enforces a strict
   interview-value gate and writes a structured result for orchestrated runs.
-  If the tag has children, walks leaves first (post-order). Use when the user
+  If the tag has children, covers those leaves only — never the parent. Use when the user
   invokes /cover-tag or asks to expand a tag with more possible interview
   questions.
 disable-model-invocation: true
@@ -32,11 +32,11 @@ Language: English only — this skill, filenames, tag lines, card bodies, and th
 /cover-tag <tag> [--limit N] [--per-node M] [--max-nodes K] [--flat] [--result-file PATH]
 ```
 
-- `<tag>` required: a tree path (`#Java/Collections/Map`) or a short name (`HashMap`). Resolve it in `SRS/Format/Tags.md` (leaf or parent).
+- `<tag>` required: a tree path (`#Java/Collections/Map`) or a short name (`HashMap`). Resolve it in `SRS/Format/Tags.md`.
 - `--limit` optional: hard maximum of **new** card files, never a target. Default **50**. Write fewer whenever fewer strong, distinct candidates survive the quality gate.
-- `--per-node` optional: max new files per visited node. Default: even split of `--limit`, leftover slots on the invoked tag. If set, the invoked tag is reserved first so a wide walk does not starve it.
-- `--max-nodes` optional: max tree nodes to visit. Default **12**. Ignored with `--flat`.
-- `--flat` optional: cover only the resolved prefix (old behavior). Still treat child cues as already covered so you do not duplicate them on the parent.
+- `--per-node` optional: max new files per visited **leaf**. Default: even split of `--limit`. Unused slots stay unused.
+- `--max-nodes` optional: max **leaves** to visit. Default **12**. Ignored with `--flat` on a leaf.
+- `--flat` optional: if the resolved prefix is a **leaf**, cover that leaf only. If it is a **parent**, cover its descendant leaves only — never the parent node.
 - `--result-file` optional for interactive use and **mandatory when supplied by an orchestrator**. It must be repository-local and is written through `write_cover_batch` in `write_drafts.py`, never by hand. Orchestrated use combines it with `--flat` on one leaf.
 
 ## Read first
@@ -88,7 +88,7 @@ run. Taxonomy and retagging belong exclusively to `/refine-tags`.
 
 ## Walk (do not invent a walker)
 
-Cursor does not invoke this skill as a function. Recursion is a **post-order loop in this run**: children before parents, invoked tag last.
+Cursor does not invoke this skill as a function. Recursion is a **leaf-only loop in this run**: cover descendant leaves, never parent nodes, never ancestors.
 
 After `<tag>` is resolved, run (PowerShell: no leading `#`):
 
@@ -113,7 +113,7 @@ For **each** `cover_next` node, until quotas are spent:
 3. Normalize each candidate to an English cue per `Naming.md`.
 4. Apply the full Candidate quality gate above, including semantic duplicate,
    source-meta, incidental-product, obsolete-trivia, and wrong-owner rejection.
-5. **Honest leaf:** tag the new card with this node only when no child of this node is a better fit. On a **parent** node, keep comparisons, interface contracts, and “which X when” — not a child’s mechanism. No parent+child pair on the same card.
+5. **Honest leaf:** `cover_next` is always a leaf. Tag the new card with that leaf. Never create a card whose thematic tag is a parent. If a child of this leaf would be a better fit, defer it and report it — do not invent a parent card.
 6. Create at most this node’s **quota** files via the generator below: **draft** if any used source has an answer for that cue; **empty stub** if not. Stop the whole run when the global `--limit` is reached. Never add weak candidates to reach the quota.
 7. The generator appends `- [+] <Cue>.md` to `md-file-names.txt`. Do not append by hand.
 
@@ -182,10 +182,10 @@ priority: 0
 #Resolved/Leaf #SRS #New
 ```
 
-- One tag line: thematic leaf/leaves, then `#SRS`, then `#New`.
+- One tag line: one thematic leaf, then `#SRS`, then `#New`.
 - Do not invent a biography for personal cues — skip those.
 
-If the tree has no honest leaf: use the shortest honest prefix; propose a new leaf in chat; do not edit `Tags.md` (use `/refine-tags`).
+If the tree has no honest leaf: do not tag a parent. Propose a new leaf in chat; do not edit `Tags.md` (use `/refine-tags`).
 
 ### Empty stub (no answer in the sources you opened)
 
@@ -225,7 +225,7 @@ python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
 - Treat a random tutorial as a question source when a GitHub list or compilation page exists.
 - Stretch a near-match tag onto a different topic.
 - Create more than `--limit` files, or more than a node’s quota.
-- Process a parent before its listed children, or skip `subtree-order.py`.
+- Cover a parent node, tag a new card with a parent, or skip `subtree-order.py`.
 - Spawn subagents for child tags (this run is one loop).
 - Stretch a child topic onto the parent tag (or the reverse).
 - Retag an existing card, edit Tags.md, or create a sibling/other-tag candidate.
