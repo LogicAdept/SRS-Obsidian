@@ -304,9 +304,9 @@ def _run_agent(
     )
 
     model_selection: str | ModelSelection = model
-    if model == "grok-4-6":
+    if model in {"grok-4-6", "grok-4.6"}:
         model_selection = ModelSelection(
-            id=model,
+            id="grok-4.6",
             params=(
                 ModelParameterValue(id="reasoning_effort", value="high"),
             ),
@@ -449,8 +449,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="Print the queue and exit.")
     parser.add_argument(
         "--model",
-        default="grok-4-6",
-        help="Cursor SDK model ID; grok-4-6 runs at high reasoning effort.",
+        default="grok-4.6",
+        help="Cursor SDK model ID; grok-4.6 runs at high reasoning effort.",
     )
     parser.add_argument("--cover-limit", type=int, default=12)
     parser.add_argument(
