@@ -4,23 +4,16 @@ You pick a tag. Docker runs `/refine-tags` and `/cover-tag` on that leaf, or on
 the leaves under that parent — never on parent nodes or ancestors. The source
 vault is untouched until you accept the clone.
 
-## Run from the HTML tree
+## Run
 
-In a shell with a clean repo:
-
-```powershell
-$env:CURSOR_API_KEY = "cursor_..."
-python .cursor/sdk/cover_ui.py
-```
-
-Open `SRS/NamesHistory/coverage-index.html` and click **Agent** on a tag.
-If the helper is not running, the button copies:
+In a shell with a clean repo and `CURSOR_API_KEY` set:
 
 ```powershell
 ./.cursor/sdk/run_cover_vault.ps1 Java/Language/Primitives/ShortType
 ```
 
-Watch the log if you want:
+HTML **Agent** copies that command. After the run, a **Clone** button appears on
+that tag only. **Source** in the header returns to this vault.
 
 ```powershell
 Get-Content .cursor/sdk/runs/<id>/cover-run.log -Wait
@@ -31,18 +24,26 @@ Get-Content .cursor/sdk/runs/<id>/cover-run.log -Wait
 ## Review
 
 ```powershell
-$run = "C:\Users\V\ObsidianVaults\SRS\.cursor\sdk\runs\<id>"
-git -C $run status --short
-git -C $run diff
+./.cursor/sdk/switch_review.ps1 Java/Spring/Transactions
+./.cursor/sdk/switch_review.ps1 -Source
 ```
 
-Reject:
+Clone rebuilds that run's coverage index and opens a second Cursor window.
+
+Accept (cherry-pick into this repo, delete the clone, hide the Clone button):
 
 ```powershell
-Remove-Item -LiteralPath $run -Recurse -Force
+./.cursor/sdk/switch_review.ps1 -Accept Java/Spring/Transactions
 ```
 
-Accept: commit in the clone, then fetch/cherry-pick `agent/cover-<id>`.
+Drop without merging:
+
+```powershell
+./.cursor/sdk/switch_review.ps1 -Drop Java/Spring/Transactions
+```
+
+Source Control in the clone window shows the uncommitted cover diff. The source
+repository must be clean before `-Accept`.
 
 ## Defaults
 

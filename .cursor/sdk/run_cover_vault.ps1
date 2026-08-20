@@ -35,6 +35,21 @@ if ($null -ne $positionalTag) {
     $forwardArgs.Add($positionalTag)
 }
 
+function Get-RequestedTag {
+    if (-not [string]::IsNullOrWhiteSpace($positionalTag)) {
+        return $positionalTag.TrimStart("#")
+    }
+    for ($i = 0; $i -lt $forwardArgs.Count; $i++) {
+        if (
+            ($forwardArgs[$i] -eq "--only" -or $forwardArgs[$i] -eq "--continue-tag") -and
+            ($i + 1 -lt $forwardArgs.Count)
+        ) {
+            return $forwardArgs[$i + 1].TrimStart("#")
+        }
+    }
+    return $null
+}
+
 $isDryRun = $forwardArgs.Contains("--dry-run")
 $hasOnly = $forwardArgs.Contains("--only")
 $hasContinue = $forwardArgs.Contains("--continue-tag")
@@ -116,6 +131,17 @@ else {
 Write-Host "Agent branch:    $agentBranch"
 Write-Host "Agent workspace: $runWorkspace"
 
+$requestedTag = Get-RequestedTag
+if (-not [string]::IsNullOrWhiteSpace($requestedTag)) {
+    $target = @{ tag = $requestedTag; id = $runName }
+    $target | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $runWorkspace "cover-target.json") -Encoding utf8
+    $rebuild = Join-Path $PSScriptRoot "..\skills\process-topic\scripts\rebuild-coverage-index.py"
+    & python $rebuild --repo $repo --clones-js-only
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to refresh coverage-clones.js"
+    }
+}
+
 $containerName = "srs-cover-$runName"
 $repoMount = "type=bind,source=$runWorkspace,target=/workspace"
 $dockerArgs = @(
@@ -148,12 +174,18 @@ function Write-ReviewHints {
     Write-Host "The source vault is not modified."
     Write-Host "Log:"
     Write-Host "  Get-Content `"$logFile`" -Wait"
-    Write-Host "Review:"
-    Write-Host "  git -C `"$runWorkspace`" status --short"
-    Write-Host "  git -C `"$runWorkspace`" diff"
+    if (-not [string]::IsNullOrWhiteSpace($requestedTag)) {
+        Write-Host "Review that tag's clone:"
+        Write-Host "  ./.cursor/sdk/switch_review.ps1 $requestedTag"
+        Write-Host "Accept (cherry-pick, delete clone, hide Clone button):"
+        Write-Host "  ./.cursor/sdk/switch_review.ps1 -Accept $requestedTag"
+        Write-Host "Drop clone without merging:"
+        Write-Host "  ./.cursor/sdk/switch_review.ps1 -Drop $requestedTag"
+    }
+    Write-Host "Back to this vault:"
+    Write-Host "  ./.cursor/sdk/switch_review.ps1 -Source"
     Write-Host "Reject:"
     Write-Host "  docker rm -f $containerName; Remove-Item -LiteralPath `"$runWorkspace`" -Recurse -Force"
-    Write-Host "Accept after reviewing: commit in the clone, then fetch/cherry-pick $agentBranch."
 }
 
 $logFile = Join-Path $runWorkspace "cover-run.log"

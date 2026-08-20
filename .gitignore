@@ -4,3 +4,6 @@ SRS/.obsidian/
 # Disposable Cursor SDK workspaces and per-call result handoffs
 .cursor/sdk/runs/
 .cursor/sdk/cover-results/
+cover-run.log
+cover-target.json
+SRS/NamesHistory/coverage-clones.js

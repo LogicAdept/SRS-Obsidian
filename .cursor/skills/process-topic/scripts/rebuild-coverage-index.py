@@ -13,6 +13,8 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -27,6 +29,60 @@ from vault_cards import (
 Node = dict[str, Any]
 
 NOTES_MARKER = "<!-- process-topic-notes -->"
+COVER_PASS_RE = re.compile(
+    r"^=== #([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*) pass", re.MULTILINE
+)
+COVER_PLAN_RE = re.compile(r"#([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*) direct=")
+
+
+def _clone_tag(run_dir: Path) -> str | None:
+    meta = run_dir / "cover-target.json"
+    if meta.is_file():
+        try:
+            tag = str(json.loads(meta.read_text(encoding="utf-8")).get("tag", "")).strip().lstrip("#")
+        except json.JSONDecodeError:
+            tag = ""
+        if tag:
+            return tag
+    log = run_dir / "cover-run.log"
+    if log.is_file():
+        text = log.read_text(encoding="utf-8", errors="replace")
+        match = COVER_PASS_RE.search(text) or COVER_PLAN_RE.search(text)
+        if match:
+            tag = match.group(1)
+            if not meta.is_file():
+                meta.write_text(
+                    json.dumps({"tag": tag, "id": run_dir.name}, indent=2) + "\n",
+                    encoding="utf-8",
+                    newline="\n",
+                )
+            return tag
+    return None
+
+
+def scan_cover_clones(repo: Path) -> dict[str, str]:
+    """Newest agent clone directory name per launched tag."""
+    runs = repo / ".cursor" / "sdk" / "runs"
+    if not runs.is_dir():
+        return {}
+    ranked: list[tuple[float, str, str]] = []
+    for path in runs.iterdir():
+        if not path.is_dir() or not (path / ".git").exists():
+            continue
+        tag = _clone_tag(path)
+        if not tag:
+            continue
+        ranked.append((path.stat().st_mtime, tag, path.name))
+    ranked.sort()
+    return {tag: name for _, tag, name in ranked}
+
+
+def write_cover_clones_js(vault: Path, clones: dict[str, str]) -> Path:
+    path = vault / "NamesHistory" / "coverage-clones.js"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = json.dumps(clones, ensure_ascii=False, indent=2)
+    path.write_text(f"window.COVER_CLONES = {payload};\n", encoding="utf-8", newline="\n")
+    return path
 
 
 def load_preserved_notes(out_path: Path) -> str:
@@ -149,8 +205,7 @@ def render_index(
         "Row color in the HTML tree: **green** ≥50% filled · **yellow** some filled · **red** cards exist but none filled · **gray** unused (`n=0`).",
         "",
         "Order: siblings (HTML) and this table are sorted by `n` descending. "
-        "HTML row buttons: **Agent** starts the Docker cover run for that leaf, or the leaves under that parent "
-        "(needs `python .cursor/sdk/cover_ui.py`); **Process/Cover/Fill/Dedup/Refine** "
+        "HTML row buttons: **Clone** appears only for a tag with a pending agent clone; **Agent** copies the Docker cover command; **Process/Cover/Fill/Dedup/Refine** "
         "copy slash commands for Cursor chat.",
         "",
         "## Counts",
@@ -182,16 +237,19 @@ def _html_node(node: Node, depth: int) -> str:
     bar = f'<span class="bar" title="{html.escape(meta)}"><i style="width:{pct}%"></i></span>'
     tag = "#" + path
     launch = f"./.cursor/sdk/run_cover_vault.ps1 {path}"
+    review = f"./.cursor/sdk/switch_review.ps1 {path}"
     cmds = "".join(
         f'<button type="button" class="copy{extra}" data-cmd="{html.escape(cmd, quote=True)}" '
-        f'data-tag="{html.escape(path, quote=True)}" title="{html.escape(cmd, quote=True)}">{label_}</button>'
-        for label_, cmd, extra in (
-            ("Agent", launch, " agent"),
-            ("Process", f"/process-topic {tag}", ""),
-            ("Cover", f"/cover-tag {tag} --limit 12", ""),
-            ("Fill", f"/fill-tag {tag} --limit 1", ""),
-            ("Dedup", f"/dedup-tag {tag} --dry-run", ""),
-            ("Refine", f"/refine-tags {tag}", ""),
+        f'data-tag="{html.escape(path, quote=True)}" title="{html.escape(cmd, quote=True)}"'
+        f'{" hidden" if hide else ""}>{label_}</button>'
+        for label_, cmd, extra, hide in (
+            ("Agent", launch, " agent", False),
+            ("Clone", review, " clone", True),
+            ("Process", f"/process-topic {tag}", "", False),
+            ("Cover", f"/cover-tag {tag} --limit 12", "", False),
+            ("Fill", f"/fill-tag {tag} --limit 1", "", False),
+            ("Dedup", f"/dedup-tag {tag} --dry-run", "", False),
+            ("Refine", f"/refine-tags {tag}", "", False),
         )
     )
     label = (
@@ -282,8 +340,6 @@ header {{
   border-bottom: 1px solid var(--line);
   padding: 12px 20px 14px;
 }}
-h1 {{ font-size: 16px; font-weight: 650; margin: 0 0 6px; }}
-.sub {{ color: var(--muted); font-size: 12px; margin-bottom: 10px; }}
 .toolbar {{ display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }}
 input[type="search"] {{
   flex: 1; min-width: 180px;
@@ -299,14 +355,29 @@ button, label.chk {{
 label.chk {{ display: inline-flex; align-items: center; gap: 6px; user-select: none; }}
 .legend {{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 12px; color: var(--muted); }}
 .legend b {{ font-weight: 600; color: var(--text); }}
-.skills {{
-  display: grid;
-  grid-template-columns: 5.5rem 1fr;
-  gap: 2px 12px;
+.hints {{
   margin: 8px 0 10px;
   font-size: 12px;
   color: var(--muted);
   max-width: 72rem;
+}}
+.hints > summary {{
+  cursor: pointer;
+  list-style: none;
+  color: var(--text);
+  font-weight: 650;
+  user-select: none;
+}}
+.hints > summary::-webkit-details-marker {{ display: none; }}
+.hints > summary::before {{ content: "▸ "; color: var(--muted); }}
+.hints[open] > summary::before {{ content: "▾ "; }}
+.skills {{
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 2px 12px;
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--muted);
 }}
 .skills dt {{ font-weight: 650; color: var(--text); }}
 .skills dd {{ margin: 0; }}
@@ -362,19 +433,23 @@ button.copy {{
   background: var(--panel);
 }}
 button.copy:hover {{ border-color: var(--accent); color: var(--accent); }}
-button.copy.copied {{ border-color: var(--green-bar); color: var(--green-bar); }}
-button.agent {{ font-weight: 600; }}
+button.copy.copied, button.nav.copied {{ border-color: var(--green-bar); color: var(--green-bar); }}
+button.agent, button.clone, button.nav {{ font-weight: 600; }}
 li.node.hidden {{ display: none; }}
 .empty-msg {{ display: none; color: var(--muted); padding: 24px; }}
 </style>
 </head>
 <body>
 <header>
-  <h1>SRS coverage index</h1>
-  <div class="sub">Generated {html.escape(generated_at)} · {len(tree_paths)} tree paths · {cards_with_tags} tagged cards ({cards_scanned} files scanned). Siblings ordered by card count, highest first. <b>Agent</b> starts a background Docker cover run for that tag. Other buttons copy a slash command for Cursor chat. Do not hand-edit; re-run the rebuild script.</div>
-  <dl class="skills">
+  <details class="hints">
+    <summary>Подсказки про теги</summary>
+    <dl class="skills">
+    <dt>Clone</dt>
+    <dd>Только у тега, по которому уже есть агент-клон. Копирует <code>./.cursor/sdk/switch_review.ps1 &lt;tag&gt;</code> — индекс в том клоне и второе окно Cursor. После <code>-Accept</code> / <code>-Drop</code> клон удаляется и кнопка пропадает.</dd>
+    <dt>Source</dt>
+    <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
     <dt>Agent</dt>
-    <dd>Docker: <code>./.cursor/sdk/run_cover_vault.ps1 &lt;tag&gt;</code> — refine + cover that leaf, or the leaves under that parent. Never covers parent nodes. Needs <code>python .cursor/sdk/cover_ui.py</code> running (and <code>CURSOR_API_KEY</code>). If the helper is down, the button copies the command.</dd>
+    <dd>Копирует <code>./.cursor/sdk/run_cover_vault.ps1 &lt;tag&gt;</code> — refine + cover that leaf, or the leaves under that parent. Never covers parent nodes. В том же shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Process</dt>
     <dd><code>/process-topic</code> — куда относится тег, что уже покрыто и каких тем не хватает; рекомендует <em>один</em> следующий скилл. Карточки не создаёт, не заполняет и не ретегает.</dd>
     <dt>Cover</dt>
@@ -385,11 +460,13 @@ li.node.hidden {{ display: none; }}
     <dd><code>/dedup-tag --dry-run</code> — ищет дубли вопросов; только отчёт, без удаления. Уберите <code>--dry-run</code> в чате, если нужно удалить.</dd>
     <dt>Refine</dt>
     <dd><code>/refine-tags</code> — правит дерево в <code>Tags.md</code> и ретегает карточки. Когда в дереве нет честного листа.</dd>
-  </dl>
+    </dl>
+  </details>
   <div class="toolbar">
     <input type="search" id="q" placeholder="Filter tags…" autocomplete="off">
     <button type="button" id="expand">Expand all</button>
     <button type="button" id="collapse">Collapse all</button>
+    <button type="button" id="open-source" class="copy nav" data-cmd="./.cursor/sdk/switch_review.ps1 -Source">Source</button>
     <label class="chk"><input type="checkbox" id="hide-unused"> Hide unused</label>
   </div>
   <div class="legend">
@@ -397,14 +474,17 @@ li.node.hidden {{ display: none; }}
     <span class="pill"><span class="dot yellow"></span><b>{tallies["yellow"]}</b> some filled</span>
     <span class="pill"><span class="dot red"></span><b>{tallies["red"]}</b> cards, 0 filled</span>
     <span class="pill"><span class="dot unused"></span><b>{tallies["unused"]}</b> unused (n=0)</span>
-    <span>n = this tag or a child · filled = n minus #New · Agent launches Docker · other buttons copy chat prompts</span>
   </div>
 </header>
 <main>
   <p class="empty-msg" id="empty">No tags match.</p>
   <ul>{body}</ul>
 </main>
+<script src="coverage-clones.js"></script>
 <script>
+document.querySelectorAll("button.clone").forEach((btn) => {{
+  btn.hidden = !((window.COVER_CLONES || {{}})[btn.dataset.tag]);
+}});
 const nodes = [...document.querySelectorAll("li.node")];
 const empty = document.getElementById("empty");
 function applyFilter() {{
@@ -443,10 +523,10 @@ function applyFilter() {{
 document.getElementById("q").addEventListener("input", applyFilter);
 document.getElementById("hide-unused").addEventListener("change", applyFilter);
 document.getElementById("expand").addEventListener("click", () => {{
-  document.querySelectorAll("details").forEach((d) => d.open = true);
+  document.querySelectorAll("main details").forEach((d) => d.open = true);
 }});
 document.getElementById("collapse").addEventListener("click", () => {{
-  document.querySelectorAll("details").forEach((d) => d.open = false);
+  document.querySelectorAll("main details").forEach((d) => d.open = false);
 }});
 async function copyCmd(cmd) {{
   try {{
@@ -465,46 +545,24 @@ async function copyCmd(cmd) {{
     return ok;
   }}
 }}
-document.querySelector("main").addEventListener("click", async (e) => {{
-  const btn = e.target.closest("button.copy");
-  if (!btn) return;
-  e.preventDefault();
-  e.stopPropagation();
-  const cmd = btn.dataset.cmd;
-  if (!cmd) return;
-  const prev = btn.textContent;
-  const flash = (text, ok) => {{
-    btn.textContent = text;
+document.querySelectorAll("header, main").forEach((root) => {{
+  root.addEventListener("click", async (e) => {{
+    const btn = e.target.closest("button.copy");
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const cmd = btn.dataset.cmd;
+    if (!cmd) return;
+    const prev = btn.textContent;
+    const ok = await copyCmd(cmd);
+    btn.textContent = ok ? "Copied" : "Failed";
     btn.classList.toggle("copied", ok);
     setTimeout(() => {{
       btn.textContent = prev;
       btn.classList.remove("copied");
     }}, 1600);
-  }};
-  if (btn.classList.contains("agent")) {{
-    const tag = btn.dataset.tag;
-    try {{
-      const res = await fetch("http://127.0.0.1:8765/launch", {{
-        method: "POST",
-        headers: {{ "Content-Type": "application/json" }},
-        body: JSON.stringify({{ tag }}),
-      }});
-      const body = await res.json().catch(() => ({{}}));
-      if (res.ok && body.ok) {{
-        flash("Started", true);
-        return;
-      }}
-      flash(body.error || "Failed", false);
-      return;
-    }} catch (err) {{
-      const ok = await copyCmd(cmd);
-      flash(ok ? "Copied" : "Start helper", ok);
-      return;
-    }}
-  }}
-  const ok = await copyCmd(cmd);
-  flash(ok ? "Copied" : "Failed", ok);
-}}, true);
+  }}, true);
+}});
 </script>
 </body>
 </html>
@@ -519,9 +577,19 @@ def main() -> int:
         default=None,
         help="Git repo root (default: inferred from this script path).",
     )
+    parser.add_argument(
+        "--clones-js-only",
+        action="store_true",
+        help="Rewrite coverage-clones.js from .cursor/sdk/runs without rebuilding the index.",
+    )
     args = parser.parse_args()
     root = args.repo.resolve() if args.repo else repo_root_from_script()
     vault = root / "SRS"
+    clones = scan_cover_clones(root)
+    clones_js = write_cover_clones_js(vault, clones)
+    if args.clones_js_only:
+        print(f"Wrote {clones_js} ({len(clones)} pending clones)")
+        return 0
     tags_md = vault / "Format" / "Tags.md"
     out_md = vault / "NamesHistory" / "coverage-index.md"
     out_html = vault / "NamesHistory" / "coverage-index.html"
@@ -574,6 +642,7 @@ def main() -> int:
         newline="\n",
     )
     print(f"Wrote {out_md} and {out_html} ({len(rows)} paths, {cards_with_tags} tagged cards)")
+    print(f"Wrote {clones_js} ({len(clones)} pending clones)")
     return 0
 
 
