@@ -206,7 +206,7 @@ def render_index(
         "",
         "Order: siblings (HTML) and this table are sorted by `n` descending. "
         "HTML row buttons: **Agent** copies the Docker cover command. **Clone** (only if a clone exists) "
-        "opens a menu: Open / Accept / Drop. **…** hides Process/Cover/Fill/Dedup/Refine chat commands.",
+        "opens a menu: Open / Continue / Accept / Drop. **…** hides Process/Cover/Fill/Dedup/Refine chat commands.",
         "",
         "## Counts",
         "",
@@ -262,6 +262,7 @@ def _html_node(node: Node, depth: int) -> str:
         "".join(
             (
                 _copy_btn("Open", review, path),
+                _copy_btn("Continue", launch, path, " continue"),
                 _copy_btn("Accept", accept, path),
                 _copy_btn("Drop", drop, path),
             )
@@ -500,7 +501,7 @@ li.node.hidden {{ display: none; }}
     <dt>Agent</dt>
     <dd>Копирует <code>./.cursor/sdk/run_cover_vault.ps1 &lt;tag&gt;</code> — refine + cover that leaf, or the leaves under that parent. Never covers parent nodes. В том же shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Clone</dt>
-    <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — <code>./.cursor/sdk/switch_review.ps1 &lt;tag&gt;</code>. <b>Accept</b> — <code>-Accept</code> (cherry-pick в исходный vault и удалить клон). <b>Drop</b> — <code>-Drop</code> (удалить без переноса). После Accept/Drop меню пропадает.</dd>
+    <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — второе окно на клон. <b>Continue</b> — ещё один Docker-прогон в тот же клон (как Agent, без нового clone). <b>Accept</b> — cherry-pick в исходный vault и удалить клон. <b>Drop</b> — удалить без переноса. После Accept/Drop меню пропадает.</dd>
     <dt>Source</dt>
     <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
     <dt>…</dt>
@@ -528,7 +529,14 @@ li.node.hidden {{ display: none; }}
 <script src="coverage-clones.js"></script>
 <script>
 document.querySelectorAll(".clone-menu").forEach((el) => {{
-  el.hidden = !((window.COVER_CLONES || {{}})[el.dataset.tag]);
+  const id = (window.COVER_CLONES || {{}})[el.dataset.tag];
+  el.hidden = !id;
+  const cont = el.querySelector("button.continue");
+  if (cont && id) {{
+    const cmd = "./.cursor/sdk/run_cover_vault.ps1 --workspace .cursor/sdk/runs/" + id + " " + el.dataset.tag;
+    cont.dataset.cmd = cmd;
+    cont.title = cmd;
+  }}
 }});
 document.querySelectorAll(".menu").forEach((menu) => {{
   menu.addEventListener("click", (e) => e.stopPropagation());
