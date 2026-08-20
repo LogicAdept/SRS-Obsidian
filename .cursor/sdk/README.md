@@ -12,8 +12,9 @@ In a shell with a clean repo and `CURSOR_API_KEY` set:
 ./.cursor/sdk/run_cover_vault.ps1 Java/Language/Primitives/ShortType
 ```
 
-HTML **Agent** copies that command. After the run, a **Clone** button appears on
-that tag only. **Source** in the header returns to this vault.
+HTML **Agent** copies that command. After the run, **Clone ▾** appears on that
+tag only (Open / Accept / Drop). Chat skills are under **…**. **Source** in the
+header returns to this vault.
 
 ```powershell
 Get-Content .cursor/sdk/runs/<id>/cover-run.log -Wait

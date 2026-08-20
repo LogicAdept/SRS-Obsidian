@@ -205,8 +205,8 @@ def render_index(
         "Row color in the HTML tree: **green** ≥50% filled · **yellow** some filled · **red** cards exist but none filled · **gray** unused (`n=0`).",
         "",
         "Order: siblings (HTML) and this table are sorted by `n` descending. "
-        "HTML row buttons: **Clone** appears only for a tag with a pending agent clone; **Agent** copies the Docker cover command; **Process/Cover/Fill/Dedup/Refine** "
-        "copy slash commands for Cursor chat.",
+        "HTML row buttons: **Agent** copies the Docker cover command. **Clone** (only if a clone exists) "
+        "opens a menu: Open / Accept / Drop. **…** hides Process/Cover/Fill/Dedup/Refine chat commands.",
         "",
         "## Counts",
         "",
@@ -219,6 +219,23 @@ def render_index(
     if notes:
         lines.append(notes if notes.endswith("\n") else notes + "\n")
     return "\n".join(lines)
+
+
+def _copy_btn(label: str, cmd: str, path: str, extra: str = "") -> str:
+    return (
+        f'<button type="button" class="copy{extra}" data-cmd="{html.escape(cmd, quote=True)}" '
+        f'data-tag="{html.escape(path, quote=True)}" title="{html.escape(cmd, quote=True)}">{label}</button>'
+    )
+
+
+def _menu(summary: str, buttons: str, extra: str, path: str, hidden: bool = False) -> str:
+    hide = " hidden" if hidden else ""
+    return (
+        f'<details class="menu{extra}" data-tag="{html.escape(path, quote=True)}"{hide}>'
+        f"<summary>{html.escape(summary)}</summary>"
+        f'<div class="menu-list">{buttons}</div>'
+        f"</details>"
+    )
 
 
 def _html_node(node: Node, depth: int) -> str:
@@ -238,20 +255,36 @@ def _html_node(node: Node, depth: int) -> str:
     tag = "#" + path
     launch = f"./.cursor/sdk/run_cover_vault.ps1 {path}"
     review = f"./.cursor/sdk/switch_review.ps1 {path}"
-    cmds = "".join(
-        f'<button type="button" class="copy{extra}" data-cmd="{html.escape(cmd, quote=True)}" '
-        f'data-tag="{html.escape(path, quote=True)}" title="{html.escape(cmd, quote=True)}"'
-        f'{" hidden" if hide else ""}>{label_}</button>'
-        for label_, cmd, extra, hide in (
-            ("Agent", launch, " agent", False),
-            ("Clone", review, " clone", True),
-            ("Process", f"/process-topic {tag}", "", False),
-            ("Cover", f"/cover-tag {tag} --limit 12", "", False),
-            ("Fill", f"/fill-tag {tag} --limit 1", "", False),
-            ("Dedup", f"/dedup-tag {tag} --dry-run", "", False),
-            ("Refine", f"/refine-tags {tag}", "", False),
-        )
+    accept = f"./.cursor/sdk/switch_review.ps1 -Accept {path}"
+    drop = f"./.cursor/sdk/switch_review.ps1 -Drop {path}"
+    clone_menu = _menu(
+        "Clone",
+        "".join(
+            (
+                _copy_btn("Open", review, path),
+                _copy_btn("Accept", accept, path),
+                _copy_btn("Drop", drop, path),
+            )
+        ),
+        " clone-menu",
+        path,
+        hidden=True,
     )
+    chat_menu = _menu(
+        "…",
+        "".join(
+            (
+                _copy_btn("Process", f"/process-topic {tag}", path),
+                _copy_btn("Cover", f"/cover-tag {tag} --limit 12", path),
+                _copy_btn("Fill", f"/fill-tag {tag} --limit 1", path),
+                _copy_btn("Dedup", f"/dedup-tag {tag} --dry-run", path),
+                _copy_btn("Refine", f"/refine-tags {tag}", path),
+            )
+        ),
+        " chat-menu",
+        path,
+    )
+    cmds = _copy_btn("Agent", launch, path, " agent") + clone_menu + chat_menu
     label = (
         f'<span class="swatch" aria-hidden="true"></span>'
         f'<code class="name" title="{full}">{name}</code>'
@@ -427,14 +460,34 @@ li.node[data-status="green"] > details > summary .bar i {{ background: var(--gre
 li.node[data-status="unused"] > .row .bar i,
 li.node[data-status="unused"] > details > summary .bar i {{ width: 0 !important; }}
 .meta {{ color: var(--muted); font-size: 12px; white-space: nowrap; }}
-.cmds {{ display: flex; flex-wrap: wrap; gap: 4px; flex: none; }}
+.cmds {{ display: flex; flex-wrap: wrap; gap: 4px; flex: none; align-items: center; }}
 button.copy {{
   padding: 2px 7px; font-size: 11px; line-height: 1.3;
   background: var(--panel);
 }}
 button.copy:hover {{ border-color: var(--accent); color: var(--accent); }}
 button.copy.copied, button.nav.copied {{ border-color: var(--green-bar); color: var(--green-bar); }}
-button.agent, button.clone, button.nav {{ font-weight: 600; }}
+button.agent, button.nav, .menu.clone-menu > summary {{ font-weight: 600; }}
+.menu {{ position: relative; display: inline-block; }}
+.menu > summary {{
+  list-style: none; cursor: pointer; user-select: none;
+  padding: 2px 7px; font-size: 11px; line-height: 1.3;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel); color: var(--text);
+}}
+.menu > summary::-webkit-details-marker {{ display: none; }}
+.menu > summary::after {{ content: " ▾"; color: var(--muted); font-weight: 400; }}
+.menu[open] > summary {{ border-color: var(--accent); color: var(--accent); }}
+.menu[open] > summary::after {{ content: " ▴"; color: var(--accent); }}
+.menu-list {{
+  position: absolute; right: 0; z-index: 6;
+  display: flex; flex-direction: column; gap: 2px;
+  margin-top: 4px; padding: 4px; min-width: 7.5rem;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+}}
+.menu-list .copy {{ width: 100%; text-align: left; }}
+.menu.clone-menu[hidden] {{ display: none !important; }}
 li.node.hidden {{ display: none; }}
 .empty-msg {{ display: none; color: var(--muted); padding: 24px; }}
 </style>
@@ -444,22 +497,14 @@ li.node.hidden {{ display: none; }}
   <details class="hints">
     <summary>Подсказки про теги</summary>
     <dl class="skills">
-    <dt>Clone</dt>
-    <dd>Только у тега, по которому уже есть агент-клон. Копирует <code>./.cursor/sdk/switch_review.ps1 &lt;tag&gt;</code> — индекс в том клоне и второе окно Cursor. После <code>-Accept</code> / <code>-Drop</code> клон удаляется и кнопка пропадает.</dd>
-    <dt>Source</dt>
-    <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
     <dt>Agent</dt>
     <dd>Копирует <code>./.cursor/sdk/run_cover_vault.ps1 &lt;tag&gt;</code> — refine + cover that leaf, or the leaves under that parent. Never covers parent nodes. В том же shell нужен <code>CURSOR_API_KEY</code>.</dd>
-    <dt>Process</dt>
-    <dd><code>/process-topic</code> — куда относится тег, что уже покрыто и каких тем не хватает; рекомендует <em>один</em> следующий скилл. Карточки не создаёт, не заполняет и не ретегает.</dd>
-    <dt>Cover</dt>
-    <dd><code>/cover-tag</code> — берёт вопросы из GitHub-подборок и страниц со списками вопросов, создаёт <code>#New</code>: черновик с ответом из источника, если он есть, иначе пустую заготовку (по умолчанию 12).</dd>
-    <dt>Fill</dt>
-    <dd><code>/fill-tag</code> — пишет доверенные ответы GoldStandard по официальным докам и снимает <code>#New</code> (по умолчанию 1 карточка).</dd>
-    <dt>Dedup</dt>
-    <dd><code>/dedup-tag --dry-run</code> — ищет дубли вопросов; только отчёт, без удаления. Уберите <code>--dry-run</code> в чате, если нужно удалить.</dd>
-    <dt>Refine</dt>
-    <dd><code>/refine-tags</code> — правит дерево в <code>Tags.md</code> и ретегает карточки. Когда в дереве нет честного листа.</dd>
+    <dt>Clone</dt>
+    <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — <code>./.cursor/sdk/switch_review.ps1 &lt;tag&gt;</code>. <b>Accept</b> — <code>-Accept</code> (cherry-pick в исходный vault и удалить клон). <b>Drop</b> — <code>-Drop</code> (удалить без переноса). После Accept/Drop меню пропадает.</dd>
+    <dt>Source</dt>
+    <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
+    <dt>…</dt>
+    <dd>Process / Cover / Fill / Dedup / Refine — slash-команды для чата Cursor, не Docker-флоу.</dd>
     </dl>
   </details>
   <div class="toolbar">
@@ -482,8 +527,17 @@ li.node.hidden {{ display: none; }}
 </main>
 <script src="coverage-clones.js"></script>
 <script>
-document.querySelectorAll("button.clone").forEach((btn) => {{
-  btn.hidden = !((window.COVER_CLONES || {{}})[btn.dataset.tag]);
+document.querySelectorAll(".clone-menu").forEach((el) => {{
+  el.hidden = !((window.COVER_CLONES || {{}})[el.dataset.tag]);
+}});
+document.querySelectorAll(".menu").forEach((menu) => {{
+  menu.addEventListener("click", (e) => e.stopPropagation());
+  menu.addEventListener("toggle", () => {{
+    if (!menu.open) return;
+    document.querySelectorAll(".menu").forEach((other) => {{
+      if (other !== menu) other.open = false;
+    }});
+  }});
 }});
 const nodes = [...document.querySelectorAll("li.node")];
 const empty = document.getElementById("empty");
@@ -523,10 +577,10 @@ function applyFilter() {{
 document.getElementById("q").addEventListener("input", applyFilter);
 document.getElementById("hide-unused").addEventListener("change", applyFilter);
 document.getElementById("expand").addEventListener("click", () => {{
-  document.querySelectorAll("main details").forEach((d) => d.open = true);
+  document.querySelectorAll("li.node > details").forEach((d) => d.open = true);
 }});
 document.getElementById("collapse").addEventListener("click", () => {{
-  document.querySelectorAll("main details").forEach((d) => d.open = false);
+  document.querySelectorAll("li.node > details").forEach((d) => d.open = false);
 }});
 async function copyCmd(cmd) {{
   try {{
