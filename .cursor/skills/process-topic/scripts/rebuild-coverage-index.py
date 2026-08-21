@@ -29,34 +29,50 @@ from vault_cards import (
 Node = dict[str, Any]
 
 NOTES_MARKER = "<!-- process-topic-notes -->"
-COVER_PASS_RE = re.compile(
-    r"^=== #([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*) pass", re.MULTILINE
+COVER_TAG_RE = re.compile(r"[A-Za-z0-9]+(?:/[A-Za-z0-9]+)*")
+COVER_TARGET_TAG_RE = re.compile(r'"tag"\s*:\s*"(' + COVER_TAG_RE.pattern + r')"')
+FOCUSED_PLAN_RE = re.compile(
+    r"^=== focused taxonomy plan for #(" + COVER_TAG_RE.pattern + r") ===",
+    re.MULTILINE,
 )
-COVER_PLAN_RE = re.compile(r"#([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*) direct=")
+COVER_PASS_RE = re.compile(
+    r"^=== #(" + COVER_TAG_RE.pattern + r") pass", re.MULTILINE
+)
+
+
+def _normalize_clone_tag(raw: Any) -> str:
+    tag = str(raw or "").strip().lstrip("#")
+    return tag if COVER_TAG_RE.fullmatch(tag) else ""
+
+
+def _read_cover_target_tag(meta: Path) -> str:
+    """Launched tag from cover-target.json. Never a later focused leaf."""
+    try:
+        raw = meta.read_text(encoding="utf-8-sig")
+    except OSError:
+        return ""
+    try:
+        tag = _normalize_clone_tag(json.loads(raw).get("tag", ""))
+        if tag:
+            return tag
+    except json.JSONDecodeError:
+        pass
+    match = COVER_TARGET_TAG_RE.search(raw)
+    return _normalize_clone_tag(match.group(1) if match else "")
 
 
 def _clone_tag(run_dir: Path) -> str | None:
     meta = run_dir / "cover-target.json"
     if meta.is_file():
-        try:
-            tag = str(json.loads(meta.read_text(encoding="utf-8")).get("tag", "")).strip().lstrip("#")
-        except json.JSONDecodeError:
-            tag = ""
+        tag = _read_cover_target_tag(meta)
         if tag:
             return tag
     log = run_dir / "cover-run.log"
     if log.is_file():
         text = log.read_text(encoding="utf-8", errors="replace")
-        match = COVER_PASS_RE.search(text) or COVER_PLAN_RE.search(text)
+        match = FOCUSED_PLAN_RE.search(text) or COVER_PASS_RE.search(text)
         if match:
-            tag = match.group(1)
-            if not meta.is_file():
-                meta.write_text(
-                    json.dumps({"tag": tag, "id": run_dir.name}, indent=2) + "\n",
-                    encoding="utf-8",
-                    newline="\n",
-                )
-            return tag
+            return match.group(1)
     return None
 
 

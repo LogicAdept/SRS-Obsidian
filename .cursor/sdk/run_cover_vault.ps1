@@ -172,7 +172,13 @@ if (-not [string]::IsNullOrWhiteSpace($requestedTag)) {
     if (-not [string]::IsNullOrWhiteSpace($focus)) {
         $target.focus = $focus
     }
-    $target | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $runWorkspace "cover-target.json") -Encoding utf8
+    $targetJson = ($target | ConvertTo-Json) + "`n"
+    $utf8 = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText(
+        (Join-Path $runWorkspace "cover-target.json"),
+        $targetJson,
+        $utf8
+    )
     $rebuild = Join-Path $PSScriptRoot "..\skills\process-topic\scripts\rebuild-coverage-index.py"
     & python $rebuild --repo $repo --clones-js-only
     if ($LASTEXITCODE -ne 0) {

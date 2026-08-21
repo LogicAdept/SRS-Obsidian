@@ -14,8 +14,9 @@ In a shell with a clean repo and `CURSOR_API_KEY` set:
 
 HTML **Agent ▾ → General** copies that command. **Agent ▾ → Focused** copies
 the same command with empty `--focus ''`; fill the quotes in the terminal.
-After a run, **Clone ▾** appears on that tag only (Open / Continue / Focused /
-Accept / Drop). Chat skills are under **…**. **Source** returns to this vault.
+After a run, **Clone ▾** appears on the **launched** tag only (Open / Continue /
+Focused / Accept / Drop), even if Focused created a new descendant leaf. Chat
+skills are under **…**. **Source** returns to this vault.
 
 ```powershell
 Get-Content .cursor/sdk/runs/<id>/cover-run.log -Wait

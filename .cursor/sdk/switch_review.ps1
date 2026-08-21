@@ -138,21 +138,28 @@ function Rebuild-CloneIndex([string]$ClonePath) {
 function Read-CloneTag([string]$ClonePath) {
     $meta = Join-Path $ClonePath "cover-target.json"
     if (Test-Path -LiteralPath $meta) {
-        $data = Get-Content -LiteralPath $meta -Raw -Encoding UTF8 | ConvertFrom-Json
-        $value = [string]$data.tag
-        if (-not [string]::IsNullOrWhiteSpace($value)) {
-            return $value.TrimStart("#")
+        $raw = [System.IO.File]::ReadAllText($meta)
+        try {
+            $data = $raw | ConvertFrom-Json
+            $value = [string]$data.tag
+            if (-not [string]::IsNullOrWhiteSpace($value)) {
+                return $value.TrimStart("#")
+            }
+        } catch {
+        }
+        if ($raw -match '"tag"\s*:\s*"([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*)"') {
+            return $Matches[1]
         }
     }
     $log = Join-Path $ClonePath "cover-run.log"
     if (Test-Path -LiteralPath $log) {
         foreach ($line in Get-Content -LiteralPath $log -Encoding UTF8) {
-            if ($line -match '^=== #([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*) pass') {
+            if ($line -match '^=== focused taxonomy plan for #([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*)') {
                 return $Matches[1]
             }
         }
         foreach ($line in Get-Content -LiteralPath $log -Encoding UTF8) {
-            if ($line -match '#([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*) direct=') {
+            if ($line -match '^=== #([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*) pass') {
                 return $Matches[1]
             }
         }
