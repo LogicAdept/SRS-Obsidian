@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/Testing #Java/Annotations #SRS #New
+#Java/Spring/Framework/Testing #Java/Annotations #Java/Spring/Transactions #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

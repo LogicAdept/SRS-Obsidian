@@ -1,4 +1,207 @@
 {
-  "nodes": {},
+  "nodes": {
+    "Java/Spring/Transactions": {
+      "children": [
+        "Java/Spring/Transactions/Propagation"
+      ],
+      "coverage_fingerprint": "9db7fc8a88b3ffbce1b80765e34b8f3a330bd41b3604c32c1b977fdaa61352cb",
+      "last_created": 0,
+      "last_error": "fingerprint changed",
+      "passes": 1,
+      "refined_taxonomy_fingerprints": [
+        "0e7ba34ef81c7bf838aba9351d69dee21a4051c94fbef1cc16b2f5caf0e9d90a"
+      ],
+      "status": "dirty",
+      "taxonomy_fingerprint": "5c2c372cc86b3b30ec19821616baeca592bdcd082f64139f933ef367efb2b7cc"
+    },
+    "Java/Spring/Transactions/Propagation": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "New comparison cards: REQUIRED vs REQUIRES_NEW, NESTED vs REQUIRES_NEW, NESTED vs REQUIRED, SUPPORTS vs NOT_SUPPORTED, MANDATORY vs NEVER."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "Existing cards already define the term and list the seven Propagation values: How would you explain Propagation; What are Spring transaction propagation levels."
+          ],
+          "required": false,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "New cards cover UnexpectedRollbackException, NESTED JDBC-savepoint limits, REQUIRES_NEW pool exhaustion, and same-row deadlock while the outer transaction is suspended."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "New per-value how-it-works cards for REQUIRED, REQUIRES_NEW, NESTED, SUPPORTS, NOT_SUPPORTED, MANDATORY, and NEVER, plus join semantics for isolation/timeout/readOnly."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "missing_definition_gaps": {
+          "evidence": [
+            "Named enum values and UnexpectedRollbackException now have dedicated cues; remaining interview titles were parent-owned (self-invocation, rollbackFor) or duplicates of the existing seven-level list."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "procedure_operations": {
+          "evidence": [
+            "Existing When should you use REQUIRES_NEW, plus new when-to-use cards for NESTED, MANDATORY, NEVER, SUPPORTS, NOT_SUPPORTED, and a how-to-test REQUIRES_NEW independence cue."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "7efc3944642771f76cbde7bb4479c78863d608c84ae0bd91df2d12ab62cc1296",
+      "deferred_candidates": [
+        "Why does @Transactional not work on internal calls / self-invocation with REQUIRES_NEW -> #Java/Spring/Transactions (existing card What happens when one Spring Transactional method calls another)",
+        "How to handle checked exceptions and rollbackFor -> #Java/Spring/Transactions",
+        "How to implement the transactional outbox pattern -> #Java/Spring/Transactions or integration patterns, not this leaf",
+        "Does @Transactional work across threads -> #Java/Spring/Transactions",
+        "Best practices for default transaction configuration / timeout -> #Java/Spring/Transactions",
+        "Isolation-level dirty/non-repeatable/phantom table -> #Databases/SQL/Transactions"
+      ],
+      "last_created": 24,
+      "last_error": null,
+      "passes": 1,
+      "refined_taxonomy_fingerprint": "11630f30ebc6ce56069d72ed64b0347916c2d6a4df09988bb67a5a36bec5d2a3",
+      "refined_taxonomy_fingerprints": [
+        "11630f30ebc6ce56069d72ed64b0347916c2d6a4df09988bb67a5a36bec5d2a3"
+      ],
+      "sources_searched": {
+        "interview": [
+          "https://github.com/DEBAGanov/interview_questions/blob/main/C%D0%BE%D0%B1%D0%B5%D1%81%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20Java.%20Spring%20Framework.md",
+          "https://github.com/alitalhacoban/backend-interview-questions-2026",
+          "https://github.com/JavaJub/java-interview",
+          "https://github.com/timmson/java-interview/blob/main/011-spring.md",
+          "https://github.com/Ilinich/java-interview-1/blob/master/011-spring.md",
+          "https://github.com/Devinterview-io/spring-interview-questions",
+          "https://github.com/enhorse/java-interview",
+          "https://github.com/yogi388/spring-interview-questions",
+          "https://github.com/bikkimahato/spring-interview-questions",
+          "https://github.com/Sathish2905/spring_interview_questions",
+          "https://github.com/rahulmoundekar/Spring-Framework-Interview-Question",
+          "https://github.com/WeKnow-io/java-interview-questions",
+          "https://github.com/Venkatesh-Bharath/Java-Full-Stack-interview-questions-3-to-10-years-experience/blob/main/SpringBoot.md",
+          "https://gist.github.com/carefree-ladka/b84ea8c4076fab8d186dbded65f52569",
+          "https://sharpskill.dev/en/blog/spring-boot/spring-boot-transaction-propagation-interview",
+          "https://interviewasssistant.com/en/interview-questions/spring-transaction-propagation",
+          "https://medium.com/@javatechie/transaction-propagation-explained-in-detail-8c3a5c39fbb2",
+          "https://theskilledcoder.com/java-interview/transactions"
+        ],
+        "official": [
+          "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/tx-propagation.html",
+          "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Propagation.html",
+          "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/txdeclarative-settings.html"
+        ]
+      },
+      "status": "complete",
+      "taxonomy_fingerprint": "11630f30ebc6ce56069d72ed64b0347916c2d6a4df09988bb67a5a36bec5d2a3"
+    },
+    "Java/Spring/Transactions/SelfInvocation": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "New cue What is the difference between a self-invocation and a cross-bean Transactional call."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "Existing leaf cue What happens when one Spring Transactional method calls another plus How would you explain self-invocation already define proxy bypass."
+          ],
+          "required": false,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "New cue Why can a self-invoked REQUIRES_NEW method still roll back the outer transaction covers the popular lie that REQUIRES_NEW always isolates rollback."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "New cards explain cross-bean vs this-call interceptor paths and the no-transaction case when a non-transactional method self-invokes @Transactional."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "missing_definition_gaps": {
+          "evidence": [
+            "Named terms self-invocation, proxy bypass, REQUIRES_NEW-on-this, and AspectJ tx mode are cued; AopContext and rollbackFor stay on sibling tags."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "procedure_operations": {
+          "evidence": [
+            "New how-to cue for extract-bean / @Lazy self-injection, plus when to use AspectJ mode for transactional self-invocation."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "6507613a432e4b6ce9a72052844ac81c55e99e0c318a787ee0e54d156125b0c5",
+      "deferred_candidates": [
+        "Why does @Transactional skip this.method() in general -> existing leaf What happens when one Spring Transactional method calls another and AOP cue Why does a self-invocation skip Spring AOP advice",
+        "AopContext.currentProxy / exposeProxy=true -> #Java/Spring/Framework/AOP (already listed on Why does a self-invocation skip Spring AOP advice)",
+        "REQUIRED vs REQUIRES_NEW without a self-call -> #Java/Spring/Transactions/Propagation",
+        "UnexpectedRollbackException when a cross-bean REQUIRED inner throws and the outer catches -> #Java/Spring/Transactions/Propagation",
+        "rollbackFor / checked exceptions -> #Java/Spring/Transactions",
+        "TransactionTemplate as a self-invocation workaround -> #Java/Spring/Transactions (programmatic vs declarative)",
+        "@Transactional on private or final methods -> #Java/Spring/Transactions or #Java/Spring/Framework/AOP",
+        "Circular dependency from self-injection -> #Java/Spring/Core/IoC (How do you fix a circular dependency caused by self-injection in Spring)",
+        "@Async / @Cacheable self-invocation -> those tags, not this leaf"
+      ],
+      "last_created": 5,
+      "last_error": null,
+      "last_focus": "Calls between @Transactional methods: self-invocation, cross-bean calls, propagation and rollback",
+      "passes": 1,
+      "refined_taxonomy_fingerprint": "bbb575f86bf42329654cae5d383bbeb19833a5a4e1f4402defa45b46b8cc802c",
+      "sources_searched": {
+        "interview": [
+          "https://github.com/sajidhamdard/java-full-stack-interview-questions/blob/main/proxy-transaction.md",
+          "https://github.com/alitalhacoban/backend-interview-questions-2026",
+          "https://github.com/alitalhacoban/backend-interview-questions-2026/blob/main/docs/spring-boot/05-spring-data-jpa-and-transactions.md",
+          "https://github.com/DEBAGanov/interview_questions/blob/main/C%D0%BE%D0%B1%D0%B5%D1%81%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20Java.%20Spring%20Framework.md",
+          "https://github.com/Devinterview-io/spring-interview-questions",
+          "https://github.com/timmson/java-interview/blob/main/011-spring.md",
+          "https://github.com/Ilinich/java-interview-1/blob/master/011-spring.md",
+          "https://github.com/Venkatesh-Bharath/Java-Full-Stack-interview-questions-3-to-10-years-experience/blob/main/SpringBoot.md",
+          "https://gist.github.com/carefree-ladka/b84ea8c4076fab8d186dbded65f52569",
+          "https://github.com/Sathish2905/spring_interview_questions",
+          "https://github.com/yogi388/spring-interview-questions",
+          "https://www.springcertified.com/blog/spring-interview-questions",
+          "https://sharpskill.dev/en/blog/spring-boot/spring-boot-transaction-propagation-interview",
+          "https://vamsilabs.netlify.app/springboot/aop/",
+          "https://theskilledcoder.com/java-interview/transactions",
+          "https://interviewasssistant.com/en/interview-questions/spring-transaction-propagation",
+          "https://javabulletin.substack.com/p/spring-boot-interview-question-transactional"
+        ],
+        "official": [
+          "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html",
+          "https://docs.spring.io/spring-framework/reference/core/aop/proxying.html",
+          "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/tx-propagation.html"
+        ]
+      },
+      "status": "complete",
+      "taxonomy_fingerprint": "bbb575f86bf42329654cae5d383bbeb19833a5a4e1f4402defa45b46b8cc802c"
+    }
+  },
   "version": 2
 }

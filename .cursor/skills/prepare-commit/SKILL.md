@@ -80,24 +80,22 @@ If there is nothing to commit, say that. Do not invent a command.
 Unstaged leftover that you intentionally skipped: mention it **above** the
 block, not inside it.
 
-Template (closing `'@` must be at column 0):
+Chat copy-paste often flattens the fence into one line. Do **not** use
+backtick line continuation or a here-string (`@' … '@`): both need real
+newlines and fail with `UnexpectedCharactersAfterHereStringHeader`.
+
+Use one paste-safe line: spaces between `git add` paths, `;` before
+`git commit`, a PowerShell single-quoted `-m` string. If the message
+contains `'`, double it (`'it''s'`).
 
 ```powershell
-git add -- `
-  "path/one" `
-  "path/two"
-git commit -m @'
-Subject line here.
-'@
+git add -- "path/one" "path/two"; git commit -m 'Subject line here.'
 ```
 
 If everything to commit is already staged:
 
 ```powershell
-git commit -m @'
-Subject line here.
-'@
+git commit -m 'Subject line here.'
 ```
 
-Use a PowerShell single-quoted here-string (`@' … '@`) so quotes in the message
-stay literal. One `git add --` plus one `git commit`. Do not add `git push`.
+One `git add --` plus one `git commit`. Do not add `git push`.

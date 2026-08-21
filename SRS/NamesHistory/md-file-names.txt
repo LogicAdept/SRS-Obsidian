@@ -3990,3 +3990,32 @@
 - [+] What is SavedRequest.md
 - [+] What is the difference between Principal and UserDetails.md
 - [+] What is WebAuthenticationDetails.md
+- [+] How does REQUIRED transaction propagation work.md
+- [+] How does REQUIRES_NEW transaction propagation work.md
+- [+] How does NESTED transaction propagation work.md
+- [+] How does SUPPORTS transaction propagation work.md
+- [+] How does NOT_SUPPORTED transaction propagation work.md
+- [+] How does MANDATORY transaction propagation work.md
+- [+] How does NEVER transaction propagation work.md
+- [+] What is the difference between REQUIRED and REQUIRES_NEW propagation.md
+- [+] What is the difference between NESTED and REQUIRES_NEW propagation.md
+- [+] What is the difference between SUPPORTS and NOT_SUPPORTED propagation.md
+- [+] What is the difference between MANDATORY and NEVER propagation.md
+- [+] What is the difference between NESTED and REQUIRED propagation.md
+- [+] What is UnexpectedRollbackException in Spring REQUIRED propagation.md
+- [+] What happens to isolation timeout and readOnly when REQUIRED joins an outer transaction.md
+- [+] Why can REQUIRES_NEW exhaust the connection pool.md
+- [+] Does NESTED propagation require JDBC savepoints.md
+- [+] When should you use NESTED transaction propagation.md
+- [+] When should you use MANDATORY transaction propagation.md
+- [+] When should you use NEVER transaction propagation.md
+- [+] When should you use SUPPORTS transaction propagation.md
+- [+] When should you use NOT_SUPPORTED transaction propagation.md
+- [+] How do you test that REQUIRES_NEW commits independently of the outer transaction.md
+- [+] What happens if NESTED is used when no current transaction exists.md
+- [+] Why can REQUIRES_NEW deadlock when inner and outer touch the same rows.md
+- [+] What is the difference between a self-invocation and a cross-bean Transactional call.md
+- [+] What happens when a non-transactional method calls a Transactional method in the same class.md
+- [+] Why can a self-invoked REQUIRES_NEW method still roll back the outer transaction.md
+- [+] How do you make an inner Transactional method honor its annotation.md
+- [+] When should you use AspectJ mode for Transactional self-invocation.md
