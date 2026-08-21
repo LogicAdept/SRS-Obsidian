@@ -709,6 +709,98 @@
       },
       "status": "complete",
       "taxonomy_fingerprint": "bbb575f86bf42329654cae5d383bbeb19833a5a4e1f4402defa45b46b8cc802c"
+    },
+    "Java/Annotations": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "New SOURCE vs CLASS vs RUNTIME, marker vs single-member vs multi-member, annotations vs comments, TYPE vs TYPE_USE. Existing stub How would you explain marker interfaces and why annotations largely replaced them already covers the marker-interface comparison."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "No prior definition cue for the Java annotation type; added What is a Java annotation and What are meta-annotations in Java from interview dumps."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "Covered default CLASS vs popular RUNTIME lie, cannot extend @interface, duplicate ElementType in Target, Object as illegal member type, TYPE_USE vs dump ElementType.USE, and java.text package lie. Java 8 repeating/type-use version split included."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "First-order gap: how retention, Target, Inherited, repeating containers, type-use, processors vs reflection, value() shorthand, and Override actually work. Existing stubs only covered declare-custom and declare-repeatable procedures."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "missing_definition_gaps": {
+          "evidence": [
+            "Named language terms checked: annotation, meta-annotation, retention trio, Target, Inherited, repeating container, TYPE_USE, Override. @FunctionalInterface deferred to Java/FunctionalInterfaces. Spring/JPA/JUnit named annotations already have sibling cards."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "procedure_operations": {
+          "evidence": [
+            "Existing stubs already ask how to declare a custom and a repeatable annotation. Added how to retrieve annotations at runtime and how to annotate a package via package-info.java."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "845c47746c6116636531209245a4469b197aa5af99dc9ec03861b671f147e433",
+      "deferred_candidates": [
+        "What is the FunctionalInterface annotation (Java/FunctionalInterfaces)",
+        "How do you use Spring stereotype annotations such as Component Service Repository (Java/Spring/Core/IoC/Stereotypes)",
+        "How do JAX-RS Path GET POST annotations map a resource (API/REST)",
+        "Which JPA Entity Table Id Column annotations map a class (Java/Persistence/JPA)",
+        "What JUnit 4 Test Before After Ignore fixture annotations exist (Java/Testing/JUnit)",
+        "How do Bean Validation NotNull Size Valid annotations constrain fields (Java/Persistence or validation leaf)",
+        "How do Jackson JsonSerialize JsonProperty annotations customize JSON (library/Jackson, not this leaf)",
+        "getDeclaredMethods versus getMethods when scanning for annotations (Java/Language/Reflection)"
+      ],
+      "last_created": 23,
+      "last_error": null,
+      "last_focus": "Refine in first order",
+      "passes": 1,
+      "refined_taxonomy_fingerprint": "edeb336cfee2549c6e20a66ead9e8365bec5e286ede4e0540101666f10e6f496",
+      "sources_searched": {
+        "interview": [
+          "https://github.com/enhorse/java-interview/blob/master/java8.md",
+          "https://github.com/sudheerj/java-interview-questions",
+          "https://github.com/WeKnow-io/java-interview-questions",
+          "https://github.com/FAQGURU/FAQGURU/blob/master/topics/en/java.md",
+          "https://github.com/Devinterview-io/java-interview-questions",
+          "https://www.baeldung.com/java-annotations-interview-questions",
+          "https://interviewprep.org/annotations-interview-questions/",
+          "https://www.questionsprep.com/products/java_interview/section/java_annotations_and_reflection",
+          "https://thekiranacademy.com/tutorials/core-java-interview-questions/annotation-interview-questions.php",
+          "https://www.buggybread.com/2014/04/java-interview-questions-and-answers-on.html",
+          "https://www.buggybread.com/2015/02/java-interview-questions-and-answers-on_20.html"
+        ],
+        "official": [
+          "https://docs.oracle.com/javase/tutorial/java/annotations/",
+          "https://docs.oracle.com/javase/tutorial/java/annotations/repeating.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Target.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Inherited.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/package-summary.html",
+          "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.6",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Override.html"
+        ]
+      },
+      "status": "complete",
+      "taxonomy_fingerprint": "edeb336cfee2549c6e20a66ead9e8365bec5e286ede4e0540101666f10e6f496"
     }
   },
   "version": 2

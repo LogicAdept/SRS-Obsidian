@@ -4086,3 +4086,26 @@
 - [+] Does catching Exception satisfy a checked exception obligation.md
 - [+] Does throws IOException cover FileNotFoundException.md
 - [+] Is Throwable a checked exception.md
+- [+] How do Java annotation retention policies work.md
+- [+] What happens if you omit Retention on a custom annotation.md
+- [+] How does the Target meta-annotation restrict annotation placement.md
+- [+] How does Inherited annotation inheritance work.md
+- [+] How are repeating annotations stored for compatibility.md
+- [+] Which program elements can be annotated in Java.md
+- [+] How do annotation processors differ from runtime reflection.md
+- [+] How does the value element shorthand work.md
+- [+] Why do annotations have no direct effect on annotated code.md
+- [+] How does the Override annotation work.md
+- [+] Can you extend an annotation type in Java.md
+- [+] What happens if the same ElementType appears twice in Target.md
+- [+] What object types can an annotation element return.md
+- [+] How does TYPE_USE differ from TYPE as an annotation target.md
+- [+] What package contains Java annotation types.md
+- [+] What is the difference between SOURCE CLASS and RUNTIME retention.md
+- [+] What is the difference between marker single-member and multi-member annotations.md
+- [+] What is the difference between annotations and comments.md
+- [+] How do you retrieve annotations at runtime.md
+- [+] How do you annotate a Java package.md
+- [+] How does an empty Target array affect a custom annotation.md
+- [+] What is a Java annotation.md
+- [+] What are meta-annotations in Java.md
