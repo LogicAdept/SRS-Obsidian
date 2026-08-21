@@ -45,8 +45,8 @@ def _normalize_clone_tag(raw: Any) -> str:
     return tag if COVER_TAG_RE.fullmatch(tag) else ""
 
 
-def _read_cover_target_tag(meta: Path) -> str:
-    """Launched tag from cover-target.json. Never a later focused leaf."""
+def _read_agent_target_tag(meta: Path) -> str:
+    """Launched tag from an agent target file."""
     try:
         raw = meta.read_text(encoding="utf-8-sig")
     except OSError:
@@ -61,23 +61,32 @@ def _read_cover_target_tag(meta: Path) -> str:
     return _normalize_clone_tag(match.group(1) if match else "")
 
 
-def _clone_tag(run_dir: Path) -> str | None:
-    meta = run_dir / "cover-target.json"
+def _clone_tag(run_dir: Path, kind: str) -> str | None:
+    meta = run_dir / f"{kind}-target.json"
     if meta.is_file():
-        tag = _read_cover_target_tag(meta)
+        tag = _read_agent_target_tag(meta)
         if tag:
             return tag
-    log = run_dir / "cover-run.log"
+    log = run_dir / f"{kind}-run.log"
     if log.is_file():
         text = log.read_text(encoding="utf-8", errors="replace")
-        match = FOCUSED_PLAN_RE.search(text) or COVER_PASS_RE.search(text)
+        if kind == "fill":
+            match = re.search(
+                r"^tag=#(" + COVER_TAG_RE.pattern + r")\b",
+                text,
+                re.MULTILINE,
+            )
+        else:
+            match = FOCUSED_PLAN_RE.search(text) or COVER_PASS_RE.search(text)
         if match:
             return match.group(1)
     return None
 
 
-def scan_cover_clones(repo: Path) -> dict[str, str]:
-    """Newest agent clone directory name per launched tag."""
+def scan_agent_clones(repo: Path, kind: str) -> dict[str, str]:
+    """Newest cover or fill clone directory name per launched tag."""
+    if kind not in {"cover", "fill"}:
+        raise ValueError(f"unsupported agent kind: {kind}")
     runs = repo / ".cursor" / "sdk" / "runs"
     if not runs.is_dir():
         return {}
@@ -85,7 +94,7 @@ def scan_cover_clones(repo: Path) -> dict[str, str]:
     for path in runs.iterdir():
         if not path.is_dir() or not (path / ".git").exists():
             continue
-        tag = _clone_tag(path)
+        tag = _clone_tag(path, kind)
         if not tag:
             continue
         ranked.append((path.stat().st_mtime, tag, path.name))
@@ -93,11 +102,21 @@ def scan_cover_clones(repo: Path) -> dict[str, str]:
     return {tag: name for _, tag, name in ranked}
 
 
-def write_cover_clones_js(vault: Path, clones: dict[str, str]) -> Path:
+def write_agent_clones_js(
+    vault: Path,
+    cover_clones: dict[str, str],
+    fill_clones: dict[str, str],
+) -> Path:
     path = vault / "NamesHistory" / "coverage-clones.js"
     path.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(clones, ensure_ascii=False, indent=2)
-    path.write_text(f"window.COVER_CLONES = {payload};\n", encoding="utf-8", newline="\n")
+    cover_payload = json.dumps(cover_clones, ensure_ascii=False, indent=2)
+    fill_payload = json.dumps(fill_clones, ensure_ascii=False, indent=2)
+    path.write_text(
+        f"window.COVER_CLONES = {cover_payload};\n"
+        f"window.FILL_CLONES = {fill_payload};\n",
+        encoding="utf-8",
+        newline="\n",
+    )
     return path
 
 
@@ -221,8 +240,10 @@ def render_index(
         "Row color in the HTML tree: **green** ≥50% filled · **yellow** some filled · **red** cards exist but none filled · **gray** unused (`n=0`).",
         "",
         "Order: siblings (HTML) and this table are sorted by `n` descending. "
-        "HTML row buttons: **Agent** opens General / Focused. **Clone** (only if a clone exists) "
-        "opens Open / Continue / Focused / Accept / Drop. **…** hides Process/Cover/Fill/Dedup/Refine chat commands.",
+        "HTML row buttons: **Cover agent** opens General / Focused. **Fill agent** starts "
+        "a bounded fill batch on one durable agent (one send per card). Clone menus appear "
+        "only when the corresponding cover or fill clone exists. **…** hides "
+        "Process/Cover/Fill/Dedup/Refine chat commands.",
         "",
         "## Counts",
         "",
@@ -270,11 +291,11 @@ def _html_node(node: Node, depth: int) -> str:
     bar = f'<span class="bar" title="{html.escape(meta)}"><i style="width:{pct}%"></i></span>'
     tag = "#" + path
     launch = f"./.cursor/sdk/run_cover_vault.ps1 {path}"
-    review = f"./.cursor/sdk/switch_review.ps1 {path}"
-    accept = f"./.cursor/sdk/switch_review.ps1 -Accept {path}"
-    drop = f"./.cursor/sdk/switch_review.ps1 -Drop {path}"
+    review = f"./.cursor/sdk/switch_review.ps1 -Kind Cover {path}"
+    accept = f"./.cursor/sdk/switch_review.ps1 -Kind Cover -Accept {path}"
+    drop = f"./.cursor/sdk/switch_review.ps1 -Kind Cover -Drop {path}"
     agent_menu = _menu(
-        "Agent",
+        "Cover agent",
         "".join(
             (
                 _copy_btn("General", launch, path),
@@ -284,8 +305,23 @@ def _html_node(node: Node, depth: int) -> str:
         " agent-menu",
         path,
     )
+    fill_launch = f"./.cursor/sdk/run_fill_tag.ps1 {path}"
+    fill_agent_menu = ""
+    if n_new:
+        fill_agent_menu = _menu(
+            "Fill agent",
+            "".join(
+                (
+                    _copy_btn("Start 1", f"{fill_launch} --limit 1", path),
+                    _copy_btn("Start 3", f"{fill_launch} --limit 3", path),
+                    _copy_btn("Start 10", f"{fill_launch} --limit 10", path),
+                )
+            ),
+            " fill-agent-menu",
+            path,
+        )
     clone_menu = _menu(
-        "Clone",
+        "Cover clone",
         "".join(
             (
                 _copy_btn("Open", review, path),
@@ -296,6 +332,27 @@ def _html_node(node: Node, depth: int) -> str:
             )
         ),
         " clone-menu",
+        path,
+        hidden=True,
+    )
+    fill_review = f"./.cursor/sdk/switch_review.ps1 -Kind Fill {path}"
+    fill_accept = f"./.cursor/sdk/switch_review.ps1 -Kind Fill -Accept {path}"
+    fill_drop = f"./.cursor/sdk/switch_review.ps1 -Kind Fill -Drop {path}"
+    fill_clone_menu = _menu(
+        "Fill clone",
+        "".join(
+            (
+                _copy_btn("Open", fill_review, path),
+                _copy_btn("Log", "", path, " fill-log"),
+                _copy_btn("Progress", "", path, " fill-progress"),
+                _copy_btn("Continue 1", "", path, " fill-continue limit-1"),
+                _copy_btn("Continue 3", "", path, " fill-continue limit-3"),
+                _copy_btn("Continue 10", "", path, " fill-continue limit-10"),
+                _copy_btn("Accept", fill_accept, path),
+                _copy_btn("Drop", fill_drop, path),
+            )
+        ),
+        " fill-clone-menu",
         path,
         hidden=True,
     )
@@ -313,7 +370,7 @@ def _html_node(node: Node, depth: int) -> str:
         " chat-menu",
         path,
     )
-    cmds = agent_menu + clone_menu + chat_menu
+    cmds = agent_menu + fill_agent_menu + clone_menu + fill_clone_menu + chat_menu
     label = (
         f'<span class="swatch" aria-hidden="true"></span>'
         f'<code class="name" title="{full}">{name}</code>'
@@ -496,7 +553,11 @@ button.copy {{
 }}
 button.copy:hover {{ border-color: var(--accent); color: var(--accent); }}
 button.copy.copied, button.nav.copied {{ border-color: var(--green-bar); color: var(--green-bar); }}
-button.nav, .menu.agent-menu > summary, .menu.clone-menu > summary {{ font-weight: 600; }}
+button.nav,
+.menu.agent-menu > summary,
+.menu.fill-agent-menu > summary,
+.menu.clone-menu > summary,
+.menu.fill-clone-menu > summary {{ font-weight: 600; }}
 .menu {{ position: relative; display: inline-block; }}
 .menu > summary {{
   list-style: none; cursor: pointer; user-select: none;
@@ -516,7 +577,7 @@ button.nav, .menu.agent-menu > summary, .menu.clone-menu > summary {{ font-weigh
   box-shadow: 0 8px 24px rgba(0,0,0,.35);
 }}
 .menu-list .copy {{ width: 100%; text-align: left; }}
-.menu.clone-menu[hidden] {{ display: none !important; }}
+.menu.clone-menu[hidden], .menu.fill-clone-menu[hidden] {{ display: none !important; }}
 li.node.hidden {{ display: none; }}
 .empty-msg {{ display: none; color: var(--muted); padding: 24px; }}
 </style>
@@ -526,10 +587,14 @@ li.node.hidden {{ display: none; }}
   <details class="hints">
     <summary>Подсказки про теги</summary>
     <dl class="skills">
-    <dt>Agent</dt>
+    <dt>Cover agent</dt>
     <dd><b>General</b> — обычный refine + cover листа или листьев под родителем. <b>Focused</b> — копирует ту же команду с <code>--focus ''</code>; в терминале допишите, какого покрытия не хватает. Агент сопоставит запрос с честным листом (при необходимости создаст его) и покроет именно его. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
-    <dt>Clone</dt>
+    <dt>Fill agent</dt>
+    <dd><b>Start 1 / 3 / 10</b> — запускает изолированный fill-процесс на одном Cursor-агенте. Каждая карточка — отдельный <code>send</code> в той же сессии. Число — максимальное количество попыток за запуск; карточка, оставленная <code>#New</code>, тоже расходует попытку.</dd>
+    <dt>Cover clone</dt>
     <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — второе окно на клон. <b>Continue</b> — продолжить незавершённое состояние. <b>Focused</b> — шаблон с <code>--focus ''</code> для того же клона, даже если лист уже complete. <b>Accept</b> — cherry-pick в исходный vault и удалить клон. <b>Drop</b> — удалить без переноса.</dd>
+    <dt>Fill clone</dt>
+    <dd>Управление fill-клоном: <b>Open</b>, просмотр <b>Log</b> / <b>Progress</b>, продолжение ещё на 1 / 3 / 10 попыток, <b>Accept</b> или <b>Drop</b>.</dd>
     <dt>Source</dt>
     <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
     <dt>…</dt>
@@ -572,6 +637,33 @@ document.querySelectorAll(".clone-menu").forEach((el) => {{
       focused.dataset.cmd = fcmd;
       focused.title = fcmd;
     }}
+  }}
+}});
+document.querySelectorAll(".fill-clone-menu").forEach((el) => {{
+  const id = (window.FILL_CLONES || {{}})[el.dataset.tag];
+  el.hidden = !id;
+  if (!id) return;
+  const workspace = ".cursor/sdk/runs/" + id;
+  const base = "./.cursor/sdk/run_fill_tag.ps1 " + el.dataset.tag +
+    " --workspace " + workspace;
+  for (const limit of [1, 3, 10]) {{
+    const btn = el.querySelector("button.fill-continue.limit-" + limit);
+    if (!btn) continue;
+    const cmd = base + " --limit " + limit;
+    btn.dataset.cmd = cmd;
+    btn.title = cmd;
+  }}
+  const log = el.querySelector("button.fill-log");
+  if (log) {{
+    const cmd = 'Get-Content "' + workspace + '/fill-run.log" -Wait';
+    log.dataset.cmd = cmd;
+    log.title = cmd;
+  }}
+  const progress = el.querySelector("button.fill-progress");
+  if (progress) {{
+    const cmd = 'Get-Content "' + workspace + '/fill-progress.json"';
+    progress.dataset.cmd = cmd;
+    progress.title = cmd;
   }}
 }});
 document.querySelectorAll(".menu").forEach((menu) => {{
@@ -678,15 +770,19 @@ def main() -> int:
     parser.add_argument(
         "--clones-js-only",
         action="store_true",
-        help="Rewrite coverage-clones.js from .cursor/sdk/runs without rebuilding the index.",
+        help="Rewrite cover/fill clone mappings without rebuilding the index.",
     )
     args = parser.parse_args()
     root = args.repo.resolve() if args.repo else repo_root_from_script()
     vault = root / "SRS"
-    clones = scan_cover_clones(root)
-    clones_js = write_cover_clones_js(vault, clones)
+    cover_clones = scan_agent_clones(root, "cover")
+    fill_clones = scan_agent_clones(root, "fill")
+    clones_js = write_agent_clones_js(vault, cover_clones, fill_clones)
     if args.clones_js_only:
-        print(f"Wrote {clones_js} ({len(clones)} pending clones)")
+        print(
+            f"Wrote {clones_js} "
+            f"({len(cover_clones)} cover, {len(fill_clones)} fill clones)"
+        )
         return 0
     tags_md = vault / "Format" / "Tags.md"
     out_md = vault / "NamesHistory" / "coverage-index.md"
@@ -740,7 +836,10 @@ def main() -> int:
         newline="\n",
     )
     print(f"Wrote {out_md} and {out_html} ({len(rows)} paths, {cards_with_tags} tagged cards)")
-    print(f"Wrote {clones_js} ({len(clones)} pending clones)")
+    print(
+        f"Wrote {clones_js} "
+        f"({len(cover_clones)} cover, {len(fill_clones)} fill clones)"
+    )
     return 0
 
 

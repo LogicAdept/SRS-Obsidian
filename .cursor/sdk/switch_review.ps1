@@ -2,6 +2,8 @@ param(
     [switch]$Source,
     [switch]$Accept,
     [switch]$Drop,
+    [ValidateSet("Cover", "Fill")]
+    [string]$Kind,
     [Parameter(Position = 0)]
     [string]$Tag
 )
@@ -136,31 +138,38 @@ function Rebuild-CloneIndex([string]$ClonePath) {
 }
 
 function Read-CloneTag([string]$ClonePath) {
-    $meta = Join-Path $ClonePath "cover-target.json"
-    if (Test-Path -LiteralPath $meta) {
-        $raw = [System.IO.File]::ReadAllText($meta)
-        try {
-            $data = $raw | ConvertFrom-Json
-            $value = [string]$data.tag
-            if (-not [string]::IsNullOrWhiteSpace($value)) {
-                return $value.TrimStart("#")
+    foreach ($metaName in @("fill-target.json", "cover-target.json")) {
+        $meta = Join-Path $ClonePath $metaName
+        if (Test-Path -LiteralPath $meta) {
+            $raw = [System.IO.File]::ReadAllText($meta)
+            try {
+                $data = $raw | ConvertFrom-Json
+                $value = [string]$data.tag
+                if (-not [string]::IsNullOrWhiteSpace($value)) {
+                    return $value.TrimStart("#")
+                }
+            } catch {
             }
-        } catch {
-        }
-        if ($raw -match '"tag"\s*:\s*"([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*)"') {
-            return $Matches[1]
+            if ($raw -match '"tag"\s*:\s*"([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*)"') {
+                return $Matches[1]
+            }
         }
     }
-    $log = Join-Path $ClonePath "cover-run.log"
-    if (Test-Path -LiteralPath $log) {
-        foreach ($line in Get-Content -LiteralPath $log -Encoding UTF8) {
-            if ($line -match '^=== focused taxonomy plan for #([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*)') {
-                return $Matches[1]
+    foreach ($logName in @("fill-run.log", "cover-run.log")) {
+        $log = Join-Path $ClonePath $logName
+        if (Test-Path -LiteralPath $log) {
+            foreach ($line in Get-Content -LiteralPath $log -Encoding UTF8) {
+                if ($line -match '^tag=#([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*)') {
+                    return $Matches[1]
+                }
+                if ($line -match '^=== focused taxonomy plan for #([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*)') {
+                    return $Matches[1]
+                }
             }
-        }
-        foreach ($line in Get-Content -LiteralPath $log -Encoding UTF8) {
-            if ($line -match '^=== #([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*) pass') {
-                return $Matches[1]
+            foreach ($line in Get-Content -LiteralPath $log -Encoding UTF8) {
+                if ($line -match '^=== #([A-Za-z0-9]+(?:/[A-Za-z0-9]+)*) pass') {
+                    return $Matches[1]
+                }
             }
         }
     }
@@ -175,21 +184,32 @@ function Get-CloneForTag([string]$Wanted) {
     $foundClones = Get-ChildItem -LiteralPath $runsRoot -Directory -ErrorAction SilentlyContinue |
         Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName ".git") } |
         ForEach-Object {
-            $found = Read-CloneTag $_.FullName
-            if ($found -eq $want) { $_ }
+            $matchesKind = $true
+            if (-not [string]::IsNullOrWhiteSpace($Kind)) {
+                $branch = (& git -C $_.FullName branch --show-current).Trim()
+                $prefix = if ($Kind -eq "Fill") { "agent/fill-" } else { "agent/cover-" }
+                if (-not $branch.StartsWith($prefix)) {
+                    $matchesKind = $false
+                }
+            }
+            if ($matchesKind) {
+                $found = Read-CloneTag $_.FullName
+                if ($found -eq $want) { $_ }
+            }
         }
     return $foundClones | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 }
 
 function Remove-Clone([string]$ClonePath, [string]$RunName) {
     docker rm -f "srs-cover-$RunName" 2>$null | Out-Null
+    docker rm -f "srs-fill-$RunName" 2>$null | Out-Null
     if (Test-Path -LiteralPath $ClonePath) {
         Remove-Item -LiteralPath $ClonePath -Recurse -Force
     }
     Update-ClonesIndex
 }
 
-function Accept-Clone([string]$ClonePath, [string]$CoverTag) {
+function Accept-Clone([string]$ClonePath, [string]$TargetTag) {
     $dirty = @(& git -C $repo status --porcelain)
     if ($LASTEXITCODE -ne 0) {
         throw "Cannot read the source repository state."
@@ -203,14 +223,19 @@ function Accept-Clone([string]$ClonePath, [string]$CoverTag) {
         if ($LASTEXITCODE -ne 0) {
             throw "git add in the clone failed."
         }
-        & git -C $ClonePath commit -m "Cover $CoverTag"
+        $branch = (& git -C $ClonePath branch --show-current).Trim()
+        $verb = if ($branch.StartsWith("agent/fill-")) { "Fill" } else { "Cover" }
+        & git -C $ClonePath commit -m "$verb $TargetTag"
         if ($LASTEXITCODE -ne 0) {
             throw "git commit in the clone failed."
         }
     }
     $branch = (& git -C $ClonePath branch --show-current).Trim()
-    if (-not $branch.StartsWith("agent/cover-")) {
-        throw "Clone is not on an agent/cover-* branch."
+    if (-not (
+        $branch.StartsWith("agent/cover-") -or
+        $branch.StartsWith("agent/fill-")
+    )) {
+        throw "Clone is not on an agent/cover-* or agent/fill-* branch."
     }
     & git -C $repo fetch $ClonePath $branch
     if ($LASTEXITCODE -ne 0) {

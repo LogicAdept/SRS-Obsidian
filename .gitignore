@@ -6,6 +6,9 @@ SRS/.obsidian/
 .cursor/sdk/cover-results/
 cover-run.log
 cover-target.json
+fill-run.log
+fill-target.json
+fill-progress.json
 SRS/NamesHistory/coverage-clones.js
 SRS/NamesHistory/coverage-index.html
 SRS/NamesHistory/coverage-index.md
