@@ -205,8 +205,8 @@ def render_index(
         "Row color in the HTML tree: **green** ≥50% filled · **yellow** some filled · **red** cards exist but none filled · **gray** unused (`n=0`).",
         "",
         "Order: siblings (HTML) and this table are sorted by `n` descending. "
-        "HTML row buttons: **Agent** copies the Docker cover command. **Clone** (only if a clone exists) "
-        "opens a menu: Open / Continue / Accept / Drop. **…** hides Process/Cover/Fill/Dedup/Refine chat commands.",
+        "HTML row buttons: **Agent** opens General / Focused. **Clone** (only if a clone exists) "
+        "opens Open / Continue / Focused / Accept / Drop. **…** hides Process/Cover/Fill/Dedup/Refine chat commands.",
         "",
         "## Counts",
         "",
@@ -257,12 +257,24 @@ def _html_node(node: Node, depth: int) -> str:
     review = f"./.cursor/sdk/switch_review.ps1 {path}"
     accept = f"./.cursor/sdk/switch_review.ps1 -Accept {path}"
     drop = f"./.cursor/sdk/switch_review.ps1 -Drop {path}"
+    agent_menu = _menu(
+        "Agent",
+        "".join(
+            (
+                _copy_btn("General", launch, path),
+                _copy_btn("Focused…", launch, path, " focused"),
+            )
+        ),
+        " agent-menu",
+        path,
+    )
     clone_menu = _menu(
         "Clone",
         "".join(
             (
                 _copy_btn("Open", review, path),
                 _copy_btn("Continue", launch, path, " continue"),
+                _copy_btn("Focused…", launch, path, " focused"),
                 _copy_btn("Accept", accept, path),
                 _copy_btn("Drop", drop, path),
             )
@@ -285,7 +297,7 @@ def _html_node(node: Node, depth: int) -> str:
         " chat-menu",
         path,
     )
-    cmds = _copy_btn("Agent", launch, path, " agent") + clone_menu + chat_menu
+    cmds = agent_menu + clone_menu + chat_menu
     label = (
         f'<span class="swatch" aria-hidden="true"></span>'
         f'<code class="name" title="{full}">{name}</code>'
@@ -468,7 +480,7 @@ button.copy {{
 }}
 button.copy:hover {{ border-color: var(--accent); color: var(--accent); }}
 button.copy.copied, button.nav.copied {{ border-color: var(--green-bar); color: var(--green-bar); }}
-button.agent, button.nav, .menu.clone-menu > summary {{ font-weight: 600; }}
+button.nav, .menu.agent-menu > summary, .menu.clone-menu > summary {{ font-weight: 600; }}
 .menu {{ position: relative; display: inline-block; }}
 .menu > summary {{
   list-style: none; cursor: pointer; user-select: none;
@@ -499,9 +511,9 @@ li.node.hidden {{ display: none; }}
     <summary>Подсказки про теги</summary>
     <dl class="skills">
     <dt>Agent</dt>
-    <dd>Копирует <code>./.cursor/sdk/run_cover_vault.ps1 &lt;tag&gt;</code> — refine + cover that leaf, or the leaves under that parent. Never covers parent nodes. В том же shell нужен <code>CURSOR_API_KEY</code>.</dd>
+    <dd><b>General</b> — обычный refine + cover листа или листьев под родителем. <b>Focused…</b> — спросить, какого покрытия не хватает; агент сопоставит запрос с честным листом (при необходимости создаст его) и покроет именно его. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Clone</dt>
-    <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — второе окно на клон. <b>Continue</b> — ещё один Docker-прогон в тот же клон (как Agent, без нового clone). <b>Accept</b> — cherry-pick в исходный vault и удалить клон. <b>Drop</b> — удалить без переноса. После Accept/Drop меню пропадает.</dd>
+    <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — второе окно на клон. <b>Continue</b> — продолжить незавершённое состояние. <b>Focused…</b> — добрать конкретную тему в этом же клоне, даже если лист уже complete. <b>Accept</b> — cherry-pick в исходный vault и удалить клон. <b>Drop</b> — удалить без переноса.</dd>
     <dt>Source</dt>
     <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
     <dt>…</dt>
@@ -531,11 +543,12 @@ li.node.hidden {{ display: none; }}
 document.querySelectorAll(".clone-menu").forEach((el) => {{
   const id = (window.COVER_CLONES || {{}})[el.dataset.tag];
   el.hidden = !id;
-  const cont = el.querySelector("button.continue");
-  if (cont && id) {{
+  if (id) {{
     const cmd = "./.cursor/sdk/run_cover_vault.ps1 --workspace .cursor/sdk/runs/" + id + " " + el.dataset.tag;
-    cont.dataset.cmd = cmd;
-    cont.title = cmd;
+    el.querySelectorAll("button.continue, button.focused").forEach((btn) => {{
+      btn.dataset.cmd = cmd;
+      btn.title = cmd;
+    }});
   }}
 }});
 document.querySelectorAll(".menu").forEach((menu) => {{
@@ -607,14 +620,27 @@ async function copyCmd(cmd) {{
     return ok;
   }}
 }}
+function focusedCommand(base, tag) {{
+  const raw = window.prompt(
+    "Какого покрытия не хватает для #" + tag + "?",
+    ""
+  );
+  if (raw === null || !raw.trim()) return null;
+  const quoted = "'" + raw.trim().replaceAll("'", "''") + "'";
+  return base + " --focus " + quoted;
+}}
 document.querySelectorAll("header, main").forEach((root) => {{
   root.addEventListener("click", async (e) => {{
     const btn = e.target.closest("button.copy");
     if (!btn) return;
     e.preventDefault();
     e.stopPropagation();
-    const cmd = btn.dataset.cmd;
+    let cmd = btn.dataset.cmd;
     if (!cmd) return;
+    if (btn.classList.contains("focused")) {{
+      cmd = focusedCommand(cmd, btn.dataset.tag);
+      if (!cmd) return;
+    }}
     const prev = btn.textContent;
     const ok = await copyCmd(cmd);
     btn.textContent = ok ? "Copied" : "Failed";

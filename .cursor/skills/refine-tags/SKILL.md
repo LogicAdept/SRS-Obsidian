@@ -17,9 +17,16 @@ Refine the tag tree. Goal: a convenient, logical taxonomy. Do not multiply entit
 
 ```
 /refine-tags [prefix]
+/refine-tags <prefix> --focus "<missing coverage>" --result-file PATH
 ```
 
 - `prefix` optional: only that root or path (e.g. `#Java/Spring`, `#Messaging`). Default: whole tree, but still prefer small honest edits over a rewrite.
+- `--focus` is an orchestrated request to place one explicitly missing interview
+  angle under an honest leaf. Inspect existing cues first. Reuse an existing
+  descendant leaf when it owns the angle; otherwise add the smallest honest leaf
+  and retag relevant parent cards in the same run.
+- `--result-file` is mandatory with `--focus`. Before finishing, write the selected
+  leaf through `scripts/write-focus-target.py`; do not hand-write the result.
 
 Language: English only — this skill, `Tags.md` edits, and the chat report.
 
@@ -71,6 +78,25 @@ Apply a change only if it does at least one of:
 Open questions in chat are for **controversial re-parents** (two equally honest parents, synonym roots, whether two clusters are the same topic). They are not a parking lot for obvious missing filters.
 
 Do **not**: rename for style, split a leaf because a blog has a finer heading, or create a tag for a single one-off card when the parent already names the topic.
+
+An explicit `--focus` is evidence of a planned coverage lane, not by itself proof
+that a leaf is needed. Add a leaf only when the requested angle has several
+distinct interview questions or mechanisms and no existing descendant leaf owns
+them. Do not force the angle into an unrelated existing child merely to avoid a
+taxonomy edit.
+
+### Focused result
+
+With `--focus`, finish by running:
+
+```
+python .cursor/skills/refine-tags/scripts/write-focus-target.py --root <prefix> --target <leaf> --result-file <path>
+```
+
+`<leaf>` must be the single existing or newly created descendant leaf that owns
+the requested angle. The helper rejects parents, paths outside the requested
+root, and paths absent from `Tags.md`. If no honest leaf can represent the focus,
+do not write a result; explain why so the orchestrator fails closed.
 
 ## Pipeline
 

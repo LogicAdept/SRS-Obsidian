@@ -29,7 +29,7 @@ Language: English only — this skill, filenames, tag lines, card bodies, and th
 ## Invoke
 
 ```
-/cover-tag <tag> [--limit N] [--per-node M] [--max-nodes K] [--flat] [--result-file PATH]
+/cover-tag <tag> [--limit N] [--per-node M] [--max-nodes K] [--flat] [--focus TEXT] [--result-file PATH]
 ```
 
 - `<tag>` required: a tree path (`#Java/Collections/Map`) or a short name (`HashMap`). Resolve it in `SRS/Format/Tags.md`.
@@ -37,6 +37,11 @@ Language: English only — this skill, filenames, tag lines, card bodies, and th
 - `--per-node` optional: max new files per visited **leaf**. Default: even split of `--limit`. Unused slots stay unused.
 - `--max-nodes` optional: max **leaves** to visit. Default **12**. Ignored with `--flat` on a leaf.
 - `--flat` optional: if the resolved prefix is a **leaf**, cover that leaf only. If it is a **parent**, cover its descendant leaves only — never the parent node.
+- `--focus` optional: prioritize one user-identified missing interview angle within
+  the resolved leaf. Search specifically for distinct questions about that angle,
+  but keep the normal source, ownership, duplicate, and quality gates. This may
+  revisit an otherwise complete leaf; zero new cards is valid only after a real
+  focused search shows the angle is already covered or has no strong candidates.
 - `--result-file` optional for interactive use and **mandatory when supplied by an orchestrator**. It must be repository-local and is written through `write_cover_batch` in `write_drafts.py`, never by hand. Orchestrated use combines it with `--flat` on one leaf.
 
 ## Read first
@@ -106,6 +111,9 @@ For **each** `cover_next` node, until quotas are spent:
 
 1. Collect existing cues for **this node and its descendants** (cards already in the vault **plus files created earlier in this run**), plus related lines in `md-file-names.txt`.
 2. **Collect question/answer pairs** for this node. Record every URL in **chat** and in the structured result's source lists, never in a card file. Reuse repos/pages already fetched in this run; do not re-clone.
+   - With `--focus`, begin with focused queries for that exact angle and assess
+     existing cues semantically against it. Do not broaden away from the request
+     merely to produce cards.
    - Open `question-repositories.txt`. Fetch `+` GitHub repos/files that match this node (raw markdown / `gh` / clone to a temp dir **outside** the vault; do not add the clone to this repo). Skip `-` URLs.
    - Search GitHub for further interview-question repos or files on this topic (`interview questions`, topic name). Same fetch rule.
    - Search the web for **compilation pages** (question lists), not generic tutorials. Official “frequently asked” pages count only as *question* sources.

@@ -12,10 +12,10 @@ In a shell with a clean repo and `CURSOR_API_KEY` set:
 ./.cursor/sdk/run_cover_vault.ps1 Java/Language/Primitives/ShortType
 ```
 
-HTML **Agent** copies that command. After the run, **Clone ▾** appears on that
-tag only (Open / Continue / Accept / Drop). **Continue** is another Agent pass in
-the same clone. Chat skills are under **…**. **Source** in the header returns to
-this vault.
+HTML **Agent ▾ → General** copies that command. **Agent ▾ → Focused…** asks for
+one missing interview angle and copies the same command with `--focus`. After a
+run, **Clone ▾** appears on that tag only (Open / Continue / Focused / Accept /
+Drop). Chat skills are under **…**. **Source** returns to this vault.
 
 ```powershell
 Get-Content .cursor/sdk/runs/<id>/cover-run.log -Wait
@@ -37,6 +37,19 @@ Another pass in the same clone:
 ```powershell
 ./.cursor/sdk/run_cover_vault.ps1 --workspace .cursor/sdk/runs/<id> Java/Spring/Transactions
 ```
+
+`Continue` only resumes unfinished state. To add a specific missing angle even
+when the broad leaf is already complete, use **Clone ▾ → Focused…**:
+
+```powershell
+./.cursor/sdk/run_cover_vault.ps1 --workspace .cursor/sdk/runs/<id> Java/Spring/Transactions --focus 'Calls between @Transactional methods'
+```
+
+Focused mode first maps the request to one honest leaf under the selected tag.
+It may create that leaf and retag relevant parent cards, then covers only the
+selected leaf. It fails closed if no valid target leaf is reported.
+When resuming an older clone, the launcher first copies the current committed
+control scripts and relevant skills from the clean source vault into that clone.
 
 Accept (cherry-pick into this repo, delete the clone, hide the Clone button):
 

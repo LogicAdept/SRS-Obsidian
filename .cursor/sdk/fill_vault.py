@@ -5,6 +5,10 @@ Pick a tag with --only. Cover runs on that leaf, or on descendant leaves if the
 chosen path is a parent. Parent nodes and ancestors are never covered. Real runs
 require --only (or --continue-tag).
 
+With --focus, a taxonomy-planning pass first maps the requested missing angle to
+one honest descendant leaf, creating it when justified, and cover revisits that
+leaf even when its broad coverage record was already complete.
+
 Each eligible leaf gets at most one /cover-tag call per run. --cover-limit is an
 upper budget, never a target. Cover must write a validated machine-readable result;
 missing or malformed results fail closed. Hitting the budget marks review_required
@@ -55,6 +59,7 @@ DEFAULT_STATE = vault_dir(REPO) / "NamesHistory" / "coverage-progress.json"
 RESULT_ROOT = REPO / ".cursor" / "sdk" / "cover-results"
 STATE_VERSION = 2
 RESULT_VERSION = 1
+FOCUS_RESULT_VERSION = 1
 CONTAINER_MARKER = "SRS_COVER_ISOLATED_CONTAINER"
 CONTAINER_WORKSPACE = Path("/workspace")
 
@@ -86,7 +91,7 @@ Hard constraints:
 - Cover only leaf tags. Never write cards for a parent node.
 - Cover may create fewer files than its limit. The limit is a hard cap, not a target.
 - Cover must not retag existing cards, edit Tags.md, or mutate sibling tags.
-- The structured --result-file is mandatory and must be written through write_drafts.py.
+- For /cover-tag, the structured --result-file is mandatory and must be written through write_drafts.py.
 - Rebuild the coverage index after card or taxonomy changes.
 """.strip()
 
@@ -107,6 +112,12 @@ class CoverOutcome:
     exhausted: bool
     budget_hit: bool
     deferred: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class FocusPlan:
+    root: str
+    target_leaf: str
 
 
 CardAssignments = dict[str, tuple[str, ...]]
@@ -492,6 +503,31 @@ def _result_path(tag: str, pass_no: int) -> Path:
     return RESULT_ROOT / f"{digest}-p{pass_no}.json"
 
 
+def _focus_result_path(root: str, focus: str) -> Path:
+    digest = hashlib.sha256(f"{root}\0{focus}".encode("utf-8")).hexdigest()[:16]
+    return RESULT_ROOT / f"focus-{digest}.json"
+
+
+def _read_focus_result(path: Path, *, root: str, tree_paths: list[str]) -> FocusPlan:
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as err:
+        raise RuntimeError(f"missing/invalid structured focus result {path}: {err}") from err
+    if not isinstance(raw, dict) or raw.get("version") != FOCUS_RESULT_VERSION:
+        raise RuntimeError("structured focus result has an unsupported version")
+    result_root = normalize_prefix(str(raw.get("root", "")))
+    target = normalize_prefix(str(raw.get("target_leaf", "")))
+    if result_root != root:
+        raise RuntimeError("structured focus result root does not match invocation")
+    if target not in tree_paths:
+        raise RuntimeError("structured focus result target is absent from Tags.md")
+    if not path_in_prefix(target, root):
+        raise RuntimeError("structured focus result target is outside the requested root")
+    if _is_parent(target, tree_paths):
+        raise RuntimeError("structured focus result target must be a leaf")
+    return FocusPlan(root=root, target_leaf=target)
+
+
 def _read_cover_result(
     path: Path,
     *,
@@ -798,6 +834,15 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="TAG",
         help="Explicitly continue an exact review_required leaf. Repeatable.",
     )
+    parser.add_argument(
+        "--focus",
+        default="",
+        metavar="TEXT",
+        help=(
+            "Map one missing interview angle to an honest leaf and cover that "
+            "leaf even if its broad coverage record is complete."
+        ),
+    )
     parser.add_argument("--fail-fast", action="store_true")
     return parser
 
@@ -854,10 +899,22 @@ def main(argv: list[str] | None = None) -> int:
 
     only = tuple(normalize_prefix(item) for item in args.only)
     continue_tags = tuple(normalize_prefix(item) for item in args.continue_tag)
+    focus = args.focus.strip()
     if any(not item for item in only):
         raise SystemExit("--only cannot be empty")
     if any(not item for item in continue_tags):
         raise SystemExit("--continue-tag cannot be empty")
+    if focus:
+        if len(only) != 1:
+            raise SystemExit("--focus requires exactly one --only TAG")
+        if continue_tags:
+            raise SystemExit("--focus cannot be combined with --continue-tag")
+        if args.skip_refine or args.skip_cover:
+            raise SystemExit("--focus requires both refine and cover")
+        if args.dry_run:
+            raise SystemExit("--focus requires a real isolated run")
+        if len(focus) > 2000:
+            raise SystemExit("--focus must be at most 2000 characters")
     if not args.dry_run and not only and not continue_tags:
         raise SystemExit("choose a tag with --only TAG (ancestors are not processed)")
     prefix = "" if only else normalize_prefix(args.prefix)
@@ -889,14 +946,61 @@ def main(argv: list[str] | None = None) -> int:
             if reconciled is not None:
                 nodes[tag] = reconciled
 
-    queue_list, seed_leaves, limited_out = build_runtime_queue(
-        tree_paths=tree_paths,
-        scoped_paths=scoped,
-        assignments=assignments,
-        nodes=nodes,
-        max_tags=args.max_tags,
-        continue_tags=continue_tags,
-    )
+    api_key = ""
+    focus_target: str | None = None
+    if focus:
+        api_key = os.environ.pop("CURSOR_API_KEY", "").strip()
+        if not api_key:
+            raise SystemExit("set CURSOR_API_KEY (https://cursor.com/dashboard/integrations)")
+        focus_root = only[0]
+        focus_path = _focus_result_path(focus_root, focus)
+        focus_path.parent.mkdir(parents=True, exist_ok=True)
+        if focus_path.exists():
+            focus_path.unlink()
+        focus_command = (
+            f"/refine-tags #{focus_root} --focus "
+            f"{json.dumps(focus, ensure_ascii=False)} --result-file "
+            f"{focus_path.relative_to(REPO).as_posix()}"
+        )
+        print(f"\n=== focused taxonomy plan for #{focus_root} ===")
+        print(f"focus={focus}")
+        _run_agent(
+            api_key=api_key,
+            model=args.model,
+            name=f"focus {focus_root}",
+            prompt=_prompt_for("refine-tags", focus_command),
+            max_retries=args.max_retries,
+        )
+        _rebuild_index()
+        tree_paths = parse_tree_paths(TAGS_MD)
+        assignments = _card_assignments()
+        plan = _read_focus_result(focus_path, root=focus_root, tree_paths=tree_paths)
+        focus_target = plan.target_leaf
+        scoped = _scoped_paths(
+            tree_paths, prefix=prefix, only=only, excluded=excluded_tuple
+        )
+        if focus_target not in scoped:
+            raise RuntimeError("focused target is excluded from the requested scope")
+        for tag in list(nodes):
+            if tag not in tree_paths:
+                nodes.pop(tag, None)
+                continue
+            reconciled = _reconcile_record(nodes[tag], tag, tree_paths, assignments)
+            if reconciled is not None:
+                nodes[tag] = reconciled
+        queue_list = [focus_target]
+        seed_leaves = (focus_target,)
+        limited_out = 0
+        print(f"focused leaf=#{focus_target}")
+    else:
+        queue_list, seed_leaves, limited_out = build_runtime_queue(
+            tree_paths=tree_paths,
+            scoped_paths=scoped,
+            assignments=assignments,
+            nodes=nodes,
+            max_tags=args.max_tags,
+            continue_tags=continue_tags,
+        )
     resumed = sum(
         1
         for tag in scoped
@@ -939,13 +1043,14 @@ def main(argv: list[str] | None = None) -> int:
     if not queue_list:
         return 0
 
-    api_key = os.environ.pop("CURSOR_API_KEY", "").strip()
+    if not api_key:
+        api_key = os.environ.pop("CURSOR_API_KEY", "").strip()
     if not api_key:
         raise SystemExit("set CURSOR_API_KEY (https://cursor.com/dashboard/integrations)")
 
     queue: deque[str] = deque(queue_list)
     pending = set(queue_list)
-    seed_prefixes = seed_leaves if args.max_tags is not None else None
+    seed_prefixes = seed_leaves if args.max_tags is not None or focus_target else None
     cover_called: set[str] = set()
     finished_this_run: set[str] = set()
     failures: set[str] = set()
@@ -1017,7 +1122,10 @@ def main(argv: list[str] | None = None) -> int:
         existing = _reconcile_record(nodes.get(tag), tag, tree_paths, assignments)
         if existing is not None:
             nodes[tag] = existing
-        if _is_complete_current(nodes.get(tag), tag, tree_paths, assignments):
+        if (
+            tag != focus_target
+            and _is_complete_current(nodes.get(tag), tag, tree_paths, assignments)
+        ):
             finished_this_run.add(tag)
             continue
 
@@ -1061,8 +1169,10 @@ def main(argv: list[str] | None = None) -> int:
             continue
         taxonomy_before = _taxonomy_fingerprint(tree_paths, tag)
         try:
-            did_refine = _needs_refine(
-                nodes.get(tag), taxonomy_before, args.skip_refine
+            did_refine = (
+                False
+                if tag == focus_target
+                else _needs_refine(nodes.get(tag), taxonomy_before, args.skip_refine)
             )
             if did_refine:
                 print("refine")
@@ -1074,6 +1184,8 @@ def main(argv: list[str] | None = None) -> int:
                     max_retries=args.max_retries,
                 )
                 _rebuild_index()
+            elif tag == focus_target:
+                print("refine skipped: focused taxonomy plan already selected this leaf")
             elif not args.skip_refine:
                 print("refine skipped: taxonomy fingerprint already refined")
 
@@ -1181,6 +1293,11 @@ def main(argv: list[str] | None = None) -> int:
                 result_path.unlink()
             before_cover = assignments_after
             print(f"cover (upper budget {args.cover_limit})")
+            focus_option = (
+                f" --focus {json.dumps(focus, ensure_ascii=False)}"
+                if tag == focus_target
+                else ""
+            )
             _run_agent(
                 api_key=api_key,
                 model=args.model,
@@ -1188,7 +1305,8 @@ def main(argv: list[str] | None = None) -> int:
                 prompt=_prompt_for(
                     "cover-tag",
                     f"/cover-tag #{tag} --limit {args.cover_limit} --flat "
-                    f"--result-file {result_path.relative_to(REPO).as_posix()}",
+                    f"--result-file {result_path.relative_to(REPO).as_posix()}"
+                    f"{focus_option}",
                 ),
                 max_retries=args.max_retries,
             )
@@ -1223,6 +1341,8 @@ def main(argv: list[str] | None = None) -> int:
                     "last_error": None,
                 }
             )
+            if tag == focus_target:
+                record["last_focus"] = focus
             outcome_status = _status_after_cover(
                 outcome,
                 taxonomy_refined=record.get("refined_taxonomy_fingerprint")

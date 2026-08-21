@@ -8,6 +8,7 @@ $resumeWorkspace = $null
 $wait = $false
 $forwardArgs = [System.Collections.Generic.List[string]]::new()
 $positionalTag = $null
+$focus = $null
 
 for ($i = 0; $i -lt $args.Count; $i++) {
     $arg = $args[$i]
@@ -21,6 +22,19 @@ for ($i = 0; $i -lt $args.Count; $i++) {
     }
     if ($arg -eq "--wait") {
         $wait = $true
+        continue
+    }
+    if ($arg -eq "--focus") {
+        if ($i + 1 -ge $args.Count) {
+            throw "--focus requires a description of the missing coverage."
+        }
+        $i++
+        $focus = $args[$i].Trim()
+        if ([string]::IsNullOrWhiteSpace($focus)) {
+            throw "--focus cannot be empty."
+        }
+        $forwardArgs.Add("--focus")
+        $forwardArgs.Add($focus)
         continue
     }
     if (-not $arg.StartsWith("-") -and $null -eq $positionalTag -and $arg -ne "--") {
@@ -48,6 +62,26 @@ function Get-RequestedTag {
         }
     }
     return $null
+}
+
+function Sync-AgentControlFiles([string]$Workspace) {
+    $paths = @(
+        ".cursor/sdk/fill_vault.py",
+        ".cursor/skills/cover-tag/SKILL.md",
+        ".cursor/skills/refine-tags/SKILL.md",
+        ".cursor/skills/refine-tags/scripts/write-focus-target.py",
+        ".cursor/skills/process-topic/scripts/rebuild-coverage-index.py"
+    )
+    foreach ($relative in $paths) {
+        $source = Join-Path $repo $relative
+        if (-not (Test-Path -LiteralPath $source)) {
+            throw "Missing agent control file: $relative"
+        }
+        $destination = Join-Path $Workspace $relative
+        $parent = Split-Path $destination -Parent
+        New-Item -ItemType Directory -Force -Path $parent | Out-Null
+        Copy-Item -LiteralPath $source -Destination $destination -Force
+    }
 }
 
 $isDryRun = $forwardArgs.Contains("--dry-run")
@@ -126,6 +160,7 @@ else {
         throw "--workspace is not on an agent/cover-* branch."
     }
     $runName = Split-Path $runWorkspace -Leaf
+    Sync-AgentControlFiles $runWorkspace
 }
 
 Write-Host "Agent branch:    $agentBranch"
@@ -134,6 +169,9 @@ Write-Host "Agent workspace: $runWorkspace"
 $requestedTag = Get-RequestedTag
 if (-not [string]::IsNullOrWhiteSpace($requestedTag)) {
     $target = @{ tag = $requestedTag; id = $runName }
+    if (-not [string]::IsNullOrWhiteSpace($focus)) {
+        $target.focus = $focus
+    }
     $target | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $runWorkspace "cover-target.json") -Encoding utf8
     $rebuild = Join-Path $PSScriptRoot "..\skills\process-topic\scripts\rebuild-coverage-index.py"
     & python $rebuild --repo $repo --clones-js-only
