@@ -4019,3 +4019,70 @@
 - [+] Why can a self-invoked REQUIRES_NEW method still roll back the outer transaction.md
 - [+] How do you make an inner Transactional method honor its annotation.md
 - [+] When should you use AspectJ mode for Transactional self-invocation.md
+- [+] Is RuntimeException a subclass of Exception.md
+- [+] Does catch Exception also catch RuntimeException.md
+- [+] Does catch Exception also catch Error.md
+- [+] Why is Error a sibling of Exception rather than a subclass.md
+- [+] Can you throw an object that is not a Throwable.md
+- [+] Is Throwable a class or an interface.md
+- [+] What is the difference between Throwable and Exception.md
+- [+] Do checked exceptions inherit Throwable directly.md
+- [+] What information does a Throwable carry.md
+- [+] What is RuntimeException.md
+- [+] Must you declare RuntimeException in a throws clause.md
+- [+] Can you catch an unchecked exception in Java.md
+- [+] What is NullPointerException.md
+- [+] How do you prevent a NullPointerException.md
+- [+] What does Objects.requireNonNull do.md
+- [+] What did Java 14 change about NullPointerException messages.md
+- [+] What is the difference between IllegalArgumentException and IllegalStateException.md
+- [+] Should you throw NullPointerException or IllegalArgumentException for a null argument.md
+- [+] What is ArithmeticException.md
+- [+] Does floating-point division by zero throw ArithmeticException.md
+- [+] What is NumberFormatException.md
+- [+] What is ArrayIndexOutOfBoundsException.md
+- [+] What is the difference between IndexOutOfBoundsException and ArrayIndexOutOfBoundsException.md
+- [+] What is NoSuchElementException.md
+- [+] When should a custom exception extend RuntimeException.md
+- [+] Does wrapping a checked exception in RuntimeException require a throws clause.md
+- [+] What is java.lang.Error.md
+- [+] Are Error subclasses checked or unchecked.md
+- [+] Why should you not catch java.lang.Error.md
+- [+] What is the difference between RuntimeException and Error.md
+- [+] What is VirtualMachineError.md
+- [+] What is LinkageError.md
+- [+] What happens if you use a class after ExceptionInInitializerError.md
+- [+] How do you produce a StackOverflowError.md
+- [+] What is ThreadDeath.md
+- [+] What is UnsupportedClassVersionError.md
+- [+] What is NoSuchMethodError.md
+- [+] What is the difference between PermGen space and Metaspace OutOfMemoryError.md
+- [+] What is OutOfMemoryError Requested array size exceeds VM limit.md
+- [+] What happens if try and finally both throw an exception.md
+- [+] What happens if finally returns after try throws an exception.md
+- [+] What happens if finally mutates a local after try returns it.md
+- [+] Can a try statement have more than one finally block.md
+- [+] Can a try block exist without catch and finally.md
+- [+] Can you place statements between try catch and finally.md
+- [+] What is an unreachable catch block error.md
+- [+] Why can multi-catch exception types not share a parent-child relationship.md
+- [+] Does control return to the try block after a catch handles an exception.md
+- [+] How many catch blocks execute for one thrown exception.md
+- [+] What happens if no catch matches and a finally block is present.md
+- [+] What is a suppressed exception in try-with-resources.md
+- [+] What is the difference between try-with-resources and try-finally when both throw.md
+- [+] How does the compiler translate try-with-resources.md
+- [+] What happens if a later try-with-resources constructor throws.md
+- [+] What happens if close throws after a try-with-resources body succeeds.md
+- [+] What happens if a try-with-resources resource is null.md
+- [+] What are common examples of checked exceptions in Java.md
+- [+] What happens if you neither catch nor declare a checked exception.md
+- [+] How do checked exceptions work with method overriding.md
+- [+] What happens if an override declares a broader checked exception than the parent.md
+- [+] Can you override a RuntimeException throws clause with a checked exception.md
+- [+] Can a lambda throw a checked exception.md
+- [+] Can a static initializer throw a checked exception.md
+- [+] Can a constructor throw a checked exception.md
+- [+] Does catching Exception satisfy a checked exception obligation.md
+- [+] Does throws IOException cover FileNotFoundException.md
+- [+] Is Throwable a checked exception.md

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Optional #Java/Exceptions #SRS #New
+#Java/Language/Optional #Java/Exceptions/Unchecked #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

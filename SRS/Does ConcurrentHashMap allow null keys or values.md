@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/ConcurrentHashMap #Java/Exceptions #SRS #New
+#Java/Collections/Map/ConcurrentHashMap #Java/Exceptions/Unchecked #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

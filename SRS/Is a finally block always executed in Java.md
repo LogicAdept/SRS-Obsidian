@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions #SRS
+#Java/Exceptions/TryCatch #SRS
 
 # Is a `finally` block always executed in Java?
 

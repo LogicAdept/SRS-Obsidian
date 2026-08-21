@@ -40,5 +40,9 @@ Interview question repositories used as SRS sources.
 + https://github.com/marcelogdomingues/medium-articles
 + https://github.com/rhidoyhasanmahmud/The-Anatomy-of-Redis
 + https://github.com/sajidhamdard/java-full-stack-interview-questions/blob/main/proxy-transaction.md
++ https://github.com/abdullahfarid/java-interview-questions
++ https://github.com/abhishekaryangiri/java-interview-questions
++ https://github.com/mertsaner/java-interview-questions
++ https://github.com/syamdanda/Java-Interview-Preparation
 
 - https://github.com/owaresabd/spring-interview-questions/blob/spring/spring-multiple-choice-questions.md

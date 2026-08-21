@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions #Java/JVM #SRS #New
+#Java/Exceptions/Hierarchy #Java/JVM #Java/Exceptions/Error #SRS #New

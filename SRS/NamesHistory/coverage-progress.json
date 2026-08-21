@@ -1,5 +1,513 @@
 {
   "nodes": {
+    "Java/Exceptions": {
+      "children": [
+        "Java/Exceptions/Checked",
+        "Java/Exceptions/Error",
+        "Java/Exceptions/Hierarchy",
+        "Java/Exceptions/TryCatch",
+        "Java/Exceptions/Unchecked"
+      ],
+      "coverage_fingerprint": "4524d91d6078451531018a516120f6be0ed0aee3acbf6e820bcede3c15b5d7c3",
+      "last_created": 0,
+      "last_error": "taxonomy changed; descendants must converge first",
+      "passes": 1,
+      "refined_taxonomy_fingerprints": [
+        "7d78ae9d534b2cbc81720c69d49d8e829bfb63561181b52bc1cd69382bd47213"
+      ],
+      "status": "blocked",
+      "taxonomy_fingerprint": "b8b4c1215a89a4fa19b645ded99e93ce75291af0deaf12935f64b2f1ed444618"
+    },
+    "Java/Exceptions/Checked": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "Existing comparison cues already cover checked vs unchecked (What is the difference between checked and unchecked exceptions; What do checked and unchecked exceptions mean in Java). No weaker duplicate added."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "Existing cues already define checked vs unchecked (What is checked and unchecked exception; What is the difference between checked and unchecked exceptions).",
+            "New cue lists common named checked types (IOException, FileNotFoundException, SQLException, ClassNotFoundException, InterruptedException, ParseException)."
+          ],
+          "required": false,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "Existing cue Do checked exceptions inherit Throwable directly records the direct-inherit dump lie.",
+            "New cues cover unreported-exception compile failure, broader override (IOException vs Exception, SQLException), overriding RuntimeException with a checked type, and dump disagreement on whether Throwable itself is checked."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "Existing cues cover throws, wrapping a checked cause in RuntimeException, and catch-or-specify options (some still empty stubs).",
+            "New cues cover overriding throws rules, constructor throws, static-initializer prohibition, lambda functional-method throws, and throws IOException covering FileNotFoundException."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "missing_definition_gaps": {
+          "evidence": [
+            "Named dump terms IOException, FileNotFoundException, SQLException, ClassNotFoundException, InterruptedException, ParseException, and Throwable-as-checked are covered by the new examples/Throwable cues or by existing CNFE and InterruptedException cards.",
+            "Product-specific types (SQLException identity, CloneNotSupportedException, FileInputStream) were deferred to JDBC, OOP, and IO rather than stretched onto this leaf."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "procedure_operations": {
+          "evidence": [
+            "Existing cues cover handling options, wrapping to drop throws, and avoiding forced IOException handling (several still stubs).",
+            "New cues cover catching Exception to satisfy the compiler and wrapping or using a custom functional interface so a lambda can deal with checked types."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "8f7d146081cbe06873d90416139fff17351c3679a480baedf1a32b924b48014f",
+      "deferred_candidates": [
+        "What is the difference between throw and throws -> #Java/Exceptions (throw/propagation; existing Language cues already exist)",
+        "What is exception propagation -> #Java/Exceptions",
+        "How do you write a custom checked exception -> #Java/Exceptions (How do you define your own exception class already exists)",
+        "Must instance initializer checked exceptions be declared on every constructor -> #Java/OOP/Initialization",
+        "What is FileNotFoundException / why FileInputStream throws it -> #Java/IO",
+        "What is SQLException -> #Java/JDBC",
+        "What is CloneNotSupportedException -> OOP / Cloneable, not this leaf",
+        "Callable vs Runnable checked throws -> #Java/Concurrency/Executors",
+        "Java 7 more precise rethrow of catch Exception -> #Java/Exceptions/TryCatch",
+        "Spring rollbackFor on checked exceptions -> #Java/Spring/Transactions",
+        "Catch order of FileNotFoundException before IOException -> already #Java/Exceptions/TryCatch"
+      ],
+      "last_created": 11,
+      "last_error": null,
+      "passes": 1,
+      "refined_taxonomy_fingerprint": "1495aa974edbafbdfa438fce7cd96e963ecee6ddbfa47e7a340a56d4d82f667c",
+      "refined_taxonomy_fingerprints": [
+        "1495aa974edbafbdfa438fce7cd96e963ecee6ddbfa47e7a340a56d4d82f667c"
+      ],
+      "sources_searched": {
+        "interview": [
+          "https://github.com/enhorse/java-interview",
+          "https://github.com/sudheerj/java-interview-questions",
+          "https://github.com/WeKnow-io/java-interview-questions",
+          "https://github.com/FAQGURU/FAQGURU",
+          "https://github.com/anton-liauchuk/java-interview",
+          "https://github.com/mertsaner/java-interview-questions",
+          "https://github.com/syamdanda/Java-Interview-Preparation",
+          "https://www.interviewbit.com/exception-handling-interview-questions/",
+          "https://engineeringinterviewquestions.com/java-exception-handling-faqs-and-answers-experienced-freshers/"
+        ],
+        "official": [
+          "https://docs.oracle.com/javase/tutorial/essential/exceptions/catchOrDeclare.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html",
+          "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html",
+          "https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html"
+        ]
+      },
+      "status": "complete",
+      "taxonomy_fingerprint": "1495aa974edbafbdfa438fce7cd96e963ecee6ddbfa47e7a340a56d4d82f667c"
+    },
+    "Java/Exceptions/Error": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "Existing cues already compare Error vs Exception, StackOverflowError vs OutOfMemoryError, and ClassNotFoundException vs NoClassDefFoundError; this run adds RuntimeException vs Error and PermGen vs Metaspace OOM."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "Existing cards explained Error vs Exception and the Error tree but had no dedicated What is java.lang.Error cue; this run adds that definition plus VirtualMachineError, LinkageError, ThreadDeath, NoSuchMethodError, and UnsupportedClassVersionError."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "New cues cover PermGen vs Metaspace (Java 8), UnsupportedClassVersionError JDK mismatch, the lie that Error is a RuntimeException, NoSuchMethodError:main vs library skew, and Requested array size exceeds VM limit vs ordinary heap OOM."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "New cues cover Error as unchecked, LinkageError vs VirtualMachineError placement, ExceptionInInitializerError followed by NoClassDefFoundError, and producing StackOverflowError via unbounded recursion."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "missing_definition_gaps": {
+          "evidence": [
+            "Named dump Error kinds now have a cue or an existing one: Error, VirtualMachineError, OutOfMemoryError, StackOverflowError, LinkageError, NoClassDefFoundError, ExceptionInInitializerError, AssertionError, ThreadDeath, NoSuchMethodError, UnsupportedClassVersionError, plus array-size and Metaspace OOM messages."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "procedure_operations": {
+          "evidence": [
+            "Existing reproduce/diagnose OutOfMemoryError cues remain; this run adds how to produce StackOverflowError and why not to catch Error as an operations policy."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "189cc38ffb31340ab4ba9b7b22be42c35ea407957078f95f9916ed6cd49f4ecd",
+      "deferred_candidates": [
+        "What is VerifyError (better owned by #Java/Bytecode or #Java/JVM/ClassLoaders)",
+        "Should you catch Throwable (existing #Java/Exceptions/Hierarchy / TryCatch cue)",
+        "What is the difference between OutOfMemoryError and a memory leak (#Java/JVM/Memory)",
+        "Can you throw a checked exception from a static block (#Java/OOP/Initialization / TryCatch)"
+      ],
+      "last_created": 13,
+      "last_error": null,
+      "passes": 1,
+      "refined_taxonomy_fingerprint": "e0bf543e7919b389a95e2c899a340ffacc8f5bedeb859d6a290d9468f52bf6cd",
+      "refined_taxonomy_fingerprints": [
+        "e0bf543e7919b389a95e2c899a340ffacc8f5bedeb859d6a290d9468f52bf6cd"
+      ],
+      "sources_searched": {
+        "interview": [
+          "https://github.com/enhorse/java-interview",
+          "https://github.com/a11exe/java-interview",
+          "https://github.com/sudheerj/java-interview-questions",
+          "https://github.com/WeKnow-io/java-interview-questions",
+          "https://github.com/Devinterview-io/java-interview-questions",
+          "https://github.com/FAQGURU/FAQGURU",
+          "https://gist.github.com/carefree-ladka/b84ea8c4076fab8d186dbded65f52569",
+          "https://github.com/abdullahfarid/java-interview-questions",
+          "https://github.com/abhishekaryangiri/java-interview-questions",
+          "https://www.javamadesoeasy.com/2015/05/exceptions-top-60-interview-questions_16.html",
+          "https://www.javamadesoeasy.com/2015/05/javalangerror-in-exception-handling-in.html",
+          "https://www.javamadesoeasy.com/2015/04/threaddeath-error-calling-stop-method.html",
+          "https://www.javamadesoeasy.com/2015/12/solve-javalangexceptionininitializererr.html",
+          "https://www.javamadesoeasy.com/2015/12/how-to-solve-javalangnoclassdeffounderr.html",
+          "https://www.javamadesoeasy.com/2015/12/when-javalangstackoverflowerror-occurs.html",
+          "https://www.javamadesoeasy.com/2015/05/outofmemoryerror-in-java.html",
+          "https://www.interviewbit.com/exception-handling-interview-questions/"
+        ],
+        "official": [
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Error.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/VirtualMachineError.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/LinkageError.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ThreadDeath.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NoSuchMethodError.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/UnsupportedClassVersionError.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/StackOverflowError.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/OutOfMemoryError.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ExceptionInInitializerError.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NoClassDefFoundError.html",
+          "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html",
+          "https://docs.oracle.com/en/java/javase/21/troubleshoot/troubleshoot-memory-leaks.html"
+        ]
+      },
+      "status": "complete",
+      "taxonomy_fingerprint": "e0bf543e7919b389a95e2c899a340ffacc8f5bedeb859d6a290d9468f52bf6cd"
+    },
+    "Java/Exceptions/Hierarchy": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "Existing: What is the difference between java.lang.Error and java.lang.Exception.",
+            "New: What is the difference between Throwable and Exception."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "Existing cues already name the root and the tree: What sits at the root of every Java exception, How would you explain the Java exception type hierarchy, What are the key base exception types in Java."
+          ],
+          "required": false,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "New: Is Throwable a class or an interface (dump calls it an interface), Do checked exceptions inherit Throwable directly (dump says directly inherit Throwable).",
+            "Existing: Is AssertionError a subclass of Exception, What is the difference between ClassNotFoundException and NoClassDefFoundError."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "New: Is RuntimeException a subclass of Exception, Does catch Exception also catch RuntimeException, Does catch Exception also catch Error, Why is Error a sibling of Exception rather than a subclass, Can you throw an object that is not a Throwable.",
+            "Existing: Can you catch Throwable (catching the root also catches Error)."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "missing_definition_gaps": {
+          "evidence": [
+            "Named tree terms Throwable, Exception, Error, and RuntimeException are covered by existing hierarchy stubs plus the new RuntimeException-placement and Throwable-versus-Exception cues. Remaining named types (NPE, OOM, custom exceptions, checkedness of Throwable) belong to sibling or parent leaves and were deferred."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "procedure_operations": {
+          "evidence": [
+            "New: What information does a Throwable carry (message, cause, stack, suppressed), Can you throw an object that is not a Throwable.",
+            "Existing: Can you catch Throwable."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "15b463ed18b0c6cb98f8aad6edfe7b685e72253da2238b814254a55269acb157",
+      "deferred_candidates": [
+        "Which class should a custom exception extend (Exception vs RuntimeException vs Throwable vs Error) -> #Java/Exceptions",
+        "Why should you not extend Throwable or Error directly for a custom type -> #Java/Exceptions",
+        "Is Throwable itself a checked exception -> #Java/Exceptions/Checked",
+        "What is the difference between checked and unchecked exceptions (already covered) -> #Java/Exceptions/Checked and #Java/Exceptions/Unchecked",
+        "Exception chaining, getCause, and initCause as wrapping practice -> #Java/Exceptions",
+        "Why catch block order matters for subclass vs superclass -> #Java/Exceptions/TryCatch",
+        "Why should you avoid catching Exception broadly as a practice (beyond the is-a fact) -> #Java/Exceptions/TryCatch",
+        "OutOfMemoryError and StackOverflowError details -> #Java/Exceptions/Error",
+        "Common kinds such as NullPointerException and ClassCastException -> #Java/Exceptions/Unchecked"
+      ],
+      "last_created": 9,
+      "last_error": null,
+      "passes": 1,
+      "refined_taxonomy_fingerprint": "87aef0cb3094acc8c3657be777befb873d7056f3a8abafe1890cb688c5acd451",
+      "refined_taxonomy_fingerprints": [
+        "87aef0cb3094acc8c3657be777befb873d7056f3a8abafe1890cb688c5acd451"
+      ],
+      "sources_searched": {
+        "interview": [
+          "https://github.com/enhorse/java-interview",
+          "https://github.com/WeKnow-io/java-interview-questions",
+          "https://github.com/harp-lab/java-interview-questions",
+          "https://github.com/sudheerj/java-interview-questions",
+          "https://github.com/in28minutes/JavaInterviewQuestionsAndAnswers",
+          "https://github.com/anton-liauchuk/java-interview",
+          "https://github.com/m-fedosov/java-questions-rus",
+          "https://github.com/FAQGURU/FAQGURU",
+          "https://github.com/a11exe/java-interview",
+          "https://github.com/d1mnewz/interviews",
+          "https://www.baeldung.com/java-exceptions-interview-questions",
+          "https://interview-prep.coderboi.com/java/exceptions/exception-handling",
+          "https://interview-prep.coderboi.com/java/exceptions/custom-exceptions",
+          "https://theskilledcoder.com/java-interview/exception-hierarchy",
+          "https://www.w3docs.com/learn-java/java-exception-hierarchy"
+        ],
+        "official": [
+          "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Error.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html",
+          "https://docs.oracle.com/javase/tutorial/essential/exceptions/throwing.html"
+        ]
+      },
+      "status": "complete",
+      "taxonomy_fingerprint": "87aef0cb3094acc8c3657be777befb873d7056f3a8abafe1890cb688c5acd451"
+    },
+    "Java/Exceptions/TryCatch": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "Existing cue compares final, finally, and finalize. This run adds try-with-resources vs try-finally when both throw, and multi-catch union rules vs unreachable multiple-catch order."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "Existing cues already define try-catch-finally, finally, try-with-resources, and AutoCloseable; this run adds unreachable-catch and suppressed-exception names rather than a second What is try card."
+          ],
+          "required": false,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "Existing GoldStandard and stubs cover finally-not-always and System.exit. This run adds finally-return swallowing a pending exception, finally-throw masking try/catch, unreachable catch, parent-child multi-catch compile error, and TWR vs handwritten finally which exception wins (Java 7)."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "Existing cues cover try-catch-finally flow, return-then-finally, multi-catch syntax, and TWR close-after-try. This run adds TWR desugaring, initializer-failure close order, null-resource close, catch-does-not-resume-try, one-catch-per-throw, and finally-mutates-local-after-return."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "missing_definition_gaps": {
+          "evidence": [
+            "Named dump terms checked: try-catch-finally, finally, try-with-resources, multi-catch, AutoCloseable already had cues; this run adds unreachable catch block and suppressed exception. Remaining dump titles were duplicates or owned by sibling tags."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "procedure_operations": {
+          "evidence": [
+            "Existing cues already cover catch order for IOException/FileNotFoundException, multi-catch, and try-finally without catch. This run adds how to retrieve suppressed exceptions (getSuppressed) and how TWR close behaves on constructor failure and null resources."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "29ac10b51194c560f6a702a6402d2467dc2390cbc6ce4ac074a161144aaca15a",
+      "deferred_candidates": [
+        "What is the difference between throw and throws (#Java/Exceptions / #Java/Language)",
+        "What is the difference between checked and unchecked exceptions (#Java/Exceptions/Checked and Unchecked)",
+        "What is the difference between Closeable and AutoCloseable (#Java/IO)",
+        "Why is try-with-resources not a drop-in for lock/unlock (#Java/Concurrency/Synchronization)",
+        "How should exceptions be handled in multi-threaded code (#Java/Concurrency/Threads)",
+        "Can a static initializer throw a checked exception (#Java/OOP/Initialization / #Java/Exceptions/Error)",
+        "What is exception chaining / getCause (#Java/Exceptions/Hierarchy)",
+        "How do exception-handling rules work when overriding a method (#Java/Exceptions/Checked)",
+        "Can you throw a checked exception from a lambda (#Java/Language)"
+      ],
+      "last_created": 17,
+      "last_error": null,
+      "passes": 1,
+      "refined_taxonomy_fingerprint": "2cb99951ad58df3db657abf747ac219134494d6e3f9202e83e6401a5742e9263",
+      "refined_taxonomy_fingerprints": [
+        "2cb99951ad58df3db657abf747ac219134494d6e3f9202e83e6401a5742e9263"
+      ],
+      "sources_searched": {
+        "interview": [
+          "https://github.com/enhorse/java-interview",
+          "https://github.com/anton-liauchuk/java-interview",
+          "https://github.com/in28minutes/JavaInterviewQuestionsAndAnswers",
+          "https://github.com/sudheerj/java-interview-questions",
+          "https://github.com/Devinterview-io/java-interview-questions",
+          "https://github.com/WeKnow-io/java-interview-questions",
+          "https://github.com/a11exe/java-interview",
+          "https://www.interviewbit.com/exception-handling-interview-questions/",
+          "https://www.javaguides.net/2026/02/tricky-core-java-exception-handling-interview-questions-and-answers.html",
+          "https://theskilledcoder.com/java-interview/exceptions-interview-questions",
+          "https://www.baeldung.com/java-exceptions-interview-questions",
+          "https://www.springjavalab.com/2025/04/java-exception-handling-interview-questions.html",
+          "https://interview-prep.coderboi.com/java/exceptions/try-with-resources"
+        ],
+        "official": [
+          "https://docs.oracle.com/javase/specs/jls/se22/html/jls-14.html#jls-14.20",
+          "https://docs.oracle.com/javase/tutorial/essential/exceptions/handling.html",
+          "https://docs.oracle.com/javase/tutorial/essential/exceptions/finally.html",
+          "https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html",
+          "https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Throwable.html",
+          "https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/AutoCloseable.html"
+        ]
+      },
+      "status": "complete",
+      "taxonomy_fingerprint": "2cb99951ad58df3db657abf747ac219134494d6e3f9202e83e6401a5742e9263"
+    },
+    "Java/Exceptions/Unchecked": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "Existing checked vs unchecked comparison cards remain; new cues add IllegalArgumentException vs IllegalStateException, NPE vs IAE for a null argument, and IndexOutOfBoundsException vs ArrayIndexOutOfBoundsException."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "Existing cards listed common kinds and compared checked vs unchecked but had no dedicated RuntimeException or NullPointerException definition; new cues cover those terms plus ArithmeticException, NumberFormatException, ArrayIndexOutOfBoundsException, and NoSuchElementException."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "New cues cover Java 14 helpful NPE messages, integer vs floating-point divide-by-zero, the lie that unchecked exceptions cannot be caught, and overflow not throwing ArithmeticException (pointed from the ArithmeticException trap; overflow wrap already has a primitives card)."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "New cues cover compiler treatment of RuntimeException (throws optional, catch legal), NPE dereference cases, requireNonNull, wrapping a checked cause in RuntimeException, and NumberFormatException extending IllegalArgumentException."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "missing_definition_gaps": {
+          "evidence": [
+            "Named dump kinds now have a cue or an existing one: NPE, CCE (existing), ArithmeticException, NumberFormatException, ArrayIndexOutOfBoundsException, IAE/ISE (comparison), NoSuchElementException, ConcurrentModificationException (existing), UnsupportedOperationException (existing collection example). Remaining interview titles were sibling-owned or duplicates."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "procedure_operations": {
+          "evidence": [
+            "New cues cover preventing NPE, Objects.requireNonNull, and when a custom exception should extend RuntimeException."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "9d5ad7549017d11bba3d0b35c6360c481408680a4538186113ac40c31e8cf73d",
+      "deferred_candidates": [
+        "Can an overriding method throw extra unchecked exceptions not declared by the parent (OOP / Language)",
+        "Can a standard Java functional interface lambda throw a checked exception (Language)",
+        "Are Error subclasses considered unchecked exceptions (Exceptions/Error or Hierarchy)",
+        "How do you wrap checked IOException in RuntimeException as an API policy (Exceptions/Checked; stub already exists)"
+      ],
+      "last_created": 17,
+      "last_error": null,
+      "passes": 1,
+      "refined_taxonomy_fingerprint": "60fa4aa6e7aed796cc374664a11afef3284cc4989e37607865254b66c463e79d",
+      "refined_taxonomy_fingerprints": [
+        "60fa4aa6e7aed796cc374664a11afef3284cc4989e37607865254b66c463e79d"
+      ],
+      "sources_searched": {
+        "interview": [
+          "https://github.com/enhorse/java-interview",
+          "https://github.com/sudheerj/java-interview-questions",
+          "https://github.com/harp-lab/java-interview-questions",
+          "https://github.com/WeKnow-io/java-interview-questions",
+          "https://github.com/Devinterview-io/java-interview-questions",
+          "https://github.com/anton-liauchuk/java-interview",
+          "https://github.com/a11exe/java-interview",
+          "https://github.com/FAQGURU/FAQGURU",
+          "https://github.com/in28minutes/JavaInterviewQuestionsAndAnswers",
+          "https://github.com/JavaJub/java-interview",
+          "https://www.interviewbit.com/exception-handling-interview-questions/",
+          "https://www.baeldung.com/java-exceptions-interview-questions",
+          "https://interview-prep.coderboi.com/java/exceptions/exception-handling",
+          "https://www.geeksforgeeks.org/java/java-checked-vs-unchecked-exceptions/",
+          "https://techinterviewguide.in/what-are-the-common-runtime-exceptions-in-java/"
+        ],
+        "official": [
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ArithmeticException.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NumberFormatException.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IndexOutOfBoundsException.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ArrayIndexOutOfBoundsException.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/NoSuchElementException.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html",
+          "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html",
+          "https://openjdk.org/jeps/358"
+        ]
+      },
+      "status": "complete",
+      "taxonomy_fingerprint": "60fa4aa6e7aed796cc374664a11afef3284cc4989e37607865254b66c463e79d"
+    },
     "Java/Spring/Transactions": {
       "children": [
         "Java/Spring/Transactions/Propagation"

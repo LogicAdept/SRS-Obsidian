@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions #Java/Language #SRS #New
+#Java/Exceptions/Checked #Java/Language #SRS #New

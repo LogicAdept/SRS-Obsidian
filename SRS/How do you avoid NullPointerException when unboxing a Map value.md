@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Wrappers #Java/Collections #SRS #New
+#Java/Language/Wrappers #Java/Collections #Java/Exceptions/Unchecked #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

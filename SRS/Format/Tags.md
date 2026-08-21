@@ -41,6 +41,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **Collections in the tree:** **`#Java/Collections`** is the framework (interfaces, `Collection` vs `Collections`, unmodifiable views). Implementations live under **`List`**, **`Map`**, **`Set`**, **`Queues`**. List impls: **`ArrayList`**, **`LinkedList`**, **`Vector`**. Set impls: **`HashSet`**, **`LinkedHashSet`**, **`TreeSet`**, **`EnumSet`**. Queue impls: **`ArrayDeque`**, **`PriorityQueue`**, **`BlockingQueue`**. Concurrent collections stay **`#Java/Collections/Concurrency`**. Iterators stay **`#Java/Collections/Iteration`**. Do not put **`#Java/Collections`** or a family tag (`List`/`Set`/`Map`/`Queues`) next to a more specific child on the same card. Comparison cards carry both implementation leaves.
 
+**Exceptions in the tree:** **`#Java/Exceptions`** is the Java exception model (handling practices, custom types, `throw`/propagation). **Hierarchy** is `Throwable` and the Exception/Error/RuntimeException tree. **Checked** is checked exceptions (`throws`, wrapping, the checked-exception debate). **Unchecked** is `RuntimeException` and common kinds (NPE, CCE). **Error** is `java.lang.Error` and JVM errors (OOM, StackOverflowError, ExceptionInInitializerError, AssertionError). **TryCatch** is try/catch/finally, multi-catch, catch order, and try-with-resources. Checked vs unchecked comparison cards carry **Checked** and **Unchecked**. Error vs Exception comparison carries **Error** and **Hierarchy**. Do not put **`#Java/Exceptions`** next to a more specific **`#Java/Exceptions/...`** child on the same card.
+
 ---
 
 ## Tree (prefixes in cards)
@@ -89,6 +91,11 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Parallelism`
 * `#Java/Async`
 * `#Java/Exceptions`
+* `#Java/Exceptions/Hierarchy`
+* `#Java/Exceptions/Checked`
+* `#Java/Exceptions/Unchecked`
+* `#Java/Exceptions/Error`
+* `#Java/Exceptions/TryCatch`
 * `#Java/Language`
 * `#Java/Language/Assert`
 * `#Java/Language/Enum`

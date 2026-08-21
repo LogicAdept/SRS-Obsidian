@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Reflection #Java/JVM/ClassLoaders #SRS #New
+#Java/Language/Reflection #Java/JVM/ClassLoaders #Java/Exceptions/Hierarchy #Java/Exceptions/Error #Java/Exceptions/Checked #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
