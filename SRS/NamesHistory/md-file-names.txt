@@ -4120,3 +4120,33 @@
 - [+] Can you register a shutdown hook after shutdown has begun.md
 - [+] What is ProcessHandle.md
 - [+] How do you pass environment variables to a subprocess in Java.md
+- [+] What is the OSI model.md
+- [+] What is the purpose of each OSI layer.md
+- [+] How does encapsulation work in the OSI model.md
+- [+] How does de-encapsulation work in the OSI model.md
+- [+] What is the difference between the OSI model and the TCP IP model.md
+- [+] What PDU is associated with each OSI layer.md
+- [+] Which OSI layer handles logical addressing and routing.md
+- [+] Which OSI layer handles MAC addressing and local frame forwarding.md
+- [+] Which OSI layer provides end-to-end delivery flow control and error recovery.md
+- [+] What is the function of the OSI Session layer.md
+- [+] What is the function of the OSI Presentation layer.md
+- [+] What is the importance of the OSI Physical layer.md
+- [+] What is the job of the Network layer under the OSI model.md
+- [+] At which OSI layer does a router primarily operate.md
+- [+] At which OSI layer does a switch primarily operate.md
+- [+] At which OSI layer does a hub operate.md
+- [+] What is the correct order of OSI layers from Layer 7 to Layer 1.md
+- [+] How do the TCP IP model layers map to the OSI model.md
+- [+] Which TCP IP layer corresponds to OSI Session Presentation and Application.md
+- [+] How many layers does the TCP IP model have.md
+- [+] What is added to data at the Transport layer during encapsulation.md
+- [+] In what order are headers removed during de-encapsulation.md
+- [+] How do you use a bottom-up OSI approach when troubleshooting.md
+- [+] Why do many dumps place HTTPS encryption at the Presentation layer.md
+- [+] What is a frame at the Data Link layer.md
+- [+] What is a packet at the Network layer.md
+- [+] What is a segment at the Transport layer.md
+- [+] At which OSI layer does a duplicate IP address problem occur.md
+- [+] What does a Layer 2 broadcast look like in a packet capture.md
+- [+] How does ARP relate to the OSI layers.md

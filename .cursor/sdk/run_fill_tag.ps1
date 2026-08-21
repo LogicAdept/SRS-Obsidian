@@ -10,13 +10,13 @@ $forwardArgs = [System.Collections.Generic.List[string]]::new()
 $positionalTag = $null
 
 for ($i = 0; $i -lt $args.Count; $i++) {
-    $arg = $args[$i]
+    $arg = [string]$args[$i]
     if ($arg -eq "--workspace") {
         if ($i + 1 -ge $args.Count) {
             throw "--workspace requires a run directory."
         }
         $i++
-        $resumeWorkspace = $args[$i]
+        $resumeWorkspace = [string]$args[$i]
         continue
     }
     if ($arg -eq "--wait") {

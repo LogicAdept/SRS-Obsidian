@@ -44,5 +44,9 @@ Interview question repositories used as SRS sources.
 + https://github.com/abhishekaryangiri/java-interview-questions
 + https://github.com/mertsaner/java-interview-questions
 + https://github.com/syamdanda/Java-Interview-Preparation
++ https://github.com/HannachiHassen/Network-Plus-N10-009-Study-Series
++ https://github.com/codetobuild/computer-network-interview-questions
++ https://github.com/bregman-arie/computer-networking
++ https://github.com/nairuzabulhul/.CodeBits
 
 - https://github.com/owaresabd/spring-interview-questions/blob/spring/spring-multiple-choice-questions.md

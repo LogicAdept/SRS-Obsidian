@@ -204,9 +204,40 @@ function Remove-Clone([string]$ClonePath, [string]$RunName) {
     docker rm -f "srs-cover-$RunName" 2>$null | Out-Null
     docker rm -f "srs-fill-$RunName" 2>$null | Out-Null
     if (Test-Path -LiteralPath $ClonePath) {
-        Remove-Item -LiteralPath $ClonePath -Recurse -Force
+        try {
+            Remove-Item -LiteralPath $ClonePath -Recurse -Force -ErrorAction Stop
+        } catch {
+            Write-Warning "Could not delete clone folder (close the Cursor window on it if open): $ClonePath"
+            Write-Warning $_.Exception.Message
+        }
     }
     Update-ClonesIndex
+}
+
+function Get-AcceptPaths([string]$ClonePath) {
+    # Only vault content. Never commit generated indexes, logs, or Obsidian state.
+    $paths = @(
+        "SRS/Format/Tags.md",
+        "SRS/NamesHistory/coverage-progress.json",
+        "SRS/NamesHistory/md-file-names.txt",
+        "SRS/NamesHistory/question-repositories.txt"
+    )
+    $srs = Join-Path $ClonePath "SRS"
+    if (Test-Path -LiteralPath $srs) {
+        Get-ChildItem -LiteralPath $srs -Filter "*.md" -File -ErrorAction SilentlyContinue |
+            ForEach-Object { "SRS/$($_.Name)" } |
+            ForEach-Object { $paths += $_ }
+    }
+    return $paths | Select-Object -Unique
+}
+
+function Resolve-AcceptConflicts {
+    $script = Join-Path $PSScriptRoot "merge_accept_conflicts.py"
+    Write-Host "Resolving Accept conflicts on shared vault files..."
+    & (Get-Python) $script $repo
+    if ($LASTEXITCODE -ne 0) {
+        throw "Accept conflict auto-merge failed; clone kept. Resolve manually or abort with: git cherry-pick --abort"
+    }
 }
 
 function Accept-Clone([string]$ClonePath, [string]$TargetTag) {
@@ -215,13 +246,32 @@ function Accept-Clone([string]$ClonePath, [string]$TargetTag) {
         throw "Cannot read the source repository state."
     }
     if ($dirty.Count -ne 0) {
-        throw "The source repository must be clean before -Accept."
+        # Mid-Accept recovery: source may already be cherry-picking this clone.
+        $inCherry = Test-Path -LiteralPath (Join-Path $repo ".git\CHERRY_PICK_HEAD")
+        if (-not $inCherry) {
+            throw "The source repository must be clean before -Accept."
+        }
+        Resolve-AcceptConflicts
+        $prev = $ErrorActionPreference
+        $ErrorActionPreference = "Continue"
+        & git -C $repo cherry-pick --continue --no-edit
+        $cont = $LASTEXITCODE
+        $ErrorActionPreference = $prev
+        if ($cont -ne 0) {
+            throw "cherry-pick --continue failed; clone kept at $ClonePath"
+        }
+        return
     }
     $cloneDirty = @(& git -C $ClonePath status --porcelain)
     if ($cloneDirty.Count -ne 0) {
-        & git -C $ClonePath add -A
+        $acceptPaths = @(Get-AcceptPaths $ClonePath)
+        & git -C $ClonePath add -- @acceptPaths
         if ($LASTEXITCODE -ne 0) {
             throw "git add in the clone failed."
+        }
+        $staged = @(& git -C $ClonePath diff --cached --name-only)
+        if ($staged.Count -eq 0) {
+            throw "Clone has no vault files to accept."
         }
         $branch = (& git -C $ClonePath branch --show-current).Trim()
         $verb = if ($branch.StartsWith("agent/fill-")) { "Fill" } else { "Cover" }
@@ -247,11 +297,23 @@ function Accept-Clone([string]$ClonePath, [string]$TargetTag) {
     & git -C $repo merge-base --is-ancestor $fetched HEAD
     $owned = ($LASTEXITCODE -eq 0)
     $ErrorActionPreference = $prev
-    if (-not $owned) {
-        & git -C $repo cherry-pick FETCH_HEAD
-        if ($LASTEXITCODE -ne 0) {
-            throw "cherry-pick failed; clone kept at $ClonePath"
-        }
+    if ($owned) {
+        return
+    }
+    $ErrorActionPreference = "Continue"
+    & git -C $repo cherry-pick FETCH_HEAD
+    $pick = $LASTEXITCODE
+    $ErrorActionPreference = $prev
+    if ($pick -eq 0) {
+        return
+    }
+    Resolve-AcceptConflicts
+    $ErrorActionPreference = "Continue"
+    & git -C $repo cherry-pick --continue --no-edit
+    $cont = $LASTEXITCODE
+    $ErrorActionPreference = $prev
+    if ($cont -ne 0) {
+        throw "cherry-pick failed after auto-merge; clone kept at $ClonePath"
     }
 }
 
