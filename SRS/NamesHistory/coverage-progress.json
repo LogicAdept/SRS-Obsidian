@@ -801,6 +801,105 @@
       },
       "status": "complete",
       "taxonomy_fingerprint": "edeb336cfee2549c6e20a66ead9e8365bec5e286ede4e0540101666f10e6f496"
+    },
+    "Java/Runtime": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "New cues compare Runtime vs System, Runtime.exec vs ProcessBuilder, and System.exit vs Runtime.halt."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "Existing cards did not define Runtime or System; new cue covers both class purposes.",
+            "New shutdown-hook and ProcessHandle cues name the remaining dump terms."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "New cues cover hooks skipping on halt/SIGKILL, System.exit-from-hook hang, and ProcessHandle Java 9 split."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "Existing System.exit card plus new hooks-run-concurrently and exec/ProcessBuilder start-path cues."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "missing_definition_gaps": {
+          "evidence": [
+            "Tag owns environment and properties, but interview dumps never isolated System.getenv versus System.getProperty as a distinct cue."
+          ],
+          "required": true,
+          "satisfied": false
+        },
+        "procedure_operations": {
+          "evidence": [
+            "Existing redirect-streams stub plus new invoke-process, register-hook, and subprocess-environment cues."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "51ed097e2d1fdd5c276388b3894523f9e48b0641d6e568e1394ffc523d28c5f4",
+      "deferred_candidates": [
+        "What do System.gc and Runtime.gc do (#Java/JVM/GarbageCollector)",
+        "How do Runtime.freeMemory totalMemory and maxMemory work (#Java/JVM/Memory)",
+        "What is the difference between a shutdown hook and finalize (#Java/JVM)",
+        "What is runtime polymorphism (#Java/OOP)",
+        "What is RuntimeException (#Java/Exceptions)"
+      ],
+      "last_created": 11,
+      "last_error": "candidate search not exhausted",
+      "passes": 1,
+      "refined_taxonomy_fingerprint": "e718076b72ba8f9318dbb0d76d791bd865a960c9cd844c54de2d9191efcbf9aa",
+      "refined_taxonomy_fingerprints": [
+        "e718076b72ba8f9318dbb0d76d791bd865a960c9cd844c54de2d9191efcbf9aa"
+      ],
+      "sources_searched": {
+        "interview": [
+          "https://github.com/enhorse/java-interview",
+          "https://github.com/WeKnow-io/java-interview-questions",
+          "https://github.com/abdelrahmanfaheem/java-interview-questions",
+          "https://github.com/harp-lab/java-interview-questions",
+          "https://github.com/sudheerj/java-interview-questions",
+          "https://github.com/Devinterview-io/java-interview-questions",
+          "https://github.com/FAQGURU/FAQGURU/blob/master/topics/en/java.md",
+          "https://github.com/snowdream/115-Java-Interview-Questions-and-Answers",
+          "https://github.com/anton-liauchuk/java-interview",
+          "https://github.com/a11exe/java-interview",
+          "https://github.com/JavaJub/java-interview",
+          "https://github.com/d1mnewz/interviews",
+          "https://github.com/kiransagar1/Java-Interview-Questions-and-Answers-",
+          "https://github.com/alitalhacoban/backend-interview-questions-2026",
+          "https://www.interviewbit.com/java-interview-questions/",
+          "https://itsobes.com/java/how-to-work-with-shutdown-hooks/",
+          "https://itsobes.com/java/how-to-launch-another-program-from-a-java-application/",
+          "https://r4r.co.in/blogs/article/467/Java-multithreading-interview-questions-Set-2",
+          "https://www.tpointtech.com/jvm-shutdown-hook-in-java",
+          "https://engineeringinterviewquestions.com/mcqs-on-java-lang-runtime-classloader-classes-answers/",
+          "https://engineeringinterviewquestions.com/mcqs-on-java-lang-system-class-advance-answers/"
+        ],
+        "official": [
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runtime.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/System.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ProcessBuilder.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Process.html",
+          "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ProcessHandle.html"
+        ]
+      },
+      "status": "dirty",
+      "taxonomy_fingerprint": "e718076b72ba8f9318dbb0d76d791bd865a960c9cd844c54de2d9191efcbf9aa"
     }
   },
   "version": 2

@@ -4109,3 +4109,14 @@
 - [+] How does an empty Target array affect a custom annotation.md
 - [+] What is a Java annotation.md
 - [+] What are meta-annotations in Java.md
+- [+] What is the purpose of the Runtime class and the System class.md
+- [+] How do you invoke an external process in Java.md
+- [+] What is the difference between Runtime.exec and ProcessBuilder.md
+- [+] What is a JVM shutdown hook.md
+- [+] When does a JVM shutdown hook not run.md
+- [+] What happens if you call System.exit from a shutdown hook.md
+- [+] In what order do shutdown hooks run.md
+- [+] What is the difference between System.exit and Runtime.halt.md
+- [+] Can you register a shutdown hook after shutdown has begun.md
+- [+] What is ProcessHandle.md
+- [+] How do you pass environment variables to a subprocess in Java.md

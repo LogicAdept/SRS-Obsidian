@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM/ClassLoaders #Java/Runtime #SRS #New
+#Java/JVM/ClassLoaders #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из шпаргалок Хабра (MishaBucha, 2025). Не сверен с официальной документацией. Не считать ответом для ревью.
