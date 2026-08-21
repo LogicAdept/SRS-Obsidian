@@ -262,7 +262,7 @@ def _html_node(node: Node, depth: int) -> str:
         "".join(
             (
                 _copy_btn("General", launch, path),
-                _copy_btn("Focused…", launch, path, " focused"),
+                _copy_btn("Focused", f"{launch} --focus ''", path, " focused"),
             )
         ),
         " agent-menu",
@@ -274,7 +274,7 @@ def _html_node(node: Node, depth: int) -> str:
             (
                 _copy_btn("Open", review, path),
                 _copy_btn("Continue", launch, path, " continue"),
-                _copy_btn("Focused…", launch, path, " focused"),
+                _copy_btn("Focused", f"{launch} --focus ''", path, " focused"),
                 _copy_btn("Accept", accept, path),
                 _copy_btn("Drop", drop, path),
             )
@@ -511,9 +511,9 @@ li.node.hidden {{ display: none; }}
     <summary>Подсказки про теги</summary>
     <dl class="skills">
     <dt>Agent</dt>
-    <dd><b>General</b> — обычный refine + cover листа или листьев под родителем. <b>Focused…</b> — спросить, какого покрытия не хватает; агент сопоставит запрос с честным листом (при необходимости создаст его) и покроет именно его. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
+    <dd><b>General</b> — обычный refine + cover листа или листьев под родителем. <b>Focused</b> — копирует ту же команду с <code>--focus ''</code>; в терминале допишите, какого покрытия не хватает. Агент сопоставит запрос с честным листом (при необходимости создаст его) и покроет именно его. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Clone</dt>
-    <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — второе окно на клон. <b>Continue</b> — продолжить незавершённое состояние. <b>Focused…</b> — добрать конкретную тему в этом же клоне, даже если лист уже complete. <b>Accept</b> — cherry-pick в исходный vault и удалить клон. <b>Drop</b> — удалить без переноса.</dd>
+    <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — второе окно на клон. <b>Continue</b> — продолжить незавершённое состояние. <b>Focused</b> — шаблон с <code>--focus ''</code> для того же клона, даже если лист уже complete. <b>Accept</b> — cherry-pick в исходный vault и удалить клон. <b>Drop</b> — удалить без переноса.</dd>
     <dt>Source</dt>
     <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
     <dt>…</dt>
@@ -545,10 +545,17 @@ document.querySelectorAll(".clone-menu").forEach((el) => {{
   el.hidden = !id;
   if (id) {{
     const cmd = "./.cursor/sdk/run_cover_vault.ps1 --workspace .cursor/sdk/runs/" + id + " " + el.dataset.tag;
-    el.querySelectorAll("button.continue, button.focused").forEach((btn) => {{
-      btn.dataset.cmd = cmd;
-      btn.title = cmd;
-    }});
+    const cont = el.querySelector("button.continue");
+    if (cont) {{
+      cont.dataset.cmd = cmd;
+      cont.title = cmd;
+    }}
+    const focused = el.querySelector("button.focused");
+    if (focused) {{
+      const fcmd = cmd + " --focus ''";
+      focused.dataset.cmd = fcmd;
+      focused.title = fcmd;
+    }}
   }}
 }});
 document.querySelectorAll(".menu").forEach((menu) => {{
@@ -620,27 +627,14 @@ async function copyCmd(cmd) {{
     return ok;
   }}
 }}
-function focusedCommand(base, tag) {{
-  const raw = window.prompt(
-    "Какого покрытия не хватает для #" + tag + "?",
-    ""
-  );
-  if (raw === null || !raw.trim()) return null;
-  const quoted = "'" + raw.trim().replaceAll("'", "''") + "'";
-  return base + " --focus " + quoted;
-}}
 document.querySelectorAll("header, main").forEach((root) => {{
   root.addEventListener("click", async (e) => {{
     const btn = e.target.closest("button.copy");
     if (!btn) return;
     e.preventDefault();
     e.stopPropagation();
-    let cmd = btn.dataset.cmd;
+    const cmd = btn.dataset.cmd;
     if (!cmd) return;
-    if (btn.classList.contains("focused")) {{
-      cmd = focusedCommand(cmd, btn.dataset.tag);
-      if (!cmd) return;
-    }}
     const prev = btn.textContent;
     const ok = await copyCmd(cmd);
     btn.textContent = ok ? "Copied" : "Failed";

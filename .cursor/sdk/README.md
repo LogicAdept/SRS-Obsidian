@@ -12,10 +12,10 @@ In a shell with a clean repo and `CURSOR_API_KEY` set:
 ./.cursor/sdk/run_cover_vault.ps1 Java/Language/Primitives/ShortType
 ```
 
-HTML **Agent ▾ → General** copies that command. **Agent ▾ → Focused…** asks for
-one missing interview angle and copies the same command with `--focus`. After a
-run, **Clone ▾** appears on that tag only (Open / Continue / Focused / Accept /
-Drop). Chat skills are under **…**. **Source** returns to this vault.
+HTML **Agent ▾ → General** copies that command. **Agent ▾ → Focused** copies
+the same command with empty `--focus ''`; fill the quotes in the terminal.
+After a run, **Clone ▾** appears on that tag only (Open / Continue / Focused /
+Accept / Drop). Chat skills are under **…**. **Source** returns to this vault.
 
 ```powershell
 Get-Content .cursor/sdk/runs/<id>/cover-run.log -Wait
@@ -39,7 +39,8 @@ Another pass in the same clone:
 ```
 
 `Continue` only resumes unfinished state. To add a specific missing angle even
-when the broad leaf is already complete, use **Clone ▾ → Focused…**:
+when the broad leaf is already complete, use **Clone ▾ → Focused** and fill
+`--focus` in the terminal:
 
 ```powershell
 ./.cursor/sdk/run_cover_vault.ps1 --workspace .cursor/sdk/runs/<id> Java/Spring/Transactions --focus 'Calls between @Transactional methods'
