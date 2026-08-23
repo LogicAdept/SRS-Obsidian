@@ -11,16 +11,30 @@ TAG_TOKEN_RE = re.compile(r"#([A-Za-z][A-Za-z0-9]*(?:/[A-Za-z0-9]+)*)")
 SKIP_DIR_NAMES = frozenset({"Format", "NamesHistory", ".obsidian"})
 
 
+DRAFT_MARKERS = (
+    "Untrusted draft",
+    "Unverified traps",
+    "Черновик без доверия",
+    "Непроверен",
+    "Ненадёж",
+)
+
+
 @dataclass(frozen=True)
 class Card:
     path: Path
     tags: frozenset[str]
     is_new: bool
+    has_draft: bool = False
 
     @property
     def cue(self) -> str:
         name = self.path.name
         return name[:-3] if name.lower().endswith(".md") else name
+
+
+def text_has_draft(text: str) -> bool:
+    return any(marker in text for marker in DRAFT_MARKERS)
 
 
 def repo_root_from_script() -> Path:
@@ -222,7 +236,15 @@ def scan_cards(vault: Path) -> tuple[int, list[Card]]:
         tags = card_tags(tag_line)
         if not tags:
             continue
-        cards.append(Card(path=path, tags=frozenset(tags), is_new="New" in tags))
+        is_new = "New" in tags
+        cards.append(
+            Card(
+                path=path,
+                tags=frozenset(tags),
+                is_new=is_new,
+                has_draft=is_new and text_has_draft(text),
+            )
+        )
     return len(files), cards
 
 

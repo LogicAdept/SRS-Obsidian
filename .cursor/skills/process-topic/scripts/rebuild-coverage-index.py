@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Rebuild coverage-index.md (table) and coverage-index.html (colored tree).
+"""Rebuild coverage-index.md (table) and coverage-index.html (colored tree + #New tab).
 
 Counts for each tree path T:
   n        — cards whose tag line has T or a child T/...
   n_new    — subset that also has #New
   n_filled — n - n_new
+
+The HTML also has a **#New** tab: searchable list of unfinished cards with a
+Fill button that copies `/fill-tag @SRS/<Cue>.md` for chat.
 
 Do not edit the generated files by hand. Re-run this script after card or Tags.md changes.
 """
@@ -240,6 +243,8 @@ def render_index(
         "Row color in the HTML tree: **green** ≥50% filled · **yellow** some filled · **red** cards exist but none filled · **gray** unused (`n=0`).",
         "",
         "Order: siblings (HTML) and this table are sorted by `n` descending. "
+        "HTML tabs: **Tags** (tree) and **#New** (unfinished cards; **Fill** copies "
+        "`/fill-tag @SRS/<Cue>.md`). "
         "HTML row buttons: **Cover agent** opens General / Focused. **Fill agent** starts "
         "a bounded fill batch on one durable agent (one send per card). Clone menus appear "
         "only when the corresponding cover or fill clone exists. **…** hides "
@@ -394,6 +399,24 @@ def _html_node(node: Node, depth: int) -> str:
     )
 
 
+def new_card_rows(cards: list) -> list[dict[str, Any]]:
+    """Compact payload for the HTML #New tab (drafts first, then cue)."""
+    rows: list[dict[str, Any]] = []
+    for card in cards:
+        if not card.is_new:
+            continue
+        thematic = sorted(t for t in card.tags if t not in {"SRS", "New"})
+        rows.append(
+            {
+                "cue": card.cue,
+                "tags": thematic,
+                "draft": bool(card.has_draft),
+            }
+        )
+    rows.sort(key=lambda r: (not r["draft"], r["cue"].lower()))
+    return rows
+
+
 def render_html(
     *,
     generated_at: str,
@@ -401,10 +424,14 @@ def render_html(
     cards_scanned: int,
     cards_with_tags: int,
     rows: list[tuple[str, int, int, int]],
+    new_cards: list[dict[str, Any]],
 ) -> str:
     roots = build_tree(rows)
     tallies = count_statuses(rows)
     body = "".join(_html_node(node, 0) for node in roots)
+    new_json = json.dumps(new_cards, ensure_ascii=False).replace("<", "\\u003c")
+    n_new_total = len(new_cards)
+    n_draft = sum(1 for c in new_cards if c["draft"])
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -580,6 +607,43 @@ button.nav,
 .menu.clone-menu[hidden], .menu.fill-clone-menu[hidden] {{ display: none !important; }}
 li.node.hidden {{ display: none; }}
 .empty-msg {{ display: none; color: var(--muted); padding: 24px; }}
+.tabs {{ display: flex; gap: 6px; margin: 10px 0 0; }}
+.tab {{
+  background: var(--bg); color: var(--muted);
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 6px 12px; cursor: pointer; font: inherit; font-weight: 650;
+}}
+.tab[aria-selected="true"] {{
+  color: var(--text); border-color: var(--accent); color: var(--accent);
+}}
+.panel {{ display: none; }}
+.panel.active {{ display: block; }}
+.panel-toolbar {{
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  margin-bottom: 10px;
+}}
+.panel-toolbar .count {{ color: var(--muted); font-size: 12px; }}
+#new-list {{ list-style: none; margin: 0; padding: 0; }}
+#new-list li {{
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  padding: 8px 10px; border-bottom: 1px solid var(--line);
+}}
+#new-list .cue {{
+  flex: 1; min-width: 12rem;
+  font: 13px/1.35 ui-monospace, Consolas, monospace;
+}}
+#new-list .tags {{ color: var(--muted); font-size: 12px; flex: 1 1 100%; }}
+@media (min-width: 900px) {{
+  #new-list .tags {{ flex: 1 1 auto; }}
+}}
+.badge {{
+  font-size: 11px; font-weight: 650; padding: 2px 7px; border-radius: 99px;
+  border: 1px solid var(--line); color: var(--muted); flex: none;
+}}
+.badge.draft {{
+  border-color: var(--yellow-bar); color: var(--yellow-bar);
+}}
+.badge.stub {{ opacity: 0.85; }}
 </style>
 </head>
 <body>
@@ -599,16 +663,22 @@ li.node.hidden {{ display: none; }}
     <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
     <dt>…</dt>
     <dd>Process / Cover / Fill / Dedup / Refine — slash-команды для чата Cursor, не Docker-флоу.</dd>
+    <dt>#New</dt>
+    <dd>Вкладка со всеми карточками <code>#New</code>. <b>Fill</b> копирует <code>/fill-tag @SRS/&lt;Cue&gt;.md</code> — в чат вставляете конкретный файл. Drafts (untrusted dump) выше stubs. Фильтр ищет по cue и тегам.</dd>
     </dl>
   </details>
-  <div class="toolbar">
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab" role="tab" id="tab-tags" aria-selected="true" data-panel="panel-tags">Tags</button>
+    <button type="button" class="tab" role="tab" id="tab-new" aria-selected="false" data-panel="panel-new">#New ({n_new_total})</button>
+  </div>
+  <div class="toolbar" id="tags-toolbar">
     <input type="search" id="q" placeholder="Filter tags…" autocomplete="off">
     <button type="button" id="expand">Expand all</button>
     <button type="button" id="collapse">Collapse all</button>
     <button type="button" id="open-source" class="copy nav" data-cmd="./.cursor/sdk/switch_review.ps1 -Source">Source</button>
     <label class="chk"><input type="checkbox" id="hide-unused"> Hide unused</label>
   </div>
-  <div class="legend">
+  <div class="legend" id="tags-legend">
     <span class="pill"><span class="dot green"></span><b>{tallies["green"]}</b> ≥50% filled</span>
     <span class="pill"><span class="dot yellow"></span><b>{tallies["yellow"]}</b> some filled</span>
     <span class="pill"><span class="dot red"></span><b>{tallies["red"]}</b> cards, 0 filled</span>
@@ -616,9 +686,21 @@ li.node.hidden {{ display: none; }}
   </div>
 </header>
 <main>
-  <p class="empty-msg" id="empty">No tags match.</p>
-  <ul>{body}</ul>
+  <section class="panel active" id="panel-tags" role="tabpanel">
+    <p class="empty-msg" id="empty">No tags match.</p>
+    <ul>{body}</ul>
+  </section>
+  <section class="panel" id="panel-new" role="tabpanel" hidden>
+    <div class="panel-toolbar">
+      <input type="search" id="new-q" placeholder="Filter #New by cue or tag…" autocomplete="off">
+      <label class="chk"><input type="checkbox" id="drafts-only"> Drafts only</label>
+      <span class="count" id="new-count">{n_draft} drafts · {n_new_total} total</span>
+    </div>
+    <p class="empty-msg" id="new-empty">No #New cards match.</p>
+    <ul id="new-list"></ul>
+  </section>
 </main>
+<script type="application/json" id="new-cards-data">{new_json}</script>
 <script src="coverage-clones.js"></script>
 <script>
 document.querySelectorAll(".clone-menu").forEach((el) => {{
@@ -753,6 +835,101 @@ document.querySelectorAll("header, main").forEach((root) => {{
     }}, 1600);
   }}, true);
 }});
+
+const PAGE = 150;
+const newData = JSON.parse(document.getElementById("new-cards-data").textContent || "[]");
+const newList = document.getElementById("new-list");
+const newEmpty = document.getElementById("new-empty");
+const newCount = document.getElementById("new-count");
+let newRendered = 0;
+let newFiltered = [];
+
+function fillCmd(cue) {{
+  return "/fill-tag @SRS/" + cue + ".md";
+}}
+
+function renderNewPage(reset) {{
+  if (reset) {{
+    newList.innerHTML = "";
+    newRendered = 0;
+  }}
+  const slice = newFiltered.slice(newRendered, newRendered + PAGE);
+  for (const row of slice) {{
+    const li = document.createElement("li");
+    const badge = document.createElement("span");
+    badge.className = "badge " + (row.draft ? "draft" : "stub");
+    badge.textContent = row.draft ? "draft" : "stub";
+    const cue = document.createElement("code");
+    cue.className = "cue";
+    cue.textContent = row.cue;
+    const tags = document.createElement("span");
+    tags.className = "tags";
+    tags.textContent = (row.tags || []).map((t) => "#" + t).join(" ");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy";
+    btn.textContent = "Fill";
+    btn.dataset.cmd = fillCmd(row.cue);
+    btn.title = btn.dataset.cmd;
+    li.append(badge, cue, btn, tags);
+    newList.appendChild(li);
+  }}
+  newRendered += slice.length;
+  const more = newFiltered.length - newRendered;
+  let moreBtn = document.getElementById("new-more");
+  if (more > 0) {{
+    if (!moreBtn) {{
+      moreBtn = document.createElement("button");
+      moreBtn.type = "button";
+      moreBtn.id = "new-more";
+      moreBtn.textContent = "Load more";
+      moreBtn.addEventListener("click", () => renderNewPage(false));
+      newList.after(moreBtn);
+    }}
+    moreBtn.style.display = "";
+    moreBtn.textContent = "Load more (" + more + " left)";
+  }} else if (moreBtn) {{
+    moreBtn.style.display = "none";
+  }}
+  newEmpty.style.display = newFiltered.length ? "none" : "block";
+  newCount.textContent =
+    newFiltered.length + " shown of " + newData.length +
+    " · " + newData.filter((r) => r.draft).length + " drafts";
+}}
+
+function applyNewFilter() {{
+  const q = document.getElementById("new-q").value.trim().toLowerCase();
+  const draftsOnly = document.getElementById("drafts-only").checked;
+  newFiltered = newData.filter((row) => {{
+    if (draftsOnly && !row.draft) return false;
+    if (!q) return true;
+    if (row.cue.toLowerCase().includes(q)) return true;
+    return (row.tags || []).some((t) => t.toLowerCase().includes(q));
+  }});
+  renderNewPage(true);
+}}
+
+document.getElementById("new-q").addEventListener("input", applyNewFilter);
+document.getElementById("drafts-only").addEventListener("change", applyNewFilter);
+
+function setTab(panelId) {{
+  document.querySelectorAll(".tab").forEach((tab) => {{
+    const on = tab.dataset.panel === panelId;
+    tab.setAttribute("aria-selected", on ? "true" : "false");
+  }});
+  document.querySelectorAll(".panel").forEach((panel) => {{
+    const on = panel.id === panelId;
+    panel.classList.toggle("active", on);
+    panel.hidden = !on;
+  }});
+  const tagsChrome = panelId === "panel-tags";
+  document.getElementById("tags-toolbar").style.display = tagsChrome ? "" : "none";
+  document.getElementById("tags-legend").style.display = tagsChrome ? "" : "none";
+  if (panelId === "panel-new" && !newList.childElementCount) applyNewFilter();
+}}
+document.querySelectorAll(".tab").forEach((tab) => {{
+  tab.addEventListener("click", () => setTab(tab.dataset.panel));
+}});
 </script>
 </body>
 </html>
@@ -831,6 +1008,7 @@ def main() -> int:
             cards_scanned=cards_scanned,
             cards_with_tags=cards_with_tags,
             rows=rows,
+            new_cards=new_card_rows(cards),
         ),
         encoding="utf-8",
         newline="\n",

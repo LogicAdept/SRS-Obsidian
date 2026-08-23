@@ -20,10 +20,12 @@ official documentation.
 
 ```
 /fill-tag <tag> [--limit N]
+/fill-tag @SRS/<Cue>.md
 ```
 
-- `<tag>` required: tree path or short name. Resolve via `SRS/Format/Tags.md`.
-- `--limit` optional: cards to finish this run. Default **1**. Never more than **3** unless the user lists specific cues.
+- `<tag>` required when no file is named: tree path or short name. Resolve via `SRS/Format/Tags.md`.
+- `@SRS/<Cue>.md` (or another vault-relative card path): fill **that** card only. Coverage index **#New** tab copies this form.
+- `--limit` optional: cards to finish this run when filling by tag. Default **1**. Never more than **3** unless the user lists specific cues.
 
 Accuracy beats coverage. A wrong card is worse than leaving `#New`.
 
@@ -45,7 +47,7 @@ Prefer `#New` cards whose tag line matches `<tag>` or a child of it.
 
 Skip personal/HR/biography cues: leave the stub; human fills those.
 
-If the user names explicit cues, use those instead of scanning the tag.
+If the user names explicit cues or attaches `@SRS/<Cue>.md`, use those instead of scanning the tag.
 
 Otherwise process cards with an `Untrusted draft` body before empty stubs. A
 draft contains more claims that can be lost or accidentally trusted; auditing
