@@ -2,37 +2,80 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Data #SRS #New
+#Java/Spring/Data #SRS
 
-> [!warning] Untrusted draft
-> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
+# How do you implement a custom repository method?
 
-When query derivation cannot express the logic:
+> [!abstract] Short answer
+> Add a **repository fragment**: a small custom interface, a class named `{FragmentName}Impl` that implements it, and extend both the store repository and the fragment from your main repository interface. Spring Data auto-detects the `Impl` class and composes it into the repository proxy — you do not `@Bean` the implementation.
 
-1. Declare a custom interface with the extra methods.
-2. Implement it. The implementation class name uses the Impl suffix by default relative to the repository.
-3. Extend both JpaRepository (or the store repository) and the custom interface from the main repository.
+## Fragment + `Impl` composition
+
+When derived query methods, `@Query`, or Specifications are not enough, implement logic in a fragment class and expose it through the main repository.
 
 ```java
-public interface CustomRepository {
-    List<CustomEntity> customQueryMethod();
+public interface OrderRepositoryCustom {
+  List<Order> findHighValueOrders(BigDecimal threshold);
 }
 
-public class CustomRepositoryImpl implements CustomRepository {
-    @PersistenceContext
-    private EntityManager em;
-    public List<CustomEntity> customQueryMethod() {
-        return em.createQuery("SELECT c FROM CustomEntity c WHERE c.someField = :value", CustomEntity.class)
-                 .setParameter("value", "someValue")
-                 .getResultList();
-    }
+public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
+
+  @PersistenceContext
+  private EntityManager em;
+
+  @Override
+  public List<Order> findHighValueOrders(BigDecimal threshold) {
+    return em.createQuery(
+            "SELECT o FROM Order o WHERE o.total >= :threshold", Order.class)
+        .setParameter("threshold", threshold)
+        .getResultList();
+  }
 }
 
-public interface MainRepository extends JpaRepository<CustomEntity, Long>, CustomRepository {
-}
+public interface OrderRepository
+    extends JpaRepository<Order, Long>, OrderRepositoryCustom {}
 ```
 
-Mongo dumps do the same with a *Impl class that injects MongoTemplate.
-> [!warning] Unverified traps from the dump
-> - The Impl suffix is the default naming Spring Data looks up; a dump that registers the Impl as a @Bean is extra and easy to get wrong.
-> - The fragment interface must be mixed into the repository Spring Data proxies.
+**Listing 1.** JPA custom fragment with `EntityManager` (Spring Data Commons custom repository pattern).
+
+Spring Data scans for `{CustomInterfaceName}Impl` in the repository’s package (default postfix **`Impl`**, overridable via `@EnableJpaRepositories(repositoryImplementationPostfix = …)`). The composed proxy delegates custom methods to the fragment and CRUD/query methods to the generated base.
+
+```d2
+direction: right
+main: "OrderRepository\nextends JpaRepository\n+ OrderRepositoryCustom" {
+  width: 280
+  height: 90
+  style.fill: "#e3f2fd"
+}
+proxy: "Spring Data proxy" {
+  width: 180
+  height: 70
+  style.fill: "#fff3e0"
+}
+base: "Generated CRUD\n/ @Query methods" {
+  width: 200
+  height: 70
+  style.fill: "#e8f5e9"
+}
+impl: "OrderRepositoryCustomImpl\n(EntityManager / MongoTemplate)" {
+  width: 280
+  height: 70
+  style.fill: "#f3e5f5"
+}
+
+main -> proxy
+proxy -> base
+proxy -> impl
+```
+
+**Fig. 1.** One repository interface; runtime composition merges base repository + custom fragment.
+
+For MongoDB, the same pattern uses `OrderRepositoryCustomImpl` with **`MongoTemplate`** or `MongoOperations` instead of `EntityManager`. You can mix **multiple** fragment interfaces on one repository; declaration order controls precedence when signatures overlap.
+
+> [!warning] Do not register `Impl` as a `@Bean`
+> The fragment implementation is picked up by naming convention and composed into the repository factory. Manually declaring it as a Spring bean is unnecessary and can break the expected `…Impl` lookup. The fragment interface must be **extended by the repository interface** — a standalone custom class is not reachable through the repository proxy.
+
+See [[What is Spring Data JPA]], [[What is MongoTemplate]], and [[How do you define a native query in Spring Data JPA]].
+
+> [!tip] Interview answer
+> I declare a custom fragment interface, implement it in a class suffixed `Impl`, and extend both `JpaRepository` and that fragment from the main repository. Spring Data finds `OrderRepositoryCustomImpl` automatically and merges it into the proxy. For Mongo I inject `MongoTemplate` the same way I use `EntityManager` in JPA.
