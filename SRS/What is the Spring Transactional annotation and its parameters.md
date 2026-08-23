@@ -2,76 +2,96 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Transactions #Java/Annotations #SRS #New
+#Java/Spring/Transactions #Java/Annotations #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is the Spring `Transactional` annotation and its parameters?
 
-**@Transactional — под капотом.**
+> [!abstract] Short answer
+> **`@Transactional` is metadata** on a class or method that tells Spring’s transaction infrastructure how to demarcate work around that method once **`@EnableTransactionManagement`** and a **`PlatformTransactionManager`** are registered. Defaults: **`REQUIRED`**, **`ISOLATION_DEFAULT`**, read-write, default timeout, rollback on **`RuntimeException`/`Error`** only. Attributes tune propagation, isolation, timeout, read-only, rollback rules, and which manager to use.
 
-Spring создаёт прокси-обёртку. JDK dynamic proxy (если интерфейс) или CGLIB (наследование). Прокси: открывает транзакцию (PlatformTransactionManager), вызывает метод, commit при успехе, rollback при RuntimeException/Error. Checked НЕ откатывают — нужно rollbackFor.
+## Metadata plus AOP proxy (default)
 
-**Что такое @Transactional?**
+The annotation alone does not open transactions. `@EnableTransactionManagement` (or XML `<tx:annotation-driven/>`) switches on infrastructure that reads the metadata and wraps the bean in an AOP **proxy** (JDK interface proxy or CGLIB class proxy). **`TransactionInterceptor`** delegates begin/commit/rollback to the chosen **`PlatformTransactionManager`** — see [[How do you use AOP to manage transactions]].
 
-Аннотация, которая открывает транзакцию перед методом и коммитит после или откатывает при исключении. По умолчанию откат на RuntimeException и Error, но не на checked.
+Only **external** calls through the proxy are advised; **`this.inner()`** bypasses it ([[What happens when one Spring Transactional method calls another]]). Class-level `@Transactional` applies to methods of the class and **subclasses**; inherited methods on ancestors are **not** covered unless redeclared on the subclass.
 
-**Как работает @Transactional под капотом?**
+Method-level attributes **override** class-level defaults for that method.
 
-Spring создаёт прокси (JDK dynamic proxy для интерфейсов или CGLIB для классов). Прокси открывает транзакцию перед методом, коммитит после или откатывает при исключении.
+```java
+@Transactional(readOnly = true)
+@Service
+public class ReportService {
 
-**Почему @Transactional не работает при self-invocation?**
+    public Report load(String id) { … }
 
-Вызов this.method() идёт минуя прокси. Решение: вынести метод в другой бин или инжектить self через ApplicationContext / @Lazy self.
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void rebuild(String id) { … }
+}
+```
 
-**Что такое @Transactional?**
+**Listing 1.** Method settings take precedence — from Spring Framework `@Transactional` reference.
 
-Аннотация, которая открывает транзакцию вокруг метода. На успешный возврат — COMMIT, на RuntimeException — ROLLBACK. Реализуется через AOP-прокси: вызов идёт через прокси, который и управляет транзакцией.
+## Parameter reference
 
-**Что произойдёт при вызове @Transactional-метода из того же класса?**
+| Attribute | Default | Role |
+| --- | --- | --- |
+| **`propagation`** | `REQUIRED` | Join/create/suspend/nest policy — [[What are Spring transaction propagation levels]] |
+| **`isolation`** | `DEFAULT` | Isolation level; applies only when a **new** TX starts (`REQUIRED` / `REQUIRES_NEW`) |
+| **`timeout`** / **`timeoutString`** | `-1` (system default) | Seconds; same new-TX rule as isolation |
+| **`readOnly`** | `false` | Hint for read-only optimization; same new-TX rule |
+| **`rollbackFor`**, **`noRollbackFor`** | none | Type-safe rollback rules |
+| **`rollbackForClassName`**, **`noRollbackForClassName`** | none | Pattern-based rules (easy to over-match) |
+| **`value`** / **`transactionManager`** | `""` | Bean name / qualifier of the `TransactionManager` to use |
+| **`label`** | `{}` | Optional labels for manager-specific behavior |
 
-Транзакция НЕ откроется. Внутри одного бина вызов this.method() идёт напрямую на объект, в обход прокси. Это любимая ловушка на собесах — самая частая ошибка. Решения: (1) Self-injection — внедрить бин сам в себя через ApplicationContext. (2) Вынести метод в другой бин. (3) Перейти на AspectJ — там работает self-invocation.
+Rollback defaults and overrides: [[What is Spring default rollback policy for Transactional]]. Spring **6.2+**: `@EnableTransactionManagement(rollbackOn = ALL_EXCEPTIONS)` can flip the global default to roll back on checked exceptions too.
 
-**Как работает @Transactional под капотом?**
+```java
+@Transactional(
+    propagation = Propagation.REQUIRED,
+    isolation = Isolation.READ_COMMITTED,
+    timeout = 30,
+    readOnly = false,
+    rollbackFor = { IOException.class },
+    noRollbackFor = { BusinessWarningException.class },
+    transactionManager = "orderTxManager"
+)
+public void placeOrder(Order order) throws IOException { … }
+```
 
-Spring создаёт прокси (JDK dynamic proxy или CGLIB). При вызове метода через прокси — открывается транзакция, в finally — commit/rollback.
+**Listing 2.** Conceptual combination of attributes from Table 2 in the reference docs.
 
-**Почему @Transactional не работает при вызове метода того же класса?**
+```d2
+direction: right
+ann: "@Transactional\nmetadata" {
+  width: 200
+  height: 70
+  style.fill: "#e3f2fd"
+}
+proxy: "AOP proxy +\nTransactionInterceptor" {
+  width: 260
+  height: 80
+  style.fill: "#fff3e0"
+}
+mgr: "PlatformTransactionManager" {
+  width: 260
+  height: 70
+  style.fill: "#e8f5e9"
+}
 
-Self-invocation идёт минуя прокси. Решение: вынести метод в отдельный бин или inject self.
+ann -> proxy -> mgr
+```
 
-**@Transactional на private методе — что произойдёт?**
+**Fig. 1.** Attributes configure the interceptor; the manager drives the resource transaction.
 
-Ничего — транзакция не создастся. CGLIB-прокси наследует класс, но private методы не переопределяемы → прокси их не видит. JDK Dynamic Proxy работает через интерфейс — private вообще не в интерфейсе. Решение: сделать метод package-private или public.
+> [!warning] Private methods are not advised in default proxy mode
+> `@Transactional` is typically on **public** methods; as of Spring **6.0**, **protected** / package-visible methods can work on class-based proxies. Interface-based proxies still require **public** methods on the interface.
 
-**Два @Transactional метода в одном классе: A() вызывает B(). Сколько транзакций?**
+> [!warning] Long non-DB work inside the boundary
+> A transaction holds the JDBC connection (or JTA enlistment) for the whole method — external HTTP calls inside `@Transactional` can starve the pool. Shorten the boundary or move I/O outside.
 
-Одна. Вызов this.B() минует прокси → @Transactional на B() не работает. B() выполняется в транзакции A() (Propagation.REQUIRED по умолчанию). Если нужна отдельная транзакция для B() — вынести в другой бин или self-injection через @Lazy.
+> [!warning] `@EnableTransactionManagement` scans its own context only
+> Transaction metadata on beans in a **different** application context (for example services vs a child `WebApplicationContext`) is not picked up unless transaction management is enabled there too.
 
-**@Transactional + долгий REST-вызов внутри — чем опасно?**
-
-Транзакция удерживает соединение к БД всё время REST-вызова (секунды). Пул соединений исчерпается → все потоки ждут → сервис висит (connection starvation). Решение: read → close transaction → REST → open transaction → write. Или вынести REST-вызов за @Transactional.
-
-**В какой момент происходит коммит @Transactional?**
-
-После успешного завершения метода (без исключений). Прокси: try { beginTransaction; target.method(); commit; } catch { rollback; }. Rollback по умолчанию: RuntimeException и Error. Checked — НЕ откатывают (нужен rollbackFor). flush != commit: flush отправляет SQL, commit фиксирует.
-
-**@Transactional.**
-
-Прокси (JDK/CGLIB). Открывает транзакцию, commit/rollback. self-call минует прокси. Rollback на RuntimeException/Error; checked — нужен rollbackFor.
-
-**@Transactional — прокси.**
-
-Spring создаёт прокси (JDK/CGLIB). Прокси открывает транзакцию, вызывает метод, commit/rollback. self-call минует прокси → @Transactional/@Cacheable/@Async не работают. Решение: вынести в другой бин.
-
-**How does @Transactional work at interview level?**
-
-Источник: https://habr.com/ru/articles/967632/
-
-Прокси вокруг метода (JDK или CGLIB). TransactionInterceptor открывает транзакцию до метода и commit/rollback после.
-Propagation: REQUIRED (default), REQUIRES_NEW, NESTED, SUPPORTS, NOT_SUPPORTED, NEVER, MANDATORY.
-Isolation: READ_COMMITTED, REPEATABLE_READ, SERIALIZABLE, READ_UNCOMMITTED.
-Почему может не работать: private метод; внутренний this.method(); final класс/метод; setRollbackOnly без корректного отката.
-
-**Default rollback and proxy recap?**
-
-Rollback on unchecked only. REQUIRED default. Proxy AOP: private/self-invoke/final skip it. rollbackFor, isolation, timeout, readOnly.
+> [!tip] Interview answer
+> **`@Transactional` declares transaction metadata; Spring’s proxy and `TransactionInterceptor` apply it at runtime.** Know defaults: `REQUIRED`, default isolation, read-write, rollback on unchecked only. Tune propagation, isolation, timeout, readOnly, rollback rules, and `transactionManager`. It only works on proxied external calls — not `this` self-invocation.

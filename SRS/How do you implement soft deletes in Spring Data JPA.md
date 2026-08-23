@@ -2,43 +2,96 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Data/JPA #SRS #New
+#Java/Spring/Data/JPA #SRS
 
-> [!warning] Untrusted draft
-> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
+# How do you implement soft deletes in Spring Data JPA?
 
-Soft delete keeps the row and marks it deleted.
+> [!abstract] Short answer
+> Spring Data JPA has no built-in soft delete. Keep a **deleted flag** (or timestamp) on the entity, hide deleted rows from reads, and turn deletes into **updates** — either explicitly in service code or via Hibernate `@SQLDelete` / `@SQLRestriction` (or Hibernate 6.5+ `@SoftDelete`) so `repository.delete` does not issue `DELETE`.
 
-1. Add a boolean field on the entity, default false.
+## Flag column and filtered reads
+
+Add a marker field and exclude deleted rows from queries. Plain `findAll()` and `findById()` still return deleted rows unless you add a global filter.
 
 ```java
 @Entity
-public class MyEntity {
-    @Id
-    private Long id;
-    private Boolean deleted = false;
+public class Article {
+
+  @Id
+  private Long id;
+
+  private boolean deleted = false;
+}
+
+public interface ArticleRepository extends JpaRepository<Article, Long> {
+
+  @Query("SELECT a FROM Article a WHERE a.deleted = false")
+  List<Article> findAllActive();
 }
 ```
 
-2. Filter reads so deleted rows are hidden.
-
-```java
-public interface MyEntityRepository extends JpaRepository<MyEntity, Long> {
-    @Query("SELECT e FROM MyEntity e WHERE e.deleted = false")
-    List<MyEntity> findAllNotDeleted();
-}
-```
-
-3. Delete by setting the flag and saving, inside a transaction.
+**Listing 1.** Manual soft delete: custom finder excludes `deleted = true` (application-level pattern; not automatic on every query).
 
 ```java
 @Transactional
 public void softDelete(Long id) {
-    MyEntity entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-    entity.setDeleted(true);
-    repository.save(entity);
+  Article article = repository.findById(id)
+      .orElseThrow(() -> new EntityNotFoundException(id.toString()));
+  article.setDeleted(true);
+  repository.save(article);
 }
 ```
-> [!warning] Unverified traps from the dump
-> - Plain findAll and deleteById from JpaRepository still see or remove the physical row unless you override them.
-> - The dump's finder is a custom method, not an automatic global filter.
+
+**Listing 2.** Logical delete as update + `save`, not `deleteById`.
+
+## Make repository deletes logical (Hibernate)
+
+To intercept `repository.delete(entity)` / derived deletes, map Hibernate’s delete statement to an `UPDATE` and add a read restriction so generated SQL skips deleted rows.
+
+```java
+@Entity
+@SQLDelete(sql = "UPDATE article SET deleted = true WHERE id = ?")
+@SQLRestriction("deleted = false")
+public class Article {
+
+  @Id
+  private Long id;
+
+  private boolean deleted = false;
+}
+```
+
+**Listing 3.** `@SQLDelete` replaces physical `DELETE`; `@SQLRestriction` filters selects (Hibernate ORM; Hibernate 6 replaces deprecated `@Where`).
+
+Hibernate **6.5+** offers `@SoftDelete` on the entity for the same idea with less boilerplate. Spring Data derived **`deleteBy…`** methods may load matching entities and call `delete` one-by-one so JPA lifecycle callbacks run — different from a bulk `@Modifying` JPQL delete.
+
+```d2
+direction: right
+call: "deleteById / delete(entity)" {
+  width: 240
+  height: 70
+  style.fill: "#e3f2fd"
+}
+hib: "@SQLDelete → UPDATE\n@SQLRestriction on SELECT" {
+  width: 280
+  height: 70
+  style.fill: "#fff3e0"
+}
+row: "Row stays in DB\ndeleted = true" {
+  width: 220
+  height: 70
+  style.fill: "#e8f5e9"
+}
+
+call -> hib -> row
+```
+
+**Fig. 1.** Repository delete API unchanged; persistence provider emits an update instead of `DELETE`.
+
+> [!warning] Nothing is automatic by default
+> A bare `deleted` field plus `JpaRepository` does not filter reads or soft-delete on `deleteById`. Native SQL, `@Query` without the predicate, and second-level cache can still expose or resurrect deleted rows unless every path respects the flag.
+
+See [[What is Spring Data JPA]], [[What is the Modifying annotation in Spring Data JPA]], and [[What is the difference between save and saveAndFlush in Spring Data JPA]].
+
+> [!tip] Interview answer
+> Spring Data JPA does not soft-delete for you. I add a deleted flag, filter queries or use Hibernate `@SQLRestriction`, and either update the flag in a service method or map deletes with `@SQLDelete` so `repository.delete` runs an UPDATE. Without that mapping, `deleteById` still removes the physical row.
