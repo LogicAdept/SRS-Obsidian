@@ -2,144 +2,92 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/AOP #SRS #New
+#Java/Spring/Framework/AOP #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is aspect oriented programming AOP?
 
-Spring AOP enables Aspect-Oriented Programming in spring applications. In AOP, aspects enable the modularization of concerns such as transaction management, logging or security that cut across multiple types and objects (often termed crosscutting concerns).
+> [!abstract] Short answer
+> **AOP** modularizes **cross-cutting concerns** (transactions, logging, security, caching) into **aspects** so they stay out of domain classes. In Spring, an aspect is usually an `@Aspect` bean: **pointcuts** select join points, **advice** runs there. Spring AOP is **proxy-based** and, by default, only advises **method executions** on Spring beans at **runtime**.
 
-AOP provides the way to dynamically add the cross-cutting concern before, after or around the actual logic using simple pluggable configurations. It makes easy to maintain code in the present and future as well.
+## Cross-cutting concern vs AOP
 
-* **Aspect Oriented Programming Core Concepts**
+| Term | Meaning |
+|---|---|
+| **Cross-cutting concern** | Behavior needed across many types (logging, security, tx) — [[What is a cross-cutting concern]] |
+| **AOP** | A technique to **extract** that behavior into reusable aspects instead of copy-paste |
 
-1. **Aspect**: An aspect is a class that implements enterprise application concerns that cut across multiple classes, such as transaction management. 
+AOP **complements** OOP: the class remains the unit for domain structure; the **aspect** is the unit for shared infrastructure — [[Is security a cross-cutting concern]], [[Which parts of a system would you move into aspects]].
 
-2. **Join Point**: A join point is the specific point in the application such as method execution, exception handling, changing object variable values etc. In Spring AOP a join points is always the execution of a method.
+## Core AOP vocabulary (Spring)
 
-3. **Advice**: Advices are actions taken for a particular join point. In terms of programming, they are methods that gets executed when a certain join point with matching pointcut is reached in the application.
+| Term | Spring meaning |
+|---|---|
+| **Aspect** | Module that holds pointcuts + advice (`@Aspect` class or schema) |
+| **Join point** | A point in execution — in Spring AOP **always a method execution** |
+| **Pointcut** | Predicate matching join points (AspectJ expression language) |
+| **Advice** | Action at a matched join point — [[What is Advice in Spring AOP]] |
+| **Target / advised object** | The bean being advised (behind a proxy) |
+| **AOP proxy** | JDK interface proxy or **CGLIB** subclass proxy |
+| **Weaving** | Linking aspects to objects — Spring AOP weaves at **runtime** via proxies |
 
-4. **Pointcut**: Pointcut are expressions that is matched with join points to determine whether advice needs to be executed or not. Pointcut uses different kinds of expressions that are matched with the join points and Spring framework uses the AspectJ pointcut expression language.
+Full AspectJ can weave at compile/load time and advise more join-point kinds — [[What is the difference between Spring AOP and AspectJ]].
 
-5. **Weaving**: It is the process of linking aspects with other objects to create the advised proxy objects. This can be done at compile time, load time or at runtime. Spring AOP performs weaving at the runtime.
+## Advice kinds (use the weakest that fits)
 
-* **Types of Advices**
+`@Before` · `@AfterReturning` · `@AfterThrowing` · `@After` (finally) · `@Around` (`ProceedingJoinPoint.proceed()`).
 
-1. **Before Advice**: These advices runs before the execution of join point methods. We can use @Before annotation to mark an advice type as Before advice.
+Spring recommends the **least powerful** advice type that works — e.g. prefer `@AfterReturning` over `@Around` when you only need the return value — [[Why can Around advice lose the join point return value]].
 
-2. **After returning advice**: Advice to be executed after a join point completes normally: for example, if a method returns without throwing an exception.
-
-3. **After throwing advice**: Advice to be executed if a method exits by throwing an exception.
-
-4. **After advice**: Advice to be executed regardless of the means by which a join point exits.
-
-5. **Around advice**: Around advice can perform custom behavior before and after the method invocation. This type of advice is used where we need frequent access to a method or database like- caching.
-
-Example: Types of Advices 
 ```java
-/**
-* AOP program to illustrate types of Advices
-*
-*// 
 @Aspect
-class Logging { 
-    
-    // **Before** 
-    @Before("execution(public void com.aspect.ImplementAspect.aspectCall())") 
-    public void loggingAdvice1() { 
-        System.out.println("Before advice is executed"); 
-    } 
-  
-    // **After** 
-    @After("execution(public void com.aspect.ImplementAspect.aspectCall())") 
-    public void loggingAdvice2() { 
-        System.out.println("Running After Advice."); 
-    } 
-  
-    // **Around** 
-    @Around("execution(public void com.aspect.ImplementAspect.myMethod())") 
-    public void loggingAdvice3() { 
-        System.out.println("Before and After invoking method myMethod"); 
-    } 
-  
-    // **AfterThrowing** 
-    @AfterThrowing("execution(" public void com.aspect.ImplementAspect.aspectCall())") 
-    public void loggingAdvice4() { 
-        System.out.println("Exception thrown in method"); 
-    } 
-  
-    // **AfterRunning** 
-    @AfterReturning("execution(public void com.aspect.ImplementAspect.myMethod())") 
-    public void loggingAdvice5() { 
-        System.out.println("AfterReturning advice is run"); 
-    } 
+@Component
+public class TimingAspect {
+
+    @Around("execution(* com.example.service..*(..))")
+    public Object time(ProceedingJoinPoint pjp) throws Throwable {
+        long start = System.nanoTime();
+        try {
+            return pjp.proceed(); // must call and return
+        } finally {
+            long ms = (System.nanoTime() - start) / 1_000_000;
+            // log pjp.getSignature() + ms
+        }
+    }
 }
 ```
 
-Example: JoinPoints
-```java
-/**
-* AOP program to illustrate JoinPoints
-*
-**/
-  
-@Aspect
-class Logging { 
-  
-    // Passing a JoinPoint Object into parameters of the method 
-    // with the annotated advice enables to print the information 
-  
-    @Before("execution(public void com.aspect.ImplementAspect.aspectCall())") 
-    public void loggingAdvice1(JoinPoint joinpoint) { 
-        System.out.println("Before advice is executed"); 
-        System.out.println(joinpoint.toString()); 
-    } 
-} 
-```
-Example: PointCuts 
-```java
-/**
-* AOP program to illustrate PointCuts 
-*
-**/
-@Aspect
-class Logging { 
+**Listing 1.** Around advice wraps the join point; skipping `proceed()` or dropping its return value breaks the call.
 
-    @Pointcut("execution(public void com.aspect.ImplementAspect.aspectCall())") 
-    public void pointCut() { 
-    } 
-  
-    // pointcut() is used to avoid repeatition of code 
-    @Before("pointcut()") 
-    public void loggingAdvice1() { 
-        System.out.println("Before advice is executed"); 
-    } 
-} 
+```d2
+direction: right
+caller: "Caller" {
+  width: 100
+  height: 45
+  style.fill: "#e3f2fd"
+}
+proxy: "AOP proxy\n(JDK / CGLIB)" {
+  width: 140
+  height: 55
+  style.fill: "#fff3e0"
+}
+advice: "Advice\n(before/around/after)" {
+  width: 150
+  height: 55
+  style.fill: "#fce4ec"
+}
+target: "Target bean\n(method execution)" {
+  width: 160
+  height: 55
+  style.fill: "#e8f5e9"
+}
+
+caller -> proxy -> advice -> target
 ```
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+**Fig. 1.** Spring AOP inserts advice on the proxy path to the real bean method.
 
-**AOP: кейс «замерить время всех методов сервиса».**
+> [!warning] Proxy limits
+> Self-invocation (`this.method()`) skips the proxy — advice does not run — [[Why does a self-invocation skip Spring AOP advice]]. **Private** / **final** methods and non-Spring objects are outside default Spring AOP. In Boot, **CGLIB** is the default (`spring.aop.proxy-target-class=true`); set it `false` for JDK proxies.
 
-@Aspect + @Around("execution(* com.example.service.*.*(..))"). ProceedingJoinPoint: long start = System.nanoTime(); Object result = pjp.proceed(); long elapsed = System.nanoTime() - start; log.info("{} took {} ms", methodName, elapsed/1_000_000); return result. В проде: Micrometer @Timed вместо ручного AOP.
-
-**AOP: JDK proxy vs CGLIB.**
-
-JDK dynamic proxy — если бин реализует интерфейс (через Proxy.newProxyInstance). CGLIB — наследование от класса (final-классы нельзя проксировать). Spring Boot 3 по умолчанию использует CGLIB.
-
-**В чем разница между Сквозной Функциональностью (Cross Cutting Concerns) и АОП (аспектно ориентированное программирование)?**
-
-Сквозная Функциональность — функциональность, которая может потребоваться вам на нескольких различных уровнях —
-логирование, управление производительностью, безопасность и т.д.
-АОП — один из подходов к реализации данной проблемы
-
-**What is Spring AOP?**
-
-Источник: https://habr.com/ru/articles/967632/
-
-Выносит повторяющееся (логирование, транзакции, безопасность) в аспекты, не смешивая с бизнес-логикой. Аспект = advice (код до/после/вокруг метода) + pointcut (где применять).
-
-**AOP terms interviewers want?**
-
-Aspect = pointcut + advice. Join point = method execution in Spring AOP. @Transactional/@Cacheable/@Async/@PreAuthorize are aspects.
+> [!tip] Interview answer
+> AOP extracts cross-cutting concerns into aspects (pointcut + advice). Spring AOP uses runtime proxies and only method-execution join points on beans. Built-in declarative services — @Transactional, @Cacheable, @PreAuthorize — are AOP under the hood.

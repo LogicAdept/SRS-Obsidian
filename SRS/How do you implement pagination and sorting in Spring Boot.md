@@ -2,130 +2,84 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Boot #Java/Spring/Data #SRS #New
+#Java/Spring/Boot #Java/Spring/Data #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How do you implement pagination and sorting in Spring Boot?
 
-* **JPA Entity**: 
+> [!abstract] Short answer
+> Use Spring Data’s **`Pageable`** / **`Sort`** on repository methods (or `PagingAndSortingRepository` / `JpaRepository`). Build pages with **`PageRequest.of(page, size, sort)`**, return **`Page`** (or cheaper **`Slice`**). In MVC, inject **`Pageable`** and let Spring Data Web bind `page`, `size`, and `sort` query params.
 
-**EmployeeEntity.java** 
+## Repository layer
+
 ```java
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
- 
-@Entity
-@Table(name="TBL_EMPLOYEES")
-public class EmployeeEntity {
- 
-    @Id
-    @GeneratedValue
-    private Long id;
-     
-    @Column(name="first_name")
-    private String firstName;
-     
-    @Column(name="last_name")
-    private String lastName;
-     
-    @Column(name="email", nullable=false, length=200)
-    private String email;
-     
-    //Setters and getters
- 
-    @Override
-    public String toString() {
-        return "EmployeeEntity [id=" + id + ", firstName=" + firstName +
-                ", lastName=" + lastName + ", email=" + email   + "]";
-    }
+public interface UserRepository extends JpaRepository<User, Long> {
+  Page<User> findByLastName(String lastName, Pageable pageable);
+  Slice<User> findByActiveTrue(Pageable pageable);
+  List<User> findByLastName(String lastName, Sort sort);
 }
 ```
-* **PagingAndSortingRepository** 
-PagingAndSortingRepository is an extension of CrudRepository to provide additional methods to retrieve entities using the pagination and sorting abstraction. It provides two methods :
 
- * **Page findAll(Pageable pageable)** – returns a Page of entities meeting the paging restriction provided in the Pageable object.
- * **Iterable findAll(Sort sort)** – returns all entities sorted by the given options. No paging is applied here.
+**Listing 1.** `Pageable`/`Sort` as method parameters (Spring Data query-methods docs).
 
-**EmployeeRepository.java** 
+- **`Page`** — content + total elements/pages (extra **count** query).
+- **`Slice`** — content + whether a next slice exists (no full count).
+- **`List` + `Pageable`** — range only; no `Page` metadata / no count.
+
 ```java
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.stereotype.Repository;
-import com.springbatchexample.demo.entity.EmployeeEntity;
- 
-@Repository
-public interface EmployeeRepository
-        extends PagingAndSortingRepository<EmployeeEntity, Long> {
- 
+Page<User> page = users.findAll(PageRequest.of(1, 20, Sort.by("lastName")));
+```
+
+**Listing 2.** Second page (0-based index), size 20, sorted (Commons core concepts).
+
+Since Spring Data **3.0**, `PagingAndSortingRepository` no longer extends CRUD — `JpaRepository` already composes list CRUD + paging. Prefer `JpaRepository` in Boot apps.
+
+```d2
+direction: right
+http: "?page=&size=&sort=" {
+  style.fill: "#e3f2fd"
+}
+ctrl: "Controller\nPageable arg" {
+  style.fill: "#fff3e0"
+}
+repo: "Repository\nfind…(Pageable)" {
+  style.fill: "#e8f5e9"
+}
+page: "Page / Slice" {
+  style.fill: "#f3e5f5"
+}
+
+http -> ctrl -> repo -> page
+```
+
+**Fig. 1.** Query params → `Pageable` → repository → paged result.
+
+## Web layer (Boot + Spring Data Web)
+
+With Spring Data Web support, controllers can take `Pageable` directly:
+
+| Param | Meaning |
+| --- | --- |
+| `page` | 0-based page (default 0) |
+| `size` | page size (default 20) |
+| `sort` | `property(,ASC\|DESC)` — repeat for multi-sort |
+
+```java
+@GetMapping("/users")
+Page<User> list(Pageable pageable) {
+  return userRepository.findAll(pageable);
 }
 ```
-* **Accepting paging and sorting parameters** 
-In below spring mvc controller, we are accepting paging and sorting parameters using pageNo, pageSize and sortBy query parameters. Also, by default '10' employees will be fetched from database in page number '0', and employee records will be sorted based on 'id' field.
 
-**EmployeeController.java** 
-```java
-@RestController
-@RequestMapping("/employees")
-public class EmployeeController
-{
-    @Autowired
-    EmployeeService service;
- 
-    @GetMapping
-    public ResponseEntity<List<EmployeeEntity>> getAllEmployees(
-                        @RequestParam(defaultValue = "0") Integer pageNo,
-                        @RequestParam(defaultValue = "10") Integer pageSize,
-                        @RequestParam(defaultValue = "id") String sortBy)
-    {
-        List<EmployeeEntity> list = service.getAllEmployees(pageNo, pageSize, sortBy);
- 
-        return new ResponseEntity<List<EmployeeEntity>>(list, new HttpHeaders(), HttpStatus.OK);
-    }
-}
-```
-To perform pagination and/or sorting, we must create org.springframework.data.domain.Pageable or org.springframework.data.domain.Sort instances are pass to the findAll() method.
+**Listing 3.** Default binding via `PageableHandlerMethodArgumentResolver` (Spring Data web extensions). Customize with `@PageableDefault` or a `PageableHandlerMethodArgumentResolverCustomizer` bean.
 
-**EmployeeService.java**
-```java
-@Service
-public class EmployeeService
-{
-    @Autowired
-    EmployeeRepository repository;
-     
-    public List<EmployeeEntity> getAllEmployees(Integer pageNo, Integer pageSize, String sortBy)
-    {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
- 
-        Page<EmployeeEntity> pagedResult = repository.findAll(paging);
-         
-        if(pagedResult.hasContent()) {
-            return pagedResult.getContent();
-        } else {
-            return new ArrayList<EmployeeEntity>();
-        }
-    }
-}
-```
-* **Pagination and sorting techniques**
- * **Paging WITHOUT sorting**: To apply only pagination in result set, we shall create Pageable object without any Sort information.
-```java
-Pageable paging = PageRequest.of(pageNo, pageSize);
-Page<EmployeeEntity> pagedResult = repository.findAll(paging);
-```
- * **Paging WITH sorting**: To apply only pagination in result set, we shall create Pageable object with desired Sort column name.
-```java
-Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by("email"));
-Page<EmployeeEntity> pagedResult = repository.findAll(paging);
-```
- * **Sorting only**: If there is no need to page, and only sorting is required, we can create Sort object for that.
-```java
-Sort sortOrder = Sort.by("email");
-List<EmployeeEntity> list = repository.findAll(sortOrder);
-```
+## Cost notes
 
-**PageRequest vs keyset?**
+`Page` always pays for a count unless you switch to `Slice`, scrolling/`Window`, or return a limited `List`. Offset pagination (`PageRequest`) gets expensive on deep pages; Spring Data also documents **scrolling** for chunked iteration when offset is a poor fit.
 
-Spring Pageable → OFFSET. Fine until deep pages. For feeds, keyset on indexed (sort,id). Don't COUNT(*) every page. Sort property must match an index or you sort 1e8 rows.
+> [!warning] Sort property must be real
+> `Sort.by("email")` must map to an entity property (or explicit query). Invalid names fail at query time; unindexed sorts can full-scan large tables.
+
+> [!tip] Interview answer
+> I pass `Pageable` into Spring Data methods via `PageRequest.of(page, size, Sort.by(...))`, return `Page` when I need totals or `Slice` when I do not. In Boot MVC I inject `Pageable` and use `page`/`size`/`sort` query params. Since Data 3, paging is a separate fragment from CRUD — `JpaRepository` already includes both.
+
+See [[What is a PagingAndSortingRepository]], [[What is the difference between CrudRepository and PagingAndSortingRepository]], and [[What are Spring Data Repository interfaces]].
