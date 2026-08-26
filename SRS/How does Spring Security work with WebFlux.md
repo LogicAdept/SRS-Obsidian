@@ -101,5 +101,8 @@ Multiple chains work like the servlet side: `@Order` plus `securityMatcher` (e.g
 > [!warning] `User.withDefaultPasswordEncoder()` is demo-only
 > Official samples still show it, but the API is **deprecated** and documented as **unsafe for production** (password material can still be recovered from the running process). Hash ahead of time with a `PasswordEncoder`, then pass the encoded string to `User.withUsername(...).password(...)`.
 
+> [!warning] `@WebFluxTest` skips custom `SecurityWebFilterChain`
+> Import that `@Bean` or use `@SpringBootTest` — [[How do you test a WebFlux endpoint]].
+
 > [!tip] Interview answer
 > **WebFlux security is `WebFilter`-based:** `@EnableWebFluxSecurity` plus `ServerHttpSecurity` builds a `SecurityWebFilterChain`, orchestrated by `WebFilterChainProxy`. Use `authorizeExchange` / `pathMatchers` and reactive auth (`ReactiveAuthenticationManager`, `MapReactiveUserDetailsService`). Leave servlet `HttpSecurity` / `FilterChainProxy` for MVC apps.

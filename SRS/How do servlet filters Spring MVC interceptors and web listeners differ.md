@@ -2,60 +2,68 @@
 reps: 0
 priority: 0
 -->
-#Java/Servlet #Java/Spring/Framework/WebMvc #Java/Listeners #SRS #New
+#Java/Servlet #Java/Spring/Framework/WebMvc #Java/Listeners #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How do servlet filters Spring MVC interceptors and web listeners differ?
 
-Interceptor can be used to perform operations in the following situations − 
-* Before sending the request to the controller
-* Before sending the response to the client
+> [!abstract] Short answer
+> **`Filter`** wraps **any** servlet or static resource in the container (`doFilter` + `FilterChain`) and **can replace** request/response. **`HandlerInterceptor`** runs **inside `DispatcherServlet` after `HandlerMapping`** around one mapped handler (`preHandle` / `postHandle` / `afterCompletion`) and **cannot** swap those objects. **Listeners** (`ServletContextListener`, `HttpSessionListener`, `ServletRequestListener`, …) observe **lifecycle events**, not a per-request wrap of a controller. Spring Security sits in the **filter** chain **before** the servlet. Interceptors are **not** “Java EE filters renamed” and **not** Spring AOP.
 
-For example, interceptor can be used to add the request header before sending the request to the controller and add the response header before sending the response to the client. 
+## Container wrap vs MVC chain vs events
 
-Interceptors support three methods − 
+Jakarta Servlet `Filter`: `init` once, then `doFilter` on every matching request. Skip `chain.doFilter` to abort. Typical: gzip, multipart, CORS, Security.
 
-* **preHandle()** − This is used to perform operations before sending the request to the controller. This method should return true to return the response to the client.
-* **postHandle()** − This is used to perform operations before sending the response to the client.
-* **afterCompletion()** − This is used to perform operations after completing the request and response.
+`HandlerInterceptor`: `preHandle` **true** continues the chain; **false** means you already wrote the response (it does **not** mean “send the controller’s response to the client”). `postHandle` is **after a successful handler**, **before view render**. `afterCompletion` runs only if **this** interceptor’s `preHandle` returned true. Register via `WebMvcConfigurer.addInterceptors` (or a `HandlerMapping`’s interceptor list). A `@Component` interceptor is **not** applied until registered.
+
+Listeners implement `EventListener` subtypes. `ServletContextListener.contextInitialized` runs **before** any filter or servlet is initialized.
+
+```d2
+direction: down
+l: "Listeners\ncontext / session / request events" {
+  width: 300
+  height: 55
+  style.fill: "#f3e5f5"
+}
+f: "Filter chain\n(can wrap request/response)" {
+  width: 300
+  height: 55
+  style.fill: "#e3f2fd"
+}
+ds: "DispatcherServlet" {
+  width: 220
+  height: 40
+  style.fill: "#fff3e0"
+}
+hi: "HandlerInterceptor\npreHandle → handler → postHandle" {
+  width: 320
+  height: 55
+  style.fill: "#e8f5e9"
+}
+
+l -> f
+f -> ds
+ds -> hi
+```
+
+**Fig. 1.** Listeners are not in the HTTP wrap. Filters enclose the servlet. Interceptors enclose a **mapped handler** only. AOP vs these layers: [[How do servlet filters interceptors and AOP differ in Spring]]. Callbacks: [[What is a HandlerInterceptor in Spring MVC]]. Register: [[How do you register a HandlerInterceptor in Spring MVC]].
 
 ```java
-@Component
-public class ProductServiceInterceptor implements HandlerInterceptor {
-   @Override
-   public boolean preHandle(
-      HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-      
-       log.info("[preHandle][" + request + "]" + "[" + request.getMethod()
-      + "]" + request.getRequestURI() + getParameters(request));
-      return true;
-   }
-   @Override
-   public void postHandle(
-      HttpServletRequest request, HttpServletResponse response, Object handler, 
-      ModelAndView modelAndView) throws Exception {
-          log.info("[postHandle][" + request + "]");
-      }
-   
-   @Override
-   public void afterCompletion(HttpServletRequest request, HttpServletResponse response, 
-      Object handler, Exception ex) throws Exception {
-           if (ex != null) {
-              ex.printStackTrace();
-           }
-           log.info("[afterCompletion][" + request + "][exception: " + ex + "]");
-      }
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+        Object handler) {
+    return true; // continue; false → you own the response
 }
 ```
 
-**В чем разница между Filters, Listeners and Interceptors?**
+**Listing 1.** Conceptual: interceptor abort is `false`, not “return the response.” Filters abort by not calling `chain.doFilter`.
 
-Концептуально всё просто, фильтры сервлетов могут перехватывать только HTTPServlets. Listeners могут перехватывать специфические события. Как перехватить события которые относятся ни к тем не другим?
+> [!warning] Not the same SPI
+> Dumps that say “Java EE Filter = Spring Interceptor = AOP” are **wrong**. Three APIs, three places in the stack. AOP advises **bean methods**.
 
-Фильтры и перехватчики делают по сути одно и тоже: они перехватывают какое-то событие, и делают что-то до или после.
-Java EE использует термин Filter, Spring называет их Interceptors. Именно здесь AOP используется в полную силу,
-благодаря чему возможно перехватывание вызовов любых объектов.
+> [!warning] Interceptors cannot wrap the request
+> You cannot swap `HttpServletRequest` in `preHandle`. Set **attributes** or **response headers**. Content wrapping (GZIP, multipart) belongs on a **Filter**.
 
-**Where does Spring Security sit vs interceptors?**
+> [!warning] `@Component` is not registration
+> An interceptor bean still needs **`addInterceptors`**. Security as an interceptor is a **mismatch** with MVC path matching; use the **filter** chain.
 
-Security is a servlet Filter chain before DispatcherServlet. Interceptors run after the servlet mapped a handler. Listeners are servlet lifecycle (context/session/request), not per-controller AOP.
+> [!tip] Interview answer
+> **Filters wrap the servlet (and static files) and can replace request/response. Interceptors wrap a Spring MVC handler after it is mapped. Listeners fire on context, session, or request lifecycle — they do not sit in the controller call chain.** Spring Security is a filter in front of `DispatcherServlet`.
