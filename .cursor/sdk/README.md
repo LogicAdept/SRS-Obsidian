@@ -1,4 +1,34 @@
-# Cover vault
+# Agent sandboxes
+
+## Chat fill (no SDK)
+
+Disposable clone + a second Cursor window. You run `/fill-tag` in chat yourself.
+No `CURSOR_API_KEY`, no Docker agent. Source vault stays clean until Accept.
+
+```powershell
+# Source repo must be clean/committed first.
+./.cursor/sdk/open_chat_sandbox.ps1 Networking/OSI
+```
+
+In the new window:
+
+```
+/fill-tag Networking/OSI --limit 1
+```
+
+Resume the same clone later:
+
+```powershell
+./.cursor/sdk/open_chat_sandbox.ps1 --workspace .cursor/sdk/runs/<id> Networking/OSI
+```
+
+Accept / Drop / Source — same as Cover (`switch_review.ps1 -Kind Fill …`).
+Optional: push the clone branch and open a GitHub PR instead of local Accept.
+
+This isolates the vault copy only. Cursor still runs on the host; for hard
+filesystem isolation use a VM.
+
+## Cover vault
 
 You pick a tag. Docker runs `/refine-tags` and `/cover-tag` on that leaf, or on
 the leaves under that parent — never on parent nodes or ancestors. The source

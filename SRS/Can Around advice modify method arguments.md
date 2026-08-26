@@ -7,55 +7,84 @@ priority: 0
 # Can Around advice modify method arguments?
 
 > [!abstract] Short answer
-> **Yes.** `@Around` advice calls **`ProceedingJoinPoint.proceed(Object[] args)`** and Spring uses that array as the arguments of the **target method**. `proceed()` with no array keeps the caller’s originals. The advice must still **return** the `proceed()` result (or a deliberate substitute).
+> **Yes, in Spring AOP.** `@Around` advice can replace the target method’s arguments by calling `ProceedingJoinPoint.proceed(Object[] args)`. `proceed()` with no array keeps the caller’s original arguments.
 
-## `proceed(Object[])` replaces the call
+Only around advice owns `ProceedingJoinPoint`. Other advice kinds can *read* arguments (for example via `JoinPoint.getArgs()` or `args(...)` binding) but cannot swap what the join point runs with. See [[What is ProceedingJoinPoint in Around advice]] and [[What advice types does Spring AOP support]].
 
-Spring Framework *Declaring Advice*: invoking `proceed()` without arguments supplies the **caller’s original** arguments. The overload **`proceed(Object[])`** uses the array values as the arguments when the underlying method runs.
+## How argument replacement works
 
-First parameter of `@Around` must be **`ProceedingJoinPoint`**. Return type should be **`Object`** so the caller sees the real result — [[Why can Around advice lose the join point return value]].
+```d2
+direction: down
+call: "Client calls\nproxied bean method" {
+  width: 260
+  height: 80
+  style.fill: "#e3f2fd"
+}
+around: "@Around advice\nreceives ProceedingJoinPoint" {
+  width: 280
+  height: 90
+  style.fill: "#fff3e0"
+}
+choose: "Which proceed?" {
+  width: 240
+  height: 70
+  style.fill: "#fff3e0"
+}
+orig: "proceed()\n→ original args" {
+  width: 240
+  height: 80
+  style.fill: "#e8f5e9"
+}
+repl: "proceed(Object[])\n→ array becomes args" {
+  width: 280
+  height: 80
+  style.fill: "#e8f5e9"
+}
+target: "Target method runs\n(or advice short-circuits)" {
+  width: 280
+  height: 90
+  style.fill: "#f3e5f5"
+}
+
+call -> around
+around -> choose
+choose -> orig
+choose -> repl
+orig -> target
+repl -> target
+```
+
+**Fig. 1.** Spring AOP around advice decides whether the target sees the original arguments or a replacement array.
+
+Spring Framework documents this explicitly: `proceed()` without arguments supplies the caller’s originals; the overloaded `proceed(Object[])` uses the array values as the arguments of the underlying method. Spring’s runtime implementation (`MethodInvocationProceedingJoinPoint`, Spring Framework 6.2) also rejects a `null` array and requires the array **length** to equal the join-point argument count, or it throws `IllegalArgumentException`.
 
 ```java
 @Around("execution(List<Account> find*(..)) && args(accountHolderNamePattern)")
-public Object preProcessQueryPattern(ProceedingJoinPoint pjp,
+public Object preProcessQueryPattern(
+        ProceedingJoinPoint pjp,
         String accountHolderNamePattern) throws Throwable {
     String newPattern = preProcess(accountHolderNamePattern);
     return pjp.proceed(new Object[] { newPattern });
 }
 ```
 
-**Listing 1.** Conceptual pattern from Spring’s “Proceeding with Arguments” example — bind `args(...)` then pass a new array into `proceed`.
+**Listing 1.** Official Spring shape: bind every method parameter in order, then `proceed` with a same-length `Object[]` (Spring Framework 6.x Declaring Advice).
 
-For **Spring AOP + AspectJ weaving** compatibility, bind **each** join-point parameter on the advice signature in order, then pass a matching `Object[]`. Native AspectJ `proceed` uses different arity rules (advice parameters, not join-point parameters); Spring’s proxy path is simpler: the array **is** the target invocation args.
+For portability with AspectJ weaving, Spring recommends that same pattern: bind each target parameter on the advice signature in order, then pass a matching `Object[]` to `proceed`. Spring’s proxy-based semantics treat the array as the full argument list of the join point; classic AspectJ around advice uses a different `proceed` arity rule tied to the advice parameters.
 
-```d2
-direction: right
-caller: "Caller\noriginal args" {
-  width: 180
-  height: 70
-  style.fill: "#e3f2fd"
-}
-around: "@Around\nbuild Object[]" {
-  width: 200
-  height: 70
-  style.fill: "#fff3e0"
-}
-target: "Target method\nreplaced args" {
-  width: 200
-  height: 70
-  style.fill: "#e8f5e9"
-}
-
-caller -> around -> target
+```java
+Object[] args = pjp.getArgs();
+args[0] = "mutated";
+return pjp.proceed(); // still original args
 ```
 
-**Fig. 1.** The interceptor sits between caller and target; only `proceed(Object[])` changes what the target receives. See [[What is ProceedingJoinPoint in Around advice]].
+**Listing 2.** Conceptual pitfall: `getArgs()` returns a clone; mutating it does not change the invocation unless you pass that array to `proceed(Object[])`.
 
-> [!warning] Array must be a legal invocation
-> Length and types must match the target method. A mismatched array fails at invoke time (typical reflection `IllegalArgumentException`), not as a compile-time AspectJ check in Spring proxy mode.
+> [!warning] Wrong array length fails fast
+> In Spring AOP, `proceed(new Object[]{...})` must have the **same length** as the advised method’s argument list. A shorter or longer array throws `IllegalArgumentException` (“Expecting N arguments to proceed…”) before the target runs. Wrong **types** are a separate failure later (typically at reflective invoke), not that length check.
 
-> [!warning] `proceed()` without an array does not rewrite args
-> Mutating a bound parameter variable (the `String name` advice argument) does **not** change the target call unless you pass a new `Object[]` into `proceed`.
+> [!warning] Proxy boundary still applies
+> Argument rewriting only happens when the call goes through the Spring proxy into advised around advice. A self-invocation on `this` never enters the proxy, so [[Why does a self-invocation skip Spring AOP advice]] applies here too — no around advice, no modified args.
 
 > [!tip] Interview answer
-> **Yes — around advice can replace arguments with `pjp.proceed(new Object[]{ … })`.** Spring feeds that array to the target method. No-arg `proceed()` keeps the originals. Return the `proceed()` value so the caller still sees the method result.
+> **Yes — around advice can change arguments with `proceed(Object[])`.** Plain `proceed()` keeps the originals. In Spring AOP the array must match the target method’s arity or you get `IllegalArgumentException`. Mutating `getArgs()` alone is not enough; pass the new array to `proceed`.
