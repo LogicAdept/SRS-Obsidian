@@ -2,16 +2,69 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/DataAccess #SRS #New
+#Java/Spring/Framework/DataAccess #SRS
 
-> [!warning] Untrusted draft
-> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
+# What is `SimpleJdbcInsert`?
 
-`SimpleJdbcInsert` simplifies inserting a row without writing a long INSERT statement. The interview answer: convenient for straightforward inserts.
+> [!abstract] Short answer
+> **`SimpleJdbcInsert`** builds **INSERT** from **JDBC metadata**: you set the **table name**, pass **column → value**, and Spring writes the statement. **Do not subclass it.** Configure once (fluent **`withTableName`**, optional **`usingColumns`**, **`usingGeneratedKeyColumns`**), then **`execute`**. **`JdbcClient` does not replace this** for inserts that need metadata or generated keys.
 
-It appears on the Java Code Geeks list of Spring JDBC access approaches next to `JdbcTemplate` and `SimpleJdbcCall`.
+## Metadata insert, not a query API
 
-> [!warning] Unverified traps from the dump
-> - The dump does not show `withTableName` / `execute(Map)` in the Q&A body used here; only the purpose.
-> - Not a replacement for `JdbcTemplate` queries or updates.
+Docs: instantiate in the DAO **initialization** path. Map **keys must match table column names**. Alternatives to `Map`: **`MapSqlParameterSource`**, **`BeanPropertySqlParameterSource`**. Generated keys: **`usingGeneratedKeyColumns("id")`** then **`executeAndReturnKey`** → **`Number`** (not a guaranteed concrete numeric type). Multiple / non-numeric keys: **`executeAndReturnKeyHolder`**. Restrict columns with **`usingColumns`**.
 
+```java
+public void setDataSource(DataSource dataSource) {
+    this.insertActor = new SimpleJdbcInsert(dataSource)
+            .withTableName("t_actor")
+            .usingGeneratedKeyColumns("id");
+}
+
+public void add(Actor actor) {
+    Map<String, Object> parameters = new HashMap<>(2);
+    parameters.put("first_name", actor.getFirstName());
+    parameters.put("last_name", actor.getLastName());
+    Number newId = insertActor.executeAndReturnKey(parameters);
+    actor.setId(newId.longValue());
+}
+```
+
+**Listing 1.** Framework sample — no `id` in the map when the column is generated. Template keys: [[How do you fetch auto-generated keys with JdbcTemplate]]. Named sources: [[How do you use NamedParameterJdbcTemplate with SqlParameterSource]].
+
+```d2
+direction: down
+cfg: "withTableName + metadata" {
+  width: 240
+  height: 50
+  style.fill: "#e3f2fd"
+}
+exec: "execute(Map / SqlParameterSource)" {
+  width: 280
+  height: 50
+  style.fill: "#fff3e0"
+}
+sql: "INSERT constructed for you" {
+  width: 240
+  height: 50
+  style.fill: "#e8f5e9"
+}
+
+cfg -> exec -> sql
+```
+
+**Fig. 1.** Stored procedures: [[What is SimpleJdbcCall]]. Fluent queries: [[What is JdbcClient]]. Template: [[What is Spring JdbcTemplate]].
+
+> [!warning] Column names, not Java properties
+> A `Map` is keyed by **database columns**. Bean property names only apply when you pass **`BeanPropertySqlParameterSource`**.
+
+> [!warning] Not a general `JdbcTemplate`
+> No SELECT/UPDATE/batch facade here. Wrong tool for queries.
+
+> [!tip] Interview answer
+> **`SimpleJdbcInsert` uses table metadata so you skip a hand-written INSERT.** Configure `withTableName`, `execute` a map of columns. Generated keys: `usingGeneratedKeyColumns` + `executeAndReturnKey`.
+
+## See also
+
+- [[What is SimpleJdbcCall]]
+- [[How do you fetch auto-generated keys with JdbcTemplate]]
+- [[What is JdbcClient]]

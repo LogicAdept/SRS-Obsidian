@@ -2,18 +2,62 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/DataAccess #SRS #New
+#Java/Spring/Framework/DataAccess #SRS
 
-> [!warning] Untrusted draft
-> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
+# How do you configure a `DataSource` in Spring?
 
-Dumps say you define a `DataSource` bean in XML or `@Configuration` Java config, with URL, username, and password. A GitHub Spring interview dump uses `org.springframework.jdbc.datasource.DriverManagerDataSource` and sets `driverClassName`, `url`, `username`, and `password`.
+> [!abstract] Short answer
+> Expose a **`javax.sql.DataSource` bean**. In Framework Java config that is often **`DriverManagerDataSource`** (tests) or a **pool** (`HikariCP`, DBCP, C3P0) with URL, user, password, and **`destroyMethod = "close"`** for pooled types. Production: a **pool** or **JNDI**. Boot: **`spring.datasource.*`** auto-configures one unless you define your own bean.
 
-in28minutes shows a pooled variant: `com.mchange.v2.c3p0.ComboPooledDataSource` with `driverClass`, `jdbcUrl`, `user`, `password`, and `destroy-method="close"`, values taken from properties.
+## You supply connection parameters
 
-Interview lists also say you can add connection-pooling settings on that bean. A `@Bean` returning `DataSourceBuilder.create().url(...).username(...).password(...).build()` appears in a 2026 JDBC/JPA question dump.
+Spring JDBC *who does what*: **you** define connection parameters; Spring **opens/closes** connections through the DataSource. Docs show **`@Bean` `DriverManagerDataSource`** with `driverClassName`, `url`, `username`, `password`, plus XML `property-placeholder`. Same pattern for **`BasicDataSource`** (DBCP) and **`ComboPooledDataSource`** (C3P0).
 
-> [!warning] Unverified traps from the dump
-> - `DriverManagerDataSource` in dumps is a simple helper, not a production pool. HikariCP is a different card (`What is HikariCP in Spring Boot`).
-> - Boot auto-config of a DataSource from `application.properties` is not the same as this explicit Framework bean.
+```java
+@Bean
+DriverManagerDataSource dataSource() {
+    DriverManagerDataSource dataSource = new DriverManagerDataSource();
+    dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+    dataSource.setUrl("jdbc:hsqldb:hsql://localhost:");
+    dataSource.setUsername("sa");
+    dataSource.setPassword("");
+    return dataSource;
+}
+```
 
+**Listing 1.** Framework sample — **not a pool**. Pooling: [[What is connection pooling in Spring JDBC]]. Boot Hikari: [[What is HikariCP in Spring Boot]]. JNDI: [[How do you use a Tomcat JNDI DataSource in Spring]].
+
+Then construct **`JdbcTemplate`** from that bean — [[How do you configure JdbcTemplate as a bean]].
+
+```d2
+direction: right
+cfg: "@Bean DataSource" {
+  width: 180
+  height: 45
+  style.fill: "#e3f2fd"
+}
+jt: "JdbcTemplate" {
+  width: 160
+  height: 45
+  style.fill: "#fff3e0"
+}
+
+cfg -> jt
+```
+
+**Fig. 1.** Template: [[What is Spring JdbcTemplate]]. `DataSourceBuilder` in Boot how-to is a **Boot** helper, not required in plain Framework.
+
+> [!warning] `DriverManagerDataSource` is documented as test-only
+> No pooling; concurrent checkout is expensive. Do not copy it into production as “the Spring DataSource”.
+
+> [!warning] Two DataSource beans
+> Multiple databases need **multiple templates**. Boot: a custom `@Bean DataSource` **suppresses** auto-config.
+
+> [!tip] Interview answer
+> **Define a `DataSource` bean with URL and credentials, preferably a pool (Hikari).** Tests may use `DriverManagerDataSource`. Boot fills this from `spring.datasource.*` unless you declare the bean yourself.
+
+## See also
+
+- [[What is connection pooling in Spring JDBC]]
+- [[What is HikariCP in Spring Boot]]
+- [[How do you configure JdbcTemplate as a bean]]

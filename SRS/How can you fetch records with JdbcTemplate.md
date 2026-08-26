@@ -2,18 +2,74 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/DataAccess #Java/JDBC #SRS #New
+#Java/Spring/Framework/DataAccess #Java/JDBC #SRS
 
-> [!warning] Untrusted draft
-> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
+# How can you fetch records with `JdbcTemplate`?
 
-Dumps name a small set of read methods: `query` (list of mapped objects), `queryForObject` (one value or one mapped object), `queryForMap` (one row as `Map<String,Object>`), `queryForList` (list of those maps).
+> [!abstract] Short answer
+> Use **`query`** for **many rows** (`List<T>` + **`RowMapper`**), **`queryForObject`** for **exactly one** row (scalar class or mapper), **`queryForList`** / **`queryForMap`** when you want **maps** instead of a domain type. Walk the whole cursor yourself with **`ResultSetExtractor`**. Per-row void work: **`RowCallbackHandler`**. **`update` is DML**, not a fetch. Bind **`?` arguments in order**.
 
-For domain objects you pass a callback: `RowMapper` (per row), or `ResultSetExtractor` if you walk the whole `ResultSet`. Java Code Geeks starts the same answer with “two interfaces” for fetching records (the list in that dump is truncated).
+## Read APIs
 
-`update` in those notes is INSERT/UPDATE/DELETE, not a fetch.
+Spring *Running Queries* / *Querying (SELECT)*:
 
-> [!warning] Unverified traps from the dump
-> - Bind-variable order on `JdbcTemplate` must match `?` order.
-> - `queryForObject` is for a single result; `query` is for multiple rows. Dumps do not name the exception if the row count is wrong.
+```java
+int count = jdbcTemplate.queryForObject(
+        "select count(*) from mytable", Integer.class);
 
+String name = jdbcTemplate.queryForObject(
+        "select name from mytable where id = ?", String.class, id);
+
+List<Actor> actors = jdbcTemplate.query(
+        "select first_name, last_name from t_actor",
+        actorRowMapper);
+
+Actor one = jdbcTemplate.queryForObject(
+        "select first_name, last_name from t_actor where id = ?",
+        actorRowMapper, id);
+```
+
+**Listing 1.** Conceptual Framework patterns. Cardinality: [[What is the difference between query and queryForObject in JdbcTemplate]]. Mapper: [[What is a RowMapper in Spring JDBC]]. Maps: [[What is queryForMap in JdbcTemplate]], [[What is queryForList in JdbcTemplate]].
+
+Two dump “interfaces” for fetching: **`RowMapper`** (usual) and **`ResultSetExtractor`** (whole `ResultSet`) — [[What is ResultSetExtractor]], [[What is RowCallbackHandler]].
+
+```d2
+direction: down
+sql: "SELECT + binds" {
+  width: 200
+  height: 45
+  style.fill: "#e3f2fd"
+}
+jt: "JdbcTemplate.query*" {
+  width: 220
+  height: 50
+  style.fill: "#fff3e0"
+}
+out: "List / T / Map" {
+  width: 200
+  height: 45
+  style.fill: "#e8f5e9"
+}
+
+sql -> jt -> out
+```
+
+**Fig. 1.** Template: [[What is Spring JdbcTemplate]]. Wrong row count on `queryForObject` → **`IncorrectResultSizeDataAccessException`**.
+
+> [!warning] `update` does not fetch
+> INSERT/UPDATE/DELETE return **row counts** (or keys). Reads are `query*`.
+
+> [!warning] `?` order is positional
+> Named binds need [[What is NamedParameterJdbcTemplate]] or [[What is JdbcClient]].
+
+> [!tip] Interview answer
+> **`query` + `RowMapper` for lists, `queryForObject` for one row, `queryForMap`/`queryForList` for untyped rows.** Extractor if you build a graph. `update` is not a read. `queryForObject` throws if the row count is not one.
+
+## See also
+
+- [[What is Spring JdbcTemplate]]
+- [[What is a RowMapper in Spring JDBC]]
+- [[What is BeanPropertyRowMapper]]
+- [[What is ResultSetExtractor]]
+- [[What is the difference between query and queryForObject in JdbcTemplate]]
+- [[How do you fetch auto-generated keys with JdbcTemplate]]
