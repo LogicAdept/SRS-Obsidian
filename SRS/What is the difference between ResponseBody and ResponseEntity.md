@@ -2,35 +2,73 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/WebMvc #API/REST #Java/Annotations #SRS #New
+#Java/Spring/Framework/WebMvc #API/REST #Java/Annotations #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is the difference between `ResponseBody` and `ResponseEntity`?
 
-**Почему иногда мы используем `@ResponseBody`, а иногда `ResponseEntity`?**
+> [!abstract] Short answer
+> **`@ResponseBody` writes the return value through `HttpMessageConverter`s and skips view resolution.** Default success status is **200 OK** unless you also set status another way (`@ResponseStatus`, servlet API). **`ResponseEntity<T>` is a return type**: body **plus** **`HttpStatusCode` and `HttpHeaders`**. You do **not** need `@ResponseBody` on a method that returns `ResponseEntity` — `HttpEntity` / `ResponseEntity` are first-class MVC return values. `@RestController` already implies `@ResponseBody` on every method.
 
-ResponseEntity необходим, только если мы хотим кастомизировать ответ, добавив к нему статус ответа. Во всех остальных случаях будем использовать `@ResponseBody`.
+## Annotation vs wrapper
 
-````java
-@GetMapping(value=”/resource”)
-@ResponseBody
-public Resource sayHello() { return resource; }
+`@ResponseBody` (since 3.0; type-level since 4.0) is the “write this object as the body” marker. `@RestController` inherits it.
 
-@PostMapping(value=”/resource”)
-public ResponseEntity createResource() {
-    ….
-    return ResponseEntity.created(resource).build();
+`ResponseEntity` (since 3.0.2) **extends `HttpEntity`** with a status. Same converters write `getBody()`. Builders: `ok()`, `created(URI)`, `accepted()`, `noContent()`, `badRequest()`, `notFound()`, `unprocessableContent()` (7.0; `unprocessableEntity()` deprecated), `internalServerError()`, `status(...)`. `of(Optional)` / `ofNullable` → 200 with body or **404** if empty/`null`. `of(ProblemDetail)` copies the problem’s status.
+
+```java
+@GetMapping("/handle")
+public ResponseEntity<String> handle() {
+    URI location = URI.create("/resource/1");
+    return ResponseEntity.created(location)
+            .header("MyResponseHeader", "MyValue")
+            .body("Hello World");
 }
-````
+```
 
-Стандартные HTTP коды статусов ответов, которые можно использовать.
-200 — SUCCESS
-201 — CREATED
-404 — RESOURCE NOT FOUND
-400 — BAD REQUEST
-401 — UNAUTHORIZED
-500 — SERVER ERROR
+**Listing 1.** Conceptual Framework javadoc: **201 + Location + body**. `created` takes a **`URI`**, not the domain object. Body-only pair: [[What is the difference between RequestBody and ResponseBody]]. `@RestController`: [[What is the difference between Spring RestController and Controller]]. Method-level status without a wrapper: [[What is the ResponseStatus annotation in Spring MVC]].
 
-Для `@ResponseBody` единственные состояния статуса это SUCCESS(200), если всё хорошо и SERVER ERROR(500), если произошла какая-либо ошибка.
+```java
+@GetMapping("/resource")
+@ResponseBody
+public Resource bodyOnly() {
+    return resource;
+}
+```
 
-Допустим мы что-то создали и хотим отправить статус CREATED(201). В этом случае мы используем `ResponseEntity`.
+**Listing 2.** Conceptual: converters write `Resource`; status stays **200** unless something else changes it. Errors can still be **4xx/5xx** via exception resolvers — not “only 500”.
+
+```d2
+direction: down
+ret: "controller return value" {
+  width: 240
+  height: 40
+  style.fill: "#e3f2fd"
+}
+rb: "@ResponseBody\nconverters → body\nstatus default 200" {
+  width: 280
+  height: 70
+  style.fill: "#fff3e0"
+}
+re: "ResponseEntity\nstatus + headers + body" {
+  width: 280
+  height: 70
+  style.fill: "#e8f5e9"
+}
+
+ret -> rb
+ret -> re
+```
+
+**Fig. 1.** Same converter pipeline. `ResponseEntity` is how you set status and headers in the return value.
+
+> [!warning] `@ResponseBody` is not “only 200 or 500”
+> Dumps that say so are **wrong**. Uncaught exceptions still map through `HandlerExceptionResolver`. `@ResponseStatus` on the method or exception can be 404, 204, 201, … without `ResponseEntity`.
+
+> [!warning] `ResponseEntity.created(resource)` does not compile
+> The static factory is **`created(URI location)`**. Then `.body(...)` or `.build()`. HTTP 201 is **`CREATED`**, not a dump label “SUCCESS”.
+
+> [!warning] `@ResponseStatus` loses to `ResponseEntity`
+> If you return a `ResponseEntity`, its status **wins**. Do not stack `@ResponseStatus` and expect it to override the entity.
+
+> [!tip] Interview answer
+> **`@ResponseBody` means “serialize the return value as the HTTP body.”** **`ResponseEntity` is that body plus status and headers in one object.** Use the entity (or `ProblemDetail`) when the status is not 200; `@RestController` already covers the body-only case.
