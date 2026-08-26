@@ -2,16 +2,78 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/DataAccess #Java/JDBC #SRS #New
+#Java/Spring/Framework/DataAccess #Java/JDBC #SRS
 
-> [!warning] Untrusted draft
-> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
+# What is the difference between `query` and `queryForObject` in `JdbcTemplate`?
 
-Exam notes: `queryForObject` when you expect a single result (a scalar with `Integer.class` / `Date.class`, or one domain object plus a `RowMapper`). `query` when you expect multiple rows; return type becomes a `List` and the same `RowMapper` runs per row.
+> [!abstract] Short answer
+> **`query`** runs a SELECT and maps **zero or more** rows (typically a **`List<T>`** via **`RowMapper`**). **`queryForObject`** maps **exactly one** row to a **single `T`** (scalar `Integer.class` / `String.class`, or a domain type + `RowMapper`). If the result size is not one, **`IncorrectResultSizeDataAccessException`** (no row: usually **`EmptyResultDataAccessException`**). “Maybe missing” → **`query`** and inspect the list, not `queryForObject`.
 
-in28minutes: `query` with a user bind for many todos; `queryForObject` with an id bind for one todo.
+## Cardinality is the API
 
-> [!warning] Unverified traps from the dump
-> - Using `queryForObject` for a query that can return zero or many rows is the failure mode the dumps imply by stressing “single result”.
-> - There is also `queryForMap` / `queryForList` when you do not want a domain type.
+Spring examples: `queryForObject("select count(*) …", Integer.class)` for a **one-cell** aggregate; `query(..., rowMapper)` for a **list** of actors; `queryForObject(..., rowMapper, id)` for **one** actor.
 
+```java
+int count = jdbcTemplate.queryForObject(
+        "select count(*) from t_actor where first_name = ?",
+        Integer.class, "Joe");
+
+List<Actor> all = jdbcTemplate.query(
+        "select first_name, last_name from t_actor",
+        actorRowMapper);
+
+Actor one = jdbcTemplate.queryForObject(
+        "select first_name, last_name from t_actor where id = ?",
+        actorRowMapper, id);
+```
+
+**Listing 1.** Conceptual mix of Framework samples. Mapper: [[What is a RowMapper in Spring JDBC]]. Template: [[What is Spring JdbcTemplate]].
+
+No domain type: **`queryForMap`** (one row → `Map` of columns), **`queryForList`** (many rows → `List<Map>` or `List<T>`). Those still enforce “one row” on the `ForMap` / single-object overloads — [[What is queryForMap in JdbcTemplate]], [[What is queryForList in JdbcTemplate]].
+
+```d2
+direction: down
+q: "query + RowMapper" {
+  width: 240
+  height: 50
+  style.fill: "#e8f5e9"
+}
+list: "List<T> (0..n)" {
+  width: 200
+  height: 45
+  style.fill: "#e3f2fd"
+}
+qo: "queryForObject" {
+  width: 220
+  height: 50
+  style.fill: "#fff3e0"
+}
+one: "exactly one T" {
+  width: 200
+  height: 45
+  style.fill: "#fce4ec"
+}
+
+q -> list
+qo -> one
+```
+
+**Fig. 1.** `count(*)` is still **one row**. A `WHERE id = ?` that misses is **not**.
+
+> [!warning] `queryForObject` is not `findById` Optional
+> Zero rows throw. Catching that in every DAO is noise — use `query` and `stream().findFirst()` (or handle empty list) when absence is normal.
+
+> [!warning] Two rows also fail `queryForObject`
+> Unique constraint missing → **`IncorrectResultSizeDataAccessException`**, not a silent first row.
+
+> [!tip] Interview answer
+> **`query` returns a list; `queryForObject` demands exactly one row.** Same `RowMapper` can serve both. Scalars use `queryForObject(sql, Integer.class)`. For optional rows, do not use `queryForObject`.
+
+## See also
+
+- [[What is Spring JdbcTemplate]]
+- [[How can you fetch records with JdbcTemplate]]
+- [[What is a RowMapper in Spring JDBC]]
+- [[What is queryForMap in JdbcTemplate]]
+- [[What is queryForList in JdbcTemplate]]
+- [[What is the DataAccessException hierarchy]]
