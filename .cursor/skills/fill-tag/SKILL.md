@@ -25,7 +25,7 @@ official documentation.
 
 - `<tag>` required when no file is named: tree path or short name. Resolve via `SRS/Format/Tags.md`. A grouping parent is valid even if it has no own bullet, as long as a child leaf exists (`#Java/Spring/Framework` covers `.../WebMvc`, `.../WebFlux`, …).
 - `@SRS/<Cue>.md` (or another vault-relative card path): fill **that** card only. Coverage index **#New** tab copies this form.
-- `--limit` optional: cards to finish this run when filling by tag. Default **1**. Never more than **3** unless the user lists specific cues or the Docker fill orchestrator names a tight cluster.
+- `--limit` optional: cards to finish this run when filling by tag. Default **1**. Never more than **3** unless the user lists specific cues or the Docker fill orchestrator names a cluster from its clustering turn.
 
 Accuracy beats coverage. A wrong card is worse than leaving `#New`.
 

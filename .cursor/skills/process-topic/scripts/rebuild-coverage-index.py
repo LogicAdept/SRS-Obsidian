@@ -249,8 +249,9 @@ def render_index(
         "HTML tabs: **Tags** (tree) and **#New** (unfinished cards; **Fill** copies "
         "`/fill-tag @SRS/<Cue>.md`). "
         "HTML row buttons: **Cover agent** opens General / Focused. **Fill agent** starts "
-        "a fill on one durable agent (warm-up, then one send per tight cue cluster until "
-        "the tag is empty). Toolbar **Rebuild index** copies "
+        "a fill on one durable agent (warm-up, model clusters remaining #New cards "
+        "by shared official docs, then one send per cluster until the tag is empty). "
+        "Toolbar **Rebuild index** copies "
         f"`{REBUILD_INDEX_CMD}`. "
         "Clone menus appear "
         "only when the corresponding cover or fill clone exists. **…** hides "
@@ -658,7 +659,7 @@ li.node.hidden {{ display: none; }}
     <dt>Cover agent</dt>
     <dd><b>General</b> — обычный refine + cover листа или листьев под родителем. <b>Focused</b> — копирует ту же команду с <code>--focus ''</code>; в терминале допишите, какого покрытия не хватает. Агент сопоставит запрос с честным листом (при необходимости создаст его) и покроет именно его. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Fill agent</dt>
-    <dd><b>Start</b> — изолированный fill на одном Cursor-агенте. Один ход агента = весь <em>узкий</em> кластер (все <code>#New</code> с одним типом/аннотацией в названии). Потом следующий кластер, пока под тегом не кончатся <code>#New</code>. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
+    <dd><b>Start</b> — изолированный fill на одном Cursor-агенте. Сначала модель группирует оставшиеся <code>#New</code> по общему механизму и официальным докам. Один ход = один такой кластер, затем следующий, пока под тегом не кончатся <code>#New</code>. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Cover clone</dt>
     <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — второе окно на клон. <b>Continue</b> — продолжить незавершённое состояние. <b>Focused</b> — шаблон с <code>--focus ''</code> для того же клона, даже если лист уже complete. <b>Accept</b> — cherry-pick в исходный vault и удалить клон. <b>Drop</b> — удалить без переноса.</dd>
     <dt>Fill clone</dt>

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Fill #New cards under a tag with one durable Cursor agent.
 
-The orchestrator warms the durable session once, then sends one tight cue
-cluster per turn (every #New card that shares a distinctive identifier in the
-title, e.g. SecurityFilterChain or @Transactional). --until-tag walks every
-remaining cluster until the tag is empty; --one-cluster stops after the first
-cluster. Real runs are accepted only inside the hardened Docker workspace
-created by run_fill_tag.ps1. Direct host execution is limited to --dry-run.
+The orchestrator warms the durable session, asks the model to cluster remaining
+#New cards by shared official docs, then fills one cluster per send. --until-tag
+walks every remaining cluster until the tag is empty; --one-cluster stops
+after the first cluster. Real runs are accepted only inside the hardened Docker
+workspace created by run_fill_tag.ps1. Direct host execution is limited to
+--dry-run.
 """
 
 from __future__ import annotations
@@ -55,45 +55,6 @@ CONTAINER_MARKER = "SRS_FILL_ISOLATED_CONTAINER"
 CONTAINER_WORKSPACE = Path("/workspace")
 SYSTEM_TAGS = frozenset({"SRS", "New"})
 PROGRESS_VERSION = 1
-# Title tokens too broad to define a cluster (whole topic, not one mechanism).
-GENERIC_CUE_IDS = frozenset(
-    {
-        "springboot",
-        "springframework",
-        "springsecurity",
-        "javase",
-        "javabean",
-        "javabeans",
-    }
-)
-PASCAL_RE = re.compile(r"\b[A-Z][a-z0-9]+(?:[A-Z][A-Za-z0-9]+)+\b")
-CAMEL_RE = re.compile(r"\b[a-z]+(?:[A-Z][A-Za-z0-9]+)+\b")
-ANNOTATION_RE = re.compile(r"@[A-Z][A-Za-z0-9]+")
-CAP_WORD_RE = re.compile(r"\b[A-Z][A-Za-z0-9]{7,}\b")
-GENERIC_CAP_WORDS = frozenset(
-    {
-        "annotation",
-        "annotations",
-        "application",
-        "between",
-        "configuration",
-        "controller",
-        "difference",
-        "exception",
-        "exceptions",
-        "framework",
-        "interface",
-        "java",
-        "method",
-        "methods",
-        "repository",
-        "security",
-        "service",
-        "spring",
-        "transaction",
-        "transactions",
-    }
-)
 
 DRAFT_MARKERS = (
     "untrusted draft",
@@ -105,14 +66,14 @@ DRAFT_MARKERS = (
 CONSTRAINTS = """
 You are in an isolated disposable clone of the SRS vault.
 
-This is one durable agent session. The orchestrator sends one tight cue
-cluster per turn: every listed #New card that shares one type or annotation.
-Finish every listed card in this turn before you reply. Do not look ahead to
+This is one durable agent session. After warm-up the orchestrator asks you to
+cluster the remaining #New cards, then sends one of those clusters per turn.
+Finish every listed card in a fill turn before you reply. Do not look ahead to
 a later cluster, invent extra cues, or start a card that is not listed.
 
 Hard constraints:
-- Read and follow `.cursor/skills/fill-tag/SKILL.md`.
-- Process every listed target this turn; no other cards.
+- Read and follow `.cursor/skills/fill-tag/SKILL.md` on fill turns.
+- Process every listed target this fill turn; no other cards.
 - Invoke fill-tag with `--limit N` matching the listed count. The listed cues
   are an explicit assignment, so do not stop after the first card and do not
   apply the skill's usual cap of 3.
@@ -131,7 +92,7 @@ Session cache:
   for every card in this turn. Do not WebFetch a URL you already opened.
 - Previous cluster pages may not apply to a new cluster.
 
-Chat report override (this orchestrator only; not the card file):
+Chat report override on fill turns (this orchestrator only; not the card file):
 - One line per file: FILENAME | CHECKLIST PASS or FAIL.
 - DRAFT AUDIT: one line per file (not per ledger item).
 - DOCS READ: official URLs only, comma-separated. Repeat URLs you reused.
@@ -159,6 +120,10 @@ class AgentRunError(RuntimeError):
 
 class WorkspaceViolation(RuntimeError):
     """An agent changed files outside its assigned cluster."""
+
+
+class ClusterPlanError(RuntimeError):
+    """The clustering turn did not return a usable partition of the queue."""
 
 
 def _utc_now() -> str:
@@ -218,54 +183,6 @@ def _has_untrusted_draft(text: str) -> bool:
     return any(marker in lowered for marker in DRAFT_MARKERS)
 
 
-def _cue_identifiers(cue: str) -> frozenset[str]:
-    """Distinctive API/type names from the cue. Not the tag path."""
-    found: set[str] = set()
-    for match in ANNOTATION_RE.finditer(cue):
-        found.add(match.group(0).casefold())
-    for match in PASCAL_RE.finditer(cue):
-        found.add(match.group(0).casefold())
-    for match in CAMEL_RE.finditer(cue):
-        found.add(match.group(0).casefold())
-    for match in CAP_WORD_RE.finditer(cue):
-        token = match.group(0)
-        if token.casefold() in GENERIC_CAP_WORDS:
-            continue
-        if PASCAL_RE.fullmatch(token) or CAMEL_RE.fullmatch(token):
-            continue
-        found.add(token.casefold())
-    return frozenset(item for item in found if item not in GENERIC_CUE_IDS)
-
-
-def _cluster_label(ids: frozenset[str], cue: str) -> str:
-    if not ids:
-        return cue
-    return max(ids, key=lambda item: (len(item), item))
-
-
-def _cluster_queue(raw: list[Candidate]) -> list[Candidate]:
-    """Group by the most specific identifier in the cue, not by tag path."""
-    rebuilt: list[Candidate] = []
-    for item in raw:
-        ids = _cue_identifiers(item.cue)
-        rebuilt.append(
-            Candidate(
-                path=item.path,
-                cue=item.cue,
-                has_draft=item.has_draft,
-                cluster=_cluster_label(ids, item.cue),
-            )
-        )
-    rebuilt.sort(
-        key=lambda item: (
-            item.cluster.casefold(),
-            not item.has_draft,
-            item.cue.casefold(),
-        )
-    )
-    return rebuilt
-
-
 def _candidate_queue(tag: str) -> list[Candidate]:
     _scanned, cards = scan_cards(VAULT)
     candidates: list[Candidate] = []
@@ -281,19 +198,20 @@ def _candidate_queue(tag: str) -> list[Candidate]:
                 path=card.path,
                 cue=card.cue,
                 has_draft=_has_untrusted_draft(text),
-                cluster=card.cue,
+                cluster="",
             )
         )
-    return _cluster_queue(candidates)
+    candidates.sort(key=lambda item: (not item.has_draft, item.cue.casefold()))
+    return candidates
 
 
-def _filled_sibling(cluster: str) -> Path | None:
-    needle = cluster.casefold()
+def _filled_sibling(tag: str) -> Path | None:
     _scanned, cards = scan_cards(VAULT)
     for card in cards:
         if card.is_new:
             continue
-        if needle in _cue_identifiers(card.cue) or card.cue.casefold() == needle:
+        thematic = set(card.tags) - SYSTEM_TAGS
+        if any(path_in_prefix(card_tag, tag) for card_tag in thematic):
             return card.path
     return None
 
@@ -421,6 +339,121 @@ def _warmup_prompt(tag: str, sibling: Path | None) -> str:
     )
 
 
+def _cluster_prompt(tag: str, cards: list[Candidate]) -> str:
+    lines: list[str] = []
+    for offset, card in enumerate(cards, start=1):
+        relative = card.path.relative_to(REPO).as_posix()
+        kind = "untrusted_draft" if card.has_draft else "empty_stub"
+        lines.append(
+            f"{offset}. {card.path.name} | {json.dumps(card.cue, ensure_ascii=False)} "
+            f"| {kind} | {relative}"
+        )
+    listed = "\n".join(lines)
+    return (
+        "Same durable session. Warm-up is done. This is a clustering turn, not a "
+        "fill turn. Do not fill any card, do not edit any vault card, and do not "
+        "edit Tags.md. Do not WebSearch or WebFetch.\n\n"
+        f"Partition every listed #New card under #{tag} into tight clusters.\n"
+        "A cluster is a set of cards that share the same official documentation "
+        "pages (same mechanism, annotation family, or spec section). "
+        "Prefer multi-card clusters. Use a singleton only when no other listed "
+        "card shares that mechanism. Do not put the whole tag in one cluster. "
+        "Do not invent files. Each listed file must appear in exactly one cluster.\n\n"
+        f"Cards ({len(cards)}):\n{listed}\n\n"
+        "Reply with JSON only, no markdown fences, no prose:\n"
+        '{"clusters":[{"label":"short mechanism name","files":["Exact.md"]}]}'
+    )
+
+
+def _extract_json(report: str) -> Any:
+    text = report.strip()
+    fenced = re.search(
+        r"```(?:json)?\s*(.*?)\s*```", text, re.DOTALL | re.IGNORECASE
+    )
+    if fenced:
+        text = fenced.group(1).strip()
+    decoder = json.JSONDecoder()
+    for index, char in enumerate(text):
+        if char not in "{[":
+            continue
+        try:
+            value, _end = decoder.raw_decode(text[index:])
+            return value
+        except json.JSONDecodeError:
+            continue
+    raise ClusterPlanError("no JSON object in clustering report")
+
+
+def _lookup_card(raw: str, available: list[Candidate]) -> Candidate | None:
+    token = str(raw).strip().strip("`").replace("\\", "/")
+    name = Path(token).name
+    for card in available:
+        relative_repo = card.path.relative_to(REPO).as_posix()
+        relative_vault = card.path.relative_to(VAULT).as_posix()
+        if card.path.name == name or relative_repo == token or relative_vault == token:
+            return card
+        if card.cue == token:
+            return card
+    return None
+
+
+def _parse_cluster_plan(
+    report: str, available: list[Candidate]
+) -> list[list[Candidate]]:
+    payload = _extract_json(report)
+    if isinstance(payload, dict):
+        raw_clusters = payload.get("clusters")
+    else:
+        raw_clusters = payload
+    if not isinstance(raw_clusters, list) or not raw_clusters:
+        raise ClusterPlanError("clustering JSON must contain a non-empty clusters list")
+
+    seen: set[str] = set()
+    batches: list[list[Candidate]] = []
+    for offset, item in enumerate(raw_clusters, start=1):
+        if not isinstance(item, dict):
+            raise ClusterPlanError(f"cluster {offset} is not an object")
+        label = str(item.get("label") or "").strip() or f"cluster-{offset}"
+        files = item.get("files") or item.get("cards") or []
+        if not isinstance(files, list) or not files:
+            raise ClusterPlanError(f"cluster {label!r} has no files")
+        group: list[Candidate] = []
+        for name in files:
+            card = _lookup_card(name, available)
+            if card is None:
+                raise ClusterPlanError(f"clustering named unknown file: {name}")
+            if card.path.name in seen:
+                raise ClusterPlanError(
+                    f"clustering listed {card.path.name} more than once"
+                )
+            seen.add(card.path.name)
+            group.append(
+                Candidate(
+                    path=card.path,
+                    cue=card.cue,
+                    has_draft=card.has_draft,
+                    cluster=label,
+                )
+            )
+        batches.append(group)
+    missing = [card.path.name for card in available if card.path.name not in seen]
+    if missing:
+        raise ClusterPlanError(
+            "clustering omitted files: " + ", ".join(missing)
+        )
+    return batches
+
+
+def _cluster_retry_prompt(err: ClusterPlanError, cards: list[Candidate]) -> str:
+    names = "\n".join(f"- {card.path.name}" for card in cards)
+    return (
+        "Same durable session. Clustering JSON was unusable: "
+        f"{err}. Do not fill cards. Reply with JSON only.\n\n"
+        "Put every listed file in exactly one cluster:\n"
+        f"{names}\n"
+    )
+
+
 def _prompt_for(tag: str, cards: list[Candidate], *, index: int, total: int) -> str:
     label = cards[0].cluster
     lines: list[str] = []
@@ -435,7 +468,7 @@ def _prompt_for(tag: str, cards: list[Candidate], *, index: int, total: int) -> 
     count = len(cards)
     return (
         "Same durable session and the same hard constraints. "
-        "Warm-up is done. Previous clusters are finished.\n\n"
+        "Warm-up and clustering are done. Previous clusters are finished.\n\n"
         f"Turn {index}/{total}. Fill this entire tight cluster in this one turn. "
         "Fetch official docs for this mechanism once, then write every listed card "
         "before you reply. Do not stop after the first card. Do not pick any other "
@@ -636,24 +669,13 @@ def _summary(items: list[dict[str, Any]], remaining: int) -> dict[str, int]:
     return result
 
 
-def _group_clusters(cards: list[Candidate]) -> list[list[Candidate]]:
-    groups: list[list[Candidate]] = []
-    for item in cards:
-        if not groups or groups[-1][0].cluster != item.cluster:
-            groups.append([item])
-        else:
-            groups[-1].append(item)
-    return groups
-
-
 def _select_clusters(
-    available: list[Candidate],
+    groups: list[list[Candidate]],
     *,
     until_tag: bool,
     one_cluster: bool,
     limit: int | None,
 ) -> list[list[Candidate]]:
-    groups = _group_clusters(available)
     if not groups:
         return []
     if until_tag and one_cluster:
@@ -687,7 +709,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Fill #New cards under one tag with one durable Cursor agent; "
-            "warm-up once, then one tight cue cluster per send."
+            "the model clusters remaining cards, then one cluster is filled per send."
         )
     )
     parser.add_argument("tag", metavar="TAG")
@@ -704,14 +726,14 @@ def _build_parser() -> argparse.ArgumentParser:
         "--until-tag",
         action="store_true",
         help=(
-            "Walk every tight cue cluster under the tag until no #New remain "
+            "Walk every model cluster under the tag until no #New remain "
             "(one send fills the whole current cluster, then the next cluster)."
         ),
     )
     parser.add_argument(
         "--one-cluster",
         action="store_true",
-        help="Fill only the first tight cue cluster, then stop.",
+        help="Fill only the first model cluster, then stop.",
     )
     parser.add_argument("--model", default="grok-4.6")
     parser.add_argument("--max-retries", type=int, default=2)
@@ -745,14 +767,8 @@ def main() -> int:
     tree_paths = parse_tree_paths(TAGS_MD)
     tag = _resolve_tag(args.tag, tree_paths)
     available = _candidate_queue(tag)
-    batches = _select_clusters(
-        available,
-        until_tag=args.until_tag,
-        one_cluster=args.one_cluster,
-        limit=args.limit,
-    )
-    selected_cards = [card for batch in batches for card in batch]
-    available_clusters = len(_group_clusters(available))
+    if args.until_tag and args.one_cluster:
+        raise SystemExit("use either --until-tag or --one-cluster, not both")
 
     print(f"repo={REPO}", flush=True)
     if args.until_tag:
@@ -762,39 +778,22 @@ def main() -> int:
     else:
         limit_shown = args.limit if args.limit is not None else 1
     print(
-        f"tag=#{tag} available={len(available)} available_clusters={available_clusters} "
-        f"selected_cards={len(selected_cards)} selected_clusters={len(batches)} "
+        f"tag=#{tag} available={len(available)} "
         f"limit={limit_shown} until_tag={str(args.until_tag).lower()} "
         f"one_cluster={str(args.one_cluster).lower()}",
         flush=True,
     )
-    if args.until_tag:
-        priority = "one cluster per send, then the next, until the tag is done"
-    elif args.one_cluster:
-        priority = "one cluster this run (whole cluster in one send)"
-    else:
-        priority = "one cluster per send (or --limit N clusters)"
-    print(f"priority={priority}", flush=True)
-    print(
-        "agent=one durable session; one send fills every card in the current cluster",
-        flush=True,
-    )
+    print("clustering=model (shared official docs), then one cluster per send", flush=True)
     print("index=rebuild once at end of run", flush=True)
-    for index, cards in enumerate(batches, start=1):
-        print(
-            f"  [{index}/{len(batches)}] cluster={cards[0].cluster} "
-            f"cards={len(cards)}",
-            flush=True,
-        )
-        for card in cards:
-            kind = "draft" if card.has_draft else "stub"
-            print(f"      {kind}: {card.path.name}", flush=True)
+    for card in available:
+        kind = "draft" if card.has_draft else "stub"
+        print(f"  {kind}: {card.path.name}", flush=True)
 
     if args.dry_run:
         if sys.platform != "linux":
             print("note: direct host execution is dry-run only", file=sys.stderr)
         return 0
-    if not batches:
+    if not available:
         return 0
 
     _require_container_boundary()
@@ -809,15 +808,10 @@ def main() -> int:
         "requested_limit": args.limit,
         "until_tag": args.until_tag,
         "one_cluster": args.one_cluster,
-        "clusters": len(batches),
-        "selected": [card.path.name for card in selected_cards],
-        "selected_clusters": [
-            {
-                "label": batch[0].cluster,
-                "files": [card.path.name for card in batch],
-            }
-            for batch in batches
-        ],
+        "clustering": "pending",
+        "clusters": 0,
+        "selected": [card.path.name for card in available],
+        "selected_clusters": [],
         "agent_id": None,
         "started_at": _utc_now(),
         "updated_at": _utc_now(),
@@ -879,7 +873,7 @@ def main() -> int:
             _save_progress(progress_path, state)
             print(f"agent_id={agent_id or 'unknown'}", flush=True)
 
-            sibling = _filled_sibling(batches[0][0].cluster)
+            sibling = _filled_sibling(tag)
             warmup_before = _card_snapshot()
             warmup_tags = _sha256_text(_read_text(TAGS_MD))
             print("\n[warmup] START read format + skill", flush=True)
@@ -907,6 +901,90 @@ def main() -> int:
             )
             if warmup.report.strip():
                 print(warmup.report.rstrip(), flush=True)
+
+            print("\n[cluster] START model partition", flush=True)
+            cluster_before = _card_snapshot()
+            cluster_tags = _sha256_text(_read_text(TAGS_MD))
+            try:
+                clustered = _send(
+                    agent,
+                    _cluster_prompt(tag, available),
+                    max_retries=args.max_retries,
+                )
+                if _sha256_text(_read_text(TAGS_MD)) != cluster_tags:
+                    raise WorkspaceViolation("clustering modified Tags.md")
+                cluster_changed = _changed_cards(cluster_before, _card_snapshot())
+                if cluster_changed:
+                    raise WorkspaceViolation(
+                        "clustering modified cards: " + ", ".join(cluster_changed)
+                    )
+                try:
+                    planned = _parse_cluster_plan(clustered.report, available)
+                except ClusterPlanError as err:
+                    print(f"[cluster] retry: {err}", flush=True)
+                    clustered = _send(
+                        agent,
+                        _cluster_retry_prompt(err, available),
+                        max_retries=args.max_retries,
+                    )
+                    if _sha256_text(_read_text(TAGS_MD)) != cluster_tags:
+                        raise WorkspaceViolation("clustering retry modified Tags.md")
+                    cluster_changed = _changed_cards(cluster_before, _card_snapshot())
+                    if cluster_changed:
+                        raise WorkspaceViolation(
+                            "clustering retry modified cards: "
+                            + ", ".join(cluster_changed)
+                        )
+                    planned = _parse_cluster_plan(clustered.report, available)
+            except (
+                AgentRunError,
+                WorkspaceViolation,
+                ClusterPlanError,
+            ) as err:
+                print(f"FAILED clustering: {err}", file=sys.stderr, flush=True)
+                state["startup_error"] = f"clustering: {err}"
+                state["clustering"] = "failed"
+                _save_progress(progress_path, state)
+                return 1
+
+            batches = _select_clusters(
+                planned,
+                until_tag=args.until_tag,
+                one_cluster=args.one_cluster,
+                limit=args.limit,
+            )
+            state["clustering"] = "ok"
+            state["clusters"] = len(batches)
+            state["selected"] = [card.path.name for batch in batches for card in batch]
+            state["selected_clusters"] = [
+                {
+                    "label": batch[0].cluster,
+                    "files": [card.path.name for card in batch],
+                }
+                for batch in batches
+            ]
+            _save_progress(progress_path, state)
+            print(
+                f"[cluster] OK id={clustered.run_id or 'unknown'} "
+                f"clusters={len(planned)} selected={len(batches)}",
+                flush=True,
+            )
+            if clustered.report.strip():
+                print("    --- cluster report ---", flush=True)
+                print(clustered.report.rstrip(), flush=True)
+                print("    --- end report ---", flush=True)
+            for index, cards in enumerate(batches, start=1):
+                print(
+                    f"  [{index}/{len(batches)}] cluster={cards[0].cluster} "
+                    f"cards={len(cards)}",
+                    flush=True,
+                )
+                for card in cards:
+                    kind = "draft" if card.has_draft else "stub"
+                    print(f"      {kind}: {card.path.name}", flush=True)
+            if not batches:
+                print("No clusters selected after model partition.", flush=True)
+                return 0
 
             index_dirty = False
             card_index = 0
