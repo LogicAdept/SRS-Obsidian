@@ -38,6 +38,10 @@ function Sync-AgentControlFiles([string]$Workspace) {
     $paths = @(
         ".cursor/sdk/fill_tag_loop.py",
         ".cursor/skills/fill-tag/SKILL.md",
+        ".cursor/skills/refine-tags/SKILL.md",
+        ".cursor/skills/refine-tags/scripts/tag-audit.py",
+        ".cursor/skills/refine-tags/scripts/retag-prefix.py",
+        ".cursor/skills/dedup-tag/SKILL.md",
         ".cursor/skills/process-topic/scripts/rebuild-coverage-index.py",
         ".cursor/skills/process-topic/scripts/vault_cards.py"
     )
@@ -69,14 +73,6 @@ if ($LASTEXITCODE -ne 0) {
 
 if (-not $isDryRun -and [string]::IsNullOrWhiteSpace($env:CURSOR_API_KEY)) {
     throw "Set CURSOR_API_KEY before a real run."
-}
-
-$dirty = @(& git -C $repo status --porcelain)
-if ($LASTEXITCODE -ne 0) {
-    throw "Cannot read the source repository state."
-}
-if ($dirty.Count -ne 0) {
-    throw "The source repository must be clean and committed before creating or resuming an agent run."
 }
 
 & docker build --tag $image --file $dockerfile $PSScriptRoot
@@ -124,8 +120,8 @@ else {
         throw "--workspace is not on an agent/fill-* branch."
     }
     $runName = Split-Path $runWorkspace -Leaf
-    Sync-AgentControlFiles $runWorkspace
 }
+Sync-AgentControlFiles $runWorkspace
 
 Write-Host "Agent branch:    $agentBranch"
 Write-Host "Agent workspace: $runWorkspace"

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Fill a bounded queue of #New cards with one durable Cursor agent.
+"""Fill #New cards under a tag with one durable Cursor agent.
 
 The orchestrator names one target per send, waits, then validates that card
-before asking for the next. Real runs are accepted only inside the hardened
-Docker workspace created by run_fill_tag.ps1. Direct host execution is
-intentionally limited to --dry-run.
+before asking for the next. After fill turns it runs /refine-tags and
+/dedup-tag for the same tag, then rebuilds the coverage index once. Real runs
+are accepted only inside the hardened Docker workspace created by
+run_fill_tag.ps1. Direct host execution is limited to --dry-run.
 """
 
 from __future__ import annotations
@@ -65,15 +66,26 @@ and waits for you to finish that card before naming the next. Do not look
 ahead, invent extra cues, or start a later card on your own.
 
 Hard constraints:
-- Read and follow `.cursor/skills/fill-tag/SKILL.md` exactly.
+- Read and follow `.cursor/skills/fill-tag/SKILL.md` exactly except the
+  coverage-index step.
 - Process exactly the one target card named in the current turn.
 - Invoke fill-tag with `--limit 1` on every turn.
 - Use only official/original documentation as evidence.
 - Do not create cards, invoke cover-tag, edit Tags.md, or modify another card.
 - Do not spawn subagents.
 - Do not commit, checkout, reset, clean, push, or run destructive git commands.
-- Do not run rebuild-coverage-index.py; the orchestrator rebuilds the index.
+- Do not run rebuild-coverage-index.py. The orchestrator rebuilds once after
+  refine-tags and dedup-tag for this tag.
 - English only for the card and the final report.
+""".strip()
+
+POST_CONSTRAINTS = """
+Fill turns are finished. Do not fill another #New card this turn.
+Do not spawn subagents.
+Do not commit, checkout, reset, clean, push, or run destructive git commands.
+Do not run rebuild-coverage-index.py; the orchestrator rebuilds once after
+refine-tags and dedup-tag for this tag.
+English only.
 """.strip()
 
 
@@ -302,6 +314,61 @@ def _prompt_for(
     )
 
 
+def _post_prompt(skill: str, command: str) -> str:
+    skill_file = f".cursor/skills/{skill}/SKILL.md"
+    return (
+        f"{POST_CONSTRAINTS}\n\n"
+        f"Read and follow `{skill_file}` exactly except the coverage-index step.\n\n"
+        f"Invoke now:\n{command}\n"
+    )
+
+
+def _run_post_phase(
+    agent: Any,
+    *,
+    name: str,
+    skill: str,
+    command: str,
+    max_retries: int,
+    state: dict[str, Any],
+    progress_path: Path,
+) -> None:
+    started = time.monotonic()
+    print(f"\n[{name}] START {command}", flush=True)
+    status = "failed"
+    error: str | None = None
+    run_id = ""
+    report = ""
+    try:
+        outcome = _send(
+            agent,
+            _post_prompt(skill, command),
+            max_retries=max_retries,
+        )
+        run_id = outcome.run_id
+        report = outcome.report
+        status = "ok"
+    except AgentRunError as err:
+        error = str(err)
+    if report:
+        print("    --- agent report ---", flush=True)
+        print(report.rstrip(), flush=True)
+        print("    --- end report ---", flush=True)
+    elapsed = round(time.monotonic() - started, 1)
+    detail = f" id={run_id}" if run_id else ""
+    if error:
+        detail += f" error={error}"
+    print(f"[{name}] {status.upper()} {elapsed:.1f}s{detail}", flush=True)
+    state["post"][name] = {
+        "status": status,
+        "duration_seconds": elapsed,
+        "run_id": run_id or None,
+        "error": error,
+        "command": command,
+    }
+    _save_progress(progress_path, state)
+
+
 def _create_agent(
     *,
     api_key: str,
@@ -495,7 +562,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Fill #New cards under one tag with one durable Cursor agent; "
-            "each send names a single card."
+            "each send names a single card. After fill turns, run "
+            "/refine-tags and /dedup-tag for that tag, then rebuild the index once."
         )
     )
     parser.add_argument("tag", metavar="TAG")
@@ -532,6 +600,10 @@ def main() -> int:
         raise SystemExit("--max-retries cannot be negative")
     if not TAGS_MD.is_file() or not FILL_SKILL.is_file():
         raise SystemExit("required Tags.md or fill-tag skill is missing")
+    refine_skill = REPO / ".cursor" / "skills" / "refine-tags" / "SKILL.md"
+    dedup_skill = REPO / ".cursor" / "skills" / "dedup-tag" / "SKILL.md"
+    if not refine_skill.is_file() or not dedup_skill.is_file():
+        raise SystemExit("required refine-tags or dedup-tag skill is missing")
 
     tree_paths = parse_tree_paths(TAGS_MD)
     tag = _resolve_tag(args.tag, tree_paths)
@@ -549,7 +621,11 @@ def main() -> int:
         flush=True,
     )
     print("priority=untrusted drafts, then empty stubs", flush=True)
-    print("agent=one durable session; one send per card", flush=True)
+    print(
+        "agent=one durable session; one send per card; then refine-tags, "
+        "dedup-tag, then one index rebuild",
+        flush=True,
+    )
     for index, candidate in enumerate(selected, start=1):
         kind = "draft" if candidate.has_draft else "stub"
         print(f"  [{index}/{len(selected)}] {kind}: {candidate.path.name}", flush=True)
@@ -557,8 +633,7 @@ def main() -> int:
     if args.dry_run:
         if sys.platform != "linux":
             print("note: direct host execution is dry-run only", file=sys.stderr)
-        return 0
-    if not selected:
+        print("then /refine-tags, then /dedup-tag, then rebuild coverage index", flush=True)
         return 0
 
     _require_container_boundary()
@@ -573,6 +648,7 @@ def main() -> int:
         "requested_limit": args.limit,
         "until_tag": args.until_tag,
         "selected": [candidate.path.name for candidate in selected],
+        "post": {},
         "agent_id": None,
         "started_at": _utc_now(),
         "updated_at": _utc_now(),
@@ -632,7 +708,7 @@ def main() -> int:
             state["agent_id"] = agent_id or None
             _save_progress(progress_path, state)
             print(f"agent_id={agent_id or 'unknown'}", flush=True)
-            index_dirty = False
+            preserve_workspace = False
 
             for index, candidate in enumerate(selected, start=1):
                 started = time.monotonic()
@@ -679,8 +755,6 @@ def main() -> int:
                             "agent removed or renamed the target card"
                         )
 
-                    if changed:
-                        index_dirty = True
                     target_tags = _card_tags(candidate.path)
                     if relative_card not in changed:
                         status = "no_change"
@@ -707,9 +781,9 @@ def main() -> int:
                             changed
                         )
                         fatal = True
-                        index_dirty = True
                     if isinstance(err, WorkspaceViolation):
                         fatal = True
+                        preserve_workspace = True
 
                 record_item(
                     index=index,
@@ -726,9 +800,44 @@ def main() -> int:
                         flush=True,
                     )
                     break
-            if index_dirty:
-                print("\nRebuilding coverage index at end of run", flush=True)
-                _rebuild_index()
+            if preserve_workspace:
+                print(
+                    "Skipping refine-tags, dedup-tag, and index rebuild "
+                    "after a workspace violation.",
+                    flush=True,
+                )
+                state["post"]["index"] = "skipped"
+                _save_progress(progress_path, state)
+            else:
+                _run_post_phase(
+                    agent,
+                    name="refine",
+                    skill="refine-tags",
+                    command=f"/refine-tags #{tag}",
+                    max_retries=args.max_retries,
+                    state=state,
+                    progress_path=progress_path,
+                )
+                _run_post_phase(
+                    agent,
+                    name="dedup",
+                    skill="dedup-tag",
+                    command=f"/dedup-tag #{tag}",
+                    max_retries=args.max_retries,
+                    state=state,
+                    progress_path=progress_path,
+                )
+                print(
+                    "\nRebuilding coverage index after refine-tags and dedup-tag",
+                    flush=True,
+                )
+                try:
+                    _rebuild_index()
+                    state["post"]["index"] = "rebuilt"
+                except subprocess.CalledProcessError as err:
+                    print(f"FAILED to rebuild coverage index: {err}", file=sys.stderr, flush=True)
+                    state["post"]["index"] = f"failed: {err}"
+                _save_progress(progress_path, state)
     except AgentRunError as err:
         print(f"FAILED to create fill agent: {err}", file=sys.stderr, flush=True)
         state["summary"] = _summary(state["items"], len(_candidate_queue(tag)))
@@ -742,7 +851,11 @@ def main() -> int:
         + " ".join(f"{key}={value}" for key, value in summary.items()),
         flush=True,
     )
-    return 2 if summary["failed"] or summary["invalid"] else 0
+    post = state.get("post") or {}
+    post_failed = any(
+        (post.get(name) or {}).get("status") == "failed" for name in ("refine", "dedup")
+    ) or str(post.get("index") or "").startswith("failed")
+    return 2 if summary["failed"] or summary["invalid"] or post_failed else 0
 
 
 if __name__ == "__main__":
