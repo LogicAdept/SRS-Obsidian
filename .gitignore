@@ -12,3 +12,8 @@ fill-progress.json
 SRS/NamesHistory/coverage-clones.js
 SRS/NamesHistory/coverage-index.html
 SRS/NamesHistory/coverage-index.md
+
+# Python bytecode (rewritten on every script run)
+__pycache__/
+*.py[cod]
+

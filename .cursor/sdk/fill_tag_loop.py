@@ -2,11 +2,12 @@
 """Fill #New cards under a tag with one durable Cursor agent.
 
 The orchestrator warms the durable session, asks the model to cluster remaining
-#New cards by shared official docs, then fills one cluster per send. --until-tag
-walks every remaining cluster until the tag is empty; --one-cluster stops
-after the first cluster. Real runs are accepted only inside the hardened Docker
-workspace created by run_fill_tag.ps1. Direct host execution is limited to
---dry-run.
+#New cards by shared official docs, then fills one cluster per send. Shape
+failures (missing warning, leftover URL, skipped file) get a repair send on
+the same agent instead of stopping the tag. --until-tag walks every remaining
+cluster until the tag is empty; --one-cluster stops after the first cluster.
+Real runs are accepted only inside the hardened Docker workspace created by
+run_fill_tag.ps1. Direct host execution is limited to --dry-run.
 """
 
 from __future__ import annotations
@@ -55,6 +56,7 @@ CONTAINER_MARKER = "SRS_FILL_ISOLATED_CONTAINER"
 CONTAINER_WORKSPACE = Path("/workspace")
 SYSTEM_TAGS = frozenset({"SRS", "New"})
 PROGRESS_VERSION = 1
+SHAPE_REPAIR_CLUSTER = "orchestrator-shape-repair"
 
 DRAFT_MARKERS = (
     "untrusted draft",
@@ -97,6 +99,12 @@ Chat report override on fill turns (this orchestrator only; not the card file):
 - DRAFT AUDIT: one line per file (not per ledger item).
 - DOCS READ: official URLs only, comma-separated. Repeat URLs you reused.
 - Omit LINKS TO VERIFY, TAGS, and long checklist quotes unless FAIL.
+
+Repair turns:
+- The orchestrator may send a repair turn listing validator failures.
+- Fix only those listed files. Add a real `> [!warning]` pitfall; do not
+  restore `#New` to dodge a missing warning.
+- URLs belong in the chat DOCS READ line, never in the card body.
 """.strip()
 
 
@@ -480,6 +488,163 @@ def _prompt_for(tag: str, cards: list[Candidate], *, index: int, total: int) -> 
     )
 
 
+def _repair_prompt(
+    tag: str,
+    cards: list[Candidate],
+    problems: dict[str, str],
+    *,
+    attempt: int,
+    max_repairs: int,
+) -> str:
+    lines: list[str] = []
+    for offset, card in enumerate(cards, start=1):
+        relative = card.path.relative_to(REPO).as_posix()
+        issue = problems.get(card.path.name, "GoldStandard shape failed")
+        lines.append(f"{offset}. `{relative}` — {issue}")
+    listed = "\n".join(lines)
+    count = len(cards)
+    return (
+        "Same durable session and the same hard constraints. "
+        "This is a repair turn, not a new cluster.\n\n"
+        f"Repair {attempt}/{max_repairs}. The orchestrator validator rejected "
+        "these files after the fill turn. Patch the listed shape failures in "
+        "place. Do not restore #New to dodge a missing warning. Do not touch "
+        "any other card.\n\n"
+        "Required GoldStandard shape (all of these):\n"
+        "- `> [!abstract] Short answer`\n"
+        "- at least one `> [!warning]` pitfall (a real trap, not a heading)\n"
+        "- `> [!tip] Interview answer`\n"
+        "- at least two `[[wikilinks]]`\n"
+        "- no URLs in the .md (put them in DOCS READ in chat)\n"
+        "- no footnotes, no NOTES/SOURCES/REFERENCES in the file\n"
+        "- no untrusted-draft residue\n\n"
+        f"Rejected files ({count}):\n{listed}\n\n"
+        "Reuse official docs already fetched for this cluster. Fetch again "
+        "only if you need a pitfall you did not already read.\n\n"
+        f"Invoke now:\n/fill-tag #{tag} --limit {count}\n"
+    )
+
+
+def _print_agent_report(report: str) -> None:
+    if not report.strip():
+        return
+    print("    --- agent report ---", flush=True)
+    print(report.rstrip(), flush=True)
+    print("    --- end report ---", flush=True)
+
+
+def _assert_assigned_edits(
+    *,
+    assigned: set[str],
+    before_cards: dict[str, str],
+    tags_hash: str,
+) -> list[str]:
+    after_cards = _card_snapshot()
+    changed = _changed_cards(before_cards, after_cards)
+    if _sha256_text(_read_text(TAGS_MD)) != tags_hash:
+        raise WorkspaceViolation("agent modified Tags.md")
+    extra = [name for name in changed if name not in assigned]
+    if extra:
+        raise WorkspaceViolation(
+            "agent modified cards outside its assignment: " + ", ".join(extra)
+        )
+    missing = [name for name in assigned if name not in after_cards]
+    if missing:
+        raise WorkspaceViolation(
+            "agent removed or renamed target cards: " + ", ".join(missing)
+        )
+    return changed
+
+
+def _evaluate_cards(
+    cards: list[Candidate],
+    changed: list[str],
+    tree_paths: list[str],
+    *,
+    previous: dict[str, tuple[str, str | None]] | None = None,
+) -> list[tuple[Candidate, str, str | None]]:
+    out: list[tuple[Candidate, str, str | None]] = []
+    for card in cards:
+        relative = card.path.relative_to(VAULT).as_posix()
+        status, error = _card_fill_status(card, relative, changed, tree_paths)
+        if previous is not None and status == "no_change":
+            prev_status, prev_error = previous[card.path.name]
+            out.append((card, prev_status, prev_error))
+            continue
+        out.append((card, status, error))
+    return out
+
+
+def _repair_targets(
+    per_card: list[tuple[Candidate, str, str | None]],
+) -> list[tuple[Candidate, str]]:
+    targets: list[tuple[Candidate, str]] = []
+    for card, status, error in per_card:
+        if status == "invalid":
+            targets.append((card, error or "GoldStandard shape failed"))
+        elif status == "no_change":
+            targets.append((card, "listed card was not modified this turn"))
+    return targets
+
+
+def _evaluate_from_disk(
+    cards: list[Candidate],
+    tree_paths: list[str],
+) -> list[tuple[Candidate, str, str | None]]:
+    out: list[tuple[Candidate, str, str | None]] = []
+    for card in cards:
+        if "New" in _card_tags(card.path):
+            out.append((card, "kept_new", None))
+            continue
+        problems = _validate_filled_card(card.path, tree_paths)
+        if problems:
+            out.append((card, "invalid", "; ".join(problems)))
+        else:
+            out.append((card, "filled", None))
+    return out
+
+
+def _invalid_from_progress(
+    progress_path: Path,
+    tag: str,
+    tree_paths: list[str],
+) -> list[Candidate]:
+    if not progress_path.is_file():
+        return []
+    try:
+        data = json.loads(_read_text(progress_path))
+    except json.JSONDecodeError:
+        return []
+    if data.get("tag") != tag:
+        return []
+    found: list[Candidate] = []
+    seen: set[str] = set()
+    for item in data.get("items", []):
+        if item.get("status") != "invalid":
+            continue
+        name = str(item.get("file") or "").strip()
+        if not name or name in seen:
+            continue
+        path = VAULT / name
+        if not path.is_file():
+            continue
+        if "New" in _card_tags(path):
+            continue
+        problems = _validate_filled_card(path, tree_paths)
+        if not problems:
+            continue
+        seen.add(name)
+        found.append(
+            Candidate(
+                path=path,
+                cue=str(item.get("cue") or path.stem),
+                has_draft=_has_untrusted_draft(_read_text(path)),
+                cluster=SHAPE_REPAIR_CLUSTER,
+            )
+        )
+    return found
+
+
 def _create_agent(
     *,
     api_key: str,
@@ -737,7 +902,21 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--model", default="grok-4.6")
     parser.add_argument("--max-retries", type=int, default=2)
-    parser.add_argument("--fail-fast", action="store_true")
+    parser.add_argument(
+        "--max-repairs",
+        type=int,
+        default=2,
+        help=(
+            "Repair sends per cluster after shape validation fails "
+            "(missing warning, leftover URL, skipped file). Default 2. "
+            "The run continues to the next cluster unless --fail-fast."
+        ),
+    )
+    parser.add_argument(
+        "--fail-fast",
+        action="store_true",
+        help="Stop after a cluster that is still failed/invalid after repairs.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
         "--progress-file",
@@ -752,6 +931,8 @@ def main() -> int:
         raise SystemExit("--limit must be at least 1")
     if args.max_retries < 0:
         raise SystemExit("--max-retries cannot be negative")
+    if args.max_repairs < 0:
+        raise SystemExit("--max-repairs cannot be negative")
     required = (
         TAGS_MD,
         GOLD_STANDARD,
@@ -784,6 +965,11 @@ def main() -> int:
         flush=True,
     )
     print("clustering=model (shared official docs), then one cluster per send", flush=True)
+    print(
+        f"repairs=up to {args.max_repairs} shape-fix sends per cluster "
+        "(missing warning, leftover URL, skipped file)",
+        flush=True,
+    )
     print("index=rebuild once at end of run", flush=True)
     for card in available:
         kind = "draft" if card.has_draft else "stub"
@@ -793,8 +979,6 @@ def main() -> int:
         if sys.platform != "linux":
             print("note: direct host execution is dry-run only", file=sys.stderr)
         return 0
-    if not available:
-        return 0
 
     _require_container_boundary()
     api_key = os.environ.pop("CURSOR_API_KEY", "").strip()
@@ -802,12 +986,24 @@ def main() -> int:
         raise SystemExit("set CURSOR_API_KEY (https://cursor.com/dashboard/integrations)")
 
     progress_path = _resolve_progress_path(args.progress_file)
+    leftover_invalid = _invalid_from_progress(progress_path, tag, tree_paths)
+    if leftover_invalid:
+        print(
+            f"leftover_invalid={len(leftover_invalid)} from prior progress "
+            "(will repair before new clusters)",
+            flush=True,
+        )
+        for card in leftover_invalid:
+            print(f"  invalid: {card.path.name}", flush=True)
+    if not available and not leftover_invalid:
+        return 0
     state: dict[str, Any] = {
         "version": PROGRESS_VERSION,
         "tag": tag,
         "requested_limit": args.limit,
         "until_tag": args.until_tag,
         "one_cluster": args.one_cluster,
+        "max_repairs": args.max_repairs,
         "clustering": "pending",
         "clusters": 0,
         "selected": [card.path.name for card in available],
@@ -830,12 +1026,13 @@ def main() -> int:
         error: str | None,
         report: str,
         print_report: bool = False,
+        repair_attempts: int = 0,
     ) -> None:
         if print_report and report:
-            print("    --- agent report ---", flush=True)
-            print(report.rstrip(), flush=True)
-            print("    --- end report ---", flush=True)
+            _print_agent_report(report)
         detail = f" id={run_id}" if run_id else ""
+        if repair_attempts:
+            detail += f" repairs={repair_attempts}"
         if error:
             detail += f" error={error}"
         print(
@@ -852,6 +1049,7 @@ def main() -> int:
                 "status": status,
                 "duration_seconds": elapsed,
                 "run_id": run_id or None,
+                "repair_attempts": repair_attempts,
                 "error": error,
             }
         )
@@ -902,50 +1100,58 @@ def main() -> int:
             if warmup.report.strip():
                 print(warmup.report.rstrip(), flush=True)
 
-            print("\n[cluster] START model partition", flush=True)
-            cluster_before = _card_snapshot()
-            cluster_tags = _sha256_text(_read_text(TAGS_MD))
-            try:
-                clustered = _send(
-                    agent,
-                    _cluster_prompt(tag, available),
-                    max_retries=args.max_retries,
-                )
-                if _sha256_text(_read_text(TAGS_MD)) != cluster_tags:
-                    raise WorkspaceViolation("clustering modified Tags.md")
-                cluster_changed = _changed_cards(cluster_before, _card_snapshot())
-                if cluster_changed:
-                    raise WorkspaceViolation(
-                        "clustering modified cards: " + ", ".join(cluster_changed)
-                    )
+            planned: list[list[Candidate]] = []
+            clustered_id = "skipped"
+            clustered_report = ""
+            if available:
+                print("\n[cluster] START model partition", flush=True)
+                cluster_before = _card_snapshot()
+                cluster_tags = _sha256_text(_read_text(TAGS_MD))
                 try:
-                    planned = _parse_cluster_plan(clustered.report, available)
-                except ClusterPlanError as err:
-                    print(f"[cluster] retry: {err}", flush=True)
                     clustered = _send(
                         agent,
-                        _cluster_retry_prompt(err, available),
+                        _cluster_prompt(tag, available),
                         max_retries=args.max_retries,
                     )
                     if _sha256_text(_read_text(TAGS_MD)) != cluster_tags:
-                        raise WorkspaceViolation("clustering retry modified Tags.md")
+                        raise WorkspaceViolation("clustering modified Tags.md")
                     cluster_changed = _changed_cards(cluster_before, _card_snapshot())
                     if cluster_changed:
                         raise WorkspaceViolation(
-                            "clustering retry modified cards: "
-                            + ", ".join(cluster_changed)
+                            "clustering modified cards: " + ", ".join(cluster_changed)
                         )
-                    planned = _parse_cluster_plan(clustered.report, available)
-            except (
-                AgentRunError,
-                WorkspaceViolation,
-                ClusterPlanError,
-            ) as err:
-                print(f"FAILED clustering: {err}", file=sys.stderr, flush=True)
-                state["startup_error"] = f"clustering: {err}"
-                state["clustering"] = "failed"
-                _save_progress(progress_path, state)
-                return 1
+                    try:
+                        planned = _parse_cluster_plan(clustered.report, available)
+                    except ClusterPlanError as err:
+                        print(f"[cluster] retry: {err}", flush=True)
+                        clustered = _send(
+                            agent,
+                            _cluster_retry_prompt(err, available),
+                            max_retries=args.max_retries,
+                        )
+                        if _sha256_text(_read_text(TAGS_MD)) != cluster_tags:
+                            raise WorkspaceViolation("clustering retry modified Tags.md")
+                        cluster_changed = _changed_cards(cluster_before, _card_snapshot())
+                        if cluster_changed:
+                            raise WorkspaceViolation(
+                                "clustering retry modified cards: "
+                                + ", ".join(cluster_changed)
+                            )
+                        planned = _parse_cluster_plan(clustered.report, available)
+                except (
+                    AgentRunError,
+                    WorkspaceViolation,
+                    ClusterPlanError,
+                ) as err:
+                    print(f"FAILED clustering: {err}", file=sys.stderr, flush=True)
+                    state["startup_error"] = f"clustering: {err}"
+                    state["clustering"] = "failed"
+                    _save_progress(progress_path, state)
+                    return 1
+                clustered_id = clustered.run_id or "unknown"
+                clustered_report = clustered.report
+            else:
+                print("\n[cluster] SKIP no remaining #New", flush=True)
 
             batches = _select_clusters(
                 planned,
@@ -953,7 +1159,12 @@ def main() -> int:
                 one_cluster=args.one_cluster,
                 limit=args.limit,
             )
-            state["clustering"] = "ok"
+            if leftover_invalid:
+                if args.one_cluster:
+                    batches = [leftover_invalid]
+                else:
+                    batches = [leftover_invalid] + batches
+            state["clustering"] = "ok" if available else "skipped"
             state["clusters"] = len(batches)
             state["selected"] = [card.path.name for batch in batches for card in batch]
             state["selected_clusters"] = [
@@ -965,13 +1176,13 @@ def main() -> int:
             ]
             _save_progress(progress_path, state)
             print(
-                f"[cluster] OK id={clustered.run_id or 'unknown'} "
+                f"[cluster] OK id={clustered_id} "
                 f"clusters={len(planned)} selected={len(batches)}",
                 flush=True,
             )
-            if clustered.report.strip():
+            if clustered_report.strip():
                 print("    --- cluster report ---", flush=True)
-                print(clustered.report.rstrip(), flush=True)
+                print(clustered_report.rstrip(), flush=True)
                 print("    --- end report ---", flush=True)
             for index, cards in enumerate(batches, start=1):
                 print(
@@ -980,7 +1191,10 @@ def main() -> int:
                     flush=True,
                 )
                 for card in cards:
-                    kind = "draft" if card.has_draft else "stub"
+                    if cards[0].cluster == SHAPE_REPAIR_CLUSTER:
+                        kind = "invalid"
+                    else:
+                        kind = "draft" if card.has_draft else "stub"
                     print(f"      {kind}: {card.path.name}", flush=True)
             if not batches:
                 print("No clusters selected after model partition.", flush=True)
@@ -1005,50 +1219,115 @@ def main() -> int:
                 report = ""
                 cluster_error: str | None = None
                 per_card: list[tuple[Candidate, str, str | None]] = []
+                repair_attempts = 0
 
                 try:
-                    outcome = _send(
-                        agent,
-                        _prompt_for(
-                            tag,
-                            cards,
-                            index=index,
-                            total=len(batches),
-                        ),
-                        max_retries=args.max_retries,
-                    )
-                    run_id = outcome.run_id
-                    report = outcome.report
+                    if label == SHAPE_REPAIR_CLUSTER:
+                        per_card = _evaluate_from_disk(cards, tree_paths)
+                    else:
+                        outcome = _send(
+                            agent,
+                            _prompt_for(
+                                tag,
+                                cards,
+                                index=index,
+                                total=len(batches),
+                            ),
+                            max_retries=args.max_retries,
+                        )
+                        run_id = outcome.run_id
+                        report = outcome.report
+                        _print_agent_report(report)
+                        report = ""
 
-                    after_cards = _card_snapshot()
-                    changed = _changed_cards(before_cards, after_cards)
-                    if _sha256_text(_read_text(TAGS_MD)) != tags_hash:
-                        raise WorkspaceViolation("agent modified Tags.md")
-                    extra = [name for name in changed if name not in assigned]
-                    if extra:
-                        raise WorkspaceViolation(
-                            "agent modified cards outside its assignment: "
-                            + ", ".join(extra)
+                        changed = _assert_assigned_edits(
+                            assigned=assigned,
+                            before_cards=before_cards,
+                            tags_hash=tags_hash,
                         )
-                    missing = [
-                        name for name in assigned if name not in after_cards
-                    ]
-                    if missing:
-                        raise WorkspaceViolation(
-                            "agent removed or renamed target cards: "
-                            + ", ".join(missing)
-                        )
+                        if changed:
+                            index_dirty = True
+                        per_card = _evaluate_cards(cards, changed, tree_paths)
 
-                    if changed:
-                        index_dirty = True
-                    for card in cards:
-                        relative = card.path.relative_to(VAULT).as_posix()
-                        status, error = _card_fill_status(
-                            card, relative, changed, tree_paths
+                    targets = _repair_targets(per_card)
+                    while targets and repair_attempts < args.max_repairs:
+                        repair_attempts += 1
+                        repair_cards = [card for card, _reason in targets]
+                        problems = {
+                            card.path.name: reason for card, reason in targets
+                        }
+                        print(
+                            f"  [repair {repair_attempts}/{args.max_repairs}] "
+                            f"START cluster={label} cards={len(repair_cards)}",
+                            flush=True,
                         )
-                        if status == "invalid":
-                            fatal = True
-                        per_card.append((card, status, error))
+                        for card, reason in targets:
+                            print(
+                                f"      {card.path.name}: {reason}",
+                                flush=True,
+                            )
+                        repair_before = _card_snapshot()
+                        repair_tags = _sha256_text(_read_text(TAGS_MD))
+                        repair_assigned = {
+                            card.path.relative_to(VAULT).as_posix()
+                            for card in repair_cards
+                        }
+                        outcome = _send(
+                            agent,
+                            _repair_prompt(
+                                tag,
+                                repair_cards,
+                                problems,
+                                attempt=repair_attempts,
+                                max_repairs=args.max_repairs,
+                            ),
+                            max_retries=args.max_retries,
+                        )
+                        run_id = outcome.run_id
+                        _print_agent_report(outcome.report)
+                        repair_changed = _assert_assigned_edits(
+                            assigned=repair_assigned,
+                            before_cards=repair_before,
+                            tags_hash=repair_tags,
+                        )
+                        if repair_changed:
+                            index_dirty = True
+                        previous = {
+                            card.path.name: (status, error)
+                            for card, status, error in per_card
+                        }
+                        repaired = _evaluate_cards(
+                            repair_cards,
+                            repair_changed,
+                            tree_paths,
+                            previous=previous,
+                        )
+                        by_name = {
+                            card.path.name: (card, status, error)
+                            for card, status, error in per_card
+                        }
+                        for card, status, error in repaired:
+                            by_name[card.path.name] = (card, status, error)
+                        per_card = [by_name[card.path.name] for card in cards]
+                        print(
+                            f"  [repair {repair_attempts}/{args.max_repairs}] "
+                            f"DONE cluster={label} id={run_id or 'unknown'}",
+                            flush=True,
+                        )
+                        targets = _repair_targets(per_card)
+
+                    leftover = _repair_targets(per_card)
+                    if leftover and repair_attempts >= args.max_repairs:
+                        suffix = (
+                            "stopping (--fail-fast)."
+                            if args.fail_fast
+                            else "continuing with remaining clusters."
+                        )
+                        print(
+                            "  Repair budget exhausted for this cluster; "
+                            + suffix,
+                            flush=True,
+                        )
                 except (
                     AgentRunError,
                     WorkspaceViolation,
@@ -1066,15 +1345,20 @@ def main() -> int:
                         index_dirty = True
                     if isinstance(err, WorkspaceViolation):
                         fatal = True
-                    per_card = [
-                        (card, "failed", cluster_error) for card in cards
-                    ]
+                    if per_card:
+                        per_card = [
+                            (card, "failed", cluster_error)
+                            if status in {"invalid", "no_change"}
+                            else (card, status, error)
+                            for card, status, error in per_card
+                        ]
+                    else:
+                        per_card = [
+                            (card, "failed", cluster_error) for card in cards
+                        ]
+                    _print_agent_report(report)
 
                 elapsed = round(time.monotonic() - started, 1)
-                if report:
-                    print("    --- agent report ---", flush=True)
-                    print(report.rstrip(), flush=True)
-                    print("    --- end report ---", flush=True)
                 print(
                     f"[{index}/{len(batches)}] DONE cluster={label} {elapsed:.1f}s "
                     f"id={run_id or 'unknown'}",
@@ -1091,14 +1375,18 @@ def main() -> int:
                         run_id=run_id,
                         error=error,
                         report="",
+                        repair_attempts=repair_attempts,
                     )
                     if status in {"failed", "invalid"}:
                         cluster_failed = True
-                if fatal or (args.fail_fast and cluster_failed):
+                if fatal:
                     print(
                         "Stopping early to preserve the workspace for review.",
                         flush=True,
                     )
+                    break
+                if args.fail_fast and cluster_failed:
+                    print("Stopping early (--fail-fast).", flush=True)
                     break
             if index_dirty:
                 print("\nRebuilding coverage index at end of run", flush=True)

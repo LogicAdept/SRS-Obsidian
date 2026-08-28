@@ -174,6 +174,13 @@ Write the complete `.md` into `SRS/<Cue>.md` (cue already is the basename). Then
 
 If any checklist line is FAIL, fix before finishing. If you cannot fix without guessing, keep `#New`.
 
+When the Docker fill orchestrator sends a **repair** turn with validator
+problems, treat that as the same FAIL: patch the listed files now. A missing
+`> [!warning]` is a real failure — add a documented pitfall; do not restore
+`#New` to bypass it. URLs belong in chat DOCS READ, not in the `.md`. The
+orchestrator re-validates and either accepts or sends another repair; it does
+not stop the tag for a shape miss.
+
 When `--limit` is 2–3, or a named cluster is larger: fetch the shared official
 docs once, then finish and self-check one card before writing the next. Do not
 stop after the first card.
