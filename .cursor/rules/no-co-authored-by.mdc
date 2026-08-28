@@ -1,0 +1,10 @@
+---
+description: Never add Co-authored-by trailers to git commits
+alwaysApply: true
+---
+
+# No Co-authored-by
+
+Never add `Co-authored-by` (or `Signed-off-by` for Cursor) to a commit message, proposed `git commit` command, or commit-template text. That includes `Cursor`, `Cursor Agent`, and any other AI/tool identity.
+
+Write only the subject (and body if needed). Do not append trailers after a blank line.
