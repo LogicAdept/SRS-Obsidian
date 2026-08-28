@@ -69,7 +69,7 @@ The index is a **cache**. Source of truth is cards + `Tags.md`. Do not increment
 ### Recommend order (first match)
 
 1. **`/refine-tags [prefix]`** — no honest leaf, or the item clearly belongs under a different root than cards currently use (example: Hohpe/Woolf EIP names → `#Patterns/Enterprise/Integration/...`, **not** `#Messaging/Bus` or similar).
-2. **`/dedup-tag <tag> --dry-run`** — several cues look like the same question.
+2. **`/dedup-tag <tag> --dry-run`** — several cues look like the same question (merge unique claims into one card, then delete extras).
 3. **`/fill-tag <tag> [--limit N]`** — many `#New` cards and the leaf already has enough distinct cues.
 4. **`/cover-tag <tag> [--limit N]`** — thin coverage, or named themes have no matching cues. Default limit **12** unless the gap list is smaller.
 5. **Skip** — well covered, distinct, mostly filled. Propose that the user tick `[x]` on the queue line. Do not invent work.

@@ -130,6 +130,6 @@ python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
 - Silently create a new top-level root.
 - Duplicate the whole tree into FillCardPrompt or a skill file.
 - Fill or create cards (`/import-repo`, `/cover-tag`, `/fill-tag`).
-- Delete semantic duplicate **cards**; that is `/dedup-tag`.
+- Merge or delete semantic duplicate **cards**; that is `/dedup-tag`.
 - Mass-rename wikilink titles; this skill changes **tags**, not filenames.
 ---
