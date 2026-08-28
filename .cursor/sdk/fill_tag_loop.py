@@ -173,13 +173,36 @@ def _read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
+def _known_tag_paths(tree_paths: list[str]) -> list[str]:
+    """Tags.md leaves plus implied grouping parents the HTML tree also shows."""
+    seen: set[str] = set()
+    out: list[str] = []
+    for path in tree_paths:
+        parts = path.split("/")
+        for end in range(1, len(parts) + 1):
+            prefix = "/".join(parts[:end])
+            if prefix in seen:
+                continue
+            seen.add(prefix)
+            out.append(prefix)
+    return out
+
+
+def _tag_in_tree(requested: str, tree_paths: list[str]) -> bool:
+    return any(path_in_prefix(path, requested) for path in tree_paths)
+
+
 def _resolve_tag(raw: str, tree_paths: list[str]) -> str:
     requested = normalize_prefix(raw)
     if not requested:
         raise SystemExit("TAG cannot be empty")
-    if requested in tree_paths:
+    if _tag_in_tree(requested, tree_paths):
         return requested
-    matches = [path for path in tree_paths if path.rsplit("/", 1)[-1] == requested]
+    matches = [
+        path
+        for path in _known_tag_paths(tree_paths)
+        if path.rsplit("/", 1)[-1] == requested
+    ]
     if len(matches) == 1:
         return matches[0]
     if not matches:
