@@ -31,7 +31,7 @@ for ($i = 0; $i -lt $args.Count; $i++) {
 }
 
 if ([string]::IsNullOrWhiteSpace($positionalTag)) {
-    throw "Choose a tag first: ./.cursor/sdk/run_fill_tag.ps1 Java/Spring/Transactions --limit 10"
+    throw "Choose a tag first: ./.cursor/sdk/run_fill_tag.ps1 Java/Spring/Transactions --until-tag"
 }
 
 function Sync-AgentControlFiles([string]$Workspace) {

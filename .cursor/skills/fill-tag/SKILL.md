@@ -25,7 +25,7 @@ official documentation.
 
 - `<tag>` required when no file is named: tree path or short name. Resolve via `SRS/Format/Tags.md`.
 - `@SRS/<Cue>.md` (or another vault-relative card path): fill **that** card only. Coverage index **#New** tab copies this form.
-- `--limit` optional: cards to finish this run when filling by tag. Default **1**. Never more than **3** unless the user lists specific cues.
+- `--limit` optional: cards to finish this run when filling by tag. Default **1**. Never more than **3** unless the user lists specific cues or the Docker fill orchestrator names a tight cluster.
 
 Accuracy beats coverage. A wrong card is worse than leaving `#New`.
 
@@ -47,7 +47,10 @@ Prefer `#New` cards whose tag line matches `<tag>` or a child of it.
 
 Skip personal/HR/biography cues: leave the stub; human fills those.
 
-If the user names explicit cues or attaches `@SRS/<Cue>.md`, use those instead of scanning the tag.
+If the user names explicit cues, attaches `@SRS/<Cue>.md`, or the orchestrator
+lists a tight cluster of files, fill **every named card** this turn. Do not
+stop after the first file. Coverage index **#New** tab still copies a single
+`@SRS/<Cue>.md`.
 
 Otherwise process cards with an `Untrusted draft` body before empty stubs. A
 draft contains more claims that can be lost or accidentally trusted; auditing
@@ -171,7 +174,9 @@ Write the complete `.md` into `SRS/<Cue>.md` (cue already is the basename). Then
 
 If any checklist line is FAIL, fix before finishing. If you cannot fix without guessing, keep `#New`.
 
-When `--limit` is 2–3: finish and self-check one card before the next.
+When `--limit` is 2–3, or a named cluster is larger: fetch the shared official
+docs once, then finish and self-check one card before writing the next. Do not
+stop after the first card.
 
 ## Coverage index
 

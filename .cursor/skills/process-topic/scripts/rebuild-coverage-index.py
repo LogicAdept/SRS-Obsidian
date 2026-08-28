@@ -32,6 +32,9 @@ from vault_cards import (
 Node = dict[str, Any]
 
 NOTES_MARKER = "<!-- process-topic-notes -->"
+REBUILD_INDEX_CMD = (
+    "python ./.cursor/skills/process-topic/scripts/rebuild-coverage-index.py"
+)
 COVER_TAG_RE = re.compile(r"[A-Za-z0-9]+(?:/[A-Za-z0-9]+)*")
 COVER_TARGET_TAG_RE = re.compile(r'"tag"\s*:\s*"(' + COVER_TAG_RE.pattern + r')"')
 FOCUSED_PLAN_RE = re.compile(
@@ -246,7 +249,10 @@ def render_index(
         "HTML tabs: **Tags** (tree) and **#New** (unfinished cards; **Fill** copies "
         "`/fill-tag @SRS/<Cue>.md`). "
         "HTML row buttons: **Cover agent** opens General / Focused. **Fill agent** starts "
-        "a bounded fill batch on one durable agent (one send per card). Clone menus appear "
+        "a fill on one durable agent (warm-up, then one send per tight cue cluster until "
+        "the tag is empty). Toolbar **Rebuild index** copies "
+        f"`{REBUILD_INDEX_CMD}`. "
+        "Clone menus appear "
         "only when the corresponding cover or fill clone exists. **…** hides "
         "Process/Cover/Fill/Dedup/Refine chat commands.",
         "",
@@ -317,9 +323,7 @@ def _html_node(node: Node, depth: int) -> str:
             "Fill agent",
             "".join(
                 (
-                    _copy_btn("Start 1", f"{fill_launch} --limit 1", path),
-                    _copy_btn("Start 3", f"{fill_launch} --limit 3", path),
-                    _copy_btn("Start 10", f"{fill_launch} --limit 10", path),
+                    _copy_btn("Start", f"{fill_launch} --until-tag", path),
                 )
             ),
             " fill-agent-menu",
@@ -350,9 +354,7 @@ def _html_node(node: Node, depth: int) -> str:
                 _copy_btn("Open", fill_review, path),
                 _copy_btn("Log", "", path, " fill-log"),
                 _copy_btn("Progress", "", path, " fill-progress"),
-                _copy_btn("Continue 1", "", path, " fill-continue limit-1"),
-                _copy_btn("Continue 3", "", path, " fill-continue limit-3"),
-                _copy_btn("Continue 10", "", path, " fill-continue limit-10"),
+                _copy_btn("Continue", "", path, " fill-continue"),
                 _copy_btn("Accept", fill_accept, path),
                 _copy_btn("Drop", fill_drop, path),
             )
@@ -432,6 +434,8 @@ def render_html(
     new_json = json.dumps(new_cards, ensure_ascii=False).replace("<", "\\u003c")
     n_new_total = len(new_cards)
     n_draft = sum(1 for c in new_cards if c["draft"])
+    rebuild_cmd = html.escape(REBUILD_INDEX_CMD, quote=True)
+    rebuild_cmd_html = html.escape(REBUILD_INDEX_CMD)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -654,13 +658,15 @@ li.node.hidden {{ display: none; }}
     <dt>Cover agent</dt>
     <dd><b>General</b> — обычный refine + cover листа или листьев под родителем. <b>Focused</b> — копирует ту же команду с <code>--focus ''</code>; в терминале допишите, какого покрытия не хватает. Агент сопоставит запрос с честным листом (при необходимости создаст его) и покроет именно его. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Fill agent</dt>
-    <dd><b>Start 1 / 3 / 10</b> — запускает изолированный fill-процесс на одном Cursor-агенте. Каждая карточка — отдельный <code>send</code> в той же сессии. Число — максимальное количество попыток за запуск; карточка, оставленная <code>#New</code>, тоже расходует попытку.</dd>
+    <dd><b>Start</b> — изолированный fill на одном Cursor-агенте. Один ход агента = весь <em>узкий</em> кластер (все <code>#New</code> с одним типом/аннотацией в названии). Потом следующий кластер, пока под тегом не кончатся <code>#New</code>. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Cover clone</dt>
     <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — второе окно на клон. <b>Continue</b> — продолжить незавершённое состояние. <b>Focused</b> — шаблон с <code>--focus ''</code> для того же клона, даже если лист уже complete. <b>Accept</b> — cherry-pick в исходный vault и удалить клон. <b>Drop</b> — удалить без переноса.</dd>
     <dt>Fill clone</dt>
-    <dd>Управление fill-клоном: <b>Open</b>, просмотр <b>Log</b> / <b>Progress</b>, продолжение ещё на 1 / 3 / 10 попыток, <b>Accept</b> или <b>Drop</b>.</dd>
+    <dd>Управление fill-клоном: <b>Open</b>, просмотр <b>Log</b> / <b>Progress</b>, <b>Continue</b> — оставшиеся <code>#New</code> в том же клоне, снова кластер за кластером, <b>Accept</b> или <b>Drop</b>.</dd>
     <dt>Source</dt>
     <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
+    <dt>Rebuild index</dt>
+    <dd>Копирует <code>{rebuild_cmd_html}</code> — пересобрать HTML/MD индекс из текущего vault (вставить в терминал из корня репозитория).</dd>
     <dt>…</dt>
     <dd>Process / Cover / Fill / Dedup / Refine — slash-команды для чата Cursor, не Docker-флоу.</dd>
     <dt>#New</dt>
@@ -676,6 +682,7 @@ li.node.hidden {{ display: none; }}
     <button type="button" id="expand">Expand all</button>
     <button type="button" id="collapse">Collapse all</button>
     <button type="button" id="open-source" class="copy nav" data-cmd="./.cursor/sdk/switch_review.ps1 -Source">Source</button>
+    <button type="button" id="rebuild-index" class="copy nav" data-cmd="{rebuild_cmd}" title="{rebuild_cmd}">Rebuild index</button>
     <label class="chk"><input type="checkbox" id="hide-unused"> Hide unused</label>
   </div>
   <div class="legend" id="tags-legend">
@@ -695,6 +702,7 @@ li.node.hidden {{ display: none; }}
       <input type="search" id="new-q" placeholder="Filter #New by cue or tag…" autocomplete="off">
       <label class="chk"><input type="checkbox" id="drafts-only"> Drafts only</label>
       <span class="count" id="new-count">{n_draft} drafts · {n_new_total} total</span>
+      <button type="button" class="copy nav" data-cmd="{rebuild_cmd}" title="{rebuild_cmd}">Rebuild index</button>
     </div>
     <p class="empty-msg" id="new-empty">No #New cards match.</p>
     <ul id="new-list"></ul>
@@ -728,12 +736,11 @@ document.querySelectorAll(".fill-clone-menu").forEach((el) => {{
   const workspace = ".cursor/sdk/runs/" + id;
   const base = "./.cursor/sdk/run_fill_tag.ps1 " + el.dataset.tag +
     " --workspace " + workspace;
-  for (const limit of [1, 3, 10]) {{
-    const btn = el.querySelector("button.fill-continue.limit-" + limit);
-    if (!btn) continue;
-    const cmd = base + " --limit " + limit;
-    btn.dataset.cmd = cmd;
-    btn.title = cmd;
+  const cont = el.querySelector("button.fill-continue");
+  if (cont) {{
+    const cmd = base + " --until-tag";
+    cont.dataset.cmd = cmd;
+    cont.title = cmd;
   }}
   const log = el.querySelector("button.fill-log");
   if (log) {{

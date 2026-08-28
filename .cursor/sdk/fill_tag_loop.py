@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Fill a bounded queue of #New cards with one durable Cursor agent.
+"""Fill #New cards under a tag with one durable Cursor agent.
 
-The orchestrator names one target per send, waits, then validates that card
-before asking for the next. Real runs are accepted only inside the hardened
-Docker workspace created by run_fill_tag.ps1. Direct host execution is
-intentionally limited to --dry-run.
+The orchestrator warms the durable session once, then sends one tight cue
+cluster per turn (every #New card that shares a distinctive identifier in the
+title, e.g. SecurityFilterChain or @Transactional). --until-tag walks every
+remaining cluster until the tag is empty; --one-cluster stops after the first
+cluster. Real runs are accepted only inside the hardened Docker workspace
+created by run_fill_tag.ps1. Direct host execution is limited to --dry-run.
 """
 
 from __future__ import annotations
@@ -42,6 +44,10 @@ from vault_cards import (  # noqa: E402
 
 VAULT = vault_dir(REPO)
 TAGS_MD = VAULT / "Format" / "Tags.md"
+GOLD_STANDARD = VAULT / "Format" / "GoldStandard.md"
+NAMING_MD = VAULT / "Format" / "Naming.md"
+FORMAT_MD = VAULT / "Format" / "Format.md"
+FILL_PROMPT = VAULT / "Format" / "FillCardPrompt.txt"
 FILL_SKILL = REPO / ".cursor" / "skills" / "fill-tag" / "SKILL.md"
 REBUILD = SCRIPTS / "rebuild-coverage-index.py"
 DEFAULT_PROGRESS = REPO / "fill-progress.json"
@@ -49,6 +55,45 @@ CONTAINER_MARKER = "SRS_FILL_ISOLATED_CONTAINER"
 CONTAINER_WORKSPACE = Path("/workspace")
 SYSTEM_TAGS = frozenset({"SRS", "New"})
 PROGRESS_VERSION = 1
+# Title tokens too broad to define a cluster (whole topic, not one mechanism).
+GENERIC_CUE_IDS = frozenset(
+    {
+        "springboot",
+        "springframework",
+        "springsecurity",
+        "javase",
+        "javabean",
+        "javabeans",
+    }
+)
+PASCAL_RE = re.compile(r"\b[A-Z][a-z0-9]+(?:[A-Z][A-Za-z0-9]+)+\b")
+CAMEL_RE = re.compile(r"\b[a-z]+(?:[A-Z][A-Za-z0-9]+)+\b")
+ANNOTATION_RE = re.compile(r"@[A-Z][A-Za-z0-9]+")
+CAP_WORD_RE = re.compile(r"\b[A-Z][A-Za-z0-9]{7,}\b")
+GENERIC_CAP_WORDS = frozenset(
+    {
+        "annotation",
+        "annotations",
+        "application",
+        "between",
+        "configuration",
+        "controller",
+        "difference",
+        "exception",
+        "exceptions",
+        "framework",
+        "interface",
+        "java",
+        "method",
+        "methods",
+        "repository",
+        "security",
+        "service",
+        "spring",
+        "transaction",
+        "transactions",
+    }
+)
 
 DRAFT_MARKERS = (
     "untrusted draft",
@@ -60,20 +105,37 @@ DRAFT_MARKERS = (
 CONSTRAINTS = """
 You are in an isolated disposable clone of the SRS vault.
 
-This is one durable agent session. The orchestrator sends one card per turn
-and waits for you to finish that card before naming the next. Do not look
-ahead, invent extra cues, or start a later card on your own.
+This is one durable agent session. The orchestrator sends one tight cue
+cluster per turn: every listed #New card that shares one type or annotation.
+Finish every listed card in this turn before you reply. Do not look ahead to
+a later cluster, invent extra cues, or start a card that is not listed.
 
 Hard constraints:
-- Read and follow `.cursor/skills/fill-tag/SKILL.md` exactly.
-- Process exactly the one target card named in the current turn.
-- Invoke fill-tag with `--limit 1` on every turn.
+- Read and follow `.cursor/skills/fill-tag/SKILL.md`.
+- Process every listed target this turn; no other cards.
+- Invoke fill-tag with `--limit N` matching the listed count. The listed cues
+  are an explicit assignment, so do not stop after the first card and do not
+  apply the skill's usual cap of 3.
 - Use only official/original documentation as evidence.
-- Do not create cards, invoke cover-tag, edit Tags.md, or modify another card.
+- Do not create cards, invoke cover-tag, edit Tags.md, or modify a card that
+  is not listed this turn.
 - Do not spawn subagents.
 - Do not commit, checkout, reset, clean, push, or run destructive git commands.
-- Rebuild the coverage index as required by the skill.
-- English only for the card and the final report.
+- Do not run rebuild-coverage-index.py; the orchestrator rebuilds the index.
+- English only for the cards and the final report.
+
+Session cache:
+- After warm-up, do not re-read GoldStandard, Naming, Tags, Format, or the skill
+  unless the orchestrator asks.
+- Fetch official docs for this cluster's mechanism once. Reuse those pages
+  for every card in this turn. Do not WebFetch a URL you already opened.
+- Previous cluster pages may not apply to a new cluster.
+
+Chat report override (this orchestrator only; not the card file):
+- One line per file: FILENAME | CHECKLIST PASS or FAIL.
+- DRAFT AUDIT: one line per file (not per ledger item).
+- DOCS READ: official URLs only, comma-separated. Repeat URLs you reused.
+- Omit LINKS TO VERIFY, TAGS, and long checklist quotes unless FAIL.
 """.strip()
 
 
@@ -82,6 +144,7 @@ class Candidate:
     path: Path
     cue: str
     has_draft: bool
+    cluster: str
 
 
 @dataclass(frozen=True)
@@ -95,7 +158,7 @@ class AgentRunError(RuntimeError):
 
 
 class WorkspaceViolation(RuntimeError):
-    """An agent changed files outside its assigned card."""
+    """An agent changed files outside its assigned cluster."""
 
 
 def _utc_now() -> str:
@@ -132,13 +195,61 @@ def _has_untrusted_draft(text: str) -> bool:
     return any(marker in lowered for marker in DRAFT_MARKERS)
 
 
+def _cue_identifiers(cue: str) -> frozenset[str]:
+    """Distinctive API/type names from the cue. Not the tag path."""
+    found: set[str] = set()
+    for match in ANNOTATION_RE.finditer(cue):
+        found.add(match.group(0).casefold())
+    for match in PASCAL_RE.finditer(cue):
+        found.add(match.group(0).casefold())
+    for match in CAMEL_RE.finditer(cue):
+        found.add(match.group(0).casefold())
+    for match in CAP_WORD_RE.finditer(cue):
+        token = match.group(0)
+        if token.casefold() in GENERIC_CAP_WORDS:
+            continue
+        if PASCAL_RE.fullmatch(token) or CAMEL_RE.fullmatch(token):
+            continue
+        found.add(token.casefold())
+    return frozenset(item for item in found if item not in GENERIC_CUE_IDS)
+
+
+def _cluster_label(ids: frozenset[str], cue: str) -> str:
+    if not ids:
+        return cue
+    return max(ids, key=lambda item: (len(item), item))
+
+
+def _cluster_queue(raw: list[Candidate]) -> list[Candidate]:
+    """Group by the most specific identifier in the cue, not by tag path."""
+    rebuilt: list[Candidate] = []
+    for item in raw:
+        ids = _cue_identifiers(item.cue)
+        rebuilt.append(
+            Candidate(
+                path=item.path,
+                cue=item.cue,
+                has_draft=item.has_draft,
+                cluster=_cluster_label(ids, item.cue),
+            )
+        )
+    rebuilt.sort(
+        key=lambda item: (
+            item.cluster.casefold(),
+            not item.has_draft,
+            item.cue.casefold(),
+        )
+    )
+    return rebuilt
+
+
 def _candidate_queue(tag: str) -> list[Candidate]:
     _scanned, cards = scan_cards(VAULT)
     candidates: list[Candidate] = []
     for card in cards:
         if not card.is_new:
             continue
-        thematic = card.tags - SYSTEM_TAGS
+        thematic = set(card.tags) - SYSTEM_TAGS
         if not any(path_in_prefix(card_tag, tag) for card_tag in thematic):
             continue
         text = _read_text(card.path)
@@ -147,12 +258,21 @@ def _candidate_queue(tag: str) -> list[Candidate]:
                 path=card.path,
                 cue=card.cue,
                 has_draft=_has_untrusted_draft(text),
+                cluster=card.cue,
             )
         )
-    return sorted(
-        candidates,
-        key=lambda item: (not item.has_draft, item.cue.casefold()),
-    )
+    return _cluster_queue(candidates)
+
+
+def _filled_sibling(cluster: str) -> Path | None:
+    needle = cluster.casefold()
+    _scanned, cards = scan_cards(VAULT)
+    for card in cards:
+        if card.is_new:
+            continue
+        if needle in _cue_identifiers(card.cue) or card.cue.casefold() == needle:
+            return card.path
+    return None
 
 
 def _card_snapshot() -> dict[str, str]:
@@ -253,29 +373,54 @@ def _model_selection(model: str) -> Any:
     return model
 
 
-def _prompt_for(
-    tag: str,
-    candidate: Candidate,
-    *,
-    index: int,
-    total: int,
-    follow_up: bool,
-) -> str:
-    relative = candidate.path.relative_to(REPO).as_posix()
-    if follow_up:
-        preamble = (
-            "Same durable session and the same hard constraints. "
-            "Previous cards are finished. Process only the next named target."
+def _warmup_prompt(tag: str, sibling: Path | None) -> str:
+    reads = [
+        ".cursor/skills/fill-tag/SKILL.md",
+        "SRS/Format/GoldStandard.md",
+        "SRS/Format/Naming.md",
+        "SRS/Format/Tags.md",
+        "SRS/Format/Format.md",
+        "SRS/Format/FillCardPrompt.txt (sections C, E, F, G, H only)",
+    ]
+    if sibling is not None:
+        reads.append(
+            sibling.relative_to(REPO).as_posix() + " (filled sibling, density only)"
         )
-    else:
-        preamble = CONSTRAINTS
+    listed = "\n".join(f"- `{path}`" for path in reads)
     return (
-        f"{preamble}\n\n"
-        f"Turn {index}/{total}. The one and only target is `{relative}` "
-        f"(cue: {json.dumps(candidate.cue, ensure_ascii=False)}).\n"
-        "Do not process any other #New card even if the skill's normal scan would "
-        "rank it first.\n\n"
-        f"Invoke now:\n/fill-tag #{tag} --limit 1\n"
+        f"{CONSTRAINTS}\n\n"
+        "This is a warm-up turn. Do not fill any card, do not edit any vault "
+        "card, and do not edit Tags.md.\n\n"
+        f"Tag for this run: #{tag}\n\n"
+        "Read now (do not restate them at length):\n"
+        f"{listed}\n\n"
+        "Reply with exactly: WARMUP_OK\n"
+    )
+
+
+def _prompt_for(tag: str, cards: list[Candidate], *, index: int, total: int) -> str:
+    label = cards[0].cluster
+    lines: list[str] = []
+    for offset, card in enumerate(cards, start=1):
+        relative = card.path.relative_to(REPO).as_posix()
+        kind = "untrusted_draft" if card.has_draft else "empty_stub"
+        lines.append(
+            f"{offset}. `{relative}` "
+            f"(cue: {json.dumps(card.cue, ensure_ascii=False)}; {kind})"
+        )
+    listed = "\n".join(lines)
+    count = len(cards)
+    return (
+        "Same durable session and the same hard constraints. "
+        "Warm-up is done. Previous clusters are finished.\n\n"
+        f"Turn {index}/{total}. Fill this entire tight cluster in this one turn. "
+        "Fetch official docs for this mechanism once, then write every listed card "
+        "before you reply. Do not stop after the first card. Do not pick any other "
+        "#New card from a tag scan.\n\n"
+        f"Cluster `{label}` ({count} cards):\n{listed}\n\n"
+        "These cues are named explicitly, so the skill's default --limit 1 and the "
+        "usual cap of 3 do not apply.\n\n"
+        f"Invoke now:\n/fill-tag #{tag} --limit {count}\n"
     )
 
 
@@ -468,19 +613,82 @@ def _summary(items: list[dict[str, Any]], remaining: int) -> dict[str, int]:
     return result
 
 
+def _group_clusters(cards: list[Candidate]) -> list[list[Candidate]]:
+    groups: list[list[Candidate]] = []
+    for item in cards:
+        if not groups or groups[-1][0].cluster != item.cluster:
+            groups.append([item])
+        else:
+            groups[-1].append(item)
+    return groups
+
+
+def _select_clusters(
+    available: list[Candidate],
+    *,
+    until_tag: bool,
+    one_cluster: bool,
+    limit: int | None,
+) -> list[list[Candidate]]:
+    groups = _group_clusters(available)
+    if not groups:
+        return []
+    if until_tag and one_cluster:
+        raise SystemExit("use either --until-tag or --one-cluster, not both")
+    if one_cluster:
+        return groups[:1]
+    if until_tag:
+        if limit is not None:
+            return groups[:limit]
+        return groups
+    return groups[: (limit if limit is not None else 1)]
+
+
+def _card_fill_status(
+    card: Candidate,
+    relative: str,
+    changed: list[str],
+    tree_paths: list[str],
+) -> tuple[str, str | None]:
+    if relative not in changed:
+        return "no_change", None
+    if "New" in _card_tags(card.path):
+        return "kept_new", None
+    problems = _validate_filled_card(card.path, tree_paths)
+    if problems:
+        return "invalid", "; ".join(problems)
+    return "filled", None
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Fill #New cards under one tag with one durable Cursor agent; "
-            "each send names a single card."
+            "warm-up once, then one tight cue cluster per send."
         )
     )
     parser.add_argument("tag", metavar="TAG")
     parser.add_argument(
         "--limit",
         type=int,
-        default=1,
-        help="Maximum card attempts in this execution (default: 1).",
+        default=None,
+        help=(
+            "Maximum clusters this run. Default 1, or every remaining cluster "
+            "under the tag when --until-tag is set."
+        ),
+    )
+    parser.add_argument(
+        "--until-tag",
+        action="store_true",
+        help=(
+            "Walk every tight cue cluster under the tag until no #New remain "
+            "(one send fills the whole current cluster, then the next cluster)."
+        ),
+    )
+    parser.add_argument(
+        "--one-cluster",
+        action="store_true",
+        help="Fill only the first tight cue cluster, then stop.",
     )
     parser.add_argument("--model", default="grok-4.6")
     parser.add_argument("--max-retries", type=int, default=2)
@@ -495,35 +703,75 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = _build_parser().parse_args()
-    if args.limit < 1:
+    if args.limit is not None and args.limit < 1:
         raise SystemExit("--limit must be at least 1")
     if args.max_retries < 0:
         raise SystemExit("--max-retries cannot be negative")
-    if not TAGS_MD.is_file() or not FILL_SKILL.is_file():
-        raise SystemExit("required Tags.md or fill-tag skill is missing")
+    required = (
+        TAGS_MD,
+        GOLD_STANDARD,
+        NAMING_MD,
+        FORMAT_MD,
+        FILL_PROMPT,
+        FILL_SKILL,
+    )
+    missing = [path.name for path in required if not path.is_file()]
+    if missing:
+        raise SystemExit("required fill files missing: " + ", ".join(missing))
 
     tree_paths = parse_tree_paths(TAGS_MD)
     tag = _resolve_tag(args.tag, tree_paths)
     available = _candidate_queue(tag)
-    selected = available[: args.limit]
+    batches = _select_clusters(
+        available,
+        until_tag=args.until_tag,
+        one_cluster=args.one_cluster,
+        limit=args.limit,
+    )
+    selected_cards = [card for batch in batches for card in batch]
+    available_clusters = len(_group_clusters(available))
 
     print(f"repo={REPO}", flush=True)
+    if args.until_tag:
+        limit_shown = args.limit if args.limit is not None else "tag"
+    elif args.one_cluster:
+        limit_shown = "cluster"
+    else:
+        limit_shown = args.limit if args.limit is not None else 1
     print(
-        f"tag=#{tag} available={len(available)} selected={len(selected)} "
-        f"limit={args.limit}",
+        f"tag=#{tag} available={len(available)} available_clusters={available_clusters} "
+        f"selected_cards={len(selected_cards)} selected_clusters={len(batches)} "
+        f"limit={limit_shown} until_tag={str(args.until_tag).lower()} "
+        f"one_cluster={str(args.one_cluster).lower()}",
         flush=True,
     )
-    print("priority=untrusted drafts, then empty stubs", flush=True)
-    print("agent=one durable session; one send per card", flush=True)
-    for index, candidate in enumerate(selected, start=1):
-        kind = "draft" if candidate.has_draft else "stub"
-        print(f"  [{index}/{len(selected)}] {kind}: {candidate.path.name}", flush=True)
+    if args.until_tag:
+        priority = "one cluster per send, then the next, until the tag is done"
+    elif args.one_cluster:
+        priority = "one cluster this run (whole cluster in one send)"
+    else:
+        priority = "one cluster per send (or --limit N clusters)"
+    print(f"priority={priority}", flush=True)
+    print(
+        "agent=one durable session; one send fills every card in the current cluster",
+        flush=True,
+    )
+    print("index=rebuild once at end of run", flush=True)
+    for index, cards in enumerate(batches, start=1):
+        print(
+            f"  [{index}/{len(batches)}] cluster={cards[0].cluster} "
+            f"cards={len(cards)}",
+            flush=True,
+        )
+        for card in cards:
+            kind = "draft" if card.has_draft else "stub"
+            print(f"      {kind}: {card.path.name}", flush=True)
 
     if args.dry_run:
         if sys.platform != "linux":
             print("note: direct host execution is dry-run only", file=sys.stderr)
         return 0
-    if not selected:
+    if not batches:
         return 0
 
     _require_container_boundary()
@@ -536,7 +784,17 @@ def main() -> int:
         "version": PROGRESS_VERSION,
         "tag": tag,
         "requested_limit": args.limit,
-        "selected": [candidate.path.name for candidate in selected],
+        "until_tag": args.until_tag,
+        "one_cluster": args.one_cluster,
+        "clusters": len(batches),
+        "selected": [card.path.name for card in selected_cards],
+        "selected_clusters": [
+            {
+                "label": batch[0].cluster,
+                "files": [card.path.name for card in batch],
+            }
+            for batch in batches
+        ],
         "agent_id": None,
         "started_at": _utc_now(),
         "updated_at": _utc_now(),
@@ -554,8 +812,9 @@ def main() -> int:
         run_id: str,
         error: str | None,
         report: str,
+        print_report: bool = False,
     ) -> None:
-        if report:
+        if print_report and report:
             print("    --- agent report ---", flush=True)
             print(report.rstrip(), flush=True)
             print("    --- end report ---", flush=True)
@@ -563,8 +822,7 @@ def main() -> int:
         if error:
             detail += f" error={error}"
         print(
-            f"[{index}/{len(selected)}] {status.upper()} "
-            f"{elapsed:.1f}s{detail}",
+            f"    {status.upper()} {candidate.path.name} {elapsed:.1f}s{detail}",
             flush=True,
         )
         state["items"].append(
@@ -572,6 +830,7 @@ def main() -> int:
                 "index": index,
                 "file": candidate.path.name,
                 "cue": candidate.cue,
+                "cluster": candidate.cluster,
                 "input": "untrusted_draft" if candidate.has_draft else "empty_stub",
                 "status": status,
                 "duration_seconds": elapsed,
@@ -597,29 +856,63 @@ def main() -> int:
             _save_progress(progress_path, state)
             print(f"agent_id={agent_id or 'unknown'}", flush=True)
 
-            for index, candidate in enumerate(selected, start=1):
+            sibling = _filled_sibling(batches[0][0].cluster)
+            warmup_before = _card_snapshot()
+            warmup_tags = _sha256_text(_read_text(TAGS_MD))
+            print("\n[warmup] START read format + skill", flush=True)
+            try:
+                warmup = _send(
+                    agent,
+                    _warmup_prompt(tag, sibling),
+                    max_retries=args.max_retries,
+                )
+                if _sha256_text(_read_text(TAGS_MD)) != warmup_tags:
+                    raise WorkspaceViolation("warm-up modified Tags.md")
+                warmup_changed = _changed_cards(warmup_before, _card_snapshot())
+                if warmup_changed:
+                    raise WorkspaceViolation(
+                        "warm-up modified cards: " + ", ".join(warmup_changed)
+                    )
+            except (AgentRunError, WorkspaceViolation) as err:
+                print(f"FAILED warmup: {err}", file=sys.stderr, flush=True)
+                state["startup_error"] = f"warmup: {err}"
+                _save_progress(progress_path, state)
+                return 1
+            print(
+                f"[warmup] OK id={warmup.run_id or 'unknown'}",
+                flush=True,
+            )
+            if warmup.report.strip():
+                print(warmup.report.rstrip(), flush=True)
+
+            index_dirty = False
+            card_index = 0
+            for index, cards in enumerate(batches, start=1):
                 started = time.monotonic()
-                relative_card = candidate.path.relative_to(VAULT).as_posix()
+                label = cards[0].cluster
+                assigned = {
+                    card.path.relative_to(VAULT).as_posix() for card in cards
+                }
                 print(
-                    f"\n[{index}/{len(selected)}] START {candidate.path.name}",
+                    f"\n[{index}/{len(batches)}] START cluster={label} "
+                    f"cards={len(cards)}",
                     flush=True,
                 )
                 before_cards = _card_snapshot()
                 tags_hash = _sha256_text(_read_text(TAGS_MD))
-                status = "failed"
-                error: str | None = None
                 run_id = ""
                 report = ""
+                cluster_error: str | None = None
+                per_card: list[tuple[Candidate, str, str | None]] = []
 
                 try:
                     outcome = _send(
                         agent,
                         _prompt_for(
                             tag,
-                            candidate,
+                            cards,
                             index=index,
-                            total=len(selected),
-                            follow_up=index > 1,
+                            total=len(batches),
                         ),
                         max_retries=args.max_retries,
                     )
@@ -630,63 +923,85 @@ def main() -> int:
                     changed = _changed_cards(before_cards, after_cards)
                     if _sha256_text(_read_text(TAGS_MD)) != tags_hash:
                         raise WorkspaceViolation("agent modified Tags.md")
-                    if any(name != relative_card for name in changed):
+                    extra = [name for name in changed if name not in assigned]
+                    if extra:
                         raise WorkspaceViolation(
                             "agent modified cards outside its assignment: "
-                            + ", ".join(
-                                name for name in changed if name != relative_card
-                            )
+                            + ", ".join(extra)
                         )
-                    if relative_card not in after_cards:
+                    missing = [
+                        name for name in assigned if name not in after_cards
+                    ]
+                    if missing:
                         raise WorkspaceViolation(
-                            "agent removed or renamed the target card"
+                            "agent removed or renamed target cards: "
+                            + ", ".join(missing)
                         )
 
-                    _rebuild_index()
-                    target_tags = _card_tags(candidate.path)
-                    if relative_card not in changed:
-                        status = "no_change"
-                    elif "New" in target_tags:
-                        status = "kept_new"
-                    else:
-                        problems = _validate_filled_card(candidate.path, tree_paths)
-                        if problems:
-                            status = "invalid"
-                            error = "; ".join(problems)
+                    if changed:
+                        index_dirty = True
+                    for card in cards:
+                        relative = card.path.relative_to(VAULT).as_posix()
+                        status, error = _card_fill_status(
+                            card, relative, changed, tree_paths
+                        )
+                        if status == "invalid":
                             fatal = True
-                        else:
-                            status = "filled"
+                        per_card.append((card, status, error))
                 except (
                     AgentRunError,
                     WorkspaceViolation,
                     subprocess.CalledProcessError,
                 ) as err:
-                    error = str(err)
+                    cluster_error = str(err)
                     after_cards = _card_snapshot()
                     changed = _changed_cards(before_cards, after_cards)
                     if changed:
-                        error += "; workspace changed during failed run: " + ", ".join(
-                            changed
+                        cluster_error += (
+                            "; workspace changed during failed run: "
+                            + ", ".join(changed)
                         )
                         fatal = True
+                        index_dirty = True
                     if isinstance(err, WorkspaceViolation):
                         fatal = True
+                    per_card = [
+                        (card, "failed", cluster_error) for card in cards
+                    ]
 
-                record_item(
-                    index=index,
-                    candidate=candidate,
-                    status=status,
-                    elapsed=round(time.monotonic() - started, 1),
-                    run_id=run_id,
-                    error=error,
-                    report=report,
+                elapsed = round(time.monotonic() - started, 1)
+                if report:
+                    print("    --- agent report ---", flush=True)
+                    print(report.rstrip(), flush=True)
+                    print("    --- end report ---", flush=True)
+                print(
+                    f"[{index}/{len(batches)}] DONE cluster={label} {elapsed:.1f}s "
+                    f"id={run_id or 'unknown'}",
+                    flush=True,
                 )
-                if fatal or (args.fail_fast and status in {"failed", "invalid"}):
+                cluster_failed = False
+                for card, status, error in per_card:
+                    card_index += 1
+                    record_item(
+                        index=card_index,
+                        candidate=card,
+                        status=status,
+                        elapsed=elapsed,
+                        run_id=run_id,
+                        error=error,
+                        report="",
+                    )
+                    if status in {"failed", "invalid"}:
+                        cluster_failed = True
+                if fatal or (args.fail_fast and cluster_failed):
                     print(
                         "Stopping early to preserve the workspace for review.",
                         flush=True,
                     )
                     break
+            if index_dirty:
+                print("\nRebuilding coverage index at end of run", flush=True)
+                _rebuild_index()
     except AgentRunError as err:
         print(f"FAILED to create fill agent: {err}", file=sys.stderr, flush=True)
         state["summary"] = _summary(state["items"], len(_candidate_queue(tag)))
