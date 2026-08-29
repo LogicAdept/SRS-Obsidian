@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/Hashtable #Java/Collections/Map/HashMap #Java/Collections/Map/ConcurrentHashMap #Java/Concurrency #SRS
+#Java/Collections/Map/Hashtable #Java/Collections/Map/HashMap #Java/Collections/Map/ConcurrentHashMap #Java/Collections/Concurrency #SRS
 
 # How would you explain drawbacks of the legacy `Hashtable` class?
 

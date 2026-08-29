@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/HashMap #Java/Collections/Concurrency #Java/Concurrency #Java/Versions/8 #SRS
+#Java/Collections/Map/HashMap #Java/Collections/Concurrency #Java/Versions/8 #SRS
 
 # How can misuse of `HashMap` lead to an infinite loop?
 

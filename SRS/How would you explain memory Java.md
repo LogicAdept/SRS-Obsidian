@@ -2,47 +2,64 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency #SRS #New
+#Java/JMM #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How would you explain memory Java
 
-**Расскажите о модели памяти Java?**
+> [!abstract] Short answer
+> The filename is garbled; the question is the **Java Memory Model**: when one thread’s **writes** become **visible** and **ordered** for another. The spec is **happens-before**, not a required “working memory vs main memory” machine. If **hb(x, y)**, then **x** is visible to and ordered before **y**. Intra-thread **program order**; **unlock** of a monitor **hb** later **lock** of the **same** monitor; **volatile write hb later read** of **that** field; **`start` hb** the new thread’s actions; a thread’s **last action hb** another thread **detecting termination** (`join` / `isAlive`); **interrupt hb** observing that interrupt. Transitive. Visibility: [[What is memory visibility in the Java Memory Model]]. HB list: [[How would you explain the happens-before guarantee in the Java Memory Model]]. Ordering: [[How does the Java Memory Model define visibility and ordering]].
 
-__Модель памяти Java (Java Memory Model, JMM)__ описывает поведение потоков в среде исполнения Java. Это часть семантики языка Java, набор правил, описывающий выполнение многопоточных программ и правил, по которым потоки могут взаимодействовать друг с другом посредством основной памяти.
+## Happens-before, not a hidden cache API
 
-Формально модель памяти определяет набор действий межпоточного взаимодействия (эти действия включают в себя, в частности, чтение и запись переменной, захват и освобождений монитора, чтение и запись volatile переменной, запуск нового потока), а также модель памяти определяет отношение между этими действиями -_happens-before_ - абстракции обозначающей, что если операция _X_ связана отношением happens-before с операцией _Y_, то весь код следуемый за операцией _Y_, выполняемый в одном потоке, видит все изменения, сделанные другим потоком, до операции _X_.
+Threads communicate through **shared variables**, **monitors**, **volatiles**, **starting/joining** threads, and **interruption**. Compilers and CPUs may **reorder** so long as each thread’s own sequential semantics hold and the HB edges are respected. There is **no** rule that “the rest of the universe” sees a write. A third thread needs its **own** HB path.
 
-Существует несколько основных правил для отношения happens-before:
+**`synchronized`:** unlocking **m** hb a later lock of **m**. Everything the first thread did in program order before the unlock is then ordered before what the second does after the lock. Different monitors do **not** link.
 
-+ В рамках одного потока любая операция happens-before любой операцией следующей за ней в исходном коде;
-+ Освобождение монитора (unlock) happens-before захват того же монитора (lock);
-+ Выход из `synchronized` блока/метода happens-before вход в `synchronized` блок/метод на том же мониторе;
-+ Запись `volatile` поля happens-before чтение того же самого `volatile` поля;
-+ Завершение метода `run()` экземпляра класса `Thread` happens-before выход из метода `join()` или возвращение `false` методом `isAlive()` экземпляром того же потока;
-+ Вызов метода `start()` экземпляра класса `Thread` happens-before начало метода `run()` экземпляра того же потока;
-+ Завершение конструктора happens-before начало метода `finalize()` этого класса;
-+ Вызов метода `interrupt()` на потоке happens-before обнаружению потоком факта, что данный метод был вызван либо путем выбрасывания исключения `InterruptedException`, либо с помощью методов `isInterrupted()` или `interrupted()`.
-+ Связь happens-before транзитивна, т.е. если _X_ happens-before _Y_, а _Y_ happens-before _Z_, то _X_ happens-before _Z_.
-+ Освобождение/захват монитора и запись/чтение в `volatile` переменную связаны отношением happens-before, только если операции проводятся над одним и тем же экземпляром объекта.
-+ В отношении happens-before участвуют только два потока, о поведении остальных потоков ничего сказать нельзя, пока в каждом из них не наступит отношение happens-before с другим потоком.
+**`volatile`:** a write to **v** hb a later read of **v**. Together with program order, that is how a volatile **flag** can publish earlier plain writes. It does **not** make `count++` one action — [[How does volatile visibility differ from atomicity for compound updates]].
 
-Можно выделить несколько основных областей, имеющих отношение к модели памяти:
+**`final`:** after a constructor **finishes**, and the reference was not published early, other threads that only see the object **then** see those finals — [[How would you explain immutability and its benefits in Java]]. Reflection can still rewrite finals; that is a special, easy-to-get-wrong case.
 
-_Видимость (visibility)_. Один поток может в какой-то момент временно сохранить значение некоторых полей не в основную память, а в регистры или локальный кэш процессора, таким образом второй поток, выполняемый на другом процессоре, читая из основной памяти, может не увидеть последних изменений поля. И наоборот, если поток на протяжении какого-то времени работает с регистрами и локальными кэшами, читая данные оттуда, он может сразу не увидеть изменений, сделанных другим потоком в основную память.
+Heap vs stack is **where** bytes live (JVMS), not this visibility spec — [[How would you explain the two main JVM memory regions stack and heap]].
 
-К вопросу видимости имеют отношение следующие ключевые слов языка Java: `synchronized`, `volatile`, `final`.
+```java
+final class Publish {
+    int data;
+    volatile boolean ready;
+    void writer() { data = 1; ready = true; }
+    int reader() { return ready ? data : -1; }
+}
+```
 
-С точки зрения Java все переменные (за исключением локальных переменных, объявленных внутри метода) хранятся в главной памяти, которая доступна всем потокам. Кроме этого, каждый поток имеет локальную—рабочую—память, где он хранит копии переменных, с которыми он работает, и при выполнении программы поток работает только с этими копиями. Надо отметить, что это описание не требование к реализации, а всего лишь модель, которая объясняет поведение программы, так, в качестве локальной памяти не обязательно выступает кэш память, это могут быть регистры процессора или потоки могут вообще не иметь локальной памяти.
+**Listing 1.** If `reader` sees `ready == true`, HB gives it `data == 1`. A plain `boolean ready` would not.
 
-При входе в `synchronized` метод или блок поток обновляет содержимое локальной памяти, а при выходе из `synchronized` метода или блока поток записывает изменения, сделанные в локальной памяти, в главную. Такое поведение `synchronized` методов и блоков следует из правил для отношения «происходит раньше»: так как все операции с памятью происходят раньше освобождения монитора и освобождение монитора происходит раньше захвата монитора, то все операции с памятью, которые были сделаны потоком до выхода из `synchronized` блока должны быть видны любому потоку, который входит в `synchronized` блок для того же самого монитора. Очень важно, что это правило работает только в том случае, если потоки синхронизируются, используя один и тот же монитор!
+```d2
+direction: down
+po: "program order\nin one thread" {
+  width: 220
+  height: 45
+  style.fill: "#e3f2fd"
+}
+sw: "synchronizes-with\n(unlock, volatile, start, join, interrupt)" {
+  width: 340
+  height: 55
+  style.fill: "#fff8e1"
+}
+hb: "happens-before\n(transitive)" {
+  width: 220
+  height: 45
+  style.fill: "#e8f5e9"
+}
+po -> hb
+sw -> hb
+```
 
-Что касается `volatile` переменных, то запись таких переменных производится в основную память, минуя локальную. и чтение `volatile` переменной производится также из основной памяти, то есть значение переменной не может сохраняться в регистрах или локальной памяти потока и операция чтения этой переменной гарантированно вернёт последнее записанное в неё значение.
+**Fig. 1.** Visibility is the transitive closure of program order and synchronization.
 
-Также модель памяти определяет дополнительную семантику ключевого слова `final`, имеющую отношение к видимости: после того как объект был корректно создан, любой поток может видеть значения его `final` полей без дополнительной синхронизации. «Корректно создан» означает, что ссылка на создающийся объект не должна использоваться до тех пор, пока не завершился конструктор объекта. Наличие такой семантики для ключевого слова `final` позволяет создание неизменяемых (immutable) объектов, содержащих только `final` поля, такие объекты могут свободно передаваться между потоками без обеспечения синхронизации при передаче.
+> [!warning] “Main memory vs thread-local copies” is teaching fiction
+> The language does **not** require a working-memory cache. Implementations may use registers and caches; the **programmer contract** is happens-before.
 
-Есть одна проблема, связанная с `final` полями: реализация разрешает менять значения таких полей после создания объекта (это может быть сделано, например, с использованием механизма reflection). Если значение `final` поля—константа, чьё значение известно на момент компиляции, изменения такого поля могут не иметь эффекта, так-как обращения к этой переменной могли быть заменены компилятором на константу. Также спецификация разрешает другие оптимизации, связанные с `final` полями, например, операции чтения `final` переменной могут быть переупорядочены с операциями, которые потенциально могут изменить такую переменную. Так что рекомендуется изменять `final` поля объекта только внутри конструктора, в противном случае поведение не специфицировано.
+> [!warning] Volatile is not a global fence and not atomic RMW
+> Same-field write/read is the volatile edge. Two volatiles, or a volatile plus `++`, still follow the usual compound-action rules.
 
-_Reordering (переупорядочивание)_. Для увеличения производительности процессор/компилятор могут переставлять местами некоторые инструкции/операции. Вернее, с точки зрения потока, наблюдающего за выполнением операций в другом потоке, операции могут быть выполнены не в том порядке, в котором они идут в исходном коде. Тот же эффект может наблюдаться, когда один поток кладет результаты первой операции в регистр или локальный кэш, а результат второй операции попадает непосредственно в основную память. Тогда второй поток, обращаясь к основной памяти может сначала увидеть результат второй операции, и только потом первой, когда все регистры или кэши синхронизируются с основной памятью. Еще одна причина reordering, может заключаться в том, что процессор может решить поменять порядок выполнения операций, если, например, сочтет что такая последовательность выполнится быстрее.
-
-Вопрос reordering также регулируется набором правил для отношения «происходит раньше» и у этих правил есть следствие, касающееся порядка операций, используемое на практике: операции чтения и записи `volatile` переменных не могут быть переупорядочены с операциями чтения и записи других `volatile` и не-`volatile` переменных. Это следствие делает возможным использование `volatile` переменной как флага, сигнализирующем об окончании какого-либо действия. В остальном правила, касающиеся порядка выполнения операций, гарантируют упорядоченность операций для конкретного набора случаев (таких как, например, захват и освобождение монитора), во всех остальных случаях оставляя компилятору и процессору полную свободу для оптимизаций.
+> [!tip] Interview answer
+> The Java Memory Model says when writes in one thread are visible to another, using happens-before. Unlocking a monitor, writing a volatile, starting a thread, and joining all create those edges. I do not explain it as each thread having a private copy of the heap; I explain the edges I actually get from synchronized, volatile, and start/join.

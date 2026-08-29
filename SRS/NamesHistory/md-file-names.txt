@@ -4138,3 +4138,19 @@
 - [x] What are the distinctive features of Spring Boot.md
 - [x] What is Spring Boot used for.md
 - [x] What is the value of Spring Boot.md
+- [x] What is the difference between Thread.sleep and Thread.yield.md
+- [x] How would you explain ConcurrentModificationException.md
+- [x] How would you explain exceptions and error handling in Java.md
+- [x] How would you explain exist when block finally not will.md
+- [x] What is the Java ForkJoin framework.md
+- [x] What is ThreadLocal.md
+- [x] How would you explain try catch finally exception handling in Java.md
+- [x] How would you explain try with resources in Java.md
+- [x] How would you explain what you do you know about OutOfMemoryError.md
+- [x] How would you explain which exception is thrown when error in block initialization class.md
+- [x] What are the key base exception types in Java.md
+- [x] What do checked and unchecked exceptions mean in Java.md
+- [x] What happens if an exception occurs during class static initialization.md
+- [x] What is checked and unchecked exception.md
+- [x] When can a finally block fail to execute in Java.md
+- [x] When in can be thrown exception ClassCastException.md

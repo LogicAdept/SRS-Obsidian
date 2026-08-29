@@ -36,7 +36,7 @@
 - [ ] How does Object wait with a timeout differ from wait without arguments.md
 - [ ] How does the Java Memory Model define visibility and ordering.md
 - [ ] How does Thread.join work in Java.md
-- [ ] How does Thread.sleep differ from Thread.yield.md
+- [ ] What is the difference between Thread.sleep and Thread.yield.md
 - [ ] How does volatile visibility differ from atomicity for compound updates.md
 - [x] How do you avoid ConcurrentModificationException while iterating a collection.md
 - [x] How do you obtain synchronized wrappers for standard Java collections.md
@@ -53,30 +53,29 @@
 - [ ] How would you explain FutureTask in Java concurrency.md
 - [ ] How would you explain Java atomic types in java.util.concurrent.atomic.md
 - [x] What are Java CopyOnWrite collections.md
-- [ ] How would you explain java.util.concurrent.Future style asynchronous results.md
+- [ ] How would you explain the Future interface in java.util.concurrent.md
 - [ ] How would you explain java.util.concurrent.Phaser.md
 - [ ] How would you explain monitor locks and intrinsic locks in Java.md
 - [ ] How would you explain multithreading fundamentals in Java.md
 - [ ] How would you explain non blocking and lock free synchronization ideas.md
 - [ ] How would you explain parallel streams in Java.md
 - [ ] How would you explain race conditions in concurrent programs.md
-- [ ] How would you explain ReadWriteLock for reader writer coordination.md
+- [ ] What is ReadWriteLock.md
 - [x] What is the difference between sequential and parallel streams in Java.md
 - [ ] How would you explain semaphores for limiting concurrent access.md
 - [ ] How would you explain synchronization with synchronized and locks in Java.md
 - [ ] How would you explain synchronized blocks in Java and common pitfalls.md
 - [ ] How would you explain the Callable interface in Java.md
 - [ ] How would you explain the ExecutorService interface in Java.md
-- [ ] How would you explain the Future interface in java.util.concurrent.md
 - [ ] How would you explain the happens-before guarantee in the Java Memory Model.md
-- [ ] How would you explain the Java ForkJoin framework.md
+- [ ] What is the Java ForkJoin framework.md
 - [ ] How would you explain the java.util.concurrent package.md
 - [ ] How would you explain the Object wait method and waiting on monitors.md
 - [ ] How would you explain the Runnable interface in Java.md
 - [ ] How would you explain the volatile field modifier in Java.md
 - [ ] How would you explain thread pools and executor frameworks in Java.md
 - [ ] How would you explain thread safety for shared mutable state.md
-- [ ] How would you explain ThreadLocal variables in Java.md
+- [ ] What is ThreadLocal.md
 - [ ] How would you explain InterruptedException in Java threads.md
 - [x] What is fail-fast iterator behavior in Java collections.md
 - [ ] How would you explain ResultSet types scrolling and concurrency modes.md
@@ -584,7 +583,6 @@ _(прямых вопросов про MongoDB нет — см. смежные �
 
 ### Базовое понимание Kubernetes
 - _(см. раздел Docker: «How does Docker differ from Kubernetes».)_
-- [ ] How would you explain the service mesh pattern.md
 
 ### Опыт работы с Camunda
 _(в исходном списке вопросов нет)_

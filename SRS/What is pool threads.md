@@ -2,42 +2,64 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency/Executors #SRS #New
+#Java/Concurrency/Executors #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is pool threads?
 
-**Что такое _«пул потоков»_?**
+> [!abstract] Short answer
+> A **thread pool** is a set of **worker threads** that **run submitted tasks** and are **reused**, instead of `new Thread` per job. In `java.util.concurrent` the usual pool is **`ThreadPoolExecutor`**, used through **`Executor` / `ExecutorService`**. **`Executor` is not a pool** — it is **`execute(Runnable)`**. Size is **core → queue → max → reject**, plus **keep-alive**. There is **no** language formula `N×(1+wait/compute)`. Do **not** pool **virtual threads**. Framework: [[How would you explain thread pools and executor frameworks in Java]]. `ThreadPoolExecutor`: [[How would you explain ThreadPoolExecutor]]. Sizing: [[How do you choose the size of a thread pool]], [[How do you choose the size of a thread pool]]. Cached: [[How would you explain Executors.newCachedThreadPool()]]. Full queue: [[What happens when a thread pool queue is full and a new task arrives]]. Why `ExecutorService`: [[What advantages does ExecutorService offer over creating raw threads]]. VTs: [[How would you explain Virtual Threads]].
 
-Создание потока является затратной по времени и ресурсам операцией. Количество потоков, которое может быть запущено в рамках одного процесса также ограниченно. Чтобы избежать этих проблем и в целом управлять множеством потоков более эффективно в Java был реализован механизм пула потоков (thread pool), который создаётся во время запуска приложения и в дальнейшем потоки для обработки запросов берутся и переиспользуются уже из него. Таким образом, появляется возможность не терять потоки, сбалансировать приложение по количеству потоков и частоте их создания.
+## Reuse workers; the factory is not the pool
 
-Начиная с Java 1.5 Java API предоставляет фреймворк `Executor`, который позволяет создавать различные типы пула потоков:
+**Why:** starting a platform thread is **heavy**; unbounded `new Thread` can **exhaust** the process. A pool **bounds** concurrency (if you configure it) and **reuses** idle workers.
 
-+ `Executor` - упрощенный интерфейс пула, содержит один метод для передачи задачи на выполнение;
-+ `ExecutorService` - расширенный интерфейс пула, с возможностью завершения всех потоков;
-+ `AbstractExecutorService` - базовый класс пула, реализующий интерфейс `ExecutorService`;
-+ `Executors` - фабрика объектов связанных с пулом потоков, в том числе позволяет создать основные типы пулов;
-+ `ThreadPoolExecutor` - пул потоков с гибкой настройкой, может служить базовым классом для нестандартных пулов;
-+ `ForkJoinPool` - пул для выполнения задач типа `ForkJoinTask`;
-+ ... и другие.
+**`execute`:** if **fewer than `corePoolSize`** workers, **start** one (even if others are idle). Else **queue**. If the **queue is full** and **below `maximumPoolSize`**, **start** another. Else **`RejectedExecutionHandler`**. **`newFixedThreadPool(n)`:** `n` workers, **unbounded** queue (`max` never reached). **`newCachedThreadPool()`:** **unbounded threads**, **direct handoff** (`SynchronousQueue`), idle workers die after **60s** — **not** an unbounded queue. **`ForkJoinPool`** is a **work-stealing** pool (`ForkJoinTask`, parallel streams, virtual-thread **carriers**).
 
-Методы `Executors` для создания пулов:
+**How large:** `ThreadPoolExecutor` itself: **large queues + small pools** cut CPU/OS overhead but can **starve throughput**; **I/O-bound** tasks may need **more** threads than cores because workers **block**. **`Runtime.availableProcessors()`** is a **CPU-bound starting point**, not a law. Measure. **`shutdown` / `shutdownNow`** when you own the pool.
 
-+ `newCachedThreadPool()` - если есть свободный поток, то задача выполняется в нем, иначе добавляется новый поток в пул. Потоки не используемые больше минуты завершаются и удаляются и кэша. Размер пула неограничен. Предназначен для выполнения множество небольших асинхронных задач;
-+ `newCachedThreadPool(ThreadFactory threadFactory)` - аналогично предыдущему, но с собственной фабрикой потоков;
-+ `newFixedThreadPool(int nThreads)` - создает пул на указанное число потоков. Если новые задачи добавлены, когда все потоки активны, то они будут сохранены в очереди для выполнения позже. Если один из потоков завершился из-за ошибки, на его место будет запущен другой поток. Потоки живут до тех пор, пока пул не будет закрыт явно методом `shutdown()`.
-+ `newFixedThreadPool(int nThreads, ThreadFactory threadFactory)` - аналогично предыдущему, но с собственной фабрикой потоков;
-+ `newSingleThreadScheduledExecutor()` - однопотоковый пул с возможностью выполнять задачу через указанное время или выполнять периодически. Если поток был завершен из-за каких-либо ошибок, то для выполнения следующей задачи будет создан новый поток.
-+ `newSingleThreadScheduledExecutor(ThreadFactory threadFactory)` - аналогично предыдущему, но с собственной фабрикой потоков;
-+ `newScheduledThreadPool(int corePoolSize)` - пул для выполнения задач через указанное время или периодически;
-+ `newScheduledThreadPool(int corePoolSize, ThreadFactory threadFactory)` - аналогично предыдущему, но с собственной фабрикой потоков;
-+ `unconfigurableExecutorService(ExecutorService executor)` - обертка на пул, запрещающая изменять его конфигурацию;
+```java
+ExecutorService fixed = Executors.newFixedThreadPool(4);          // 4 workers, unbounded queue
+ExecutorService cached = Executors.newCachedThreadPool();         // unbounded workers, no queue
+fixed.execute(() -> {});
+fixed.shutdown();
+```
 
-**Какого размера должен быть пул потоков?**
+**Listing 1.** Submit work to a pool. `Executor` has only `execute`; lifecycle and `submit` live on `ExecutorService`.
 
-Настраивая размер пула потоков, важно избежать двух ошибок: слишком мало потоков (очередь на выполнение будет расти, потребляя много памяти) или слишком много потоков (замедление работы всей систему из-за частых переключений контекста).
+```d2
+direction: down
+task: "submit task" {
+  width: 120
+  height: 36
+  style.fill: "#fff8e1"
+}
+core: "core workers" {
+  width: 130
+  height: 36
+  style.fill: "#e8f5e9"
+}
+q: "queue" {
+  width: 80
+  height: 36
+  style.fill: "#e3f2fd"
+}
+max: "grow to max / reject" {
+  width: 180
+  height: 36
+  style.fill: "#ffebee"
+}
+task -> core
+core -> q: "core busy"
+q -> max: "queue full"
+```
 
-Оптимальный размер пула потоков зависит от количества доступных процессоров и природы задач в рабочей очереди. На N-процессорной системе для рабочей очереди, которая будет выполнять исключительно задачи с ограничением по скорости вычислений, можно достигнуть максимального использования CPU с пулом потоков, в котором содержится N или N+1 поток.
-Для задач, которые могут ждать осуществления I/O (ввода - вывода) - например, задачи, считывающей HTTP-запрос из сокета – может понадобиться увеличение размера пула свыше количества доступных процессоров, потому, что не все потоки будут работать все время. Используя профилирование, можно оценить отношение времени ожидания (`WT`) ко времени обработки (`ST`) для типичного запроса. Если назвать это соотношение `WT/ST`, то для N-процессорной системе понадобится примерно `N*(1 + WT/ST)` потоков для полной загруженности процессоров.
+**Fig. 1.** Pool policy is workers plus queue, not “`Executor` means pool.”
 
-Использование процессора – не единственный фактор, важный при настройке размера пула потоков. По мере возрастания пула потоков, можно столкнуться с ограничениями планировщика, доступной памяти, или других системных ресурсов, таких, как количество сокетов, дескрипторы открытого файла, или каналы связи базы данных.
+> [!warning] `Executor` is not a thread pool
+> `Executor.execute` runs a `Runnable` **somehow**. The pool type is **`ThreadPoolExecutor`** (or `ForkJoinPool`, `ScheduledThreadPoolExecutor`).
+
+> [!warning] No official `N×(1+WT/ST)` size
+> That recipe is **not** in the Java SE API. Wrong size still **OOME**s the queue or **thrash**es the scheduler.
+
+> [!tip] Interview answer
+> A thread pool keeps worker threads and runs submitted tasks on them so you do not start a new Thread per request. In Java that is ThreadPoolExecutor behind ExecutorService, with core size, a queue, a max, and a rejection handler. There is no official wait-over-compute formula for the size, and you should not pool virtual threads.

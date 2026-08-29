@@ -2,49 +2,56 @@
 reps: 0
 priority: 0
 -->
-#Java/Language #Java/JMM #Java/Concurrency #SRS #New
+#Java/Language #Java/JMM #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How would you explain the volatile field modifier in Java?
 
-**volatile.**
+> [!abstract] Short answer
+> **`volatile`** is a **field** modifier (never `final` at the same time). The memory model then treats each **write** to that field as a **release** that **happens-before** every **later read** of the **same** field: other threads see a **consistent** value, and the accesses happen as many times, and in the same order, as the program text of each thread. It is **not** a lock, **not** a CPU-cache contract, and **not** atomicity for **`i++`**. Vs atomics: [[What is the difference between volatile fields and atomic variables]]. Compound updates: [[How does volatile visibility differ from atomicity for compound updates]]. Reference fields: [[What does volatile on a reference field guarantee for visibility]].
 
-Видимость между потоками (запрет кэширования в регистрах/L1-кэше) + запрет reordering вокруг volatile. НЕ гарантирует атомарность i++ (read-increment-write = три операции). Для атомарных — AtomicInteger.
+## Consistent value, not exclusive use
 
-**Зачем нужен volatile?**
+Locking is the usual way to give a thread exclusive use of shared variables. `volatile` is a **second** mechanism, more convenient when you only need **visibility and ordering**, not mutual exclusion. Two threads may still run in parallel; they just cannot each keep a private, stale copy of that field.
 
-Гарантирует видимость изменений переменной между потоками (без кэширования в регистрах). НЕ гарантирует атомарность операций типа i++.
+A write to `v` **synchronizes-with** later reads of `v` (synchronization order). That edge is a **happens-before**, so the write is **visible to and ordered before** those reads. Happens-before is **transitive**: writes the writer made **before** the volatile store are visible to a reader that has done the matching volatile load. That is why a `volatile` **reference** can publish an otherwise unsynchronized object — the object’s fields are visible **after** the reader sees the reference, not because those fields are themselves `volatile`.
 
-**Зачем volatile?**
+Reads and writes of **`volatile long` / `double`** are **atomic** as 64-bit values (a non-volatile `long`/`double` write may be two 32-bit halves). **`volatile int n; n++;`** is still **read, add, write**: two threads can lose an increment. Use **`AtomicInteger`**, **`LongAdder`**, or a **monitor**. JMM overview: [[How would you explain memory Java]]. Happens-before list: [[How would you explain the happens-before guarantee in the Java Memory Model]].
 
-Гарантирует видимость изменений между потоками (запрет кэширования в регистрах/локальном кэше CPU) и запрет reordering. НЕ гарантирует атомарность составных операций (i++).
+```java
+class Stop {
+    volatile boolean stop; // writer stores true; reader loops on stop
+}
 
-**Что гарантирует volatile?**
+class LostUpdate {
+    volatile int n;
+    void bump() { n++; } // not atomic: two bumps can both read the same n
+}
+```
 
-Видимость записи между потоками — запись одного потока становится сразу видна другим. Запрет переупорядочивания инструкций вокруг volatile. НО volatile НЕ даёт атомарности составных операций. i++ — это read-modify-write, не атомарно даже с volatile.
+**Listing 1.** A stop flag is the usual `volatile` use. Incrementing a `volatile int` is not a single atomic update.
 
-**Чем Atomic лучше volatile?**
+```d2
+direction: down
+w: "write volatile v" {
+  width: 170
+  height: 40
+  style.fill: "#e8f5e9"
+}
+r: "later read of v" {
+  width: 170
+  height: 40
+  style.fill: "#e3f2fd"
+}
+w -> r: "happens-before\n(same field)"
+```
 
-AtomicInteger / AtomicLong / AtomicReference дают и видимость, и атомарность через CAS (compare-and-swap). CAS — операция процессора «прочитать, проверить, заменить» одной инструкцией. compareAndSet, incrementAndGet — атомарны. Это lock-free.
+**Fig. 1.** One field, write then later read. No exclusion: both threads may still run.
 
-**Зачем нужен volatile?**
+> [!warning] Visibility is not atomicity and not a mutex
+> `i++` on a `volatile` counter can drop updates. `volatile` does not keep other threads out of a critical section.
 
-Гарантирует видимость изменений между потоками и запрет reorderings. НЕ гарантирует атомарность составных операций (i++).
+> [!warning] Not “flush L1 / do not cache in registers”
+> The language guarantee is **happens-before** and a **consistent** value, not a hardware cache protocol. A field cannot be both `final` and `volatile`.
 
-**volatile: что гарантирует и почему недостаточно для i++?**
-
-Видимость (запрет кэширования), happens-before (volatile write → read), запрет reordering. i++ = read+increment+write — три операции. Между ними другой поток может прочитать старое значение. Решения: AtomicInteger (CAS), synchronized, LongAdder.
-
-**volatile.**
-
-Видимость + запрет reordering. НЕ атомарность i++. Для атомарных — AtomicInteger/LongAdder.
-
-**volatile.**
-
-Видимость (запрет кэширования в регистрах/L1) + запрет reordering. НЕ гарантирует атомарность i++ (read-increment-write). Для атомарных — AtomicInteger/LongAdder.
-
-**What does volatile guarantee?**
-
-Источник: https://habr.com/ru/articles/966892/
-
-Видимость: запись в volatile happens-before последующего чтения того же поля. Запрещает переупорядочивание вокруг volatile, процессор сбрасывает кэш. Не даёт взаимного исключения — несколько потоков могут выполнять код параллельно, но видят свежее значение. Не атомарность составных операций.
+> [!tip] Interview answer
+> Volatile makes a write to that field happen-before later reads of the same field, so other threads see a consistent value. It is not a lock and it does not make i-plus-plus atomic. For a compound update I use an atomic integer or a synchronized block.

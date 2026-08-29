@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/HashMap #Java/Collections/Map/Hashtable #Java/Concurrency #Java/Versions/8 #SRS
+#Java/Collections/Map/HashMap #Java/Collections/Map/Hashtable #Java/Collections/Concurrency #Java/Versions/8 #SRS
 
 # What is the difference between `HashMap` and `Hashtable`?
 

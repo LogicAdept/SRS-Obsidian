@@ -2,28 +2,77 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency #SRS #New
+#Java/Concurrency/Threads #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How do you thread?
 
-**Как принудительно запустить поток?**
+> [!abstract] Short answer
+> The dump mixes two questions: **how you start** a thread and **how you stop** one. Start with **`start()`** (or a builder / `startVirtualThread`): that **schedules** `run`; you cannot force the CPU. Stop **cooperatively**: **`interrupt()`** and/or a **`volatile` flag**, then **return from `run`**. **`Thread.stop()`** is not a stop API anymore (`UnsupportedOperationException`). Full notes: [[How do you forcibly start a Java thread]], [[How do you stop a Java thread safely and what does safely mean]].
 
-Никак. В Java не существует абсолютно никакого способа принудительного запуска потока. Это контролируется JVM и Java не предоставляет никакого API для управления этим процессом.
+## Start schedules; stop is a protocol
 
-**Как остановить поток?**
+`new Thread(runnable).start()` (or `Thread.ofVirtual().start`) is how a second thread of execution begins — [[How do you create a thread in Java]]. `start` at most once. `run()` on the caller is not a start. `join` on a thread that was **never** started returns immediately. There is no API to pin a runnable onto a core “now.”
 
-На данный момент в Java принят уведомительный порядок остановки потока (хотя JDK 1.0 и имеет несколько управляющих выполнением потока методов, например `stop()`, `suspend()` и `resume()` - в следующих версиях JDK все они были помечены как `deprecated` из-за потенциальных угроз взаимной блокировки).
+`stop()` / `suspend()` / `resume()` are historical. `stop()` used to throw `ThreadDeath` in the victim and **unlock every monitor** — unsafe, not a clean shutdown. Today **`stop()` always throws `UnsupportedOperationException`**. Do not design around `suspend`.
 
-Для корректной остановки потока можно использовать метод класса `Thread` - `interrupt()`. Этот метод выставляет некоторый внутренний флаг-статус прерывания. В дальнейшем состояние этого флага можно проверить с помощью метода `isInterrupted()` или `Thread.interrupted()` (для текущего потока). Метод `interrupt()` также способен вывести поток из состояния ожидания или спячки. Т.е. если у потока были вызваны методы `sleep()` или `wait()` – текущее состояние прервется и будет выброшено исключение `InterruptedException`. Флаг в этом случае не выставляется.
+Cancellation: `interrupt()` sets the interrupt status, or wakes `wait` / `join` / `sleep` with **`InterruptedException`** and **clears** the status. Poll with `isInterrupted()` (does not clear) or `Thread.interrupted()` (clears) — [[What is the difference between interrupted and isInterrupted in Java]]. A CPU loop that never checks the flag **does not stop**. A custom `volatile boolean` is the other documented signal; it **does not** unblock `wait` — you still `interrupt()` for that. Interruptible NIO (`InterruptibleChannel`) can close the channel; a blocked classic `InputStream.read` is not the same.
 
-Схема действия при этом получается следующей:
+```java
+public final class StartAndStop {
+    private volatile boolean cancelled;
 
-+ Реализовать поток.
-+ В потоке периодически проводить проверку статуса прерывания через вызов `isInterrupted()`.
-+ Если состояние флага изменилось или было выброшено исключение во время ожидания/спячки, следовательно поток пытаются остановить извне.
-+ Принять решение – продолжить работу (если по каким-то причинам остановиться невозможно) или освободить заблокированные потоком ресурсы и закончить выполнение.
+    public Thread startWorker() {
+        Thread t = new Thread(() -> {
+            while (!cancelled && !Thread.currentThread().isInterrupted()) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }, "worker");
+        t.start();
+        return t;
+    }
 
-Возможная проблема, которая присутствует в этом подходе – блокировки на потоковом вводе-выводе. Если поток заблокирован на чтении данных - вызов `interrupt()` из этого состояния его не выведет. Решения тут различаются в зависимости от типа источника данных. Если чтение идет из файла – долговременная блокировка крайне маловероятна и тогда можно просто дождаться выхода из метода `read()`. Если же чтение каким-то образом связано с сетью – стоит использовать неблокирующий ввод-вывод из Java NIO.
+    public void stopWorker(Thread t) {
+        cancelled = true;
+        t.interrupt();
+    }
+}
+```
 
-Второй вариант реализации метода остановки (а также и приостановки) – сделать собственный аналог `interrupt()`. Т.е. объявить в классе потока флаги – на остановку и/или приостановку и выставлять их путем вызова заранее определённых методов извне. Методика действия при этом остаётся прежней – проверять установку флагов и принимать решения при их изменении. Недостатки такого подхода. Во-первых, потоки в состоянии ожидания таким способом не «оживить». Во-вторых, выставление флага одним потоком совсем не означает, что второй поток тут же его увидит. Для увеличения производительности виртуальная машина использует кеш данных потока, в результате чего обновление переменной у второго потока может произойти через неопределенный промежуток времени (хотя допустимым решением будет объявить переменную-флаг как `volatile`).
+**Listing 1.** `start()` to run; flag plus `interrupt()` to finish. No `stop()`.
+
+```d2
+direction: down
+q: "How do you thread?" {
+  width: 200
+  height: 40
+  style.fill: "#e3f2fd"
+}
+st: "start() — schedule once" {
+  width: 240
+  height: 45
+  style.fill: "#e8f5e9"
+}
+sp: "interrupt + flag\nreturn from run" {
+  width: 240
+  height: 55
+  style.fill: "#fff8e1"
+}
+q -> st
+q -> sp
+```
+
+**Fig. 1.** The garbled cue is start **and** stop. Neither is `Thread.stop()`.
+
+> [!warning] “No API to start a thread” is false
+> There is no **force-run-now**. There **is** `start()`. The dump collapsed those two.
+
+> [!warning] A homemade flag does not wake `wait`
+> Without `interrupt()`, a thread in `Object.wait` never sees your `boolean`. `volatile` only makes the flag itself visible.
+
+> [!tip] Interview answer
+> I start a thread with `start()`, which only schedules it. I stop it by interrupting and checking a `volatile` flag so `run` returns cleanly. I never call `Thread.stop()`.

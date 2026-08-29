@@ -2,21 +2,54 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency/Threads #SRS #New
+#Java/Concurrency/Threads #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is the difference between Thread and Runnable in Java?
 
-**Чем различаются `Thread` и `Runnable`?**
+> [!abstract] Short answer
+> **`Thread`** is a **thread of execution** (and a class that **`implements Runnable`**). **`Runnable`** is the **task**: **`void run()`**. The JDK shows **two** starts: **subclass `Thread` and override `run`**, or **`new Thread(runnable).start()`**. Prefer the **`Runnable`**: one class, **composition**, works with **`Executor.execute`**, **lambdas**, **virtual threads**. **`start()`** schedules; **`run()`** on the caller is **not** a start. `Runnable`: [[How would you explain the Runnable interface in Java]]. Create: [[How do you create a thread in Java]]. `start` vs `run`: [[What is the difference between Thread start and run]]. Vs `Callable`: [[What is the difference between Runnable and Callable in Java]]. VTs: [[How would you explain Virtual Threads]]. OS thread: [[What is the difference between an OS process and a Java thread]].
 
-`Thread` - это класс, некоторая надстройка над физическим потоком.
+## Worker object vs work item
 
-`Runnable` - это интерфейс, представляющий абстракцию над выполняемой задачей.
+**`Thread`:** lifecycle (`start`, `join`, interrupt, name, daemon, platform vs virtual). **Platform** threads wrap **OS** threads; **virtual** threads are still **`Thread`**, not a second type of `Runnable`. Subclassing `Thread` spends your **one** superclass on the worker.
 
-Помимо того, что `Runnable` помогает разрешить проблему множественного наследования, несомненный плюс от его использования состоит в том, что он позволяет логически отделить логику выполнения задачи от непосредственного управления потоком.
+**`Runnable`:** only **`run`**. Pass the **same** task to a **pool**, a **platform** thread, or **`Thread.ofVirtual().start(task)`**. **`Thread` already is a `Runnable`** — do **not** `new Thread(existingThread)` expecting two workers; you would **`run` the `Thread` object’s `run`**, which is easy to get wrong.
 
-**Why prefer Runnable over extending Thread?**
+```java
+class Worker extends Thread {
+  public void run() { work(); }
+}
+new Worker().start();
 
-Источник: https://habr.com/ru/articles/966892/
+Runnable task = () -> work();
+new Thread(task).start();
+pool.execute(task);
+```
 
-Расширяя Thread, не переопределяют его методы, а Runnable.run — нарушение IS-A Thread. Композиция (Runnable в Thread) гибче наследования. С Java 8 Runnable — лямбда.
+**Listing 1.** Official two styles, then reuse the **same** `Runnable` on a pool. `task.run()` would run on the **caller**.
+
+```d2
+direction: down
+r: "Runnable.run(): the work" {
+  width: 220
+  height: 36
+  style.fill: "#e8f5e9"
+}
+t: "Thread.start(): the worker" {
+  width: 220
+  height: 36
+  style.fill: "#fff8e1"
+}
+r -> t: "pass task into Thread or Executor"
+```
+
+**Fig. 1.** Separate **what to run** from **which thread runs it**.
+
+> [!warning] `run()` is not `start()`
+> `thread.run()` executes **`run` on this thread**. No second thread of execution.
+
+> [!warning] Extending `Thread` is optional
+> Override **`run`** if you subclass. You do not get a thread by implementing `Runnable` until **something calls `start`/`execute`**.
+
+> [!tip] Interview answer
+> Thread is the worker; Runnable is the task with void run. I pass a Runnable into a Thread or an executor instead of subclassing Thread, so I can reuse the task and keep my superclass free. start schedules that run on another thread; calling run myself does not.
