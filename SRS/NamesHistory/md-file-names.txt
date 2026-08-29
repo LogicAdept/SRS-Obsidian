@@ -247,7 +247,6 @@
 - [x] How do you create a custom Spring Boot starter.md
 - [x] How do you create a database index.md
 - [x] How do you create a mailto link in HTML.md
-- [x] How do you create a REST service quickly.md
 - [x] How do you create a singleton Spring bean at application startup.md
 - [x] How do you create a Spring MVC controller.md
 - [x] How do you create a thread in Java.md
@@ -553,7 +552,6 @@
 - [x] How does Spring AMQP retry work.md
 - [x] How does Spring Async work.md
 - [x] How does Spring Boot auto-configuration decide which beans to create.md
-- [x] How does Spring Boot auto-configure beans when you add a dependency.md
 - [x] How does Spring Boot autowire an interface with multiple implementations.md
 - [x] How does Spring resolve circular dependencies.md
 - [x] How does Spring work under the hood.md
@@ -631,7 +629,6 @@
 - [x] How would you explain 3 thread T1 T2 and T3 how implement execution in sequence T1 T2 T3.md
 - [x] How would you explain @BeforeAll @AfterAll.md
 - [x] How would you explain @Query JPQL vs native SQL.md
-- [x] How would you explain @SpringBootApplication.md
 - [x] How would you explain a Prometheus-like metrics service.md
 - [x] How would you explain ACK NACK DLQ.md
 - [x] How would you explain advantages of composition in object oriented design.md
@@ -1034,8 +1031,7 @@
 - [x] How would you explain situation when HashMap in list with hashCode.md
 - [x] How would you explain Smoke Sanity Regression Confirmation.md
 - [x] How would you explain someObj.equals(null).md
-- [x] How would you explain Spring Boot and its main advantage.md
-- [x] How would you explain Spring Boot.md
+- [x] What is Spring Boot.md
 - [x] How would you explain Spring Core inversion of control features.md
 - [x] How would you explain Spring Kafka.md
 - [x] How would you explain Spring Security.md
@@ -1419,7 +1415,6 @@
 - [x] What are the advantages of the Builder pattern over constructors.md
 - [x] What are the advantages of using Spring Cloud.md
 - [x] What are the components of a Spring Boot application.md
-- [x] What are the distinctive features of Spring Boot.md
 - [x] What are the drawbacks of lazy loading.md
 - [x] What are the educational opportunities.md
 - [x] What are the HTML dl dt and dd elements for.md
@@ -2060,7 +2055,6 @@
 - [x] What is Spring BeanPostProcessor.md
 - [x] What is Spring Boot DevTools.md
 - [x] What is Spring Boot Initializr.md
-- [x] What is Spring Boot used for.md
 - [x] What is Spring Cloud Gateway.md
 - [x] What is Spring Cloud OpenFeign.md
 - [x] What is Spring Cloud Stream used for with RabbitMQ.md
@@ -2538,7 +2532,6 @@
 - [x] What is the travelling salesman problem.md
 - [x] What is the two pointers technique.md
 - [x] What is the union-find data structure.md
-- [x] What is the value of Spring Boot.md
 - [x] What is the value range of the Java short type.md
 - [x] What is the W3C.md
 - [x] What is the Wire Tap pattern.md

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/WebMvc #Java/Spring/Boot #SRS
+#Java/Spring/Framework/WebMvc #Java/Spring/Boot/AutoConfiguration #SRS
 
 # Where should static resources live in a Spring MVC application?
 

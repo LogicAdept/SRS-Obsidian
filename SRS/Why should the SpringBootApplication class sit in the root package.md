@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Boot #Java/Annotations #SRS
+#Java/Spring/Boot/AutoConfiguration #Java/Annotations #SRS
 
 # Why should the SpringBootApplication class sit in the root package?
 

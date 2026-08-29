@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Boot #Java/Spring/Data #SRS
+#Java/Spring/Boot/AutoConfiguration #Java/Spring/Data #Java/Spring/Boot/Properties #SRS
 
 # How do you configure multiple data sources in Spring Boot?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Boot #Java/Spring/Framework/WebMvc #SRS
+#Java/Spring/Boot/Embedded #Java/Spring/Framework/WebMvc #SRS
 
 # What happens from Spring Boot startup until the first HTTP request reaches a controller?
 

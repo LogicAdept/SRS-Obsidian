@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Boot #Java/Spring/Data #Java/JDBC #SRS
+#Java/Spring/Boot/AutoConfiguration #Java/Spring/Data #Java/JDBC #SRS
 
 # How do you connect a Spring Boot application to a database?
 

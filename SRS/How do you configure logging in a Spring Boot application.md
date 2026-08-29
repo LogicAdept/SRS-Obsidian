@@ -2,181 +2,92 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Boot #Logging #SRS #New
+#Java/Logging #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How do you configure logging in a Spring Boot application?
 
-In Spring Boot, Logback is the default logging framework, just add spring-boot-starter-web, it will pull in the logback dependencies. 
-**pom.xml** 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-		 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+> [!abstract] Short answer
+> Starters pull **Logback** (`spring-boot-starter-logging`, transitively via `spring-boot-starter-web`). Default is **console**, levels **ERROR / WARN / INFO**. Set **`logging.level.<logger>`** (and **`logging.level.root`**) in `application.properties`. Add a **file** with **`logging.file.name`** or **`logging.file.path`** (not the old `logging.file`). For Logback XML, prefer **`logback-spring.xml`**. Switch implementation by excluding the logging starter and adding **`spring-boot-starter-log4j2`**. Logging starts **before** the `ApplicationContext`, so `@PropertySource` cannot choose the system.
 
-    <artifactId>spring-boot-slf4j</artifactId>
-    <packaging>jar</packaging>
-    <name>Spring Boot SLF4j</name>
-    <version>1.0</version>
+## Properties first, native file if you need more
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.2.RELEASE</version>
-    </parent>
+Boot’s `LoggingSystem` picks Logback when it is on the classpath. Commons Logging / JUL / Log4J calls are routed. Default output is **console only**.
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <!-- Package as an executable jar/war -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
-            </plugin>
-        </plugins>
-    </build>
-</project>
-```
-* **application.properties**
-```
-# logging level
-logging.level.org.springframework=ERROR
-logging.level.com.mkyong=DEBUG
-
-# output to a file
-logging.file=app.log
-
-# temp folder example
-#logging.file=${java.io.tmpdir}/app.log
-
-logging.pattern.file=%d %p %c{1.} [%t] %m%n
-
+```properties
+logging.level.root=warn
+logging.level.org.springframework.web=debug
+logging.level.org.hibernate=error
+logging.file.name=myapplication.log
 logging.pattern.console=%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
-
-## if no active profile, default is 'default'
-##spring.profiles.active=prod
-
-# root level
-#logging.level.=INFO
 ```
-* **logback.xml**
+
+**Listing 1.** Levels: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`, `OFF`. Logback maps **`FATAL` → `ERROR`**. Env vars work for **packages** (`LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB=DEBUG`), not a single class (relaxed binding lowercases). Groups: built-in **`web`** and **`sql`**, or `logging.group.tomcat=…` then `logging.level.tomcat=trace`. File: **`logging.file.name`** writes that path; **`logging.file.path`** writes **`spring.log`** in that directory; if both are set, **name wins** and path is ignored. Rotation (Logback via properties): `logging.logback.rollingpolicy.*` (default archive **7** files, **10 MB**).
+
+`--debug` / `debug=true` is **not** “everything DEBUG” — it raises a **fixed set of core loggers** (and the conditions report) ([[How can you debug which auto-configuration classes applied]]). `--trace` / `trace=true` is the louder cousin.
+
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
-    <property name="HOME_LOG" value="logs/app.log"/>
-
-    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${HOME_LOG}</file>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <!-- each archived file, size max 10MB -->
-            <maxFileSize>10MB</maxFileSize>
-            <!-- total size of all archive files, if total size > 20GB, 
-				it will delete old archived file -->
-            <totalSizeCap>20GB</totalSizeCap>
-            <!-- 60 days to keep -->
-            <maxHistory>60</maxHistory>
-        </rollingPolicy>
-
-        <encoder>
-            <pattern>%d %p %c{1.} [%t] %m%n</pattern>
-        </encoder>
-    </appender>
-
-    <logger name="com.mkyong" level="debug" additivity="false">
-        <appender-ref ref="FILE-ROLLING"/>
-    </logger>
-
-    <root level="error">
-        <appender-ref ref="FILE-ROLLING"/>
-    </root>
-
+	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+	<root level="INFO">
+		<appender-ref ref="CONSOLE"/>
+	</root>
+	<logger name="org.springframework.web" level="DEBUG"/>
 </configuration>
 ```
 
-**HelloController.java**
-```java
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import java.util.Arrays;
-import java.util.List;
+**Listing 2.** Native Logback on the classpath (or `logging.config`). Use **`logback-spring.xml`** so Boot extensions work: **`springProfile`**, **`springProperty`**. Plain **`logback.xml`** loads **too early**. Placeholders in logging properties use Boot’s **`:`** default delimiter, not Logback `:-`. Includes: `console-appender.xml`, `file-appender.xml`, structured variants. `${LOG_FILE}` / `${LOG_PATH}` come from `logging.file.name` / `logging.file.path`.
 
-@Controller
-public class HelloController {
-
-    private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
-
-    @GetMapping("/")
-    public String hello(Model model) {
-
-        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
-
-        logger.debug("Hello from Logback {}", data);
-        model.addAttribute("num", data);
-
-        return "index"; // index.html
-    }
-}
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter</artifactId>
+	<exclusions>
+		<exclusion>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
+		</exclusion>
+	</exclusions>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-log4j2</artifactId>
+</dependency>
 ```
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+**Listing 3.** Official Log4j 2 swap: exclude **`spring-boot-starter-logging`**, add **`spring-boot-starter-log4j2`**. Config files: `log4j2-spring.xml` / `log4j2.xml`. JUL in an executable JAR is discouraged.
 
-**Что такое Spring Boot и чем он отличается от Spring?**
+Structured JSON without XML: `logging.structured.format.console=ecs` (or `gelf`, `logstash`). Runtime level changes: Actuator **`loggers`** ([[How do you change log levels at runtime with Actuator]]). Profile-specific Logback blocks belong in **`logback-spring.xml`** ([[How do you activate a Spring profile]]).
 
-Spring Boot — это Spring + автоконфигурация + встроенный сервер (Tomcat/Jetty) + удобные стартеры. Минимизирует boilerplate. По сути «Spring без боли с XML».
+```d2
+direction: down
+props: "logging.level.*\nlogging.file.name" {
+  width: 240
+  height: 70
+  style.fill: "#e3f2fd"
+}
+xml: "logback-spring.xml\n(or log4j2-spring.xml)" {
+  width: 240
+  height: 70
+  style.fill: "#fff3e0"
+}
+sys: "LoggingSystem\nbefore ApplicationContext" {
+  width: 240
+  height: 70
+  style.fill: "#e8f5e9"
+}
 
-**Что такое стартер в Spring Boot?**
+props -> sys
+xml -> sys
+```
 
-Готовый набор зависимостей под задачу. Например, spring-boot-starter-web подтянет Spring MVC, Tomcat, Jackson и т.д. Один импорт — и веб-приложение работает.
+**Fig. 1.** Environment properties and the native file both feed `LoggingSystem`. Disable Boot logging entirely with system property **`org.springframework.boot.logging.LoggingSystem=none`**.
 
-**Как Spring Boot узнаёт, что и как настраивать?**
+> [!warning] `logging.file` is not the current property
+> Dumps still show `logging.file=app.log`. Use **`logging.file.name`** or **`logging.file.path`**. `logback.configurationFile` is **not** a Boot-managed key. A custom `logback.xml` that does **not** include Boot’s appenders **drops** console coloring and default patterns unless you re-include `defaults.xml`.
 
-Через @EnableAutoConfiguration (входит в @SpringBootApplication) + @Conditional. Конфигурации перечислены в META-INF/spring/...AutoConfiguration.imports (или старом spring.factories).
+> [!warning] Too early for `@PropertySource`
+> Logging is configured **before** the context exists. `@PropertySource` on a `@Configuration` class cannot switch Logback vs Log4j2. WAR deployments skip Boot’s log shutdown hook (`logging.register-shutdown-hook=false` if you need that). `springProfile` in **`logback.xml`** (not `-spring`) fails with “no applicable action”.
 
-**Что такое Spring Boot?**
-
-Spring + автоконфигурация + встроенный сервер (Tomcat/Jetty/Undertow) + стартеры. Минимизирует boilerplate.
-
-**В чём плюшка Spring Boot?**
-
-Автоконфигурация — Spring Boot сам подключает компоненты в зависимости от того, что есть на classpath. Стартеры — готовые наборы зависимостей (spring-boot-starter-web подтягивает Spring MVC, Tomcat, Jackson). Встроенный веб-сервер (Tomcat). Минимум конфигурации в XML, всё через свойства и аннотации.
-
-**Какие аннотации для тестов в Spring Boot?**
-
-@SpringBootTest — поднимает весь контекст приложения. Долго, но полноценно. @WebMvcTest — только web-слой (контроллеры), без БД. @DataJpaTest — только JPA-слой, с in-memory БД. MockMvc — имитация HTTP-запросов в тестах.
-
-**Spring Boot 3 + Java 21.**
-
-GraalVM native image, Virtual Threads support (spring.threads.virtual.enabled=true), Jakarta EE вместо javax.
+> [!tip] Interview answer
+> Boot defaults to Logback on the console at INFO. I set logging.level and logging.file.name in application.properties, and I use logback-spring.xml when I need appenders or springProfile. logging.file is the old name. To use Log4j2 I exclude spring-boot-starter-logging and add spring-boot-starter-log4j2. Logging starts before the ApplicationContext, so I do not try to configure it from @PropertySource.

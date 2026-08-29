@@ -2,212 +2,87 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security #Java/Spring/Boot #SRS #New
+#Java/Spring/Security/FilterChain #Java/Spring/Boot/AutoConfiguration #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How do you use form login authentication in Spring Boot?
 
-**Include spring security 5 dependencies**
+> [!abstract] Short answer
+> Add **`spring-boot-starter-security`**. Boot already picks **form login** vs **HTTP Basic** from the **`Accept`** header. To make it explicit, a **`SecurityFilterChain`** calls **`http.formLogin(Customizer.withDefaults())`** — Security then serves a **generated** login page and **`POST /login`**. A custom page is **`formLogin(form -> form.loginPage("/login").permitAll())`**, a **`GET /login`** controller, and an HTML **POST** with fields **`username`**, **`password`**, and a **CSRF** token. Do **not** disable CSRF or log out with **GET**.
 
-**pom.xml**
-```xml
-<properties>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-        <spring.version>5.0.7.RELEASE</spring.version>
-</properties>
- 
-<!-- Spring MVC Dependency -->
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-webmvc</artifactId>
-    <version>${spring.version}</version>
-</dependency>
- 
-<!-- Spring Security Core -->
-<dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-core</artifactId>
-    <version>${spring.version}</version>
-</dependency>
- 
-<!-- Spring Security Config -->
-<dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-config</artifactId>
-    <version>${spring.version}</version>
-</dependency>
- 
-<!-- Spring Security Web -->
-<dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-web</artifactId>
-    <version>${spring.version}</version>
-</dependency>
-```
-* **Configure Authentication and URL Security**
+## Redirect to a form, POST credentials, then a session
 
-**SecurityConfig.java**
+Unauthenticated HTML hits **`ExceptionTranslationFilter`** → **`LoginUrlAuthenticationEntryPoint`** → login page. Submit goes to **`UsernamePasswordAuthenticationFilter`**, which builds a **`UsernamePasswordAuthenticationToken`** and calls the **`AuthenticationManager`**. Success stores the `Authentication` and the default **`AuthenticationSuccessHandler`** sends the browser back to the **saved request**. Failure clears the context and redirects to **`/login?error`**.
+
 ```java
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
- 
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
- 
-    @Autowired
-    PasswordEncoder passwordEncoder;
- 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-        .passwordEncoder(passwordEncoder)
-        .withUser("user").password(passwordEncoder.encode("123456")).roles("USER")
-        .and()
-        .withUser("admin").password(passwordEncoder.encode("123456")).roles("USER", "ADMIN");
-    }
- 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
- 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-        .antMatchers("/login")
-            .permitAll()
-        .antMatchers("/**")
-            .hasAnyRole("ADMIN", "USER")
-        .and()
-            .formLogin()
-            .loginPage("/login")
-            .defaultSuccessUrl("/home")
-            .failureUrl("/login?error=true")
-            .permitAll()
-        .and()
-            .logout()
-            .logoutSuccessUrl("/login?logout=true")
-            .invalidateHttpSession(true)
-            .permitAll()
-        .and()
-            .csrf()
-            .disable();
-    }
-}
-```
-* **Bind spring security to web application**
-
-**SpringSecurityInitializer.java**
-```java
-import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
-public class SpringSecurityInitializer extends AbstractSecurityWebApplicationInitializer {
-    //no code needed
+@Bean
+SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
+	http.formLogin(Customizer.withDefaults());
+	return http.build();
 }
 ```
 
-**AppInitializer.java**
+**Listing 1.** Minimal explicit form login. `withDefaults()` is the generated page + **`POST /login`**. In Boot you do **not** register `AbstractSecurityWebApplicationInitializer` — `SecurityAutoConfiguration` already installs the filter ([[What is spring-boot-starter-security]], [[How do you secure a Spring Boot application]]).
+
 ```java
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
- 
-public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
- 
-   @Override
-   protected Class<?>[] getRootConfigClasses() {
-      return new Class[] { HibernateConfig.class, SecurityConfig.class };
-   }
- 
-   @Override
-   protected Class<?>[] getServletConfigClasses() {
-      return new Class[] { WebMvcConfig.class };
-   }
- 
-   @Override
-   protected String[] getServletMappings() {
-      return new String[] { "/" };
-   }
-}
+http.formLogin((form) -> form.loginPage("/login").permitAll());
 ```
-* **Login Controller**
+
 ```java
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
- 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
- 
 @Controller
-public class LoginController
-{
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginPage(@RequestParam(value = "error", required = false) String error,
-                            @RequestParam(value = "logout", required = false) String logout,
-                            Model model) {
-        String errorMessge = null;
-        if(error != null) {
-            errorMessge = "Username or Password is incorrect !!";
-        }
-        if(logout != null) {
-            errorMessge = "You have been successfully logged out !!";
-        }
-        model.addAttribute("errorMessge", errorMessge);
-        return "login";
-    }
-  
-    @RequestMapping(value="/logout", method = RequestMethod.GET)
-    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){   
-            new SecurityContextLogoutHandler().logout(request, response, auth);
-        }
-        return "redirect:/login?logout=true";
-    }
+class LoginController {
+	@GetMapping("/login")
+	String login() {
+		return "login";
+	}
 }
 ```
 
-**login.jsp**
-```jsp
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<html>
-<body onload='document.loginForm.username.focus();'>
-    <h1>Spring Security 5 - Login Form</h1>
- 
-    <c:if test="${not empty errorMessge}"><div style="color:red; font-weight: bold; margin: 30px 0px;">${errorMessge}</div></c:if>
- 
-    <form name='login' action="/login" method='POST'>
-        <table>
-            <tr>
-                <td>UserName:</td>
-                <td><input type='text' name='username' value=''></td>
-            </tr>
-            <tr>
-                <td>Password:</td>
-                <td><input type='password' name='password' /></td>
-            </tr>
-            <tr>
-                <td colspan='2'><input name="submit" type="submit" value="submit" /></td>
-            </tr>
-        </table>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    </form>
-</body>
-</html>
-```
-Output
-```
-// Run
---------
+**Listing 2.** Custom page: you **render** `GET /login`. **`permitAll()`** on the form-login config is required — if `/login` itself needs authentication you get a **redirect loop**. If the dispatcher has a prefix, set **`loginPage`** and **`loginProcessingUrl`** to that prefix (they are matched **literally**).
 
-http://localhost:8080/login
+```html
+<form method="post" action="/login">
+	<input type="text" name="username"/>
+	<input type="password" name="password"/>
+	<input type="submit" value="Log in"/>
+</form>
 ```
+
+**Listing 3.** Contract from the Security reference: **POST** `/login`, parameter names **`username`** and **`password`**. Thymeleaf `th:action="@{/login}"` inserts the **CSRF** field. Plain JSP/HTML must add the hidden CSRF input (`_csrf` request attribute). Query **`error`** = bad credentials; **`logout`** = just logged out. Logout is **`POST /logout`** with CSRF — default **`LogoutFilter` ignores GET** ([[When should you use HTTP Basic versus form login]]).
+
+```d2
+direction: down
+get: "GET /private\nAnonymous" {
+  width: 220
+  height: 50
+  style.fill: "#e3f2fd"
+}
+entry: "LoginUrlAuthenticationEntryPoint\nGET /login" {
+  width: 280
+  height: 70
+  style.fill: "#fff3e0"
+}
+post: "POST /login\nUsernamePasswordAuthenticationFilter" {
+  width: 300
+  height: 70
+  style.fill: "#e8f5e9"
+}
+ok: "SecurityContext + redirect\nto saved request" {
+  width: 260
+  height: 70
+  style.fill: "#f3e5f5"
+}
+
+get -> entry -> post -> ok
+```
+
+**Fig. 1.** Form login is a **browser session** flow, not Bearer JWT. Users still come from **`UserDetailsService`** (Boot’s generated **`user`** until you replace it) ([[What is the default username and password in Spring Boot Security]]). Optional DSL: `defaultSuccessUrl`, `failureUrl`, `loginProcessingUrl`.
+
+> [!warning] `csrf().disable()` plus GET `/logout` is the dump’s foot-gun
+> CSRF on **login and logout** is **on purpose** (login CSRF = session fixation / “login as attacker”). Missing token → **403**. A custom `SecurityFilterChain` **replaces** Boot’s defaults; `authorizeRequests()` / `antMatchers` / `WebSecurityConfigurerAdapter` will not compile on Boot 3/4 ([[Why was WebSecurityConfigurerAdapter removed]]).
+
+> [!warning] The generated page vanishes when you set `loginPage`
+> Once you call **`loginPage("/login")`**, Security **stops** rendering its default form — you must map **GET** and still **POST** to the processing URL. `securityMatcher("/app/**")` that **omits** `/login` yields **404** on the filter’s endpoints.
+
+> [!tip] Interview answer
+> In Boot I add starter-security; browsers get form login via content negotiation. I declare a SecurityFilterChain with formLogin. The default is a generated page and POST /login handled by UsernamePasswordAuthenticationFilter. A custom loginPage needs permitAll, a GET controller, username/password fields, and a CSRF token. I never disable CSRF for a browser app and I log out with POST /logout.

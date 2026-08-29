@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/WebMvc #Java/Spring/Boot #Java/Annotations #SRS
+#Java/Spring/Framework/WebMvc #Java/Spring/Boot/AutoConfiguration #Java/Annotations #SRS
 
 # How does Bean Validation work in Spring Boot?
 

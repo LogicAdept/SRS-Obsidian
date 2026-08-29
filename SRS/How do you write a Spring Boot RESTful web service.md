@@ -7,11 +7,11 @@ priority: 0
 # How do you write a Spring Boot RESTful web service?
 
 > [!abstract] Short answer
-> Add **`spring-boot-starter-webmvc`** (Boot **4**; Boot **3** used **`spring-boot-starter-web`**), a class with **`@SpringBootApplication`** and **`SpringApplication.run`**, and a **`@RestController`** whose methods return objects (Jackson writes JSON). Map with **`@GetMapping` / `@PostMapping` / `@PutMapping` / `@DeleteMapping`**. Bind the URL with **`@PathVariable`**, the query with **`@RequestParam`**, and JSON input with **`@RequestBody`**. You do **not** write `web.xml` or call `RestTemplate` to *serve* the API.
+> Add **`spring-boot-starter-webmvc`** (Boot **4**; Boot **3** used **`spring-boot-starter-web`**, now **deprecated** toward **`webmvc`**), a class with **`@SpringBootApplication`** and **`SpringApplication.run`**, and a **`@RestController`** whose methods return objects (Jackson writes JSON). Initializr **Web** is the same starter. Map with **`@GetMapping` / `@PostMapping` / `@PutMapping` / `@DeleteMapping`**. Bind the URL with **`@PathVariable`**, the query with **`@RequestParam`**, and JSON input with **`@RequestBody`**. Default listen port is **8080**. You do **not** write `web.xml` or call `RestTemplate` to *serve* the API.
 
 ## Starter, auto-config, then a controller
 
-Boot’s first-app tutorial: `@SpringBootApplication` is `@SpringBootConfiguration` + `@EnableAutoConfiguration` + `@ComponentScan`. The web starter pulls Tomcat + Spring MVC; auto-config sets up `DispatcherServlet` and JSON converters. `@RestController` is MVC (not Boot-specific): `@Controller` + `@ResponseBody`, so return values are the **body**, not view names.
+Boot’s first-app tutorial: `@SpringBootApplication` is `@SpringBootConfiguration` + `@EnableAutoConfiguration` + `@ComponentScan`. The first-app shortcut is Initializr with the **Web** starter; the long path is the same starter in the POM plus one Java type. The web starter pulls Tomcat + Spring MVC; auto-config sets up `DispatcherServlet` and JSON converters. `@RestController` is MVC (not Boot-specific): `@Controller` + `@ResponseBody`, so return values are the **body**, not view names. `scanBasePackages` does **not** replace `@EntityScan` / Spring Data repository scanning. Sibling packages of the main class are **not** scanned.
 
 Official REST guide: Jackson on the classpath → a returned POJO becomes JSON. Extra **`jackson-dataformat-xml`** is only if you declare **`produces` XML**. Path suffixes like `/employees.json` are **not** Framework 7 content negotiation (extension strategy was removed); use **`Accept`**.
 
@@ -88,11 +88,11 @@ mvc -> api
 > [!warning] `@ResponseBody` on `@RestController` methods is redundant
 > Type-level `@ResponseBody` already applies. Repeating it does not change JSON vs XML.
 
-> [!warning] `/resource.json` is not version 7 negotiation
-> Dump samples that append `.json` / `.xml` to the path assumed **favorPathExtension**. Framework **7** negotiates **`Accept`** by default. `produces` still restricts the mapping.
+> [!warning] `@EnableWebMvc` turns Boot MVC auto-config off
+> Boot servlet auto-config **replaces** `@EnableWebMvc`; the two **cannot** be used together. Extra MVC knobs go on a **`WebMvcConfigurer`** **without** `@EnableWebMvc`. Add `@EnableWebMvc` only if you want to own MVC configuration yourself ([[What is the EnableWebMvc annotation]]). Controllers outside the scan root are a silent **404**, not a startup error ([[Can a Spring controller be missing from the application context]]). **`spring-boot-starter-webflux`** is not this stack.
 
-> [!warning] In-memory `Map` is not REST
-> A static `HashMap` `@Repository` is a demo store. It is not idempotent HTTP, not transactional, and not exception translation for JPA.
+> [!warning] `/resource.json` is not version 7 negotiation
+> Dump samples that append `.json` / `.xml` to the path assumed **favorPathExtension**. Framework **7** negotiates **`Accept`** by default. `produces` still restricts the mapping. A static `HashMap` `@Repository` is a demo store, not REST.
 
 > [!tip] Interview answer
-> **`spring-boot-starter-webmvc` (or Boot 3 `starter-web`) + `@SpringBootApplication` + `@RestController`.** Return POJOs; Jackson writes JSON. `@GetMapping` / `@PostMapping` plus `@PathVariable` and `@RequestBody`. Boot starts Tomcat; you do not register `DispatcherServlet` yourself.
+> **Initializr Web or `spring-boot-starter-webmvc` (Boot 3 `starter-web`) + `@SpringBootApplication` + `@RestController`.** Return POJOs; Jackson writes JSON. `@GetMapping` / `@PostMapping` plus `@PathVariable` and `@RequestBody`. Boot starts Tomcat on **8080**. Do not add `@EnableWebMvc` unless you are replacing Boot’s MVC setup, and keep controllers under the scanned package.

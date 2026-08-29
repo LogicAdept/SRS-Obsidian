@@ -2,77 +2,84 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Boot/Actuator #SRS #New
+#Java/Spring/Boot/Actuator #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How do you monitor an application with Spring Boot Actuator?
 
-Spring Boot Actuator module use to monitor and manage Spring Boot application by providing production-ready features like health check-up, auditing, metrics gathering, HTTP tracing etc. All of these features can be accessed over JMX or HTTP endpoints.
+> [!abstract] Short answer
+> Add **`spring-boot-starter-actuator`**. Actuator publishes **endpoints** so you can **monitor and interact** with the process over **HTTP** (`/actuator/{id}`) or **JMX**. Default HTTP **and** JMX include is **`health` only**. For production: keep **health** (and k8s **liveness/readiness groups**), add **`metrics` / `prometheus`** behind a scrape network, **do not** expose **`env` / `heapdump`**, use a **management port** and **Spring Security**, and write a **`HealthIndicator`** for dependencies you actually care about.
 
-**Adding Spring Boot Actuator**
+## Starter, then endpoints, then a scrape
+
+The `spring-boot-actuator` module is production-ready features: health, metrics (via **Micrometer**), loggers, dumps, conditions, … You turn the module on with the starter. Built-in endpoints are auto-configured only when they are **available**: **access** permitted **and** **exposed** on a transport ([[What is the difference between enabling and exposing an Actuator endpoint]]).
+
 ```xml
-<dependencies>
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-actuator</artifactId>
-	</dependency>
-</dependencies>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
 ```
 
-**Monitoring**: Actuator creates several so-called **endpoints** that can be exposed over HTTP or JMX to let you monitor and interact with application.
+**Listing 1.** Official enablement. HTTP base path is **`/actuator`**. `GET /actuator` is the **links** document for **exposed** IDs — not a catalog of every endpoint on the classpath.
 
-For example, There is a `/health` endpoint that provides basic information about the application's health. The `/metrics` endpoint shows several useful metrics information like JVM memory used, system CPU usage, open files, and much more. The `/loggers` endpoint shows application's logs and also lets you change the log level at runtime.
+```properties
+management.endpoints.web.exposure.include=health,info,metrics,prometheus,loggers
+management.server.port=8081
 ```
-http://localhost:8080/actuator
 
-----
-{
-  "_links": {
-    "self": {
-      "href": "http://localhost:8080/actuator",
-      "templated": false
-    },
-    "health": {
-      "href": "http://localhost:8080/actuator/health",
-      "templated": false
-    },
-    "info": {
-      "href": "http://localhost:8080/actuator/info",
-      "templated": false
-    }
-  }
+**Listing 2.** Opt-in HTTP IDs plus a separate management port ([[How do you expose Spring Boot Actuator endpoints safely]]). Quote `"*"` in YAML. Dumps that still set `management.endpoint.*.enabled` / `management.endpoints.enabled-by-default` are the **deprecated** spellings of **`access`**.
+
+| ID | What it is for monitoring |
+|---|---|
+| `health` | Aggregate status; k8s groups **`/actuator/health/liveness`**, **`/actuator/health/readiness`** |
+| `metrics` | Micrometer meters (JVM, CPU, HTTP, …) as JSON |
+| `prometheus` | Same meters, scrape format — needs **`micrometer-registry-prometheus`** |
+| `loggers` | **Logger levels** at runtime — not the log file |
+| `logfile` | File contents, only if `logging.file.name` / `logging.file.path` is set |
+| `httpexchanges` | Last ~100 HTTP exchanges; needs an **`HttpExchangeRepository`** bean |
+| `threaddump` / `heapdump` | JVM diagnostics; **heapdump** is restricted and must not be public |
+
+**Listing 3 (table).** `httptrace` is the **old** ID. `info` is **not** an HTTP default ([[Which Actuator endpoints are exposed over HTTP by default]]). `loggers` **shows and modifies** configuration ([[How do you change log levels at runtime with Actuator]]).
+
+```d2
+direction: down
+starter: "spring-boot-starter-actuator" {
+  width: 260
+  height: 50
+  style.fill: "#e3f2fd"
 }
+health: "/actuator/health\nkubelet / load balancer" {
+  width: 260
+  height: 70
+  style.fill: "#e8f5e9"
+}
+metrics: "Micrometer\n/metrics or /prometheus" {
+  width: 260
+  height: 70
+  style.fill: "#fff3e0"
+}
+ops: "loggers, conditions, …\nbehind firewall / Security" {
+  width: 280
+  height: 70
+  style.fill: "#fce4ec"
+}
+
+starter -> health
+starter -> metrics
+starter -> ops
 ```
 
-|Endpoint |Description |
-|------------------------|------------------------------------| 
-|health | Application health info |
-|info | Info about the application |
-|env | Properties from environment |
-|metrics | Various metrics about the app |
-|mappings | @RequestMapping Controller mappings|
-|shutdown | Triggers application shutdown |
-|httptrace | HTTP request/response log |
-|loggers | Display and configure logger info |
-|logfile | Contents of the log file |
-|threaddump | Perform thread dump |
-|heapdump | Obtain JVM heap dump |
-|caches | Check available caches |
-|integrationgraph | Graph of Spring Integration components|
+**Fig. 1.** Health is the **probe**. Metrics are the **time series** (Prometheus, Datadog, OTLP, … — a `micrometer-registry-*` on the classpath is enough for Boot to wire a `MeterRegistry`). Ops endpoints are **interactive**, not scrape targets ([[How do you implement Kubernetes probes with Spring Boot]]).
 
-**Enabling / Disabling endpoints**
-```
-# Disable an endpoint
-management.endpoint.[endpoint-name].enabled=false
+Custom dependency checks: a **`HealthIndicator`** bean ([[How do you write a custom HealthIndicator in Spring Boot]]). Details stay hidden while **`management.endpoint.health.show-details`** is **`never`**.
 
-# Specific example for 'health' endpoint
-management.endpoint.health.enabled=false
+A **dashboard** is optional: **Spring Boot Admin** polls these URLs; it does not replace Actuator ([[What is the difference between Spring Boot Actuator and Spring Boot Admin]]). JMX is the other transport — current default include is still **`health` only**.
 
-# Instead of enabled by default, you can change to mode
-# where endpoints need to be explicitly enabled
-management.endpoints.enabled-by-default=false
-```
+> [!warning] The links document is not “everything is on”
+> Interview JSON that lists **`health` + `info`** as the only `_links` is **Boot 2**. Current default `_links` is **`health`** (and `self`). `include=*` without a firewall leaks **`env`**, **`heapdump`**, **`mappings`**, **`beans`**. Sanitization (`******`) is not a reason to expose `env`.
 
-**Actuator production checklist?**
+> [!warning] `loggers` is not `logfile`, and `enabled` is not exposure
+> `GET /actuator/loggers` does **not** stream log lines. HTTP **403** on `POST` loggers is often **CSRF**. Inaccessible endpoints are **removed from the context**; changing **include** does not raise **`read-only`** to **`unrestricted`**.
 
-health/liveness/readiness, metrics/prometheus, don't expose env/heapdump. Separate management port. Secure endpoints. Custom HealthIndicator.
+> [!tip] Interview answer
+> I add spring-boot-starter-actuator. Health is on by default at /actuator/health; I point probes at the liveness and readiness groups. For metrics I add a Micrometer registry — prometheus if we scrape — and include those IDs on HTTP behind a management port and Spring Security. I never expose env or heapdump. Custom HealthIndicator beans cover our dependencies. Dumps that mention httptrace and enabled-by-default are a version behind.

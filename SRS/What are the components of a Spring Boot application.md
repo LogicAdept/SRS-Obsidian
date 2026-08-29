@@ -2,23 +2,74 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Boot #SRS #New
+#Java/Spring/Boot #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What are the components of a Spring Boot application?
 
-Spring Boot Framework has mainly four major components.
+> [!abstract] Short answer
+> Official docs **do not** list “four major components.” A Boot **application** is a **Spring app**: **`@SpringBootApplication` + `main`**, **starters** on the classpath, **auto-configuration**, **`Environment`** (`application.properties` / YAML), an **`ApplicationContext`**, and (if web) an **embedded** Tomcat/Jetty/Undertow. **Actuator** is optional production endpoints. **CLI** is a **separate** `spring` tool (`init`, `encodepassword`, `shell`) — **not** part of the running app.
 
-* **Spring Boot Starters**: The main responsibility of Spring Boot Starter is to combine a group of common or related dependencies into single dependencies. Spring Boot starters can help to reduce the number of manually added dependencies just by adding one dependency. So instead of manually specifying the dependencies just add one starter. Examples are spring-boot-starter-web, spring-boot-starter-test, spring-boot-starter-data-jpa, etc.
+## What you actually ship
 
-* **Spring Boot AutoConfigurator**: One of the common complaint with Spring is, we need to make lot of XML based configurations. Spring Boot AutoConfigurator will simplify all these XML based configurations. It also reduces the number of annotations.
+Typical layout: `MyApplication` in the **root** package, domain packages underneath, `SpringApplication.run` as the entry ([[What is @SpringBootApplication]], [[What is Spring Boot]]). Build: parent/BOM + **`spring-boot-starter-*`** ([[Which common Spring Boot starters do you know]]). Config: externalized properties ([[What is Spring Boot property source precedence]]). Package: **executable JAR** (or WAR) ([[What is an executable JAR in Spring Boot]]).
 
-* **Spring Boot CLI**: Spring Boot CLI(Command Line Interface) is a Spring Boot software to run and test Spring Boot applications from command prompt. When we run Spring Boot applications using CLI, then it internally uses Spring Boot Starter and Spring Boot AutoConfigurate components to resolve all dependencies and execute the application.
+```java
+package com.example.myapplication;
 
-* **Spring Boot Actuator**: Spring Boot Actuator is a sub-project of Spring Boot. It adds several production grade services to your application with little effort on your part. Actuators enable production-ready features to a Spring Boot application, without having to actually implement these things yourself. The Spring Boot Actuator is mainly used to get the internals of running application like health, metrics, info, dump, environment, etc. which is similar to your production environment monitoring setup.
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-**How does Spring Boot start the context?**
+@SpringBootApplication
+public class MyApplication {
 
-Источник: https://habr.com/ru/articles/967632/
+	public static void main(String[] args) {
+		SpringApplication.run(MyApplication.class, args);
+	}
+}
+```
 
-1) Environment — свойства и профили. 2) ApplicationContext — контейнер бинов. 3) BeanFactory — регистрация бинов. 4) Refresh — lifecycle. 5) Listeners (ApplicationReadyEvent и др.). 6) Embedded server (Tomcat/Jetty), если веб.
+**Listing 1.** The documented application class. `@SpringBootApplication` = `@SpringBootConfiguration` + `@EnableAutoConfiguration` + `@ComponentScan`. There is **no** type named “AutoConfigurator.”
+
+`SpringApplication.run` (javadoc): **(1)** create an `ApplicationContext` from the classpath (servlet / reactive / none), **(2)** register `CommandLinePropertySource`, **(3)** **refresh** (load singletons), **(4)** run `CommandLineRunner` / `ApplicationRunner` beans. Environment is ready before the context; **`ApplicationReadyEvent`** fires after runners. A web classpath starts the **embedded** server as part of refresh ([[What is the SpringApplication class]], [[How do you create a non-web Spring Boot application]]).
+
+Dump “starters / AutoConfigurator / CLI / Actuator” maps like this:
+
+| Dump name | Official |
+| --- | --- |
+| Starters | Dependency descriptors (`spring-boot-starter-*`), **not** the running process |
+| AutoConfigurator | **Auto-configuration** (`.imports` + `@Conditional`), opt-in, backs off |
+| CLI | **`spring` CLI**: Initializr **`init`**, **`encodepassword`**, **`shell`**. **`run` / `jar` / `grab` were removed in Boot 3** |
+| Actuator | Optional **production** health/metrics/loggers ([[How do you monitor an application with Spring Boot Actuator]]) |
+
+```d2
+direction: down
+app: "MyApplication + starters\nproperties + your @Components" {
+  width: 300
+  height: 70
+  style.fill: "#e3f2fd"
+}
+rt: "SpringApplication\nEnvironment → Context refresh\n(+ embedded server if web)" {
+  width: 300
+  height: 80
+  style.fill: "#fff3e0"
+}
+opt: "optional Actuator\nCLI is not in the JAR" {
+  width: 280
+  height: 70
+  style.fill: "#e8f5e9"
+}
+
+app -> rt
+rt -> opt
+```
+
+**Fig. 1.** CLI does **not** “internally use starters to execute the application.” You run `main`, `mvn spring-boot:run` / `gradle bootRun`, or `java -jar`.
+
+> [!warning] CLI is not a fourth runtime piece
+> Boot 4 CLI commands are **`init`**, **`encodepassword`**, and **`shell`**. It does not start your context. Putting CLI in the same list as starters and Actuator is a tutorial mnemonic, not the architecture of an application.
+
+> [!warning] Actuator is optional; XML is not required
+> A Boot app can be a **non-web** `CommandLineRunner` with no Actuator. Auto-configuration **replaces** typical XML; it does **not** delete `@Bean` / `@Configuration` you write. `BeanFactory` **is** inside `ApplicationContext`, not a sibling container.
+
+> [!tip] Interview answer
+> I do not recite four product names. A Boot application is SpringApplication, an Environment, an ApplicationContext from @SpringBootApplication, starters plus auto-config, and an embedded server if it is web. Actuator is production extras. The CLI is a developer tool and no longer has spring run.
