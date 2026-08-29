@@ -2,101 +2,69 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions/TryCatch #SRS
+#Java/Exceptions/TryCatch #Java/Runtime #SRS
 
 # Is a `finally` block always executed in Java?
 
 > [!abstract] Short answer
-> **No.** A `finally` block is executed when control leaves the associated `try`/`catch` normally or abruptly, but there are cases where the JVM cannot execute it at all.
+> **No.** `finally` runs whenever the `try` (or a matching `catch`) **completes** — normally or abruptly, including `return` and `throw`. It does **not** run when that completion never happens: `System.exit` / `Runtime.exit` / `Runtime.halt`, a VM crash or kill, an infinite loop or deadlock inside `try`/`catch`, or a `try` that was never entered.
 
-## Typical cases
+## Completes → `finally`. Does not complete → no `finally`
 
-```java
-try {
-    riskyOperation();
-} catch (Exception e) {
-    handle(e);
-} finally {
-    cleanup();
+A `finally` clause is scheduled after the `try` block and after any `catch` that ran, **however** those blocks finish ([[How would you explain the finally block in Java]], [[What happens if no catch matches and a finally block is present]], [[Can you try-finally without catch]]). If that completion never happens, the clause is not reached.
+
+`System.exit` and `Runtime.exit` terminate the VM and do not return **or throw**. `Runtime.halt` does the same and skips shutdown hooks. The `try` therefore never completes, so `finally` on that path does not run — and a `catch` around `exit` does not run either. If another thread exits the process, remaining threads are not unwound: their `finally` blocks are skipped too, including daemon threads when the last non-daemon thread ends ([[Can main throw exceptions outward and where are they handled]]).
+
+An infinite loop, livelock, or deadlock in `try` or `catch` has the same effect: `finally` waits for a completion that never comes. If control never enters the `try` statement at all (an earlier `return` or throw), that `finally` is not part of the path.
+
+`return` from `try` or `catch` still runs `finally`. If `finally` itself `return`s or `throw`s, that new completion **replaces** whatever was pending ([[What happens if finally returns after try throws an exception]], [[What happens if try and finally both throw an exception]]).
+
+```d2
+direction: down
+try: "try / catch running" {
+  width: 280
+  height: 50
 }
+done: "block completes?" {
+  width: 300
+  height: 50
+}
+fin: "finally runs" {
+  width: 280
+  height: 50
+  style.fill: "#e8f5e9"
+}
+skip: "finally skipped" {
+  width: 300
+  height: 50
+  style.fill: "#fff8e1"
+}
+try -> done
+done -> fin: "yes (return, throw, …)"
+done -> skip: "no (exit, halt, hang, crash)"
 ```
 
-`finally` normally runs when:
-
-* the `try` block completes normally;
-* an exception is thrown and handled by a matching `catch`;
-* an exception is thrown and propagates out of the method;
-* the method returns from `try` or `catch`;
-* control leaves via `break` or `continue`.
-
-> [!warning] Important exception
-> `finally` is **not guaranteed** if the JVM terminates before reaching it. The classic example is `System.exit(...)`.
+**Fig. 1.** `finally` is tied to completion of `try`/`catch`, not to “the process is still alive.”
 
 ```java
-try {
-    System.out.println("try");
-    System.exit(0);
-} finally {
-    System.out.println("finally"); // Not executed
-}
-```
-
-Other abnormal JVM termination scenarios, such as a process being forcibly killed or the JVM crashing, can also prevent `finally` from executing.
-
-## `return` does not skip `finally`
-
-A common misconception is that `return` prevents `finally` from running.
-
-```java
-static int getValue() {
-    try {
-        return 1;
-    } finally {
-        System.out.println("cleanup");
+class Demo {
+    static void skip() {
+        try {
+            System.exit(0);
+        } finally {
+            System.out.println("not printed");
+        }
     }
 }
 ```
 
-The `finally` block executes **before the method actually returns**.
+**Listing 1.** `System.exit` does not complete the `try`, so `finally` does not run. A `return` in the same `try` would still run it.
 
-The same applies to `return` from a `catch` block.
+> [!warning] `return` still runs `finally`
+> Interview traps often claim `return` skips cleanup. It does not. Process death and non-completion are the real gaps.
 
-> [!warning] `finally` can override `return`
-> Avoid returning from `finally`. A `return` there can suppress an exception or replace an earlier return value.
-
-```java
-static int getValue() {
-    try {
-        return 1;
-    } finally {
-        return 2; // Bad practice: returns 2
-    }
-}
-```
-
-Here the method returns `2`, not `1`.
-
-## `finally` and resource management
-
-For resources such as files, sockets, and database connections, prefer [[Java/IO]] `try-with-resources` over manually closing them in `finally`.
-
-```java
-try (var input = new FileInputStream("data.txt")) {
-    process(input);
-}
-```
-
-This is generally safer because Java handles resource closing even when an exception is thrown.
+> [!warning] Interrupt is not a skip, and other threads die without `finally`
+> `Thread.interrupt` sets a status or throws `InterruptedException`. Unwinding still runs `finally`. Do not treat interrupt like `System.exit`. `exit` from one thread starts shutdown; remaining threads do not complete their current methods.
 
 > [!tip] Interview answer
-> **`finally` is executed in almost all normal control-flow paths, including exceptions and `return`, but it is not an absolute guarantee. It may not execute if the JVM terminates before control reaches it, for example through `System.exit()`, a JVM crash, or external process termination.**
-
-> [!example] Mental model
-> Think of `finally` as **“run this when leaving the `try`/`catch` construct”**, not **“the JVM guarantees this code will always run.”**
-
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
-
-**Всегда ли исполняется блок `finally`?**
-
-Код в блоке `finally` будет выполнен всегда, независимо от того, выброшено исключение или нет.
+> **`finally` is not an absolute guarantee.** It runs whenever `try` or `catch` actually finishes, including on `return` and `throw`. It fails to run when that finish never happens: `System.exit` / `halt`, a killed VM, or a hang in `try`. Other threads can lose their `finally` when the process exits.

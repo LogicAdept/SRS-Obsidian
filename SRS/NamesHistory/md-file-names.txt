@@ -697,7 +697,6 @@
 - [x] How would you explain composition in object oriented design.md
 - [x] How would you explain concurrency in software systems.md
 - [x] How would you explain ConcurrentHashMap Java 8.md
-- [x] How would you explain ConcurrentModificationException.md
 - [x] How would you explain ConfigMap vs Secret.md
 - [x] How would you explain configuration styles for Spring applications.md
 - [x] How would you explain Connection draining.md
@@ -749,10 +748,8 @@
 - [x] How would you explain Event Sourcing.md
 - [x] How would you explain Event-driven Architecture.md
 - [x] How would you explain exception.md
-- [x] How would you explain exceptions and error handling in Java.md
 - [x] How would you explain Executors.md
 - [x] How would you explain Executors.newCachedThreadPool().md
-- [x] How would you explain exist when block finally not will.md
 - [x] How would you explain exists problems race condition.md
 - [x] How would you explain exists thread input output.md
 - [x] How would you explain EXPLAIN ANALYZE.md
@@ -1191,8 +1188,6 @@
 - [x] How would you explain transaction log tailing for integration.md
 - [x] How would you explain transitive relations in relational algebra.md
 - [x] How would you explain TreeMap vs LinkedHashMap.md
-- [x] How would you explain try catch finally exception handling in Java.md
-- [x] How would you explain try with resources in Java.md
 - [x] How would you explain try-catch-finally.md
 - [x] How would you explain tuning garbage collector settings on the JVM.md
 - [x] How would you explain type erasure for Java generics.md
@@ -1241,7 +1236,6 @@
 - [x] How would you explain what works ArrayList or LinkedList.md
 - [x] How would you explain what you do you know about function main.md
 - [x] How would you explain what you do you know about interface FileFilter.md
-- [x] How would you explain what you do you know about OutOfMemoryError.md
 - [x] How would you explain what you do you know about RandomAccessFile.md
 - [x] How would you explain what you do you know about servlet filter.md
 - [x] How would you explain when thenReturn vs doReturn when.md
@@ -1249,7 +1243,6 @@
 - [x] How would you explain WHERE vs HAVING.md
 - [x] How would you explain which count in HashMap.md
 - [x] How would you explain which design pattern ideas appear in StringBuilder and StringBuffer.md
-- [x] How would you explain which exception is thrown when error in block initialization class.md
 - [x] How would you explain which fields should be included when implementing hashCode in Java.md
 - [x] How would you explain which from about thread.md
 - [x] How would you explain which Java language constructs can be marked static.md
@@ -1422,7 +1415,6 @@
 - [x] What are the HTML tr th and td elements for.md
 - [x] What are the implicit EL scope objects in JSP and how do they differ from servlet scoped objects.md
 - [x] What are the initial capacity and load factor parameters of HashMap.md
-- [x] What are the key base exception types in Java.md
 - [x] What are the main characteristics of software design patterns.md
 - [x] What are the main class threads input output.md
 - [x] What are the main components of Apache Kafka.md
@@ -1487,7 +1479,6 @@
 - [x] What design idea does LinkedList implement.md
 - [x] What diagram types are used in software design.md
 - [x] What difficulties arise when working with caching.md
-- [x] What do checked and unchecked exceptions mean in Java.md
 - [x] What do common Spring Web MVC annotations do.md
 - [x] What do cost rows and loops mean in EXPLAIN.md
 - [x] What do in OOP expressions is-a and has-a.md
@@ -1539,7 +1530,6 @@
 - [x] What happens during a Kafka consume-transform-produce transaction.md
 - [x] What happens from Spring Boot startup until the first HTTP request reaches a controller.md
 - [x] What happens if a RabbitMQ consumer crashes before ack.md
-- [x] What happens if an exception occurs during class static initialization.md
 - [x] What happens if you call Iterator.next without calling hasNext first.md
 - [x] What happens if you call iterator.remove on a collection.md
 - [x] What happens if you have more Kafka consumers than partitions.md
@@ -1755,7 +1745,6 @@
 - [x] What is change data capture with Kafka.md
 - [x] What is chaos testing.md
 - [x] What is character.md
-- [x] What is checked and unchecked exception.md
 - [x] What is CI CD.md
 - [x] What is CI.md
 - [x] What is class Object which in are there methods.md
@@ -2706,7 +2695,6 @@
 - [x] When a method is slow is the problem always in application code.md
 - [x] When are database indexes a bad idea.md
 - [x] When can a ClassCastException be thrown in Java.md
-- [x] When can a finally block fail to execute in Java.md
 - [x] When can an exception be swallowed or masked in Java.md
 - [x] When data access by index.md
 - [x] When did you last disagree with a book article or talk and why.md
@@ -2715,7 +2703,6 @@
 - [x] When does a hashCode collision occur in a HashMap.md
 - [x] When does a Java stream pipeline actually start executing.md
 - [x] When does the N plus 1 query problem occur and how do you fix it.md
-- [x] When in can be thrown exception ClassCastException.md
 - [x] When is a full table scan cheaper than using an index.md
 - [x] When is a retry policy suitable for a command or API call.md
 - [x] When is ArrayList faster than LinkedList and when is it slower.md

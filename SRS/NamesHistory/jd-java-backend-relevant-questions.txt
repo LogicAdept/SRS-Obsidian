@@ -11,7 +11,7 @@
 - [x] What is the Java Stream API.md
 - [x] Which new Map methods were added in Java 8.md
 - [ ] Which Java versions have you used professionally.md
-- [ ] How would you explain try with resources in Java.md
+- [ ] What is try-with-resources.md
 
 ### Практический опыт реализации многопоточности в приложениях
 - [ ] Have you built multithreaded projects.md

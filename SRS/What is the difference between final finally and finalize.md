@@ -2,85 +2,62 @@
 reps: 0
 priority: 0
 -->
-#Java/Language #Java/Exceptions/TryCatch #Java/JVM/GarbageCollector #SRS #New
+#Java/Exceptions/TryCatch #Java/JVM/GarbageCollector #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is the difference between `final` `finally` and `finalize`?
 
-**final, finally, finalize — три разных слова.**
+> [!abstract] Short answer
+> **They are unrelated except for the letters.** `final` is a modifier (no subclass, no override, no reassignment). `finally` is the cleanup clause of a `try` statement. `finalize()` is `Object`’s deprecated finalizer — the GC **might** call it, or never. For resources use try-with-resources, not `finalize`.
 
-final: класс (нельзя наследовать), метод (нельзя переопределить), поле (нельзя переприсвоить). finally: блок try-catch-finally, выполняется ВСЕГДА. finalize(): метод Object, вызывается GC перед удалением. Deprecated с Java 9. Для ресурсов — try-with-resources.
+## Three different language features
 
-**В чём разница final, finally, finalize?**
+**`final`** — a modifier. A `final` class has no subclasses. A `final` method cannot be overridden or hidden. A `final` field or local variable cannot be reassigned after it is assigned. Method parameters may be `final` too.
 
-final — модификатор. final class / method / field. finally — блок в try-catch-finally, выполняется ВСЕГДА (даже при исключении или return). Используется для освобождения ресурсов. finalize() — метод Object, который раньше вызывал GC перед удалением объекта. Deprecated с Java 9, использовать нельзя. Сейчас для очистки используют try-with-resources и Cleaner.
+**`finally`** — a clause of `try`. It runs after `try` and any matching `catch`, including after `return` or `throw`, **if that `try` was entered** and the process still completes the statement. It is not a literal always ([[How would you explain the finally block in Java]], [[Is a finally block always executed in Java]]). Prefer try-with-resources for `AutoCloseable` ([[What is try-with-resources]], [[How would you explain the AutoCloseable interface in Java]]).
 
-**Чем отличаются `final`, `finally` и `finalize()`?**
+**`finalize()`** — `protected void finalize() throws Throwable` on `Object`. `@Deprecated(since="9", forRemoval=true)`. Subclasses should **remove** it. Use `Cleaner` / `PhantomReference`, or `close()` + `AutoCloseable`. The collector may never call it (finalization disabled/removed, or an indefinite delay). `System.gc()` does not promise a call. An exception from `finalize` is **ignored**. It is not `finally`.
 
-Модификатор `final`:
-
-+ Класс не может иметь наследников;
-+ Метод не может быть переопределен в классах наследниках;
-+ Поле не может изменить свое значение после инициализации;
-+ Локальные переменные не могут быть изменены после присвоения им значения;
-+ Параметры методов не могут изменять своё значение внутри метода.
-
-Оператор `finally` гарантирует, что определенный в нём участок кода будет выполнен независимо от того, какие исключения были возбуждены и перехвачены в блоке `try-catch`.
-
-Метод `finalize()` вызывается перед тем как сборщик мусора будет проводить удаление объекта.
-
-Пример:
-```java
-
-public class MainClass {
-
-	public static void main(String args[]) {
-		TestClass a = new TestClass();
-		System.out.println("result of a.a() is " + a.a());
-		a = null;
-		System.gc(); // Принудительно зовём сборщик мусора
-		a = new TestClass();
-		System.out.println("result of a.a() is " + a.a());
-		System.out.println("!!! done");
-	}
-
+```d2
+direction: right
+fin: "final\nmodifier" {
+  width: 240
+  height: 70
+}
+fly: "finally\ntry clause" {
+  width: 260
+  height: 70
+  style.fill: "#e8f5e9"
+}
+ize: "finalize()\ndeprecated" {
+  width: 260
+  height: 70
+  style.fill: "#fff8e1"
 }
 ```
 
+**Fig. 1.** Same root letters; three features. Do not treat them as a family.
+
 ```java
-public class TestClass {
+class Demo {
+    final int n = 1;
 
-	public int a() {
-		try {
-			System.out.println("!!! a() called");
-			throw new Exception("");
-		} catch (Exception e) {
-			System.out.println("!!! Exception in a()");
-			return 2;
-		} finally {
-			System.out.println("!!! finally in a() ");
-		}
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		System.out.println("!!! finalize() called");
-		super.finalize();
-	}
+    static int value() {
+        try {
+            return 1;
+        } finally {
+            System.out.println("cleanup");
+        }
+    }
 }
 ```
 
-Результат выполнения:
+**Listing 1.** `final` on the field. `finally` still runs before `value()` returns `1`. There is no `finalize` here on purpose.
 
-```
-!!! a() called
-!!! Exception in a()
-!!! finally in a()
-result of a.a() is 2
-!!! a() called
-!!! Exception in a()
-!!! finally in a()
-!!! finalize() called
-result of a.a() is 2
-!!! done
-```
+> [!warning] `finally` is not “always”
+> If the `try` never started, or the VM exits (`System.exit`), `finally` does not run. Interview shorthand overstates it.
+
+> [!warning] Do not override `finalize` for cleanup
+> It is deprecated for removal. It may never run. `System.gc()` in a demo does not make it reliable. Use try-with-resources.
+
+> [!tip] Interview answer
+> **`final` stops subclassing, overriding, or reassignment.** **`finally` is `try` cleanup.** **`finalize()` is a deprecated GC hook that might never run** — use try-with-resources instead. They only share a name stem.
