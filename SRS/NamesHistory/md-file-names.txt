@@ -4143,3 +4143,11 @@
 - [+] At which OSI layer does a duplicate IP address problem occur.md
 - [+] What does a Layer 2 broadcast look like in a packet capture.md
 - [+] How does ARP relate to the OSI layers.md
+- [x] How do you create a REST service quickly.md
+- [x] How does Spring Boot auto-configure beans when you add a dependency.md
+- [x] How would you explain @SpringBootApplication.md
+- [x] How would you explain Spring Boot and its main advantage.md
+- [x] How would you explain Spring Boot.md
+- [x] What are the distinctive features of Spring Boot.md
+- [x] What is Spring Boot used for.md
+- [x] What is the value of Spring Boot.md

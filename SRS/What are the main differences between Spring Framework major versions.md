@@ -2,114 +2,55 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core #SRS #New
+#Java/Spring/Core #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What are the main differences between Spring Framework major versions?
 
-**Какие основные отличия в версиях Spring?**
+> [!abstract] Short answer
+> Interview majors are **generations**, not Java SE history. **3.x** brought **Java `@Configuration` / `@Bean`** into the core container. **4.x** made **Java 8** and **Java EE 6+** first-class (WebSocket, `@Conditional`, Groovy). **5.x** required **JDK 8**, added **WebFlux** / **`WebClient`**, JDK 9 module names, and dropped Portlet/Velocity/`globalSession`. **6.x** requires **Java 17+** and **`jakarta.*` (Jakarta EE 9–10)** plus **AOT / GraalVM native**. **7.x** keeps **JDK 17** (recommend **21/25 LTS**), raises **Jakarta EE 11** (Servlet **6.1**), drops leftover **`javax.annotation` / `javax.inject`**, and steers HTTP clients to **`RestClient`**. Current production line is **7.0.x**.
 
-+ __Версия 3 (2009)__ - Поддержка Java 5 (annotations, generics, varargs, ...).
-+ __Версия 4 (2016)__ - Поддержка Java 8 (lambda, stream api, ...).
-+ __Версия 5 (2017)__ - Построен на основе `Reactive Streams`.
+## Do not confuse Spring with Java language versions
 
-**Какие основные отличия в версиях Java?**
+Dump text that lists Java 1.0–14 **is the wrong product**. Spring **integrates** a Java/Jakarta **baseline**; it is not the JDK release train ([[What is the Spring Framework]]).
 
-##### Версия 1.0 - 23 января 1996.
+| Generation | Java / EE baseline | Signature change |
+| --- | --- | --- |
+| **3.x** | Java 5-era language (annotations, generics) | JavaConfig in **core**: `@Configuration`, `@Bean`, `@Import`, `@DependsOn` |
+| **4.x** | Java 8 usable; **Java EE 6+** (4.x docs: Servlet 3 / JPA 2) | WebSocket, `@Conditional`, Groovy; still **`javax.*`** |
+| **5.x** | **JDK 8 required** (codebase on Java 8); EE **7** APIs, EE **8** at runtime | **`spring-webflux`**, reactive `WebClient`; `AsyncRestTemplate` deprecated; Portlet / Velocity / JDO / `globalSession` gone ([[What is Spring WebFlux]], [[What is global-session bean scope in Spring]]) |
+| **6.x** | **Java 17+**, **Jakarta EE 9–10**, `jakarta.*` | AOT + native images; HTTP interfaces; **`RestClient`** (6.1); trailing-slash match **off**; remoting/EJB helpers removed |
+| **7.x** | **JDK 17–25+** (LTS: 17, 21, 25); **Jakarta EE 11–12** | Servlet **6.1** / JPA **3.2** / BV **3.1**; **`javax.annotation` / `javax.inject` unsupported**; `RestTemplate` deprecated toward **`RestClient`**; JSpecify null-safety; API versioning |
 
-##### Версия 1.1 - 19 февраля 1997.
-+ __Inner Classes__.
-+ __Reflection API__.
-+ __JavaBeans__.
-+ __JDBC__.
-+ __Collections framework__.
+```d2
+SF5: "5.x  javax.*  JDK 8  WebFlux"
+SF6: "6.x  jakarta.*  JDK 17  AOT"
+SF7: "7.x  EE 11  Servlet 6.1  RestClient"
+SF5 -> SF6: "namespace + Java 17"
+SF6 -> SF7: "EE 11, drop javax.inject leftovers"
+```
 
-##### Версия 1.2 - 8 декабря 1998.
-+ __`strictfp` keyword__.
-+ __JDBC__.
+**Fig. 1.** The upgrade that breaks compiles is **5 → 6** (`javax` → `jakarta`). **6 → 7** is a **spec floor** (Servlet 6.1, Tomcat 11 / Jetty 12.1), not another namespace rename.
 
-##### Версия 1.3 - 8 мая 2000.
-+ __HotSpot VM included__.
+```java
+import jakarta.servlet.http.HttpServletRequest; // 6.x / 7.x
+import jakarta.inject.Inject;
+import jakarta.annotation.PostConstruct;
+```
 
-##### Версия 1.4 - 6 февраля 2002.
-+ __`assert` keyword__.
-+ __NIO.2 library__  - API для работы с неблокирующим вводом-выводом.
-+ __Logging API__.
+**Listing 1.** After 6.0, Servlet/JPA/BV live in `jakarta.*`. 6.x still **detected** `javax.inject` / `javax.annotation` on old binaries; **7.0 removes** that compatibility.
 
-##### Версия 5 - 30 сентября 2004 года.
-+ __Enum__ - перечислимые типы.
-+ __Annotations__ - аннотации, специальные интерфейсы.
-+ __Generics__ - средства обобщённого программирования.
-+ __Varargs__ - методы с неопределённым числом параметров.
-+ __Autoboxing/Unboxing__ — автоматическое преобразование между скалярными типами Java и соответствующими типами-обёртками.
-+ __Static import__ - импорт статических полей и методов.
-+ __Foreach__ - итератор по коллекции объектов.
-+ __Javadoc comments__ - Javadoc-комментариев.
+## What each jump is *for*
 
-##### Версия 6 - 11 декабря 2006 года.
-+ __Scripting Language Support__ - общий API для скриптовых языков и встроенный JS-движок Mozilla Rhino.
-+ __JDBC 4.0__.
-+ __Java Compiler API__ - возможность программного вызова java-компилятора.
-+ __JAXB 2.0__.
-+ __PLuggable Annotations__.
-+ __@Override__ - использование аннотации для маркирования методов, реализующих интерфейс или расширяющих родительский класс.
+**5.0 (2017 line):** reactive stack beside MVC; Kotlin; JUnit 5 `SpringExtension`; `spring-jcl` logging bridge. OSS **5.3.x** ended **August 2024**.
 
-##### Версия 7 - 7 июля 2011 года.
-+ __InvokeDynamic__ - поддержка динамических языков программирования.
-+ __Strings in switch__. - строки в switch-выражениях.
-+ __The try-with-resources statement__ - автоматическое управление ресурсами, реализующими интерфейс java.lang.AutoCloseable.
-+ __Diamond operator <>__ - улучшенное вычисление типов при создании обобщенных экземпляров.
-+ __Simplified varargs method declaration__ - перенос предупреждения "unsafe operation" вместо объявления метода с переменным количеством аргументов.
-+ __Binary integer literals__ - префикс _0b_ (int i = 0b0101)
-+ __Underscores in numeric literals__ - подчеркивания в числах (int i = 1_000)
-+ __Catching multiple exception types__ - перехват нескольких типов исключений в одном блоке catch (catch(SQLException | IOException e)).
-+ __DualPivotQuickSort__ - в качестве стандартного алгоритма для сортировки примитивов.
-+ __TimSort__ - в качестве стандартного алгоритма для сортировки объектов.
-+ __Concurrency utilities__ - новый синхронизатор Phaser, включён легковесный механизм fork/join.
-+ __NIO.2 library__ - добавлены пакеты java.nio.file, java.nio.file.attribute и java.nio.file.spi.
+**6.0:** Java 17 source; GraalVM native / `refreshForAotProcessing`; Tomcat 10+; Hibernate **jakarta** artifacts; HTTP `@HttpExchange` clients. **6.2** was the last 6.x feature branch (OSS through **June 2026**).
 
-##### Версия 8 - 18 марта 2014 года.
-+ __Lambda expressions__ - выражения в функциональном стиле.
-+ __@FunctionalInterface__ - функциональные интерфейсы.
-+ __Stream API__. - возможность выполнения последовательности операций над элементами массива, а также возможность производить их параллельно (parallelStream).
-+ __Method Reference__ - ссылки на методы и конструкторы, оператор `::`.
-+ __Repeatable annotations__ - возможность использовать аннотации одного типа несколько раз над одним объектом.
-+ __Interface default method__ - методы по умолчанию для интерфейсов.
-+ __Annotation on Java types__ - аннотации на типы данных.
-+ __Reflection for method parameters__ - рефлексия для параметров методов.
-+ __Date & Time API (java.time)__ - новое api для работы с датами и временем.
-+ __Remove the PermGen__ - удален _PermGen_, изменен способ хранения мета-данных классов.
+**7.0 (production from November 2025):** EE 11 servers; **Undertow** adapters dropped until Servlet 6.1 exists there; `spring-jcl` module removed (Commons Logging 1.3); Jackson **3**; JUnit **6**; `ListenableFuture` gone. `RestClient` / `WebClient` / HTTP interfaces are the HTTP story ([[What is the difference between RestTemplate WebClient and RestClient]]).
 
-##### Версия 9 - 21 сентября 2017 года.
-+ __HTTP/2 support__.
-+ __Jshell__ - поддержка REPL-подхода (Read-Eval-Print-Loop) в Java.
-+ __JigSaw project__ - поддержка модуляризации в Java.
-+ __Stream API updates__.
-+ __Immutable collevtions__ - создании и инициализация коллекций в одну строку.
-+ __Concurrency updates__ - реализация Reactive Streams (в т.ч. класс `Flow`).
-+ __class Optional__  - класс для сбора not-null объектов.
-+ __Complete the removal of underscore from the set of legal identifier names__ - запрет подчёркивания в именах классов.
-+ __Support for private methods in interfaces__- private и static private методы в интерфейсах.
-+ __Compact strings__ - хранение строк в кодировке LATIN-1, если это возможно.
+Older but still asked: **`@Required`** died on the 5.1 → 6 path; XML **autodetect** autowire is not a 7.x feature.
 
-##### Версия 10 - 20 марта 2018 года.
-+ __ Local-variable type inference__ - ключевое слово `var`, что избавляет от необходимости указывать тип локальной переменной явно.
-+ __Stream API updates__.
-+ __Concurrency updates__.
+> [!warning] “Spring 4 = Java 8 in 2016” is a mash-up
+> **Spring Framework 4.0** is not “the Java 8 JDK.” 4.x *used* Java 8 features; **5.0 required JDK 8**. Dates on dump slides (3 = 2009, 5 = 2017) are roughly the **.0** years; **4.3 EOL was 31 Dec 2020**, not a feature list.
 
-##### Версия 11 - 25 сентября 2018 года.
-+ __Local-Variable Syntax for Lambda Parameters__ - ключевое слово `var` в локальных Лямбда-переменных, например при использовании аннотаций.
-+ __Launch Single-File Source-Code Programs__ - запуск приложения одной командой `java HelloWorld.java`.
-+ __Remove The Java EE and CORBA Modules__ — удалены модули Java EE и COBRA.
-
-##### Версия 12 - 19 марта 2019 года.
-+ __Switch Expressions__ - новая форма метки switch “case L ->” чтобы очевидным образом показать, что будет выполняться только код справа от метки, если эта метка – подходящая.
-
-##### Версия 13 - 17 сентября 2019 года.
-+ __Text Blocks__ - Использование `"""` для создания текстовых блоков без экранирования спец. символов.
-+ __Reimplement the legacy Socket API__ - новая реализацию `NioSocketImpl`. Она больше не требует нативного кода, тем самым упрощая перенос на разные платформы.
-
-##### Версия 14 - 17 марта 2020 года.
-+ __Records__ - записи похожи на перечисления и позволяют упростить код. По сути, они заменяют классы, у которых есть состояние, но нет поведения - есть поля, нет методов.
-+ __Pattern Matching for instanceof__.
-+ __Remove the Concurrent Mark Sweep (CMS) Garbage Collector__.
+> [!tip] Interview answer
+> 3: Java `@Configuration`. 4: Java 8 / EE 6+ on `javax`. 5: JDK 8 + WebFlux. 6: Java 17 + `jakarta.*` + AOT. 7: EE 11, no `javax.inject`, `RestClient` over `RestTemplate`. Recite **baselines**, not the Java SE changelog.

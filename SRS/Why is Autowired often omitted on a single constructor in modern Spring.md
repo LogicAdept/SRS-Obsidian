@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core/IoC #Java/Annotations #SRS
+#Java/Spring/Core/IoC/Autowiring #Java/Annotations #SRS
 
 # Why is Autowired often omitted on a single constructor in modern Spring?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core/IoC #SRS
+#Java/Spring/Core/IoC/DI #SRS
 
 # Why is constructor injection preferred in Spring?
 
@@ -74,7 +74,7 @@ setter -> field: "for optional deps"
 > [!warning] Constructor cycles fail at startup
 > **Pure constructor injection** cannot resolve a circular dependency (`A` needs `B`, `B` needs `A`) — the container throws **`BeanCurrentlyInCreationException`**. That surfaces design problems early. Setter injection can break the cycle (one bean injected before fully initialized), but the reference treats that as a last resort, not the default design.
 
-See [[Can dependency injection use mechanisms other than constructor injection]] and [[Why is Autowired often omitted on a single constructor in modern Spring]].
+See [[Which dependency injection styles do you know]] and [[Why is Autowired often omitted on a single constructor in modern Spring]].
 
 > [!tip] Interview answer
 > Constructor injection is preferred because dependencies are explicit, can be final, and the bean is fully built before use — Spring’s own recommendation for required deps. Field injection hides collaborators and is awkward to test without the container. Use setters for optional dependencies; with one constructor you often skip @Autowired entirely.

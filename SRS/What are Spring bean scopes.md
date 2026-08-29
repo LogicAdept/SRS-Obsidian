@@ -2,161 +2,57 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core/IoC/Scopes #SRS #New
+#Java/Spring/Core/IoC/Scopes #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What are Spring bean scopes?
 
-The core of spring framework is it’s bean factory and mechanisms to create and manage such beans inside Spring container. The beans in spring container can be created in six scopes i.e. singleton, prototype, request, session, application and websocket. They are called spring bean scopes.
+> [!abstract] Short answer
+> A **scope** is how many instances a **bean definition** (a recipe) produces, and **how long** each lives. The Framework documents **six** built-in scopes: **`singleton`** (default — one instance **per IoC container**), **`prototype`** (a new instance **per request** to the factory), and four **web-only** scopes on a web-aware `ApplicationContext`: **`request`**, **`session`**, **`application`** (`ServletContext`), **`websocket`**. `ClassPathXmlApplicationContext` plus `request` → `IllegalStateException`. **`globalSession` is gone** (Framework **5.0+**). **`SimpleThreadScope` exists but is not registered** until you add it. Scope is configuration (`scope="…"`, `@Scope`, `@RequestScope`, …), not something baked into the Java class.
 
-|SCOPE | DESCRIPTION |
-|-----------------------|-----------------------------------------------------------------------------------------|
-|singleton (default) |Single bean object instance per spring IoC container |
-|prototype |Opposite to singleton, it produces a new instance each and every time a bean is requested.|
-|request |A single instance will be created and available during complete lifecycle of an HTTP request. Only valid in web-aware Spring ApplicationContext.|
-|session |A single instance will be created and available during complete lifecycle of an HTTP Session. Only valid in web-aware Spring ApplicationContext.|
-|application |A single instance will be created and available during complete lifecycle of ServletContext. Only valid in web-aware Spring ApplicationContext.|
-|websocket |A single instance will be created and available during complete lifecycle of WebSocket. Only valid in web-aware Spring ApplicationContext.|
+## Six built-in scopes
 
-**1. singleton scope**
+The definition is a **recipe**: many objects can come from one recipe. You pick the scope in metadata.
 
-singleton is default bean scope in spring container. It tells the container to create and manage only one instance of bean class, per container. This single instance is stored in a cache of such singleton beans, and all subsequent requests and references for that named bean return the cached instance.
+| Scope | Instance | Where |
+| --- | --- | --- |
+| **`singleton`** | One per **container**, cached | Default everywhere |
+| **`prototype`** | New on each `getBean` / **fresh** injection | Any context |
+| **`request`** | One per HTTP **request**, then discarded | Web `ApplicationContext` |
+| **`session`** | One per HTTP **`Session`** | Web |
+| **`application`** | One per **`ServletContext`** (also a servlet attribute) | Web |
+| **`websocket`** | One per WebSocket **session** (STOMP over WebSocket) | Web |
 
-Example of singleton scope bean using Java config –
+Spring’s singleton is **per-container, per-definition**, not the GoF ClassLoader singleton. Two definitions of the same class are two singletons. It is **not** automatically thread-safe ([[Is a singleton Spring bean thread-safe]]). `ApplicationContext` **eagerly** creates non-lazy singletons ([[How do you create a singleton Spring bean at application startup]]).
+
+**Prototype:** recommended for **stateful** beans (stateless → singleton; a typical DAO is not prototype). The container runs **init** callbacks, then **forgets** the instance — **no** `destroy-method` / `@PreDestroy` from Spring. Injecting a prototype into a singleton **captures one** instance ([[How does a prototype Spring bean behave when injected into a singleton]]).
+
+**`application` vs `singleton`:** one per **`ServletContext`**, not per `ApplicationContext` (a WAR can have **several** contexts). Visible as a **`ServletContext` attribute**.
+
+Web scopes need request binding (`DispatcherServlet` already does it; otherwise `RequestContextListener` / `RequestContextFilter`). Injecting `request`/`session` into a singleton needs a **scoped proxy**, `ObjectFactory`/`ObjectProvider`, or `@Lookup` — otherwise the long-lived bean keeps **one** short-lived instance.
+
 ```java
-@Component
-// This statement is redundant - singleton is default scope
-@Scope("singleton")  // This statement is redundant
-public class BeanClass {
- 
-}
-```
-Example of singleton scope bean using XML config –
-```xml
-<!-- To specify singleton scope is redundant -->
-<bean id="beanId" class="com.springexample.BeanClass" scope="singleton" />
-// or
-<bean id="beanId" class="com.springexample.BeanClass" />
-```
-
-**2. prototype scope** 
-
-prototype scope results in the creation of a new bean instance every time a request for the bean is made by application code.
-
-Java config example of prototype bean scope –
-```java
-@Component
-@Scope("prototype")
-public class BeanClass {
-}
-```
-
-XML config example of prototype bean scope –
-```xml
-<bean id="beanId" class="com.springexample.BeanClass" scope="prototype" />
-```
-
-**3. request scope** 
-
-In request scope, container creates a new instance for each and every HTTP request. So, if server is currently handling 5 requests, then container can have at most 5 individual instances of bean class. 
-
-Java config example of request bean scope –
-```java
-@Component
-@Scope("request")
-public class BeanClass {
-}
- 
-// or
- 
-@Component
 @RequestScope
-public class BeanClass {
-}
-```
-
-XML config example of request bean scope –
-```xml
-<bean id="beanId" class="com.springexample.BeanClass" scope="request" />
-```
-
-**4. session scope** 
-
-In session scope, container creates a new instance for each and every HTTP session. So, if server has 10 active sessions, then container can have at most 10 individual instances of bean class. All HTTP requests within single session lifetime will have access to same single bean instance in that session scope.
-
-Java config example of session bean scope –
-```java
 @Component
-@Scope("session")
-public class BeanClass {
-}
- 
-// or
- 
-@Component
-@SessionScope
-public class BeanClass {
+public class LoginAction {
+	// one instance per HTTP request
 }
 ```
 
-XML config example of session bean scope –
-```xml
-<bean id="beanId" class="com.springexample.BeanClass" scope="session" />
+**Listing 1.** `@RequestScope` is `@Scope("request")` for components. Same idea: `@SessionScope`, `@ApplicationScope`. XML: `scope="request"`.
+
+```d2
+direction: right
+s: "singleton\nper container"
+p: "prototype\nper getBean"
+w: "request / session /\napplication / websocket"
 ```
 
-**5. application scope**
+**Fig. 1.** Two always-on scopes; four only in a **web-aware** context.
 
-In application scope, container creates one instance per web application runtime. It is almost similar to singleton scope, with only two differences i.e.
+**Not in the table:** `globalSession` (Portlet) — dropped in **5.0** ([[What is global-session bean scope in Spring]]). **Thread** scope: `SimpleThreadScope`, register yourself (`ConfigurableBeanFactory.registerScope`).
 
-* application scoped bean is singleton per ServletContext, whereas singleton scoped bean is singleton per ApplicationContext. Please note that there can be multiple application contexts for single application.
-* application scoped bean is visible as a ServletContext attribute.
+> [!warning] Web scopes are not “six scopes everywhere”
+> Dump tables list `request` next to `singleton` as if every app had HTTP. A console `AnnotationConfigApplicationContext` has **singleton** and **prototype** only. Using `scope="session"` there fails at startup with an **unknown bean scope**.
 
-Java config example of application bean scope –
-```java
-@Component
-@Scope("application")
-public class BeanClass {
-}
- 
-// or
- 
-@Component
-@ApplicationScope
-public class BeanClass {
-}
-```
-
-XML config example of application bean scope –
-```xml
-<bean id="beanId" class="com.springexample.BeanClass" scope="application" />
-```
-
-**6. websocket scope** 
-
-The WebSocket Protocol enables two-way communication between a client and a remote host that has opted-in to communication with client. WebSocket Protocol provides a single TCP connection for traffic in both directions. 
-
-Java config example of websocket bean scope –
-```java
-@Component
-@Scope("websocket")
-public class BeanClass {
-}
-```
-
-XML config example of websocket bean scope –
-```xml
-<bean id="beanId" class="com.springexample.BeanClass" scope="websocket" />
-```
-
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
-
-**Какие скоупы бывают у бинов?**
-
-Singleton (default) — один экземпляр на контекст. Prototype — новый объект на каждый запрос get. Request, Session, Application — для веб-приложений. Самое важное: Singleton не потокобезопасен сам по себе — если в нём mutable state, нужна синхронизация.
-
-**What Spring bean scopes exist?**
-
-Источник: https://habr.com/ru/articles/967632/
-
-Singleton (по умолчанию) — один экземпляр на контейнер. Prototype — новый при каждом запросе. Request / Session / Application — веб: HTTP-запрос, сессия, приложение.
+> [!tip] Interview answer
+> Six scopes: singleton (default, per container), prototype (new each request), plus request/session/application/websocket on a web context. Prototype is not fully lifecycle-managed. `globalSession` is history. Thread scope is optional/custom.
