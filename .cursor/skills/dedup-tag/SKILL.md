@@ -11,9 +11,11 @@ disable-model-invocation: true
 
 ## Purpose
 
-Collect every card with a given tag, find semantic duplicates, and leave one
-canonical card per cluster. Unique knowledge from the extras must land in the
-survivor **before** those files are deleted. Do not rewrite the tag tree.
+Collect every card with a given tag, find **duplicate interview questions**,
+and leave one canonical card per cluster. Unique knowledge from the extras must
+land in the survivor **before** those files are deleted. A card answers one
+cue; do not fold several questions about one topic into one file. Do not
+rewrite the tag tree.
 
 ## Invoke
 
@@ -38,7 +40,8 @@ Language: English only — this skill, filenames, and the chat report.
 
 1. Walk `SRS/*.md`. Skip `SRS/Format/` and `SRS/NamesHistory/`.
 2. Collect every card whose **tag line** contains `<tag>` or a child of it.
-3. Cluster **semantic** duplicates: same interview question / same knowledge, wording differs.
+3. Cluster **semantic duplicate questions** (same interview prompt, wording
+   differs). Do **not** cluster cards that share a topic.
 4. For each true-duplicate cluster: pick a survivor, **merge** every sibling into it, then delete the extras.
 5. Sync lists and wikilinks (unless `--dry-run`).
 6. Chat report.
@@ -47,23 +50,41 @@ Do not retag the whole set. Do not invent taxonomy. That is `/refine-tags`.
 
 ## What is a duplicate
 
-True duplicates — one card would answer the others:
+Dedup **questions**, not topics. A card is an **answer to one interview cue**.
+The vault collects questions because interviews ask questions. Two files are
+duplicates only when an interviewer asking either cue would accept the **same**
+answer — interchangeable prompts, wording differs.
+
+True duplicates — one question asked twice:
 
 - Several cues that all collapse to “what JOIN types exist”
 - “ACID properties” vs “defining properties of a transaction” vs “ACID requirements”
 - The same comparison asked twice (`UNION` vs `UNION ALL` under two names)
 - Isolation-level overviews that are the same lecture with a different title
+- “How would you explain OAuth” vs “What is OAuth 2.0”
+- “How do you enable method security in Spring Security 6” vs “What is EnableMethodSecurity”
+- “How do you handle CSRF tokens in AJAX” vs “How do you send a CSRF token in a JSON request”
 
-Not duplicates — different facts, keep all:
+Not duplicates — different questions, keep all, even on the same topic:
 
 - 1NF vs 2NF vs 3NF vs “what is normalization”
 - Catalog of JOIN types vs a card that is **only** LEFT vs INNER
 - Generic replication vs MySQL / PostgreSQL / Oracle replication
 - “How indexes work” vs “when indexes hurt” vs clustered vs non-clustered
 - Hibernate isolation vs JDBC isolation vs general ACID, if they target different APIs
-- Related follow-ups on the same topic
+- Related follow-ups on the same topic (definition vs how-to vs comparison vs trap)
+- `What is PasswordEncoder` vs “what is password hashing” vs encode vs `matches`
+- `What is a role vs an authority` vs `hasRole` vs `hasAuthority`
+- HTTP 401 vs 403 vs `AuthenticationException` vs `AccessDeniedException`
+- `What is RequestCache` vs `What is SavedRequest`
+- `What is intercept-url` vs “does matcher order matter” (XML cue vs Java DSL is a close call — keep both unless the prompts are interchangeable)
 
-If interchangeable in an interview, they are duplicates. If a follow-up would get a different answer, they are distinct. Close calls: keep both and list them in chat. Do not treat “maybe related” as a cluster.
+Do **not** merge “everything about CSRF” or “everything about PasswordEncoder”
+into one card. Shared facts in two answers do not make one question.
+
+If interchangeable in an interview, they are duplicates. If a follow-up would
+get a different answer, they are distinct. Close calls: keep both and list
+them in chat. Do not treat “maybe related” or “same theme” as a cluster.
 
 ## Survivor
 
@@ -136,14 +157,15 @@ After you create, fill, retag, or delete SRS cards (or edit the Tags.md tree), r
 python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
 ```
 
-Skip this on `--dry-run`. The Docker fill orchestrator rebuilds once after
-refine-tags and this dedup turn; do not rebuild during that Docker post-fill turn.
+Skip this on `--dry-run`. The Docker fill orchestrator rebuilds once on
+`--finalize` after refine-tags and this dedup turn; do not rebuild during a
+Docker fill turn.
 
 ## Do not
 
 - Delete a duplicate whose unique on-cue material has not been absorbed or explicitly dropped in the ledger.
 - Concatenate two GoldStandard bodies or copy dump wording into a filled card.
-- Delete merely related cards.
+- Delete merely related cards or fold several topic follow-ups into one file.
 - Create a working folder of copies or pointers.
 - Edit `Tags.md` (propose a leaf in chat if a kept card needs one).
 - Fill a `#New` card to GoldStandard (`/fill-tag`) or import new questions.

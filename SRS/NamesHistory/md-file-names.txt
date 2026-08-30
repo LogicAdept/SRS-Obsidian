@@ -946,7 +946,6 @@
 - [x] How would you explain notable language changes in recent Java versions.md
 - [x] How would you explain number hashCode.md
 - [x] How would you explain OAuth OpenID Connect.md
-- [x] How would you explain OAuth.md
 - [x] How would you explain ObjDoubleConsumer ObjIntConsumer and ObjLongConsumer.md
 - [x] How would you explain object oriented programming principles.md
 - [x] How would you explain objects.md
@@ -3861,7 +3860,6 @@
 - [+] What is UsernameNotFoundException.md
 - [+] What is WithUserDetails in Spring Security tests.md
 - [+] What is SecurityMockMvcRequestPostProcessors.md
-- [+] How do you send a CSRF token in a JSON request.md
 - [+] What is AccessDecisionManager.md
 - [+] What is EnableWebFluxSecurity.md
 - [+] What is authorizeExchange in WebFlux security.md
@@ -3888,7 +3886,6 @@
 - [+] What happens if two SecurityFilterChain beans share the same Order.md
 - [+] What is EnableMethodSecurity.md
 - [+] What is the difference between EnableMethodSecurity and EnableGlobalMethodSecurity.md
-- [+] How do you enable method security in Spring Security 6.md
 - [+] What is PreAuthorize.md
 - [+] Why does method security skip self-invocation.md
 - [+] Can method security protect private methods.md

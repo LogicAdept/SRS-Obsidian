@@ -4,9 +4,9 @@ priority: 0
 -->
 #Java/Spring/Security #Security/OAuth2 #SRS #New
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+> [!warning] Untrusted draft
+> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
 
-**Что такое OAuth 2.0?**
+OAuth 2.0 is an authorization protocol. One application obtains access to a user's resources in another application without the user sharing their password (example: sign in with Google).
 
-Протокол авторизации. Позволяет одному приложению получить доступ к ресурсам пользователя в другом приложении без передачи пароля. Например: «войти через Google».
+Roles: Resource Owner (the user), Client (the application), Authorization Server (issues tokens), Resource Server (holds the resources).

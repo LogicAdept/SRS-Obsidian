@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security #Java/Annotations #Java/Spring/Framework/WebMvc #SRS
+#Java/Spring/Security/Authentication #Java/Annotations #Java/Spring/Framework/WebMvc #SRS
 
 # What is `AuthenticationPrincipal`?
 

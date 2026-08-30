@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security #Security/JWT #Security/AppSec #SRS
+#Java/Spring/Security/CSRF #Security/JWT #Security/AppSec #SRS
 
 # Why do you disable CSRF for a JWT REST API?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security #Security/Cryptography #SRS
+#Java/Spring/Security/PasswordEncoder #Security/Cryptography #SRS
 
 # Why do two identical passwords hash to different strings with BCrypt?
 
