@@ -734,11 +734,20 @@ def _run_agent(
     )
 
     model_selection: str | ModelSelection = model
-    if model in {"grok-4-6", "grok-4.6"}:
+    name = (model or "grok-4.6").strip()
+    if "fast" in name.lower():
+        name = "grok-4.6"
+    key = name.lower().replace("_", "-")
+    if key in {"grok-4-6", "grok-4.6", "grok-4.6-high", "cursor-grok-4.6-high"}:
         model_selection = ModelSelection(
             id="grok-4.6",
-            params=(ModelParameterValue(id="reasoning_effort", value="high"),),
+            params=(
+                ModelParameterValue(id="reasoning_effort", value="high"),
+                ModelParameterValue(id="fast", value="false"),
+            ),
         )
+    else:
+        model_selection = name
     result = None
     for attempt in range(max_retries + 1):
         try:
@@ -785,7 +794,7 @@ def _build_parser() -> argparse.ArgumentParser:
         )
     )
     parser.add_argument("--dry-run", action="store_true", help="Print the derived queue.")
-    parser.add_argument("--model", default="grok-4.6")
+    parser.add_argument("--model", default="grok-4.6-high")
     parser.add_argument(
         "--cover-limit",
         type=int,
@@ -1014,6 +1023,7 @@ def main(argv: list[str] | None = None) -> int:
         and tag not in continue_tags
     )
     print(f"repo={REPO}")
+    print("model=grok-4.6 high")
     print(
         f"technical paths in scope={len(scoped)} resumed={resumed} "
         f"seed leaves={len(seed_leaves)} queued={len(queue_list)} "

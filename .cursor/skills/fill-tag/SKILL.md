@@ -33,13 +33,24 @@ Language: English only — this skill, finished card bodies, and the chat report
 
 ## Read first
 
+Once per durable session (first Docker fill turn, or a fresh interactive
+`/fill-tag` in a new chat):
+
 - `SRS/Format/GoldStandard.md`
-- `SRS/Format/Naming.md`
 - `SRS/Format/Tags.md` (Tree lives here)
 - `SRS/Format/Format.md` (D2: no `layoutEngine` in diagram source)
-- `SRS/Format/FillCardPrompt.txt` sections **C, E, F, G, H** for quality bar, gold density, checklist, and chat-only output. Ignore its preamble (“you do not have the vault”) and its TREE — use `Tags.md`.
-- The target card(s), including any draft dump text
-- A filled sibling on the same tag when one exists (density reference)
+- The target card, including any draft dump text
+- One filled sibling on the same tag when one exists (density reference)
+
+Do **not** read `SRS/Format/FillCardPrompt.txt` or `Naming.md`. This skill
+already has the quality bar, density, checklist, and chat-only output. The
+cue is the existing basename.
+
+On later turns in the **same** session: read **only** the named target card.
+Do not re-read this skill, Format notes, or another sibling.
+
+Docker fill names one file per turn and does not slash-invoke `/fill-tag`.
+Follow that named file; do not scan the tag for a different `#New` card.
 
 ## Which files to fill
 
@@ -65,7 +76,12 @@ Primary, in order:
 
 Not primary: Baeldung, Medium, Wikipedia, Stack Overflow, interview dumps, blogs. If only those exist, keep `#New`.
 
-Read the defining section (contract, spec paragraph, implementation), not a snippet. Note version.
+Open the **defining section URL** (API page, spec paragraph, reference heading).
+Not a TOC, overview, or whole-book HTML. Note version.
+
+If this session already fetched that URL (prior DOCS READ), **reuse it**. Do
+not fetch it again. Fetch an extra page only when this cue needs a section the
+session has not opened.
 
 ## Draft-aware workflow
 
@@ -134,7 +150,7 @@ Preserve existing `reps` / `priority` if already non-zero.
 
 2. One tag line: thematic leaves from `Tags.md`, then `#SRS`. **No `#New`** iff the checklist passes. No parent+child pair. Comparisons get both sides. If no leaf fits: honest shorter prefix + propose a new leaf in chat; do not silently add a top-level root (taxonomy edits are `/refine-tags`).
 
-3. English body per GoldStandard + FillCardPrompt §C:
+3. English body per GoldStandard (this skill's shape below):
 
 - `> [!abstract] Short answer` — answers the cue; does not restate the title
 - Mechanism (APIs, steps, version when it matters)
@@ -151,7 +167,7 @@ marker remains.
 
 Depth: HashMap/equals gold example, not an 8-line stub. Yes/no language cues may match gold example 1.
 
-Adversarial pass (FillCardPrompt §E): counterexample every `always`/`never`; implementation claims from real branches; listings compile or are labeled Conceptual; immutability/thresholds include preconditions.
+Adversarial pass: counterexample every `always`/`never`; implementation claims from real branches; listings compile or are labeled Conceptual; immutability/thresholds include preconditions.
 
 Do not invent biographies.
 
@@ -160,13 +176,14 @@ Do not invent biographies.
 Write the complete `.md` into `SRS/<Cue>.md` (cue already is the basename). Then in **chat only** (never inside the file):
 
 1. Filename
-2. CHECKLIST PASS/FAIL per FillCardPrompt §G line, with a short quote proving each PASS
+2. CHECKLIST PASS/FAIL for each finished-card shape line above, with a short quote proving each PASS
 3. DRAFT AUDIT — one compact line per ledger item:
    `VERIFIED`, `CORRECTED`, `REJECTED`, or `UNRESOLVED`, plus what changed.
    For an empty stub, write `DRAFT AUDIT — empty stub; no inherited claims`.
 4. LINKS TO VERIFY — every `[[wikilink]]` basename
 5. TAGS — tag line plus any proposed new leaf
-6. DOCS READ — official URLs actually opened, version/section. If none, the card is incomplete
+6. DOCS READ — official URLs this cue used, version/section. Reused session
+   URLs count; do not fetch them again. If none, the card is incomplete
 7. UNCERTAINTIES — if any remain, **keep `#New`** and list them
 
 If any checklist line is FAIL, fix before finishing. If you cannot fix without guessing, keep `#New`.
@@ -181,11 +198,15 @@ After you create, fill, retag, or delete SRS cards (or edit the Tags.md tree), r
 python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
 ```
 
-The Docker fill orchestrator rebuilds the index once after `/refine-tags` and
-`/dedup-tag` for the same tag. Do not rebuild during a Docker fill turn.
+The Docker fill orchestrator rebuilds the index once on `--finalize`, after
+`/refine-tags` and `/dedup-tag`. Do not rebuild during a Docker fill turn.
 
 ## Do not
 
+- Re-read this skill, Format notes, or a sibling on a later turn of the same
+  durable session.
+- Fetch an official URL this session already opened.
+- Invoke `/fill-tag` when the orchestrator already named a target file.
 - Fill from dump/blog wording without official verification.
 - Treat a draft as evidence, silently omit one of its substantive claims, or
   report only the claims retained in the final answer.

@@ -2,9 +2,9 @@
 """Fill #New cards under a tag with one durable Cursor agent.
 
 The orchestrator names one target per send, waits, then validates that card
-before asking for the next. After fill turns it runs /refine-tags and
-/dedup-tag for the same tag, then rebuilds the coverage index once. Real runs
-are accepted only inside the hardened Docker workspace created by
+before asking for the next. --finalize, used once after filling is done, runs
+/refine-tags and /dedup-tag for the tag, then rebuilds the coverage index.
+Real runs are accepted only inside the hardened Docker workspace created by
 run_fill_tag.ps1. Direct host execution is limited to --dry-run.
 """
 
@@ -67,15 +67,17 @@ ahead, invent extra cues, or start a later card on your own.
 
 Hard constraints:
 - Read and follow `.cursor/skills/fill-tag/SKILL.md` exactly except the
-  coverage-index step.
+  coverage-index step. Do not invoke `/fill-tag`; this message already
+  applied that skill.
 - Process exactly the one target card named in the current turn.
-- Invoke fill-tag with `--limit 1` on every turn.
-- Use only official/original documentation as evidence.
+- Use only official/original documentation as evidence. Fetch the defining
+  section URL for this cue, not a TOC or whole-book page. Reuse any official
+  URL already opened in this session; do not fetch it again.
 - Do not create cards, invoke cover-tag, edit Tags.md, or modify another card.
 - Do not spawn subagents.
 - Do not commit, checkout, reset, clean, push, or run destructive git commands.
-- Do not run rebuild-coverage-index.py. The orchestrator rebuilds once after
-  refine-tags and dedup-tag for this tag.
+- Do not run rebuild-coverage-index.py. The orchestrator rebuilds once on
+  --finalize after refine-tags and dedup-tag.
 - English only for the card and the final report.
 """.strip()
 
@@ -83,8 +85,8 @@ POST_CONSTRAINTS = """
 Fill turns are finished. Do not fill another #New card this turn.
 Do not spawn subagents.
 Do not commit, checkout, reset, clean, push, or run destructive git commands.
-Do not run rebuild-coverage-index.py; the orchestrator rebuilds once after
-refine-tags and dedup-tag for this tag.
+Do not run rebuild-coverage-index.py; the orchestrator rebuilds once on
+--finalize after refine-tags and dedup-tag for this tag.
 English only.
 """.strip()
 
@@ -227,7 +229,7 @@ def _validate_filled_card(path: Path, tree_paths: list[str]) -> list[str]:
         problems.append("tag line still contains #New")
     if not re.search(r"^> \[!abstract\] Short answer\b", text, re.MULTILINE):
         problems.append("Short answer callout is missing")
-    if not re.search(r"^> \[!warning\]\b", text, re.MULTILINE):
+    if not re.search(r"^> \[!warning\](?:\s|$)", text, re.MULTILINE):
         problems.append("warning callout is missing")
     if not re.search(r"^> \[!tip\] Interview answer\b", text, re.MULTILINE):
         problems.append("Interview answer callout is missing")
@@ -277,15 +279,88 @@ def _retry_delay(error: BaseException, attempt: int) -> float:
     return float(2**attempt)
 
 
+# #region agent log
+def _dbg(hypothesis_id: str, location: str, message: str, data: dict[str, Any]) -> None:
+    payload = {
+        "sessionId": "224cae",
+        "runId": "post-fix",
+        "hypothesisId": hypothesis_id,
+        "location": location,
+        "message": message,
+        "data": data,
+        "timestamp": int(time.time() * 1000),
+    }
+    line = json.dumps(payload, ensure_ascii=False) + "\n"
+    for path in (REPO / "debug-224cae.log", Path("/workspace/debug-224cae.log")):
+        try:
+            with path.open("a", encoding="utf-8") as handle:
+                handle.write(line)
+        except OSError:
+            pass
+    try:
+        import urllib.request
+
+        req = urllib.request.Request(
+            "http://host.docker.internal:7381/ingest/5fe0cbfe-f4f1-4441-979e-48befc349ed6",
+            data=line.encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "X-Debug-Session-Id": "224cae",
+            },
+            method="POST",
+        )
+        urllib.request.urlopen(req, timeout=1).read()
+    except Exception:
+        pass
+    print(f"debug-model {message} {json.dumps(data, ensure_ascii=False)}", flush=True)
+# #endregion
+
+
 def _model_selection(model: str) -> Any:
     from cursor_sdk import ModelParameterValue, ModelSelection
 
-    if model in {"grok-4-6", "grok-4.6"}:
-        return ModelSelection(
+    name = (model or "grok-4.6").strip()
+    if "fast" in name.lower():
+        name = "grok-4.6"
+    key = name.lower().replace("_", "-")
+    if key in {"grok-4-6", "grok-4.6", "grok-4.6-high", "cursor-grok-4.6-high"}:
+        selection = ModelSelection(
             id="grok-4.6",
-            params=(ModelParameterValue(id="reasoning_effort", value="high"),),
+            params=(
+                ModelParameterValue(id="reasoning_effort", value="high"),
+                ModelParameterValue(id="fast", value="false"),
+            ),
         )
-    return model
+        # #region agent log
+        _dbg(
+            "A,B,D",
+            "fill_tag_loop.py:_model_selection",
+            "built ModelSelection",
+            {
+                "arg": model,
+                "normalized": name,
+                "id": getattr(selection, "id", None),
+                "params": [
+                    {
+                        "id": getattr(item, "id", None),
+                        "value": getattr(item, "value", None),
+                    }
+                    for item in (getattr(selection, "params", None) or ())
+                ],
+                "type": type(selection).__name__,
+            },
+        )
+        # #endregion
+        return selection
+    # #region agent log
+    _dbg(
+        "D",
+        "fill_tag_loop.py:_model_selection",
+        "passthrough model string",
+        {"arg": model, "normalized": name},
+    )
+    # #endregion
+    return name
 
 
 def _prompt_for(
@@ -297,21 +372,78 @@ def _prompt_for(
     follow_up: bool,
 ) -> str:
     relative = candidate.path.relative_to(REPO).as_posix()
-    if follow_up:
-        preamble = (
-            "Same durable session and the same hard constraints. "
-            "Previous cards are finished. Process only the next named target."
-        )
-    else:
-        preamble = CONSTRAINTS
-    return (
-        f"{preamble}\n\n"
+    target = (
         f"Turn {index}/{total}. The one and only target is `{relative}` "
         f"(cue: {json.dumps(candidate.cue, ensure_ascii=False)}).\n"
         "Do not process any other #New card even if the skill's normal scan would "
-        "rank it first.\n\n"
-        f"Invoke now:\n/fill-tag #{tag} --limit 1\n"
+        "rank it first."
     )
+    if follow_up:
+        return (
+            "Same durable session. Format notes, the fill-tag skill, and a "
+            "sibling are already loaded. Do not re-read them and do not invoke "
+            "`/fill-tag`.\n"
+            "Read only the named target card. Fetch only new defining-section "
+            "URLs this cue still needs; reuse any official URL already opened this "
+            "session.\n"
+            "Previous cards are finished. Process only the next named target.\n\n"
+            f"{target}\n"
+        )
+    return (
+        f"{CONSTRAINTS}\n\n"
+        f"This is the session warmup for #{tag}: read the skill (except the "
+        "coverage-index step), then GoldStandard, Tags.md, Format.md, one filled "
+        "sibling under this tag if one exists, and the target card. Do not read "
+        "FillCardPrompt.txt. Then fill that one card.\n\n"
+        f"{target}\n"
+    )
+
+
+def _repair_prompt(candidate: Candidate, problems: list[str]) -> str:
+    relative = candidate.path.relative_to(REPO).as_posix()
+    listed = "\n".join(f"- {item}" for item in problems)
+    return (
+        "Same durable session. Do not re-read Format notes, the fill-tag skill, "
+        "or a sibling, and do not invoke `/fill-tag`.\n\n"
+        f"The validator rejected `{relative}`:\n{listed}\n\n"
+        "Patch that one file now so every listed problem is gone. "
+        "A missing warning must be a real `> [!warning] ...` pitfall with a title. "
+        "URLs belong in chat DOCS READ, not in the `.md`. "
+        "Re-fetch an official page only if a listed problem needs evidence this "
+        "session does not already have. "
+        "Do not restore `#New` to bypass the checklist. "
+        "Do not start another card.\n"
+    )
+
+
+def _inspect_fill(
+    candidate: Candidate,
+    *,
+    relative_card: str,
+    before_cards: dict[str, str],
+    tags_hash: str,
+    tree_paths: list[str],
+) -> tuple[str, str | None]:
+    after_cards = _card_snapshot()
+    changed = _changed_cards(before_cards, after_cards)
+    if _sha256_text(_read_text(TAGS_MD)) != tags_hash:
+        raise WorkspaceViolation("agent modified Tags.md")
+    if any(name != relative_card for name in changed):
+        raise WorkspaceViolation(
+            "agent modified cards outside its assignment: "
+            + ", ".join(name for name in changed if name != relative_card)
+        )
+    if relative_card not in after_cards:
+        raise WorkspaceViolation("agent removed or renamed the target card")
+    target_tags = _card_tags(candidate.path)
+    if relative_card not in changed:
+        return "no_change", None
+    if "New" in target_tags:
+        return "kept_new", None
+    problems = _validate_filled_card(candidate.path, tree_paths)
+    if problems:
+        return "invalid", "; ".join(problems)
+    return "filled", None
 
 
 def _post_prompt(skill: str, command: str) -> str:
@@ -381,15 +513,54 @@ def _create_agent(
     last_error: BaseException | None = None
     for attempt in range(max_retries + 1):
         try:
-            return Agent.create(
-                model=_model_selection(model),
+            selection = _model_selection(model)
+            local_opts = LocalAgentOptions(
+                cwd=str(REPO),
+                setting_sources=["project"],
+            )
+            # #region agent log
+            _dbg(
+                "B,C,E",
+                "fill_tag_loop.py:_create_agent",
+                "Agent.create kwargs",
+                {
+                    "arg_model": model,
+                    "selection_id": getattr(selection, "id", selection),
+                    "selection_params": [
+                        {
+                            "id": getattr(item, "id", None),
+                            "value": getattr(item, "value", None),
+                        }
+                        for item in (getattr(selection, "params", None) or ())
+                    ]
+                    if not isinstance(selection, str)
+                    else None,
+                    "setting_sources": ["project"],
+                },
+            )
+            # #endregion
+            agent = Agent.create(
+                model=selection,
                 api_key=api_key,
                 name=name,
-                local=LocalAgentOptions(
-                    cwd=str(REPO),
-                    setting_sources=["project"],
-                ),
+                local=local_opts,
             )
+            # #region agent log
+            _dbg(
+                "C,E",
+                "fill_tag_loop.py:_create_agent",
+                "Agent.create returned",
+                {
+                    "agent_model": str(getattr(agent, "model", None)),
+                    "agent_model_attrs": [
+                        item
+                        for item in dir(agent)
+                        if "model" in item.lower()
+                    ],
+                },
+            )
+            # #endregion
+            return agent
         except CursorAgentError as err:
             last_error = err
             retryable = bool(getattr(err, "is_retryable", False))
@@ -562,8 +733,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Fill #New cards under one tag with one durable Cursor agent; "
-            "each send names a single card. After fill turns, run "
-            "/refine-tags and /dedup-tag for that tag, then rebuild the index once."
+            "each send names a single card. Pass --finalize once filling is "
+            "done to run /refine-tags and /dedup-tag, then rebuild the index."
         )
     )
     parser.add_argument("tag", metavar="TAG")
@@ -581,7 +752,16 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Fill every remaining #New card under the tag, one send per card.",
     )
-    parser.add_argument("--model", default="grok-4.6")
+    parser.add_argument(
+        "--finalize",
+        action="store_true",
+        help=(
+            "After fill turns (if any), run /refine-tags and /dedup-tag for "
+            "this tag, then rebuild the coverage index once. Do not pass this "
+            "on every tag fill; use it once when filling is finished."
+        ),
+    )
+    parser.add_argument("--model", default="grok-4.6-high")
     parser.add_argument("--max-retries", type=int, default=2)
     parser.add_argument("--fail-fast", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
@@ -602,30 +782,44 @@ def main() -> int:
         raise SystemExit("required Tags.md or fill-tag skill is missing")
     refine_skill = REPO / ".cursor" / "skills" / "refine-tags" / "SKILL.md"
     dedup_skill = REPO / ".cursor" / "skills" / "dedup-tag" / "SKILL.md"
-    if not refine_skill.is_file() or not dedup_skill.is_file():
+    if args.finalize and (not refine_skill.is_file() or not dedup_skill.is_file()):
         raise SystemExit("required refine-tags or dedup-tag skill is missing")
 
     tree_paths = parse_tree_paths(TAGS_MD)
     tag = _resolve_tag(args.tag, tree_paths)
     available = _candidate_queue(tag)
-    if args.until_tag:
+    if args.finalize and args.limit is None and not args.until_tag:
+        selected = []
+    elif args.until_tag:
         selected = available if args.limit is None else available[: args.limit]
     else:
         selected = available[: (args.limit if args.limit is not None else 1)]
 
     print(f"repo={REPO}", flush=True)
-    limit_shown = args.limit if args.limit is not None else ("tag" if args.until_tag else 1)
+    if args.finalize and args.limit is None and not args.until_tag:
+        limit_shown = "none"
+    else:
+        limit_shown = args.limit if args.limit is not None else ("tag" if args.until_tag else 1)
     print(
         f"tag=#{tag} available={len(available)} selected={len(selected)} "
-        f"limit={limit_shown} until_tag={str(args.until_tag).lower()}",
+        f"limit={limit_shown} until_tag={str(args.until_tag).lower()} "
+        f"finalize={str(args.finalize).lower()}",
         flush=True,
     )
     print("priority=untrusted drafts, then empty stubs", flush=True)
-    print(
-        "agent=one durable session; one send per card; then refine-tags, "
-        "dedup-tag, then one index rebuild",
-        flush=True,
-    )
+    print("model=grok-4.6 high fast=false", flush=True)
+    if args.finalize:
+        print(
+            "agent=one durable session; fill if selected; then refine-tags, "
+            "dedup-tag, then one index rebuild",
+            flush=True,
+        )
+    else:
+        print(
+            "agent=one durable session; one send per card; "
+            "refine-tags, dedup-tag, and index wait for --finalize",
+            flush=True,
+        )
     for index, candidate in enumerate(selected, start=1):
         kind = "draft" if candidate.has_draft else "stub"
         print(f"  [{index}/{len(selected)}] {kind}: {candidate.path.name}", flush=True)
@@ -633,7 +827,12 @@ def main() -> int:
     if args.dry_run:
         if sys.platform != "linux":
             print("note: direct host execution is dry-run only", file=sys.stderr)
-        print("then /refine-tags, then /dedup-tag, then rebuild coverage index", flush=True)
+        if args.finalize:
+            print("then /refine-tags, then /dedup-tag, then rebuild coverage index", flush=True)
+        else:
+            print("fill only; pass --finalize once at the end for refine, dedup, and index", flush=True)
+        return 0
+    if not selected and not args.finalize:
         return 0
 
     _require_container_boundary()
@@ -647,6 +846,7 @@ def main() -> int:
         "tag": tag,
         "requested_limit": args.limit,
         "until_tag": args.until_tag,
+        "finalize": args.finalize,
         "selected": [candidate.path.name for candidate in selected],
         "post": {},
         "agent_id": None,
@@ -738,36 +938,35 @@ def main() -> int:
                     )
                     run_id = outcome.run_id
                     report = outcome.report
-
-                    after_cards = _card_snapshot()
-                    changed = _changed_cards(before_cards, after_cards)
-                    if _sha256_text(_read_text(TAGS_MD)) != tags_hash:
-                        raise WorkspaceViolation("agent modified Tags.md")
-                    if any(name != relative_card for name in changed):
-                        raise WorkspaceViolation(
-                            "agent modified cards outside its assignment: "
-                            + ", ".join(
-                                name for name in changed if name != relative_card
-                            )
+                    status, error = _inspect_fill(
+                        candidate,
+                        relative_card=relative_card,
+                        before_cards=before_cards,
+                        tags_hash=tags_hash,
+                        tree_paths=tree_paths,
+                    )
+                    repairs = 0
+                    while status == "invalid":
+                        repairs += 1
+                        problems = [part.strip() for part in (error or "").split(";") if part.strip()]
+                        print(
+                            f"    repair {repairs}: {error}",
+                            flush=True,
                         )
-                    if relative_card not in after_cards:
-                        raise WorkspaceViolation(
-                            "agent removed or renamed the target card"
+                        outcome = _send(
+                            agent,
+                            _repair_prompt(candidate, problems),
+                            max_retries=args.max_retries,
                         )
-
-                    target_tags = _card_tags(candidate.path)
-                    if relative_card not in changed:
-                        status = "no_change"
-                    elif "New" in target_tags:
-                        status = "kept_new"
-                    else:
-                        problems = _validate_filled_card(candidate.path, tree_paths)
-                        if problems:
-                            status = "invalid"
-                            error = "; ".join(problems)
-                            fatal = True
-                        else:
-                            status = "filled"
+                        run_id = outcome.run_id
+                        report = outcome.report
+                        status, error = _inspect_fill(
+                            candidate,
+                            relative_card=relative_card,
+                            before_cards=before_cards,
+                            tags_hash=tags_hash,
+                            tree_paths=tree_paths,
+                        )
                 except (
                     AgentRunError,
                     WorkspaceViolation,
@@ -780,9 +979,9 @@ def main() -> int:
                         error += "; workspace changed during failed run: " + ", ".join(
                             changed
                         )
+                    if isinstance(err, WorkspaceViolation) or changed:
                         fatal = True
                     if isinstance(err, WorkspaceViolation):
-                        fatal = True
                         preserve_workspace = True
 
                 record_item(
@@ -800,7 +999,13 @@ def main() -> int:
                         flush=True,
                     )
                     break
-            if preserve_workspace:
+            if not args.finalize:
+                print(
+                    "Fill turns finished. Refine-tags, dedup-tag, and index "
+                    "wait for --finalize.",
+                    flush=True,
+                )
+            elif preserve_workspace:
                 print(
                     "Skipping refine-tags, dedup-tag, and index rebuild "
                     "after a workspace violation.",

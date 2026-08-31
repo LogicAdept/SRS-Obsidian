@@ -249,8 +249,9 @@ def render_index(
         "HTML tabs: **Tags** (tree) and **#New** (unfinished cards; **Fill** copies "
         "`/fill-tag @SRS/<Cue>.md`). "
         "HTML row buttons: **Cover agent** opens General / Focused. **Fill agent** starts "
-        "a fill on one durable agent (one #New card per send until the tag is empty, then "
-        "`/refine-tags` and `/dedup-tag` for that tag, then one index rebuild). "
+        "a fill on one durable agent (one #New card per send until the tag is empty). "
+        "**Fill clone → Finalize** runs `/refine-tags` and `/dedup-tag` once, then one "
+        "index rebuild — not after every tag fill. "
         "Toolbar **Rebuild index** copies "
         f"`{REBUILD_INDEX_CMD}`. "
         "Clone menus appear "
@@ -356,6 +357,7 @@ def _html_node(node: Node, depth: int) -> str:
                 _copy_btn("Log", "", path, " fill-log"),
                 _copy_btn("Progress", "", path, " fill-progress"),
                 _copy_btn("Continue", "", path, " fill-continue"),
+                _copy_btn("Finalize", "", path, " fill-finalize"),
                 _copy_btn("Accept", fill_accept, path),
                 _copy_btn("Drop", fill_drop, path),
             )
@@ -659,11 +661,11 @@ li.node.hidden {{ display: none; }}
     <dt>Cover agent</dt>
     <dd><b>General</b> — обычный refine + cover листа или листьев под родителем. <b>Focused</b> — копирует ту же команду с <code>--focus ''</code>; в терминале допишите, какого покрытия не хватает. Агент сопоставит запрос с честным листом (при необходимости создаст его) и покроет именно его. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Fill agent</dt>
-    <dd><b>Start</b> — изолированный fill на одном Cursor-агенте. Один ход = одна <code>#New</code> карточка, затем следующая, пока под тегом не кончатся <code>#New</code>. После fill тот же агент делает <code>/refine-tags</code> и <code>/dedup-tag</code> для выбранного тега; индекс пересобирается один раз в самом конце. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
+    <dd><b>Start</b> — изолированный fill на одном Cursor-агенте. Один ход = одна <code>#New</code> карточка, затем следующая, пока под тегом не кончатся <code>#New</code>. Refine, dedup и индекс сюда не входят. В shell нужен <code>CURSOR_API_KEY</code>.</dd>
     <dt>Cover clone</dt>
     <dd>Меню только у тега с живым агент-клоном. <b>Open</b> — второе окно на клон. <b>Continue</b> — продолжить незавершённое состояние. <b>Focused</b> — шаблон с <code>--focus ''</code> для того же клона, даже если лист уже complete. <b>Accept</b> — cherry-pick в исходный vault и удалить клон. <b>Drop</b> — удалить без переноса.</dd>
     <dt>Fill clone</dt>
-    <dd>Управление fill-клоном: <b>Open</b>, просмотр <b>Log</b> / <b>Progress</b>, <b>Continue</b> — оставшиеся <code>#New</code> в том же клоне, снова по одной карточке, затем refine + dedup + индекс, <b>Accept</b> или <b>Drop</b>.</dd>
+    <dd>Управление fill-клоном: <b>Open</b>, просмотр <b>Log</b> / <b>Progress</b>, <b>Continue</b> — оставшиеся <code>#New</code> в том же клоне по одной карточке. <b>Finalize</b> — один раз в конце: <code>/refine-tags</code>, <code>/dedup-tag</code>, затем индекс. <b>Accept</b> или <b>Drop</b>.</dd>
     <dt>Source</dt>
     <dd>Копирует <code>./.cursor/sdk/switch_review.ps1 -Source</code> — вернуться в исходный vault.</dd>
     <dt>Rebuild index</dt>
@@ -742,6 +744,12 @@ document.querySelectorAll(".fill-clone-menu").forEach((el) => {{
     const cmd = base + " --until-tag";
     cont.dataset.cmd = cmd;
     cont.title = cmd;
+  }}
+  const fin = el.querySelector("button.fill-finalize");
+  if (fin) {{
+    const cmd = base + " --finalize";
+    fin.dataset.cmd = cmd;
+    fin.title = cmd;
   }}
   const log = el.querySelector("button.fill-log");
   if (log) {{
