@@ -7,45 +7,51 @@ priority: 0
 # How would you explain the ExecutorService interface in Java?
 
 > [!abstract] Short answer
-> **`ExecutorService`** extends **`Executor`**: you still **`execute(Runnable)`**, and you also get **`submit`** (returns a **`Future`**), **`invokeAll` / `invokeAny`**, and **lifecycle** (`shutdown`, `shutdownNow`, `awaitTermination`, **`close`**). **`Executor.execute`** runs the command **sometime later** — in a **new** thread, a **pooled** thread, or the **caller**. Rejection is **`RejectedExecutionException`**. **`submit` is `execute` plus a `Future`.** Factories: **`Executors.newFixedThreadPool`**, cached pool, etc. — those return **`ExecutorService` implementations**, not the interface itself. `execute` vs `submit`: [[What is the difference between submit and execute on an executor service]]. Task types: [[What task types can you submit to an ExecutorService]]. Vs raw `Thread`: [[What advantages does ExecutorService offer over creating raw threads]].
+> **`ExecutorService`** is an **`Executor` that you can shut down and that can hand back a `Future`**. `Executor` only **`execute(Runnable)`** — submit work, hide how it runs. This interface adds **asynchronous results** (`submit`, bulk `invokeAll` / `invokeAny`) and a **termination protocol** so workers can be reclaimed. It is a **contract**, not a pool: factories such as **`Executors.newFixedThreadPool`** return **implementations** (`ThreadPoolExecutor`, and so on). Vs `new Thread`: [[What advantages does ExecutorService offer over creating raw threads]]. The usual implementation: [[How would you explain ThreadPoolExecutor]].
 
-## Submit work, then shut down
+## Decouple submission from threads, then own the lifecycle
 
-`submit(Callable)` / `submit(Runnable)` / `submit(Runnable, result)` schedule work and give you **cancel / `isDone` / `get`**. Actions before submit **happen-before** the task, which **happen-before** `Future.get()`. Bulk: `invokeAll` waits for every task (or timeout then **cancels** the rest); `invokeAny` returns **one successful** result and **cancels** the others. Do not mutate the task collection while those run.
+Program to **`ExecutorService`**, not to a concrete pool class, unless you need tunables. Callers **submit tasks**; the service **queues, schedules, and runs** them. `execute` may still run in a **new** thread, a **pooled** thread, or the **caller** — that is the `Executor` contract, not “always a worker”. **`submit` is `execute` plus a `Future`** — [[What is the difference between submit and execute on an executor service]]. The handle: [[How would you explain the Future interface in java.util.concurrent]].
 
-**Shutdown:** `shutdown()` rejects **new** tasks and lets queued ones finish. `shutdownNow()` tries to **stop** running tasks (typically **`interrupt`**) and returns **waiting** tasks. `isTerminated` is true only after a shutdown **and** all tasks are done. **`close()`** (19+) is orderly shutdown **then wait**. An unused service should be shut down so workers can be **reclaimed**. Pools: [[How would you explain thread pools and executor frameworks in Java]]. Cached pool: [[How would you explain Executors.newCachedThreadPool()]]. Futures: [[How would you explain the Future interface in java.util.concurrent]].
+**Shutdown is part of the type.** `shutdown()` rejects **new** work and lets queued tasks finish. `shutdownNow()` tries to **stop** running tasks (typically **interrupt**) and returns **waiting** ones. `isTerminated` is true only **after** a shutdown **and** every task is done. **`close()`** (19+, `AutoCloseable`) is orderly shutdown **then wait**. An unused service should be shut down so non-daemon workers can die.
 
 ```java
-try (ExecutorService pool = Executors.newFixedThreadPool(10)) {
-    Future<?> f = pool.submit(() -> {});
-    f.get();
+try (ExecutorService pool = Executors.newFixedThreadPool(4)) {
+    Future<Integer> f = pool.submit(() -> 42);
+    int n = f.get();
 }
 ```
 
-**Listing 1.** Factory returns an `ExecutorService`. `submit` gives a `Future`. `try-with-resources` calls `close()`.
+**Listing 1.** Code against the interface. The factory chooses the implementation. `try-with-resources` calls `close()`.
 
 ```d2
 direction: down
-ex: "Executor.execute" {
-  width: 200
-  height: 40
+e: "Executor\nexecute(Runnable)" {
+  width: 220
+  height: 44
   style.fill: "#e3f2fd"
 }
-es: "ExecutorService\nsubmit, invoke*, shutdown" {
-  width: 280
+es: "ExecutorService\nFuture + shutdown" {
+  width: 260
   height: 50
   style.fill: "#e8f5e9"
 }
-ex -> es: "extends"
+impl: "ThreadPoolExecutor\n(and other impls)" {
+  width: 240
+  height: 44
+  style.fill: "#fff8e1"
+}
+e -> es: "extends"
+es -> impl: "implemented by"
 ```
 
-**Fig. 1.** The interface is execution **plus** a handle and a termination protocol — not “a queue” by itself.
+**Fig. 1.** The interface is the extra contract on top of `Executor`. A pool is one implementation.
 
-> [!warning] `execute` is not always a pool thread
-> The contract allows the **calling** thread. `CallerRunsPolicy` uses that. `submit` still goes through `execute` after wrapping.
+> [!warning] Forgetting shutdown keeps the JVM alive
+> Default pool threads are **non-daemon**. If you never `shutdown` / `close`, those workers outlive your last task and the process may not exit.
 
-> [!warning] Forgetting `shutdown` keeps workers alive
-> Default pool threads are **non-daemon**. The process can sit until those threads die. Shut down (or `close`) when you are done.
+> [!warning] `execute` is not “always a pool thread”
+> The interface allows the **calling** thread. `ThreadPoolExecutor.CallerRunsPolicy` uses that. Do not assume `execute` started a worker.
 
 > [!tip] Interview answer
-> ExecutorService is Executor plus Futures and shutdown. I submit Callables or Runnables, then get or invokeAll, and I always shut the service down. execute alone has no result handle and might even run on the caller.
+> ExecutorService is Executor plus two things: a Future when I submit work, and a shutdown protocol so I can stop accepting tasks and reclaim threads. I code to the interface; newFixedThreadPool and friends return implementations. I always shut it down when I am done, because pool threads are not daemon by default.
