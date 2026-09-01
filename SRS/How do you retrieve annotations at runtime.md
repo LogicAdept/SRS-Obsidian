@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Annotations #SRS #New
+#Java/Annotations #Java/Language/Reflection #SRS #New
 
 > [!warning] Untrusted draft
 > Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.

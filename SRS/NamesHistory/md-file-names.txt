@@ -1995,7 +1995,6 @@
 - [x] What is ReadWriteLock.md
 - [x] What is record (Java 14+).md
 - [x] What is refactoring.md
-- [x] What is Reflection.md
 - [x] What is regression testing.md
 - [x] What is rejection sampling.md
 - [x] What is ReplacingMergeTree.md
@@ -2410,7 +2409,7 @@
 - [x] What is the longest common subsequence problem.md
 - [x] What is the longest increasing subsequence problem.md
 - [x] What is the machine learning lifecycle.md
-- [x] What is the main idea of reflection in Java.md
+- [x] What is reflection in Java.md
 - [x] What is the main purpose of caching in an ORM.md
 - [x] What is the main purpose of the Map interface.md
 - [x] What is the Manhattan norm.md
