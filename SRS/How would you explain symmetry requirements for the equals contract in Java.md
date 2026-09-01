@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/OOP #Java/Language/Records #SRS
+#Java/HashCodeEquals/Contract #Java/OOP #Java/Language/Records #SRS
 
 # How would you explain symmetry requirements for the `equals` contract in Java?
 
@@ -11,7 +11,7 @@ priority: 0
 
 ## The rule
 
-The contract: `x.equals(y)` is `true` if and only if `y.equals(x)` is `true`. Together with reflexivity and transitivity this keeps a single partition. [[What properties does an equivalence relation induced by equals have]] is that partition.
+The contract: `x.equals(y)` is `true` if and only if `y.equals(x)` is `true`. Together with reflexivity and transitivity this keeps a single partition. [[What is the Object equals contract]] is that partition.
 
 ```java
 x.equals(y) == y.equals(x)  // required, both true or both false

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Contract #SRS
 
 # How would you explain the `hashCode` method contract in Java?
 
@@ -15,7 +15,7 @@ priority: 0
 2. **Equal objects, equal hashes.** `equals` true implies equal hash codes. This is the rule that makes hash-based lookup sound.
 3. **Unequal objects need not differ.** Distinct hashes for unequal objects usually improve hash-table speed, but they are not required. A constant `hashCode` still satisfies the contract.
 
-The inherited `Object.hashCode` aims, as far as is reasonably practical, to return distinct integers for distinct objects. That is an implementation goal for identity equality, not a requirement you must copy when you override. See [[How would you explain the Object equals method contract]] and [[How would you explain the equals and hashCode contract together in Java]].
+The inherited `Object.hashCode` aims, as far as is reasonably practical, to return distinct integers for distinct objects. That is an implementation goal for identity equality, not a requirement you must copy when you override. See [[What is the Object equals contract]] and [[How would you explain the equals and hashCode contract together in Java]].
 
 > [!warning] The implication is one-way
 > Same hash does not mean `equals` is true. [[Why can two unequal objects share the same hashCode value]] is exactly this clause. Treating a collision as a bug is the usual interview mistake.

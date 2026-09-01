@@ -84,6 +84,7 @@ key.id = 2; // changes equals/hashCode; reference unchanged
 
 byValue.get(key);              // typically null — contract unspecified
 byRef.get(key);                // "v" — still key == stored key
+byRef.containsKey(key);        // true — same == test as get
 byRef.get(new MutableId(2));   // null — different reference
 ```
 
@@ -93,6 +94,9 @@ byRef.get(new MutableId(2));   // null — different reference
 
 > [!warning] “Need not be immutable” is not “mutate freely”
 > Identity still **is** the reference. `get(new MutableId(2))` misses even when `equals` would be true. Rebinding a variable to a new object is a different key, not a field update. If the same instance is also a `HashMap` key, mutating it still leaves that map unspecified. Immutability remains a good default for value maps; this class is the exception because it never consults `equals`/`hashCode` on the key.
+
+> [!warning] A quiet `equals` log is not extra magic
+> Samples that print inside `equals` / `hashCode` stay silent on the `IdentityHashMap` path because lookup never calls those methods. That is the documented `==` / `identityHashCode` rule, not a quirk of one demo.
 
 > [!tip] Interview answer
 > **No.** `IdentityHashMap` matches with `==` and hashes with `System.identityHashCode`, so the usual “keep `equals`/`hashCode` stable” rule does not apply to lookup. Mutating fields on the stored instance does not hide the entry. You still have to pass that same object; a new equal instance is a miss, and `HashMap` still requires stable keys.

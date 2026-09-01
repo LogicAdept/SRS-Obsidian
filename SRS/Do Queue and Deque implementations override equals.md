@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Queues #Java/HashCodeEquals #SRS
+#Java/Collections/Queues #Java/HashCodeEquals/Contract #SRS
 
 # Do `Queue` and `Deque` implementations override `equals`?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/Language/Enum #Java/Language/Records #Java/Versions/16 #SRS
+#Java/HashCodeEquals/Implementation #Java/Language/Enum #Java/Language/Records #Java/Versions/16 #SRS
 
 # When should you override `equals` in Java?
 
@@ -11,7 +11,7 @@ priority: 0
 
 ## The question is semantic, not syntactic
 
-`Object.equals` is identity. That is already a valid equivalence relation: one instance, one class. Override only when your type’s meaning is “these two copies represent the same thing.” The contract then constrains *how* that new relation must behave; it does not tell you *which* fields matter. [[How would you explain the Object equals method contract]] is the constraint. [[In a business context must equals consider all entity fields]] is a domain choice (often a stable id, not every column).
+`Object.equals` is identity. That is already a valid equivalence relation: one instance, one class. Override only when your type’s meaning is “these two copies represent the same thing.” The contract then constrains *how* that new relation must behave; it does not tell you *which* fields matter. [[What is the Object equals contract]] is the constraint. [[In a business context must equals consider all entity fields]] is a domain choice (often a stable id, not every column).
 
 ```d2
 direction: down

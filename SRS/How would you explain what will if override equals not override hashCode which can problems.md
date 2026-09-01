@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/Collections/Map/HashMap #Java/Collections/Set/HashSet #SRS
+#Java/HashCodeEquals/Contract #Java/Collections/Map/HashMap #Java/Collections/Set/HashSet #SRS
 
 # What goes wrong if you override `equals` but not `hashCode`?
 

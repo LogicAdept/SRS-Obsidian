@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Methodologies/DDD #Java/Persistence/JPA #SRS
+#Java/HashCodeEquals/Implementation #Methodologies/DDD #Java/Persistence/JPA #SRS
 
 # In a business context must `equals` consider all entity fields?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Contract #SRS
 
 # If you override `equals`, which other methods must you override?
 

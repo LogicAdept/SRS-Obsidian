@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/String #DSA/Algorithms/Hashing #SRS
+#Java/HashCodeEquals/Contract #Java/String #DSA/Algorithms/Hashing #SRS
 
 # Why can two unequal objects share the same `hashCode` value?
 

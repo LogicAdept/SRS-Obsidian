@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/OOP #Java/Language/Records #Java/Versions/16 #SRS
+#Java/HashCodeEquals/Contract #Java/OOP #Java/Language/Records #Java/Versions/16 #SRS
 
 # How would you explain default `equals` and `hashCode` inherited from `Object`?
 

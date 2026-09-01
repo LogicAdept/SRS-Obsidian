@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Contract #SRS
 
 # Can distinct references still be equal under `equals`?
 
@@ -11,7 +11,7 @@ priority: 0
 
 ## Identity vs value equality
 
-`==` on references compares object identity. `equals` may mean the same thing or a logical equivalence the class chooses. [[How would you explain the Object equals method contract]] is the five-clause contract that any override must keep.
+`==` on references compares object identity. `equals` may mean the same thing or a logical equivalence the class chooses. [[What is the Object equals contract]] is the five-clause contract that any override must keep.
 
 ```d2
 direction: down

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/String #Java/Arrays #SRS
+#Java/HashCodeEquals/Contract #Java/String #Java/Arrays #SRS
 
 # How do you compare objects for equality in Java?
 

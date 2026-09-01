@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/Language/Records #SRS
+#Java/HashCodeEquals/Implementation #Java/Language/Records #SRS
 
 # How would you explain which fields should be included when implementing `hashCode` in Java?
 

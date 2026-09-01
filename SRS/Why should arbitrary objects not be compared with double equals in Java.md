@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/String #Java/Arrays #SRS
+#Java/HashCodeEquals/Contract #Java/String #Java/Arrays #SRS
 
 # Why should arbitrary objects not be compared with double equals in Java?
 
@@ -52,7 +52,7 @@ q -> no
 
 Primitive `==` is a different operator: numeric / boolean equality. For `double`, it is **not** an equivalence relation (`NaN != NaN`, `+0.0 == -0.0`). `Double.equals` uses representation equivalence instead. Do not mix “I used `==` on the objects” with “I used `==` on the primitives inside `equals`.”
 
-You **need** `equals` wherever the platform asks for object equality: `HashMap` keys, `HashSet` membership, `List.equals`, `Objects.equals`. Those APIs do not use `==` except `IdentityHashMap`, which is the rare identity table. `HashMap` may use `==` as a **fast path** when the stored key is the same reference, then `equals`. Pair a value `equals` with `hashCode`: [[Why should equals and hashCode be overridden together]]. [[How do you compare objects for equality in Java]] is the menu. [[How does Java decide whether two objects are equivalent]] is `equals` dispatch. [[How does IdentityHashMap decide whether two keys are the same]]. Distinct copies that still `equals` are [[Can different objects ref0 != ref1 be ref0.equals(ref1 == true]]; same reference that must `equals` is [[Can different references on object ref0 == ref1 be ref0.equals(ref1 == false]]. The five-clause contract is [[How would you explain the Object equals method contract]]. Membership under the pair is [[How would you explain HashSet, hashCode]].
+You **need** `equals` wherever the platform asks for object equality: `HashMap` keys, `HashSet` membership, `List.equals`, `Objects.equals`. Those APIs do not use `==` except `IdentityHashMap`, which is the rare identity table. `HashMap` may use `==` as a **fast path** when the stored key is the same reference, then `equals`. Pair a value `equals` with `hashCode`: [[Why should equals and hashCode be overridden together]]. [[How do you compare objects for equality in Java]] is the menu. [[How does Java decide whether two objects are equivalent]] is `equals` dispatch. [[How does IdentityHashMap decide whether two keys are the same]]. Distinct copies that still `equals` are [[Can different objects ref0 != ref1 be ref0.equals(ref1 == true]]; same reference that must `equals` is [[Can different references on object ref0 == ref1 be ref0.equals(ref1 == false]]. The five-clause contract is [[What is the Object equals contract]]. Membership under the pair is [[How would you explain HashSet, hashCode]].
 
 > [!warning] “It worked on String literals”
 > `"Ada" == "Ada"` can be true because literals may share one interned object. `new String("Ada")` does not. Tests that use `==` on strings are accidental. Enum constants are a rare case where identity and equality coincide (`Enum.equals` is final and identity-based); that does not license `==` for arbitrary objects.

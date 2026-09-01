@@ -2,12 +2,12 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/OOP #SRS
+#Java/HashCodeEquals/Contract #Java/OOP #SRS
 
-# How would you explain the `Object.equals` method contract?
+# What is the `Object.equals` contract?
 
 > [!abstract] Short answer
-> `equals` answers whether two object references represent the same **logical value**. The implementation inherited from `Object` uses identity, so it returns `true` only for two references to the same instance. An override may define value equality, but it must remain reflexive, symmetric, transitive, consistent while relevant state is unchanged, and return `false` for `null`.
+> `equals` answers whether two object references represent the same **logical value**. The implementation inherited from `Object` uses identity, so it returns `true` only for two references to the same instance. An override may define value equality, but it must remain reflexive, symmetric, transitive, consistent while relevant state is unchanged, and return `false` for `null`. Those rules partition objects into equivalence classes.
 
 ## Default identity equality
 
@@ -32,10 +32,45 @@ For non-null references `x`, `y`, and `z`:
 4. **Consistent:** repeated comparisons give the same result while equality-relevant state remains unchanged.
 5. **Non-null:** `x.equals(null)` is `false`.
 
-These rules make equality an equivalence relation: objects are partitioned into groups whose members are interchangeable for the semantics represented by that class. See [[What properties does an equivalence relation induced by equals have]].
+The first three are a mathematical equivalence relation. They **partition** objects into classes: members of a class are equal to each other and substitutable for the semantics that `equals` encodes. Under `Object.equals`, each class is a singleton (`x == y`). A value override may only **merge** classes. It must not split one instance in two (reflexivity) or put `a` with `b` but not `b` with `a` (symmetry). [[How would you explain symmetry requirements for the equals contract in Java]] is the usual inheritance break. [[Can different references on object ref0 == ref1 be ref0.equals(ref1 == false]] is reflexivity. [[How would you explain someObj.equals(null)]] is clause 5 versus `null.equals(x)` (`NullPointerException`).
+
+```d2
+direction: down
+objs: "Non-null instances" {
+  width: 240
+  height: 70
+  style.fill: "#e3f2fd"
+}
+p: "equals partitions" {
+  width: 220
+  height: 70
+  style.fill: "#fff3e0"
+}
+c1: "Class {a}" {
+  width: 160
+  height: 60
+  style.fill: "#e8f5e9"
+}
+c2: "Class {b, b2}" {
+  width: 180
+  height: 60
+  style.fill: "#e8f5e9"
+}
+
+objs -> p
+p -> c1
+p -> c2
+```
+
+**Fig. 1.** Identity `equals` yields singleton classes. Value `equals` may put `b` and `b2` in one class; then they must share `hashCode`.
+
+A `HashSet` keeps at most one representative per class; a `HashMap` replaces the value for that class. Both require `hashCode` identical throughout a class. [[How would you explain the equals and hashCode contract together in Java]] is that pairing. `Comparator.compare == 0` is a different equivalence; it matches this partition only when the comparator is consistent with `equals` ([[Why must TreeMap ordering be consistent with equals]]).
 
 > [!warning] Consistency is conditional
 > The contract does not require an object to remain equal forever. It requires stable results only while information used by `equals` is unchanged. Mutating equality state is still dangerous when an object is stored in a hash-based collection; [[Can you lose objects in a HashMap due to mutable or poorly chosen keys]] shows why.
+
+> [!warning] `float` / `double` `==` is not an equivalence
+> `NaN != NaN`, so primitive `==` does not satisfy reflexivity for those types. Compare fields with representation equivalence (`Double.compare` / `doubleToLongBits`), not `==`.
 
 ## A correct final value class
 
@@ -120,4 +155,4 @@ The contract determines the required properties, but it does **not** decide whic
 > `instanceof` allows comparisons with subclasses. If a subclass adds identity state and changes `equals`, symmetry or transitivity can fail. A final value class avoids this issue. For an extensible hierarchy, decide explicitly whether equality may cross class boundaries; using `getClass()` rejects cross-class equality, while `instanceof` requires subclasses to preserve the base relation.
 
 > [!tip] Interview answer
-> **`Object.equals` uses reference identity by default. An override defines logical equality and must be reflexive, symmetric, transitive, consistent while relevant state is unchanged, and false for `null`. Override the exact `equals(Object)` signature, compare the fields that define identity, and provide a compatible `hashCode` whenever equal objects can be distinct instances.**
+> **`Object.equals` uses reference identity by default. An override defines logical equality and must be reflexive, symmetric, transitive, consistent while relevant state is unchanged, and false for `null`. That relation partitions objects into classes: identity yields singletons, a value override only merges. Override the exact `equals(Object)` signature, compare the fields that define identity, and provide a compatible `hashCode` whenever equal objects can be distinct instances.**

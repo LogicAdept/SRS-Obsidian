@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/Arrays #Java/Language/Records #Java/Versions/16 #SRS
+#Java/HashCodeEquals/Implementation #Java/Arrays #Java/Language/Records #Java/Versions/16 #SRS
 
 # What steps must you follow to implement `hashCode` correctly?
 

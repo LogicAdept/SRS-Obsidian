@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Implementation #SRS
 
 # What is the difference between `getClass()` and `instanceof` in `equals`?
 
@@ -13,7 +13,7 @@ priority: 0
 
 `that instanceof MyClass` is true when `that` could be cast to `MyClass` without `ClassCastException` — this class, a subclass, or an implementor of that interface. `null instanceof MyClass` is **false** (no NPE).
 
-`this.getClass() == that.getClass()` compares the two **runtime** `Class` objects. A subclass has a different `Class`, so it fails. `that` must be non-null first or `that.getClass()` throws. [[How would you explain someObj.equals(null)]] [[How would you explain the Object equals method contract]]
+`this.getClass() == that.getClass()` compares the two **runtime** `Class` objects. A subclass has a different `Class`, so it fails. `that` must be non-null first or `that.getClass()` throws. [[How would you explain someObj.equals(null)]] [[What is the Object equals contract]]
 
 ```text
 that == null

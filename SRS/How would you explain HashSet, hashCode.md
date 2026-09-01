@@ -77,7 +77,7 @@ set.size();      // still 1
 
 **Listing 2.** Conceptual: mutate after `add`. Prefer immutable elements (`String`, records with immutable components). [[Why are mutable keys such as byte arrays risky in a HashMap]]
 
-A `HashMap` key has the same trap. Identity maps are the exception: mutating fields does not change `==`. [[What happens if you mutate an IdentityHashMap key after insertion]]
+A `HashMap` key has the same trap. Identity maps are the exception: mutating fields does not change `==`. [[Must IdentityHashMap keys be immutable]]
 
 > [!warning] “Lost” is not `remove`
 > Interview shorthand “you lose the object” means **lost to `contains`/`remove`**, not GC. The set still references it (`size` stays up; iteration can still visit it). You may be unable to drop it except by iterating and removing through the iterator, or `clear()`. Do not mutate `equals`/`hashCode` state of a live set element.

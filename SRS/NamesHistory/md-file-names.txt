@@ -1089,7 +1089,7 @@
 - [x] How would you explain the N plus one query problem in general.md
 - [x] How would you explain the Nashorn JavaScript engine on the JVM.md
 - [x] How would you explain the Object clone method and its issues.md
-- [x] How would you explain the Object equals method contract.md
+- [x] What is the Object equals contract.md
 - [x] How would you explain the Object wait method and waiting on monitors.md
 - [x] How would you explain the open closed principle in SOLID.md
 - [x] How would you explain the PECS rule for generic method signatures.md
@@ -2554,7 +2554,6 @@
 - [x] What problems does the Spring Framework address.md
 - [x] What professional goals do you set for yourself.md
 - [x] What project would I start on and what is its technical stack.md
-- [x] What properties does an equivalence relation induced by equals have.md
 - [x] What protocols does RabbitMQ support.md
 - [x] What RabbitMQ exchange types exist.md
 - [x] What RabbitMQ metrics do you monitor.md
@@ -3176,7 +3175,6 @@
 - [+] Does IdentityHashMap use the hashCode method.md
 - [+] How does IdentityHashMap decide whether two keys are the same.md
 - [+] Must IdentityHashMap keys be immutable.md
-- [+] What happens if you mutate an IdentityHashMap key after insertion.md
 - [+] Does IdentityHashMap allow null keys or values.md
 - [+] Is IdentityHashMap synchronized.md
 - [+] Are IdentityHashMap iterators fail-fast.md

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/OOP #Java/Language/Records #SRS
+#Java/HashCodeEquals/Implementation #Java/OOP #Java/Language/Records #SRS
 
 # How do you override `equals` correctly in Java?
 
@@ -11,7 +11,7 @@ priority: 0
 
 ## Decide whether value equality is needed
 
-Keep the inherited identity equality when each instance is unique. Override `equals` when distinct instances should represent the same logical value, for example a coordinate, a money amount, or an identifier. That choice is semantic; the contract only constrains how the chosen equality must behave. See [[When should you override equals in Java]] and [[How would you explain the Object equals method contract]].
+Keep the inherited identity equality when each instance is unique. Override `equals` when distinct instances should represent the same logical value, for example a coordinate, a money amount, or an identifier. That choice is semantic; the contract only constrains how the chosen equality must behave. See [[When should you override equals in Java]] and [[What is the Object equals contract]].
 
 ## Required implementation steps
 

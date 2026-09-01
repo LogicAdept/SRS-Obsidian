@@ -2,14 +2,14 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Contract #SRS
 
 # How would you explain `someObj.equals(null)`?
 
 > [!abstract] Short answer
 > **`false`**, when `someObj` is a non-null reference. The `Object.equals` contract requires that for any non-null `x`, `x.equals(null)` returns `false`. A correct override must do the same and must not throw on a null argument.
 
-This is one clause of the full equivalence rules in [[How would you explain the Object equals method contract]]. It is not the same as calling a method on a null *receiver*.
+This is one clause of the full equivalence rules in [[What is the Object equals contract]]. It is not the same as calling a method on a null *receiver*.
 
 ## What the contract requires
 

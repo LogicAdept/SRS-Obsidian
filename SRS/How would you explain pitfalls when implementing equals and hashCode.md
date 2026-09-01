@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/Collections/Map/HashMap #Java/Arrays #Java/Immutability #Java/Persistence/JPA #SRS
+#Java/HashCodeEquals/Implementation #Java/Collections/Map/HashMap #Java/Arrays #Java/Immutability #Java/Persistence/JPA #SRS
 
 # How would you explain pitfalls when implementing `equals` and `hashCode`?
 

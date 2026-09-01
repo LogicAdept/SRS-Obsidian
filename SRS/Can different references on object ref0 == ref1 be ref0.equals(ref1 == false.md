@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Contract #SRS
 
 # Can two references with `ref0 == ref1` have `ref0.equals(ref1) == false`?
 
@@ -25,7 +25,7 @@ ref0 == ref1 == null
     → not a false result; the call does not complete
 ```
 
-**Listing 1.** Reflexivity plus `Object`’s identity implementation. [[How would you explain the Object equals method contract]] and [[What properties does an equivalence relation induced by equals have]] are the other `equals` laws. The opposite cue — distinct references that still `equals` — is [[Can different objects ref0 != ref1 be ref0.equals(ref1 == true]].
+**Listing 1.** Reflexivity plus `Object`’s identity implementation. [[What is the Object equals contract]] covers the other `equals` laws. The opposite cue — distinct references that still `equals` — is [[Can different objects ref0 != ref1 be ref0.equals(ref1 == true]].
 
 ```d2
 direction: down

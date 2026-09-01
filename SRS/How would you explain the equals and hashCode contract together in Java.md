@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Contract #SRS
 
 # How would you explain the `equals` and `hashCode` contract together in Java?
 
@@ -21,7 +21,7 @@ For non-null references, `equals` defines an equivalence relation:
 - **Consistent:** repeated calls return the same result while equality-relevant state is unchanged.
 - **Non-null:** `x.equals(null)` is `false`.
 
-The implementation inherited from `Object` uses reference identity: two references are equal only when they refer to the same object. Override it when distinct instances should represent the same logical value. See [[How would you explain the Object equals method contract]].
+The implementation inherited from `Object` uses reference identity: two references are equal only when they refer to the same object. Override it when distinct instances should represent the same logical value. See [[What is the Object equals contract]].
 
 ### What `hashCode` must guarantee
 

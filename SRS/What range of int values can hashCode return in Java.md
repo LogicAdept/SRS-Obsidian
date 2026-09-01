@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/Language/Primitives #SRS
+#Java/HashCodeEquals/Contract #Java/Language/Primitives #SRS
 
 # What range of `int` values can `hashCode` return in Java?
 

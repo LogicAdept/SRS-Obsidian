@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Implementation #SRS
 
 # Can you implement `equals` as `equals(MyClass that)`?
 
@@ -22,7 +22,7 @@ MyClass.equals(MyClass)   extra overload — only when the compiler
 public boolean equals(MyClass that)   // does not compile
 ```
 
-**Listing 1.** Two methods named `equals`, not one override. [[How do you override equals correctly in Java]] is `equals(Object)` plus `hashCode`. [[How would you explain the Object equals method contract]] is what you must implement.
+**Listing 1.** Two methods named `equals`, not one override. [[How do you override equals correctly in Java]] is `equals(Object)` plus `hashCode`. [[What is the Object equals contract]] is what you must implement.
 
 ```d2
 direction: down

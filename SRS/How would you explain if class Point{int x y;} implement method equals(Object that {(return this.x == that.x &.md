@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Set/HashSet #Java/Collections/Map/HashMap #Java/HashCodeEquals #SRS
+#Java/Collections/Set/HashSet #Java/Collections/Map/HashMap #Java/HashCodeEquals/Implementation #SRS
 
 # Can a `Point` with `equals` on `x,y` and `hashCode` of only `x` work in a `HashSet`?
 

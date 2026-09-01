@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/OOP #Java/Language/Records #Java/Versions/16 #SRS
+#Java/HashCodeEquals/Contract #Java/OOP #Java/Language/Records #Java/Versions/16 #SRS
 
 # Where do default `equals` and `hashCode` implementations come from in Java?
 

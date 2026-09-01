@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Implementation #SRS
 
 # Can you implement `equals` by comparing only `hashCode` values?
 

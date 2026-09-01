@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Contract #SRS
 
 # What is the difference between `equals` and `hashCode` contracts?
 
@@ -44,7 +44,7 @@ hc -> link
 
 ## What each contract actually lists
 
-`equals` (non-null `x`, `y`, `z`): reflexive, symmetric, transitive, consistent while equality state is unchanged, and `x.equals(null)` is `false`. That is an equivalence relation. [[How would you explain the Object equals method contract]] and [[What properties does an equivalence relation induced by equals have]] unpack those five.
+`equals` (non-null `x`, `y`, `z`): reflexive, symmetric, transitive, consistent while equality state is unchanged, and `x.equals(null)` is `false`. That is an equivalence relation. [[What is the Object equals contract]] unpacks those five.
 
 `hashCode`: the same `int` on repeated calls in one run while that `equals` state is unchanged; equal objects produce the same `int`; unequal objects **may** share an `int`. The integer need not be stable across JVM runs. Distinct hashes are recommended for speed, not required. [[How would you explain the hashCode method contract in Java]] is that list.
 

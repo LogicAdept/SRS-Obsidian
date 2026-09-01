@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #SRS
+#Java/HashCodeEquals/Contract #SRS
 
 # How does Java decide whether two objects are equivalent?
 
@@ -18,7 +18,7 @@ Objects.equals(a, b);  // both null → true; else a.equals(b) if a != null
 
 **Listing 1.** Equivalence of two references is `equals`, not a compiler comparison of fields. `Objects.equals` only adds a null-safe dispatch.
 
-`Object.equals` implements the most discriminating equivalence relation: each non-null instance is its own class. An override may coarsen that partition so distinct instances are substitutable “at least for some purposes.” That wording is in the `equals` specification. [[How would you explain the Object equals method contract]] lists the five rules the override must still obey.
+`Object.equals` implements the most discriminating equivalence relation: each non-null instance is its own class. An override may coarsen that partition so distinct instances are substitutable “at least for some purposes.” That wording is in the `equals` specification. [[What is the Object equals contract]] lists the five rules the override must still obey.
 
 ```d2
 direction: down

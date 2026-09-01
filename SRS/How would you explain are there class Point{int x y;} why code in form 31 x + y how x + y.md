@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #DSA/Algorithms/Hashing #SRS
+#Java/HashCodeEquals/Implementation #DSA/Algorithms/Hashing #SRS
 
 # Why is `Point` hashCode `31 * x + y` better than `x + y`?
 

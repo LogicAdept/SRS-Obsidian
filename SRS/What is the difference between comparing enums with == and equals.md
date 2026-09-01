@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Enum #Java/HashCodeEquals #SRS
+#Java/Language/Enum #Java/HashCodeEquals/Contract #SRS
 
 # What is the difference between comparing enums with `==` and `equals`?
 

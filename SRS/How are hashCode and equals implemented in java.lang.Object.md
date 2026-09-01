@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/Language/Object #Java/OOP #SRS
+#Java/HashCodeEquals/Contract #Java/Language/Object #Java/OOP #SRS
 
 # How are `hashCode` and `equals` implemented in `java.lang.Object`?
 
@@ -22,7 +22,7 @@ public boolean equals(Object obj) {
 }
 ```
 
-**Listing 1.** Default implementations. `equals` is ordinary Java (`this == obj`). `hashCode` is implemented by the JVM (HotSpot may intrinsic the call). Distinct instances are never equal under this method, even when every field matches. [[How would you explain the Object equals method contract]] is the five-clause contract this pair already satisfies.
+**Listing 1.** Default implementations. `equals` is ordinary Java (`this == obj`). `hashCode` is implemented by the JVM (HotSpot may intrinsic the call). Distinct instances are never equal under this method, even when every field matches. [[What is the Object equals contract]] is the five-clause contract this pair already satisfies.
 
 The class javadoc only promises distinct ints **as far as is reasonably practical** — not uniqueness, not an address. That matches identity `equals`: each instance is unequal to the others, so distinct hashes are the quality goal.
 
