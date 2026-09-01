@@ -124,8 +124,9 @@ After you create, fill, retag, or delete SRS cards (or edit the Tags.md tree), r
 python .cursor/skills/process-topic/scripts/rebuild-coverage-index.py
 ```
 
-The Docker fill orchestrator rebuilds once on `--finalize` after refine-tags
-and dedup-tag. Do not rebuild during a Docker fill turn.
+The Docker fill orchestrator rebuilds once after fill turns on `--until-tag`
+(or `--finalize`), after refine-tags and dedup-tag. Do not rebuild during a
+Docker fill turn.
 
 ## Do not
 

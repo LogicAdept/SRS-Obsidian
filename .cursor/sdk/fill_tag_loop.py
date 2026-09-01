@@ -2,8 +2,9 @@
 """Fill #New cards under a tag with one durable Cursor agent.
 
 The orchestrator names one target per send, waits, then validates that card
-before asking for the next. --finalize, used once after filling is done, runs
-/refine-tags and /dedup-tag for the tag, then rebuilds the coverage index.
+before asking for the next. --until-tag fills every remaining #New card, then
+runs /refine-tags and /dedup-tag and rebuilds the coverage index. --finalize
+alone does that post-phase without filling. --no-finalize skips it.
 Real runs are accepted only inside the hardened Docker workspace created by
 run_fill_tag.ps1. Direct host execution is limited to --dry-run.
 """
@@ -733,8 +734,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Fill #New cards under one tag with one durable Cursor agent; "
-            "each send names a single card. Pass --finalize once filling is "
-            "done to run /refine-tags and /dedup-tag, then rebuild the index."
+            "each send names a single card. --until-tag fills the tag, then "
+            "runs /refine-tags and /dedup-tag and rebuilds the index."
         )
     )
     parser.add_argument("tag", metavar="TAG")
@@ -750,16 +751,25 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--until-tag",
         action="store_true",
-        help="Fill every remaining #New card under the tag, one send per card.",
+        help=(
+            "Fill every remaining #New card under the tag, then run "
+            "refine-tags, dedup-tag, and one index rebuild."
+        ),
     )
     parser.add_argument(
         "--finalize",
         action="store_true",
         help=(
             "After fill turns (if any), run /refine-tags and /dedup-tag for "
-            "this tag, then rebuild the coverage index once. Do not pass this "
-            "on every tag fill; use it once when filling is finished."
+            "this tag, then rebuild the coverage index once. Implied by "
+            "--until-tag when --limit is omitted. Pass alone to refine a "
+            "clone whose fill queue is already empty."
         ),
+    )
+    parser.add_argument(
+        "--no-finalize",
+        action="store_true",
+        help="Skip refine-tags, dedup-tag, and index even with --until-tag.",
     )
     parser.add_argument("--model", default="grok-4.6-high")
     parser.add_argument("--max-retries", type=int, default=2)
@@ -778,6 +788,10 @@ def main() -> int:
         raise SystemExit("--limit must be at least 1")
     if args.max_retries < 0:
         raise SystemExit("--max-retries cannot be negative")
+    if args.finalize and args.no_finalize:
+        raise SystemExit("choose --finalize or --no-finalize, not both")
+    if args.until_tag and args.limit is None and not args.no_finalize:
+        args.finalize = True
     if not TAGS_MD.is_file() or not FILL_SKILL.is_file():
         raise SystemExit("required Tags.md or fill-tag skill is missing")
     refine_skill = REPO / ".cursor" / "skills" / "refine-tags" / "SKILL.md"
@@ -830,7 +844,10 @@ def main() -> int:
         if args.finalize:
             print("then /refine-tags, then /dedup-tag, then rebuild coverage index", flush=True)
         else:
-            print("fill only; pass --finalize once at the end for refine, dedup, and index", flush=True)
+            print(
+                "fill only; --until-tag (or --finalize) runs refine, dedup, and index",
+                flush=True,
+            )
         return 0
     if not selected and not args.finalize:
         return 0
