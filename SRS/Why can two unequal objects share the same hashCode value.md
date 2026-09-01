@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/String #SRS
+#Java/HashCodeEquals #Java/String #DSA/Algorithms/Hashing #SRS
 
 # Why can two unequal objects share the same `hashCode` value?
 
@@ -11,7 +11,7 @@ priority: 0
 
 ## The contract allows it
 
-`Object.hashCode` requires equal objects to share a hash. It does **not** require the converse. Unequal objects may return the same integer; distinct hashes are recommended only because they usually make hash tables faster. [[How would you explain the hashCode method contract in Java]] is that three-clause rule; this card is the third clause.
+`Object.hashCode` requires equal objects to share a hash. It does **not** require the converse. Unequal objects may return the same integer; distinct hashes are recommended only because they usually make hash tables faster. [[How would you explain the hashCode method contract in Java]] is that three-clause rule; this card is the third clause. The `Map` javadoc’s contrapositive is the same fact: **unequal hashes ⇒ not `equals`**. Same hash ⇒ maybe equal, maybe not. [[What is the difference between equals and hashCode contracts]] is that one-way implication.
 
 ```d2
 direction: down
@@ -42,7 +42,7 @@ uneq -> may
 
 **Fig. 1.** Equality implies equal hashes. Unequality does not imply different hashes.
 
-Pigeonhole makes collisions inevitable for any `int` hash as soon as more than 2³² distinct values exist. Even before that bound, an implementation may return a constant and still obey the contract.
+Pigeonhole makes collisions inevitable for any `int` hash as soon as more than 2³² distinct values exist. Even before that bound, an implementation may return a constant and still obey the contract. Many identical hashes just make the table slow: [[What happens to HashMap if all keys share the same hashCode]]. That is a collision factory, not a substitute for [[Why should equals and hashCode be overridden together]].
 
 ## A specified `String` collision
 

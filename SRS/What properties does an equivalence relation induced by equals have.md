@@ -19,7 +19,7 @@ The `equals` contract requires, for non-null `x`, `y`, `z`:
 4. Repeated calls agree while equality-relevant information is unmodified
 5. `x.equals(null)` is `false`
 
-The first three are the mathematical equivalence relation. The specification then says that relation **partitions** the elements into equivalence classes: everyone in a class is equal to everyone else in it, and members are substitutable at least for some purposes. [[How would you explain the Object equals method contract]] is the same list in API order. [[How would you explain symmetry requirements for the equals contract in Java]] is why a one-way `instanceof` check blows the partition.
+The first three are the mathematical equivalence relation. The specification then says that relation **partitions** the elements into equivalence classes: everyone in a class is equal to everyone else in it, and members are substitutable at least for some purposes. [[How would you explain the Object equals method contract]] is the same list in API order. [[How would you explain symmetry requirements for the equals contract in Java]] is why a one-way `instanceof` check blows the partition. Same-reference `==` cannot be `equals` false if the contract holds; that trap is [[Can different references on object ref0 == ref1 be ref0.equals(ref1 == false]]. Value equality is [[How do you override equals correctly in Java]].
 
 ```d2
 direction: down
@@ -61,7 +61,7 @@ Under `Object.equals`, each class has a **single** element (`x == y`). That is t
 
 ## What the partition buys collections
 
-A `HashSet` keeps at most one representative per class: `add` of an equal key does not grow `size`. `HashMap` replaces the value for that class. Both require `hashCode` identical throughout a class; otherwise an equal object hashes to another bin and the partition is not visible to the table. [[Why should equals and hashCode be overridden together]] is that break.
+A `HashSet` keeps at most one representative per class: `add` of an equal key does not grow `size`. `HashMap` replaces the value for that class. Both require `hashCode` identical throughout a class; otherwise an equal object hashes to another bin and the partition is not visible to the table. [[Why should equals and hashCode be overridden together]] is that break. [[How would you explain HashSet, hashCode]] is membership under that pair.
 
 Consistency is not “immutable forever.” The class may change when you mutate equality state — the partition is then a different relation. Hash tables do not re-place the object. [[Can you lose objects in a HashMap due to mutable or poorly chosen keys]] is that mismatch.
 
@@ -69,6 +69,9 @@ A `Comparator`’s `compare == 0` is another equivalence (the quotient of the or
 
 > [!warning] Breaking one axiom wrecks the partition
 > Fail symmetry and “are these the same class?” depends on which object you ask. Fail transitivity and `Set` can contain `a` and `c` that should have been one element via `b`. `float` primitive `==` is not an equivalence (`NaN`); that is why field comparison uses representation equivalence.
+
+> [!warning] `equals(null)` vs calling equals **on** null
+> `x.equals(null)` must return **`false`**, not throw. `null.equals(x)` is a `NullPointerException` — there is no receiver. A type test via `instanceof` is already false for `null`. [[How would you explain someObj.equals(null)]]
 
 > [!tip] Interview answer
 > **`equals` must be an equivalence relation: reflexive, symmetric, transitive. It cuts the heap into classes of interchangeable values. `Object` uses singleton classes (identity). A value override merges instances and then every member of a class must share one `hashCode`. Consistency holds only while equality state is unchanged.**

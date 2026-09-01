@@ -52,33 +52,13 @@ q -> no
 
 Primitive `==` is a different operator: numeric / boolean equality. For `double`, it is **not** an equivalence relation (`NaN != NaN`, `+0.0 == -0.0`). `Double.equals` uses representation equivalence instead. Do not mix “I used `==` on the objects” with “I used `==` on the primitives inside `equals`.”
 
-`HashMap` may use `==` as a **fast path** when the stored key is the same reference, then `equals`. Your client code should still pass a key that is `equals` to the stored one, not rely on `==`. [[How do you compare objects for equality in Java]] is the menu. [[How does Java decide whether two objects are equivalent]] is `equals` dispatch.
+You **need** `equals` wherever the platform asks for object equality: `HashMap` keys, `HashSet` membership, `List.equals`, `Objects.equals`. Those APIs do not use `==` except `IdentityHashMap`, which is the rare identity table. `HashMap` may use `==` as a **fast path** when the stored key is the same reference, then `equals`. Pair a value `equals` with `hashCode`: [[Why should equals and hashCode be overridden together]]. [[How do you compare objects for equality in Java]] is the menu. [[How does Java decide whether two objects are equivalent]] is `equals` dispatch. [[How does IdentityHashMap decide whether two keys are the same]]. Distinct copies that still `equals` are [[Can different objects ref0 != ref1 be ref0.equals(ref1 == true]]; same reference that must `equals` is [[Can different references on object ref0 == ref1 be ref0.equals(ref1 == false]]. The five-clause contract is [[How would you explain the Object equals method contract]]. Membership under the pair is [[How would you explain HashSet, hashCode]].
 
 > [!warning] “It worked on String literals”
 > `"Ada" == "Ada"` can be true because literals may share one interned object. `new String("Ada")` does not. Tests that use `==` on strings are accidental. Enum constants are a rare case where identity and equality coincide (`Enum.equals` is final and identity-based); that does not license `==` for arbitrary objects.
 
+> [!warning] `==` is not “objects only,” and `equals` is not always state
+> Default `Object.equals` **is** `==`. `int` / `boolean` use `==` for values; there is no instance `equals` on primitives. Calling `equals` on a null reference throws; `==` with `null` is fine. [[How would you explain someObj.equals(null)]]
+
 > [!tip] Interview answer
-> **`==` on objects asks “same reference?”, not “same value?”. The JLS says even two `String`s with the same characters are `==` only if they are the same object; use `equals`. Wrappers, lists, and domain values override `equals` for content. `==` stays identity and will lie for copies.**
-
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
-
-**Разница между == и equals() для строк.**
-
-== сравнивает ссылки. equals() сравнивает содержимое. Для строк, созданных литералом, == может вернуть true из-за String Pool, но полагаться на это нельзя.
-
-**Разница между == и equals() для строк.**
-
-== сравнивает ссылки, equals() — содержимое. Для литералов == может дать true из-за String Pool, но полагаться на это нельзя.
-
-**== vs equals для строк. Почему String immutable?**
-
-== сравнивает ссылки (один объект в памяти?). equals — содержимое. String immutable: безопасность (ключи HashMap, передача в файлы/БД), потокобезопасность, кэширование hashCode, String Pool.
-
-**== vs equals для строк?**
-
-== сравнивает ссылки. equals — содержимое. Из-за String Pool два литерала "abc" == "abc" дадут true, но new String("abc") == "abc" — false (new создаёт новый объект вне пула). На собесе всегда отвечать «equals для содержимого».
-
-**Разница между == и equals(). Что вернёт someObj.equals(null)?**
-
-== сравнивает ссылки; equals(null) по контракту должен возвращать false.
+> **`==` on references is “same object.” `equals` is the equivalence method: by default also `==`, and you override it for value equality (`String`, records, your keys).** Hash tables use `equals` and `hashCode`, not `==`. On primitives, `==` already compares values.

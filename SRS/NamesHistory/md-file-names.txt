@@ -52,7 +52,6 @@
 - [x] Can Autowired be applied to methods other than constructors and setters.md
 - [x] Can dependency injection use mechanisms other than constructor injection.md
 - [x] Can developers control garbage collection or JVM memory settings.md
-- [x] Can different objects be hashCode.md
 - [x] Can different objects ref0 != ref1 be ref0.equals(ref1 == true.md
 - [x] Can different references on object ref0 == ref1 be ref0.equals(ref1 == false.md
 - [x] Can HashMap degrade to a linked list when keys have different hashCodes.md
@@ -371,7 +370,6 @@
 - [x] How do you materialize a skip index on existing ClickHouse data.md
 - [x] How do you memory leak memory leak.md
 - [x] How do you merge two divergent Git branches.md
-- [x] How do you methods hashCode and equals in class Object.md
 - [x] How do you monitor a model in production.md
 - [x] How do you monitor an application with Spring Boot Actuator.md
 - [x] How do you monitor database health and load.md
@@ -635,7 +633,6 @@
 - [x] How would you explain Apache Maven.md
 - [x] How would you explain are there class Point{int x y;} why code in form 31 x + y how x + y.md
 - [x] How would you explain are there method which can throw IOException and FileNotFoundException in which sequence.md
-- [x] How would you explain are there which recommendations about which fields should you use when hashCode.md
 - [x] How would you explain ArgumentCaptor.md
 - [x] How would you explain AssertJ vs Hamcrest.md
 - [x] How would you explain asymptotic time complexity notation.md
@@ -920,7 +917,6 @@
 - [x] How would you explain nested classes in Java and when to use each kind.md
 - [x] How would you explain non blocking and lock free synchronization ideas.md
 - [x] How would you explain notable language changes in recent Java versions.md
-- [x] How would you explain number hashCode.md
 - [x] How would you explain OAuth OpenID Connect.md
 - [x] How would you explain ObjDoubleConsumer ObjIntConsumer and ObjLongConsumer.md
 - [x] How would you explain object oriented programming principles.md
@@ -931,7 +927,6 @@
 - [x] How would you explain orElse orElseGet.md
 - [x] How would you explain OutOfMemoryError.md
 - [x] How would you explain Overload vs Override.md
-- [x] How would you explain override method Object.equals.md
 - [x] How would you explain Pagination offset limit vs cursor-based.md
 - [x] How would you explain Pairwise testing.md
 - [x] How would you explain parallel in Java 8.md
@@ -1187,7 +1182,6 @@
 - [x] How would you explain what counts as garbage from the JVM perspective.md
 - [x] How would you explain what does operator EXISTS.md
 - [x] How would you explain what does operator MERGE.md
-- [x] How would you explain what equals.md
 - [x] How would you explain what happens if in block initialization occurs exceptional situation.md
 - [x] How would you explain what happens when in thread is thrown exception.md
 - [x] How would you explain what has-a higher higher level - class abstract class or interface.md
@@ -2859,7 +2853,6 @@
 - [x] Why do we need concurrency.md
 - [x] Why do you disable CSRF for a JWT REST API.md
 - [x] Why do you need and which exist blocks initialization.md
-- [x] Why do you need equals how it differ from operation ==.md
 - [x] Why do you need if are there container servlet.md
 - [x] Why do you need JSP.md
 - [x] Why do you need.md

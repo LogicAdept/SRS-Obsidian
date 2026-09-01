@@ -2,53 +2,73 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/OOP #SRS
+#Java/HashCodeEquals #Java/Language/Object #Java/OOP #SRS
 
 # How are `hashCode` and `equals` implemented in `java.lang.Object`?
 
 > [!abstract] Short answer
-> `Object.equals` is **reference equality**: for non-null `x` and `y` it is `true` if and only if `x == y`. Each object is its own equivalence class. `Object.hashCode` returns an `int` that, as far as is reasonably practical, is **distinct for distinct objects**. `System.identityHashCode(x)` returns that same default hash even if `x`’s class overrode `hashCode`; for `null` it returns `0`.
+> `Object.equals` is **reference equality**: for non-null `x` and `y` it is `true` if and only if `x == y`. Each object is its own equivalence class. `Object.hashCode` is **`native`**: as far as reasonably practical it returns distinct `int`s for distinct objects. `System.identityHashCode(x)` returns that same default hash even if `x`’s class overrode `hashCode`; for `null` it returns `0`. It is **not** specified to be the object’s memory address.
 
-## `equals`: the most discriminating relation
+## What `Object` actually does
 
-The implementation requirement on `Object.equals` is identity. Distinct instances are never equal under this method, even when every field matches.
-
-```java
-x.equals(y)  // Object: true iff x == y  (x non-null)
-x.equals(null)  // false
-```
-
-**Listing 1.** Conceptual `Object.equals`. This satisfies the five-clause contract: it is reflexive, symmetric, transitive, consistent, and false for `null`. [[How would you explain the Object equals method contract]] is that contract in general.
-
-## `hashCode`: distinct when practical
-
-The general `hashCode` contract still applies (stable in one run, equal objects equal hashes, collisions allowed). On class `Object` the extra implementation requirement is: as far as reasonably practical, distinct objects get distinct integers. That matches identity `equals`: each instance is unequal to the others, so distinct hashes are the quality goal, not a language guarantee of uniqueness.
-
-The JVM is **not** required to publish the formula. Do not recite “it’s the memory address”; the spec does not say that. `System.identityHashCode` is specified only as “the hash the default `hashCode()` would return,” plus `0` for `null`.
+OpenJDK 21 `java.lang.Object`:
 
 ```java
-Object a = new Object();
-Object b = new Object();
-a.equals(b);                 // false
-a.hashCode() == b.hashCode(); // usually false; not a uniqueness theorem
-System.identityHashCode(a);  // default hash, even if a later subclass overrides
+@IntrinsicCandidate
+public native int hashCode();
+
+public boolean equals(Object obj) {
+    return (this == obj);
+}
 ```
 
-**Listing 2.** Conceptual default pair. Collisions of identity hashes remain legal; “reasonably practical” is not “always unique.” [[What is a hash collision]] still applies.
+**Listing 1.** Default implementations. `equals` is ordinary Java (`this == obj`). `hashCode` is implemented by the JVM (HotSpot may intrinsic the call). Distinct instances are never equal under this method, even when every field matches. [[How would you explain the Object equals method contract]] is the five-clause contract this pair already satisfies.
 
-`toString` on `Object` uses the class name, `@`, and the unsigned hex of **that object’s** `hashCode()`. After you override `hashCode`, default `toString` shows the new hash unless you override `toString` too.
+The class javadoc only promises distinct ints **as far as is reasonably practical** — not uniqueness, not an address. That matches identity `equals`: each instance is unequal to the others, so distinct hashes are the quality goal.
+
+```text
+new Object().equals(new Object())     → false   (different ==)
+x.equals(x)                           → true
+x.hashCode() == x.hashCode()          → true this run
+x.hashCode() == y.hashCode()          → maybe, even if x != y
+identityHashCode(x) vs x.hashCode()   → same until you override
+```
+
+**Listing 2.** Observable defaults. Collisions of identity hashes remain legal. [[What is a hash collision]] still applies. [[How would you explain the hashCode method contract in Java]] is the three-clause rule.
+
+```d2
+direction: down
+obj: "java.lang.Object" {
+  width: 240
+  height: 60
+  style.fill: "#e3f2fd"
+}
+eq: "equals(Object)\nthis == obj" {
+  width: 240
+  height: 80
+  style.fill: "#e8f5e9"
+}
+hc: "hashCode()\nnative identity int" {
+  width: 260
+  height: 80
+  style.fill: "#fff3e0"
+}
+
+obj -> eq
+obj -> hc
+```
+
+**Fig. 1.** Both defaults are identity. Value types replace **both** together.
+
+`Object.toString` prints `ClassName@` plus the unsigned hex of **that object’s** `hashCode()`, so the default string is identity-based. After you override `hashCode`, default `toString` shows the new hash unless you override `toString` too.
+
+These two `Object` methods already obey “equal objects, equal hashes”: the only equal pair is the same reference, which shares one hash. [[Where do default equals and hashCode implementations come from in Java]] is why every class starts here.
+
+> [!warning] “`hashCode` returns the address”
+> That interview line is not the Java SE 21 spec. The method must return the **same** `int` for the same object throughout a run (while identity is unchanged). A live heap address would move under GC and break that. Treat the default as a **stable identity hash**, not a pointer you can convert back to an object.
 
 > [!warning] `identityHashCode` is not `hashCode` after an override
 > Once a class overrides `hashCode`, `x.hashCode()` and `System.identityHashCode(x)` can disagree. Identity-based maps (`IdentityHashMap`) use identity hashes and `==`, not your value `equals`/`hashCode`. [[What is the difference between HashMap and IdentityHashMap]] is that split.
 
-These two `Object` methods already obey “equal objects, equal hashes”: the only equal pair is the same reference, which obviously shares one hash. [[Where do default equals and hashCode implementations come from in Java]] is why every class starts here.
-
 > [!tip] Interview answer
-> **`Object.equals` is `==`. `Object.hashCode` aims at a distinct `int` per instance, as far as practical, and is what `System.identityHashCode` still reports after you override. The algorithm is not specified as an address. Together they are a consistent identity pair; value classes replace both.**
-
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
-
-**Что будет, если переопределить только equals, но не hashCode?**
-
-Сломаются hash-структуры: HashMap, HashSet, Hashtable. Положили объект — посчитался один hashCode, переопределённый equals говорит «они равны», но другой hashCode значит другой бакет. Не найдёшь, что положил. Поэтому при переопределении equals — обязательно переопределяй hashCode.
+> **`Object.equals` is `this == obj`. `Object.hashCode` is native identity hashing — distinct when practical, same as `identityHashCode`, not defined as the memory address.** Classes that want value equality override **both**. Leave them alone when identity is the right notion.

@@ -61,10 +61,13 @@ If `equals` compares array **contents**, hash the contents (`Arrays.hashCode` / 
 
 Mutable fields that participate in `equals` **must** participate in `hashCode` (otherwise equal instances can disagree after a mutation of the omitted field). The practical rule is: do not then use that object as a `HashMap` / `HashSet` key. [[Can you lose objects in a HashMap due to mutable or poorly chosen keys]] is the lost-entry failure.
 
-A `record` hashes its components, which are also what its `equals` compares. Business entities that equal by database id only should hash that id, not every column. [[In a business context must equals consider all entity fields]] is that policy.
+A `record` hashes its components, which are also what its `equals` compares. That is why records are natural map keys: [[Why are Java records good HashMap keys]]. Business entities that equal by database id only should hash that id, not every column. [[In a business context must equals consider all entity fields]] is that policy. Pair the override with [[Why should equals and hashCode be overridden together]]. Mutable equality state while the object is a key is unspecified; [[What requirements apply to keys used in a HashMap]].
 
 > [!warning] Extra field is the silent contract break
 > Two `Point`s equal on `(x, y)` but `hashCode` mixing a `color` that `equals` ignores will disagree whenever colors differ. Hash tables then fail to find the equal key. The opposite mistake — hashing only `x` when `equals` uses `x` and `y` — is legal, just a [[What is a hash collision]] factory.
+
+> [!warning] “Use `id` / `uuid` because they are unique”
+> Uniqueness does not license a field `equals` ignores. An `id` belongs in `hashCode` **only if** it belongs in `equals`. Unique primitives spread well; that is performance, after the contract. If `equals` is identity/`==`, do not override either method. Entity graphs and lazy associations are [[In a business context must equals consider all entity fields]].
 
 > [!tip] Interview answer
 > **Hash the same state `equals` uses. A subset is allowed and only costs collisions. A field `equals` ignores is not allowed if equal objects can differ on it. Do not hash identity, caches, or array references when equality is by value. Mutable equals-fields belong in `hashCode`, but then the object is a poor map key.**

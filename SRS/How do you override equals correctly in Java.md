@@ -15,9 +15,9 @@ Keep the inherited identity equality when each instance is unique. Override `equ
 
 ## Required implementation steps
 
-1. Declare `@Override public boolean equals(Object o)`. A method such as `equals(Name)` has a different signature, so it is an overload: the class still inherits `Object.equals(Object)`.
+1. Declare `@Override public boolean equals(Object o)`. A method such as `equals(Name)` has a different signature, so it is an overload: the class still inherits `Object.equals(Object)`. That trap is [[Can you implement method equals class MyClass class MyClass {public boolean equals(MyClass that {return this =]]. After `equals`, override `hashCode` as well: [[How would you explain if equals override are there which methods should you override]].
 2. Return `true` immediately when `this == o`. That matches the identity relation used by the inherited implementation and satisfies reflexivity for the same reference.
-3. Reject incompatible types. For `o instanceof T`, a `null` left operand yields `false`, so a separate `o == null` check is unnecessary. `getClass()` compared with `==` also rejects a subclass instance.
+3. Reject incompatible types. For `o instanceof T`, a `null` left operand yields `false`, so a separate `o == null` check is unnecessary. `getClass()` compared with `==` also rejects a subclass instance. Pick **one** policy; do not stack `instanceof` and `getClass()` in the same method. [[How would you explain in equals takes what equals(Object that type what and object in how difference between t]] is that choice.
 4. Cast only after the type check succeeds; otherwise the cast can throw `ClassCastException`.
 5. Compare the fields that define identity. Use `==` for integral and `boolean` primitives. For `float` and `double`, do not use `==`: it is not an equivalence relation (`NaN != NaN`, while `+0.0 == -0.0`). Use representation equivalence, for example `Double.compare(a, b) == 0` or `Double.doubleToLongBits`. For nullable references, `Objects.equals` is null-safe. For arrays, use `Arrays.equals` or `Arrays.deepEquals`, not `==`.
 6. Override `hashCode` from a compatible set of fields, as required by [[How would you explain the equals and hashCode contract together in Java]].
@@ -152,6 +152,9 @@ Safer policies:
 Compare every field that participates in the logical identity, and only those fields. For `double`/`float` identity, representation equivalence treats every `NaN` as equal to every other `NaN` and treats `+0.0` as different from `-0.0`. Primitive `==` does the opposite on both points. Arrays compare by contents through `Arrays.equals`; nested arrays need `Arrays.deepEquals`. Array `==` is only reference identity.
 
 If a field can change after construction, do not use that object as a `HashMap` key or `HashSet` element. [[Can you lose objects in a HashMap due to mutable or poorly chosen keys]] shows the lookup failure. Prefer `final` primitives, `String`, or records whose components are themselves immutable.
+
+> [!warning] Two type tests in one method
+> `instanceof` and `getClass()` are alternative subtype policies, not two checks to combine. Stacking them either rejects everything the second test would have accepted, or duplicates the first. Choose one, keep it consistent with subclasses, and pair the fields with `hashCode`. Skipping `hashCode` can still look green in a unit test of `equals` while `HashSet`/`HashMap` miss.
 
 > [!tip] Interview answer
 > **Override `equals(Object)`, not a tighter overload. Check identity, then type, then identity fields, and write a matching `hashCode`. Prefer a final immutable class. If you use `instanceof` in an extensible hierarchy, a subclass that adds identity state can break symmetry; `getClass()` or a final class avoids that trap.**
