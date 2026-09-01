@@ -657,7 +657,6 @@
 - [x] How would you explain blocking versus non blocking methods in IO and concurrency.md
 - [x] How would you explain BlockingQueue.md
 - [x] How would you explain body path query headers.md
-- [x] How would you explain boxing and unboxing in Java.md
 - [x] How would you explain buffered streams in Java IO.md
 - [x] How would you explain busy spin or busy waiting in concurrent code.md
 - [x] How would you explain cache hit rate and cache miss rate.md
@@ -1710,7 +1709,6 @@
 - [x] What is atomicity in ACID transactions.md
 - [x] What is AuthenticationManager and AuthenticationProvider in Spring Security.md
 - [x] What is authorization and authentication how they differ.md
-- [x] What is autoboxing autoboxing in Java and what types in wrapper classes.md
 - [x] What is automatic identity or autoincrement in different databases.md
 - [x] What is autovacuum in PostgreSQL.md
 - [x] What is backpressure in reactive programming.md

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Wrappers #Java/Collections #Java/Exceptions/Unchecked #SRS
+#Java/Language/Wrappers/Autoboxing #Java/Collections #Java/Exceptions/Unchecked #SRS
 
 # How do you avoid `NullPointerException` when unboxing a `Map` value?
 

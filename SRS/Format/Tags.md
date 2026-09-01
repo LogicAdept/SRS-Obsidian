@@ -55,6 +55,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **Optional in the tree:** **`#Java/Language/Optional`** is `java.util.Optional` (what it is versus `null`, factories `of` / `ofNullable` / `empty`, `map` / `flatMap` / `filter` / `stream`, `isPresent` / `ifPresent` / `or` / `orElseThrow` / `get`, primitive `OptionalInt` / `OptionalLong` / `OptionalDouble`). **Usage** is intended-use rules: return type not field or parameter, never return a null `Optional`, do not wrap a collection, avoid `get()`, allocation cost, not `Serializable`. Primitive optionals dual-tag **`#Java/Language/Primitives`**. Stream bridging dual-tags **`#Java/Streams`**. Serialization of Optional dual-tags **`#Java/Serialization`**. Do not put **`#Java/Language/Optional`** next to **`#Java/Language/Optional/Usage`** on the same card.
 
+**Wrappers in the tree:** **`#Java/Language/Wrappers`** is the eight `java.lang` boxing types (`Boolean`, `Byte`, `Character`, `Short`, `Integer`, `Long`, `Float`, `Double`): why they exist, immutability, null vs primitive defaults, collections/generics, parse/format APIs (`parseInt`, `toBinaryString`). **Autoboxing** is compiler boxing/unboxing (`valueOf` / `xxxValue`, when it occurs, NPE on unbox, overload-resolution phases, `++`/`+=` on a wrapper). **Cache** (under Autoboxing) is interned identity (`IntegerCache`, `-XX:AutoBoxCacheMax`, `Boolean.TRUE`/`FALSE`, which types cache, `valueOf` vs `new`). Identity/why-wrappers and parse/format cards stay on **Wrappers**. Survey cards that span unboxing and cache stay on **Wrappers**. Dual-tag **`#Java/Language/Primitives`** when the cue is primitive vs wrapper. Do not put **`#Java/Language/Wrappers`** next to a more specific **`#Java/Language/Wrappers/...`** child, or **`#Java/Language/Wrappers/Autoboxing`** next to **`#Java/Language/Wrappers/Autoboxing/Cache`**, on the same card.
+
 ---
 
 ## Tree (prefixes in cards)
@@ -125,6 +127,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Language/Records/Constructors`
 * `#Java/Language/Reflection`
 * `#Java/Language/Wrappers`
+* `#Java/Language/Wrappers/Autoboxing`
+* `#Java/Language/Wrappers/Autoboxing/Cache`
 * `#Java/Arrays`
 * `#Java/String`
 * `#Java/StringBuilder`
