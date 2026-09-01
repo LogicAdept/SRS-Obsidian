@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language #Java/HashCodeEquals #SRS
+#Java/HashCodeEquals #SRS
 
 # Can distinct references still be equal under `equals`?
 

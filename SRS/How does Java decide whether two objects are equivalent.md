@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/Language #SRS
+#Java/HashCodeEquals #SRS
 
 # How does Java decide whether two objects are equivalent?
 

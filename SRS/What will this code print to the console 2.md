@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language #Java/JVM #Java/CodeSnippet #Career/Interview/Exercises #SRS #New
+#Java/Language/Wrappers/Autoboxing #Java/JVM #Career/Interview/Exercises #SRS #New
 ```java
   public static void main(String[] args) {  
      Object t = new Integer(101);  

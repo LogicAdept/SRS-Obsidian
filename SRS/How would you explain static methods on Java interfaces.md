@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #Java/Language #SRS #New
+#Java/OOP #Java/Language/Modifiers/Static #SRS #New

@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Java/Language #Paradigms/OOP #SRS #New
+#Java/Language/Primitives #Paradigms/OOP #SRS #New

@@ -57,6 +57,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **Primitives in the tree:** **`#Java/Language/Primitives`** is the Java primitive types (`boolean`, `byte`, `short`, `char`, `int`, `long`, `float`, `double`): identity, ranges, signedness, default/local initialization, not being `Object`. **NumericPromotion** is JLS binary/unary numeric promotion in arithmetic (why `byte + byte` is `int`, why `char + char` does not concatenate, why `int * int` overflows before a `long` assignment). **FloatingPoint** is IEEE 754 `float`/`double` (binary fractions, `float` vs `double`, `BigDecimal` for decimals, floating-point `/0`). Do not add per-type leaves (`ShortType`, `CharType`, …). Primitive vs wrapper comparison and autoboxing/unboxing cards carry **`#Java/Language/Wrappers`** and **`#Java/Language/Primitives`**. Integer overflow wrap, integer `/`, bit shifts, and numeric literals stay on **Primitives** unless a child owns the cue. Do not put **`#Java/Language/Primitives`** next to a more specific **`#Java/Language/Primitives/...`** child on the same card.
 
+**Exercises in the tree:** **`#Career/Interview/Exercises`** is interview drills: predict-the-output / print-to-console / line-by-line tracing, and implement-this coding problems. A Java print-to-console snippet carries **Exercises** plus the honest topical leaf (Primitives, Autoboxing, Initialization, Lambdas, …). There is **no `#Java/CodeSnippet`** and no `#Exercise` root. Do not put **`#Career/Interview`** next to **`#Career/Interview/Exercises`** on the same card.
+
+**Language in the tree:** **`#Java/Language`** is Java the language (identity, typing, `var`, source form, `instanceof`). Predict-the-output snippets stay **`#Career/Interview/Exercises`** plus a topical leaf, not on Language alone. **NestedClasses** is nested / inner / static nested / local / anonymous classes (enclosing instance, when to use each kind). **Modifiers** is the modifier catalog (`abstract`, `transient`, `volatile`, `synchronized` as a modifier — dual-tag **`#Java/JMM`**, **`#Java/Serialization`**, or **`#Java/Concurrency/Synchronization/SynchronizedKeyword`** as they apply). **Access** is `public` / `protected` / `private` / package-private. **Static** is the `static` keyword (members, `main`, which constructs may be `static`). **Final** is `final` on types, methods, and fields, and effectively-final. **Operators** is ternary, logical, and bitwise (not numeric promotion — that is **Primitives/NumericPromotion**; not `++` atomicity — that is **`#Java/JMM`**). **Parameters** is pass-by-value (the reference is copied). **Loops** is `for` / `while` / `do-while` and enhanced for-each (Iterable dual-tags **`#Java/Collections/Iteration`**). **Switch** is `switch` (strings in `switch`, arrow / `yield`, versus pattern matching). Record patterns in `switch` dual-tag **`#Java/Language/Records`**. **Object** is `java.lang.Object` (root type, generated / inherited members, `clone` / `Cloneable`, `finalize`). `equals` / `hashCode` stay **`#Java/HashCodeEquals`**. `wait` / `notify` stay **`#Java/Concurrency/Synchronization`**. Constructors and initializer blocks stay **`#Java/OOP/Constructors`** and **`#Java/OOP/Initialization`**. Do not put **`#Java/Language`** next to a more specific **`#Java/Language/...`** child, **`#Java/Language/Modifiers`** next to a more specific **`#Java/Language/Modifiers/...`** child, **`#Java/Language/Optional`** next to **`#Java/Language/Optional/Usage`**, **`#Java/Language/Primitives`** next to a more specific **`#Java/Language/Primitives/...`** child, **`#Java/Language/Records`** next to **`#Java/Language/Records/Constructors`**, **`#Java/Language/Wrappers`** next to a more specific **`#Java/Language/Wrappers/...`** child, or **`#Java/Language/Wrappers/Autoboxing`** next to **`#Java/Language/Wrappers/Autoboxing/Cache`**, on the same card.
+
 ---
 
 ## Tree (prefixes in cards)
@@ -119,14 +123,24 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Language`
 * `#Java/Language/Assert`
 * `#Java/Language/Enum`
+* `#Java/Language/Loops`
+* `#Java/Language/Modifiers`
+* `#Java/Language/Modifiers/Access`
+* `#Java/Language/Modifiers/Final`
+* `#Java/Language/Modifiers/Static`
+* `#Java/Language/NestedClasses`
+* `#Java/Language/Object`
+* `#Java/Language/Operators`
 * `#Java/Language/Optional`
 * `#Java/Language/Optional/Usage`
+* `#Java/Language/Parameters`
 * `#Java/Language/Primitives`
 * `#Java/Language/Primitives/FloatingPoint`
 * `#Java/Language/Primitives/NumericPromotion`
 * `#Java/Language/Records`
 * `#Java/Language/Records/Constructors`
 * `#Java/Language/Reflection`
+* `#Java/Language/Switch`
 * `#Java/Language/Wrappers`
 * `#Java/Language/Wrappers/Autoboxing`
 * `#Java/Language/Wrappers/Autoboxing/Cache`

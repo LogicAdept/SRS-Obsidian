@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/HashCodeEquals #Java/Language #Java/String #Java/Arrays #SRS
+#Java/HashCodeEquals #Java/String #Java/Arrays #SRS
 
 # Why should arbitrary objects not be compared with double equals in Java?
 

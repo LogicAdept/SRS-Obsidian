@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency/Synchronization/SynchronizedKeyword #Java/Language #SRS
+#Java/Concurrency/Synchronization/SynchronizedKeyword #Java/Language/Modifiers #SRS
 
 # What is the synchronized keyword for in Java?
 

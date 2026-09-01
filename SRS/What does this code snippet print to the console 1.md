@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/CodeSnippet #Career/Interview/Exercises #SRS #New #Stack
+#Career/Interview/Exercises #Java/Collections/List/Vector #Java/Language/Parameters #SRS #New
 ```java
     public static void main(String args[]) {  
         Stack s1 = new Stack();  

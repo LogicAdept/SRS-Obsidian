@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #Java/Language #SRS #New
+#Java/OOP #Java/Language/Modifiers/Access #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

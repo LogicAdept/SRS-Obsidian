@@ -1,4 +1,4 @@
-#Java/CodeSnippet #Career/Interview/Exercises #SRS #New
+#Career/Interview/Exercises #Java/Lambdas #Java/Language/Modifiers/Final #SRS #New
 <!--
 reps: 0
 priority: 0

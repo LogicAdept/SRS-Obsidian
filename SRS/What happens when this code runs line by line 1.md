@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language #Java/JVM #Career/Interview/Exercises #SRS #New
+#Java/Language/Primitives #Java/JVM #Career/Interview/Exercises #SRS #New
 
 ```java
    byte b = 1;  

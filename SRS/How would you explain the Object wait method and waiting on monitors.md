@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency/Synchronization #Java/Language #SRS
+#Java/Concurrency/Synchronization #SRS
 
 # How would you explain the Object wait method and waiting on monitors?
 
