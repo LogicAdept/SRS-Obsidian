@@ -16,7 +16,7 @@ from pathlib import Path
 
 
 MARKER_RE = re.compile(
-    r"<<<<<<<[^\n]*\n(.*?)\n=======\n(.*?)\n>>>>>>>[^\n]*",
+    r"<<<<<<<[^\n]*\n(.*?)=======\n(.*?)>>>>>>>[^\n]*",
     re.DOTALL,
 )
 
@@ -84,7 +84,8 @@ def merge_tags_keep_both(text: str) -> str:
             return head
         if head == theirs:
             return head
-        return f"{head}\n\n{theirs}"
+        # Source already has later refine/Accept history; keep it on overlap.
+        return head
 
     merged = MARKER_RE.sub(repl, text)
     if "<<<<<<<" in merged or ">>>>>>>" in merged:
