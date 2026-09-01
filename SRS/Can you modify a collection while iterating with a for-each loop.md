@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Iteration #Java/Language/Loops #SRS
+#Java/Collections/Iteration/FailFast #Java/Language/Loops #SRS
 
 # Can you modify a collection while iterating with a for-each loop?
 

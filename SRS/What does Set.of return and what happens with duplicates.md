@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Set #Java/Versions/9 #SRS
+#Java/Collections/Set #Java/Versions/9 #Java/Collections/Unmodifiable #SRS
 
 # What does `Set.of` return and what happens with duplicates?
 

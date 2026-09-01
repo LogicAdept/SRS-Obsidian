@@ -206,7 +206,6 @@
 - [x] How do you call a stored procedure from Java.md
 - [x] How do you call an overridden superclass method in Java.md
 - [x] How do you call superclass methods from a subclass in Java.md
-- [x] How do you can get object collection.md
 - [x] How do you capture a Java heap dump.md
 - [x] How do you capture a Java thread dump.md
 - [x] How do you choose a ClickHouse sharding key.md
@@ -353,14 +352,12 @@
 - [x] How do you invoke.md
 - [x] How do you iterate all key value pairs in a Map.md
 - [x] How do you iterate all keys in a Map.md
-- [x] How do you iterate all Mindmap.md
 - [x] How do you iterate all values in a Map.md
 - [x] How do you iterate elements LinkedList in order not using get(index.md
 - [x] How do you iterate the elements of a Java collection.md
 - [x] How do you JDBC.md
 - [x] How do you learn validate information and apply it in practice.md
 - [x] How do you list directory entries that match a criterion in Java.md
-- [x] How do you list string with using lambda.md
 - [x] How do you make a RabbitMQ message survive a broker restart.md
 - [x] How do you make all paragraph text bold with CSS.md
 - [x] How do you make your first Git commit and add all files.md
@@ -662,7 +659,6 @@
 - [x] How would you explain client side service discovery.md
 - [x] How would you explain client side UI composition for micro frontends.md
 - [x] How would you explain CMD vs ENTRYPOINT.md
-- [x] How would you explain Collection Framework.md
 - [x] How would you explain collection using methods Collection addAll removeAll retainAll.md
 - [x] How would you explain common guidelines for using inheritance in OOP.md
 - [x] How would you explain common HTTP request methods.md
@@ -795,7 +791,6 @@
 - [x] How would you explain immutable classes in Java.md
 - [x] How would you explain immutable objects and why they matter.md
 - [x] How would you explain in equals takes what equals(Object that type what and object in how difference between t.md
-- [x] How would you explain in form hierarchy interface List Set Mindmap SortedSet SortedMap Collection Iterable Ite.md
 - [x] How would you explain in how consist advantages and disadvantages object oriented approach in programming.md
 - [x] How would you explain in how consist advantages servlet over CGI Common Gateway Interface.md
 - [x] How would you explain in how consist advantages using JDBC.md
@@ -809,7 +804,6 @@
 - [x] How would you explain in how is difference between method start and run.md
 - [x] How would you explain in how is difference between values 0 and auto in margin.md
 - [x] How would you explain in how meaning CAP theorem.md
-- [x] How would you explain in how SortedMap besides what toString all elements by.md
 - [x] How would you explain in what better HTML-code.md
 - [x] How would you explain in which can thread.md
 - [x] How would you explain instance initializer blocks versus constructors.md
@@ -1359,7 +1353,6 @@
 - [x] What are the main differences between Spring Framework major versions.md
 - [x] What are the main functions of an operating system.md
 - [x] What are the main HttpServlet request handling methods.md
-- [x] What are the main interface JCF and their implementation.md
 - [x] What are the main Java Collections Framework interfaces and typical implementations.md
 - [x] What are the main Java Map implementations.md
 - [x] What are the main Java Set implementations.md
@@ -2099,7 +2092,6 @@
 - [x] What is the difference between being async and being concurrent.md
 - [x] What is the difference between CHAR VARCHAR and TEXT in PostgreSQL.md
 - [x] What is the difference between checked and unchecked exceptions.md
-- [x] What is the difference between class java.util.Collection and java.util.Collections.md
 - [x] What is the difference between ClickHouse and Snowflake.md
 - [x] What is the difference between ClickHouse Druid and Pinot.md
 - [x] What is the difference between clustered and non clustered database indexes.md
@@ -2876,8 +2868,6 @@
 - [x] Why is Kafka enable.auto.commit dangerous.md
 - [x] Why is Kafka pull based rather than push based.md
 - [x] Why is logging often implemented as a cross cutting aspect.md
-- [x] Why is Map both a data structure and a Collection framework type in Java.md
-- [x] Why is Map modeled separately from other collection types.md
 - [x] Why is NOT IN dangerous with NULL.md
 - [x] Why is OFFSET pagination slow.md
 - [x] Why is RabbitMQ written in Erlang.md
@@ -2893,7 +2883,6 @@
 - [x] Why might a Java interface declare no methods.md
 - [x] Why might PostgreSQL choose a sequential scan instead of an index.md
 - [x] Why might you synchronize on a private mutex object in Java.md
-- [x] Why Mindmap — not Collection in time how List and Set Collection.md
 - [x] Why must JDBC and IO resources be closed explicitly.md
 - [x] Why must RabbitMQ consumers be idempotent.md
 - [x] Why must wait and notify run inside synchronized blocks.md

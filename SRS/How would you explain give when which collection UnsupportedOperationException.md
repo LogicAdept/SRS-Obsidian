@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections #Java/Exceptions/Unchecked #SRS
+#Java/Collections/Unmodifiable #Java/Exceptions/Unchecked #SRS
 
 # How would you explain give when which collection `UnsupportedOperationException`?
 

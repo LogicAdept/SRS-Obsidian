@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/List/ArrayList #Java/Immutability #SRS
+#Java/Collections/List/ArrayList #Java/Immutability #Java/Collections/Unmodifiable #SRS
 
 # What is the difference between `List.of(1, 2, 3)` and `new ArrayList()`?
 
