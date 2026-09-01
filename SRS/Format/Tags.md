@@ -90,6 +90,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Collections/Set/EnumSet`
 * `#Java/Collections/Queues`
 * `#Java/Collections/Queues/ArrayDeque`
+* `#Java/Collections/Queues/Deque`
 * `#Java/Collections/Queues/PriorityQueue`
 * `#Java/Collections/Queues/BlockingQueue`
 * `#Java/Collections/Iteration`

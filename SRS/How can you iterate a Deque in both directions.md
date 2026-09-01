@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Queues #Java/Collections/Iteration #SRS
+#Java/Collections/Queues/Deque #Java/Collections/Iteration #SRS
 
 # How can you iterate a `Deque` in both directions?
 

@@ -943,7 +943,6 @@
 - [x] How would you explain Predicate DoublePredicate IntPredicate and LongPredicate.md
 - [x] How would you explain primitive specialized functional types named like IntToLongFunction.md
 - [x] How would you explain principles work with JSP.md
-- [x] How would you explain PriorityQueue.md
 - [x] How would you explain private constructors and common patterns that use them in Java.md
 - [x] How would you explain private.md
 - [x] How would you explain problems with public mutable fields in Java.md
