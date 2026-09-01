@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security #Java/Annotations #Java/Spring/Framework/WebFlux #SRS
+#Java/Spring/Security/WebFlux #Java/Annotations #Java/Spring/Framework/WebFlux #SRS
 
 # What is `EnableWebFluxSecurity`?
 

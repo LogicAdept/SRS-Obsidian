@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security/FilterChain #Java/Spring/Security/Authentication #Security/JWT #SRS
+#Java/Spring/Security/FilterChain #Java/Spring/Security/Authentication #Security/JWT #Java/Spring/Security/OAuth2 #SRS
 
 # How do you configure JWT and form login as two `SecurityFilterChain` beans?
 

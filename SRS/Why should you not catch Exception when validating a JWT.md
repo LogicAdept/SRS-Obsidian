@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security #Security/JWT #SRS
+#Java/Spring/Security/OAuth2 #Security/JWT #SRS
 
 # Why should you not catch Exception when validating a JWT?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security/FilterChain #Java/Spring/Security/Authentication #SRS
+#Java/Spring/Security/FilterChain #Java/Spring/Security/SessionManagement #SRS
 
 # What is `SessionManagementFilter`?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security/FilterChain #Security/OAuth2 #SRS
+#Java/Spring/Security/FilterChain #Security/OAuth2 #Java/Spring/Security/OAuth2 #SRS
 
 # What is `OAuth2AuthorizationRequestRedirectFilter`?
 

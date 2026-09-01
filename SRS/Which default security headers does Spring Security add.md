@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security #Security/AppSec #SRS
+#Java/Spring/Security/FilterChain #Security/AppSec #SRS
 
 # Which default security headers does Spring Security add?
 

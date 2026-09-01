@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Security/FilterChain #Security/AppSec #SRS
+#Java/Spring/Security/FilterChain #Security/AppSec #Java/Spring/Security/CSRF #SRS
 
 # What is `CsrfFilter` in Spring Security?
 
