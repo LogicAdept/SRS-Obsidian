@@ -758,7 +758,6 @@
 - [x] How would you explain fetch and add FAA in concurrent programming.md
 - [x] How would you explain first normal form in relational databases.md
 - [x] How would you explain for ArrayList or for LinkedList element in list.add(list.size 2 newElement.md
-- [x] How would you explain for Enum are there class java.util.EnumSet why how not HashSet or TreeSet.md
 - [x] How would you explain for what in Java used blocks initialization.md
 - [x] How would you explain for what in JUnit used @Ignore or @Disabled.md
 - [x] How would you explain for what in stream intended methods flatMap flatMapToInt flatMapToDouble flatMapToLong.md
