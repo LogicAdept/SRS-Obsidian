@@ -791,7 +791,6 @@
 - [x] How would you explain HAProxy vs Nginx vs Envoy.md
 - [x] How would you explain Hard assertions vs Soft assertions.md
 - [x] How would you explain has-a meaning index count.md
-- [x] How would you explain HashMap from HashSetMindmap.EntryK V.md
 - [x] How would you explain HashSet from HashMap.md
 - [x] How would you explain HashSet, hashCode.md
 - [x] How would you explain Health checks.md
@@ -823,7 +822,6 @@
 - [x] How would you explain in how consist differences between stack and heap with much.md
 - [x] How would you explain in how difference class PrintWriter from PrintStream.md
 - [x] How would you explain in how differences between volatile and Atomic variable.md
-- [x] How would you explain in how differences TreeSet and HashSet.md
 - [x] How would you explain in how is between method submit and execute threads.md
 - [x] How would you explain in how is difference between IO and NIO.md
 - [x] How would you explain in how is difference between method start and run.md
@@ -1850,7 +1848,7 @@
 - [x] What is Java Server Pages JSP.md
 - [x] What is Java.md
 - [x] What is java.util.HashMap at a high level.md
-- [x] What is java.util.HashSet.md
+- [x] What is a HashSet.md
 - [x] What is java.util.LinkedHashSet.md
 - [x] What is java.util.PriorityQueue.md
 - [x] What is Javascript.md

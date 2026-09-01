@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/HashMap #SRS #New
+#Java/Collections/Map/HashMap #Java/Collections/Set/HashSet #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
