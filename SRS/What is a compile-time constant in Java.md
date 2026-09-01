@@ -11,7 +11,7 @@ priority: 0
 
 ## Constant variable vs any `final`
 
-A constant expression is a primitive or `String` value built only from literals (including text blocks), casts to those types, unary `+ - ~ !` (not `++`/`--`), arithmetic and shifts, comparisons except `instanceof`, `==`/`!=`, bitwise operators, `&&`/`||`, `? :`, parentheses, and names of **other** constant variables (`Integer.MAX_VALUE / 2`, `"x" + Long.MAX_VALUE`). No method calls, no `new`, no `null`. Constant `String`s are interned. [[How would you explain the final keyword in Java]] is the broader modifier; [[How would you explain effectively final]] is the lambda capture rule — neither is enough by itself.
+A constant expression is a primitive or `String` value built only from literals (including text blocks), casts to those types, unary `+ - ~ !` (not `++`/`--`), arithmetic and shifts, comparisons except `instanceof`, `==`/`!=`, bitwise operators, `&&`/`||`, `? :`, parentheses, and names of **other** constant variables (`Integer.MAX_VALUE / 2`, `"x" + Long.MAX_VALUE`). No method calls, no `new`, no `null`. Constant `String`s are interned. [[What does the final keyword mean in Java]] is the broader modifier; [[How would you explain effectively final]] is the lambda capture rule — neither is enough by itself.
 
 ```d2
 direction: down

@@ -127,9 +127,11 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Language/Enum`
 * `#Java/Language/Loops`
 * `#Java/Language/Modifiers`
+* `#Java/Language/Modifiers/Abstract`
 * `#Java/Language/Modifiers/Access`
 * `#Java/Language/Modifiers/Final`
 * `#Java/Language/Modifiers/Static`
+* `#Java/Language/Modifiers/Volatile`
 * `#Java/Language/NestedClasses`
 * `#Java/Language/Object`
 * `#Java/Language/Object/Clone`

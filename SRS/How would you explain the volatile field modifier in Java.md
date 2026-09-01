@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Modifiers #Java/JMM #SRS
+#Java/Language/Modifiers/Volatile #Java/JMM #SRS
 
 # How would you explain the volatile field modifier in Java?
 

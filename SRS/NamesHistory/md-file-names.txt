@@ -844,7 +844,6 @@
 - [x] How would you explain IoC DI.md
 - [x] How would you explain is-a versus has-a relationships in object oriented design.md
 - [x] How would you explain Java 17 21.md
-- [x] How would you explain Java access modifiers and visibility rules.md
 - [x] How would you explain Java arrays and their limitations.md
 - [x] How would you explain Java atomic types in java.util.concurrent.atomic.md
 - [x] How would you explain Java binary serialization.md
@@ -1075,7 +1074,7 @@
 - [x] How would you explain the equals and hashCode contract together in Java.md
 - [x] How would you explain the event sourcing pattern.md
 - [x] How would you explain the ExecutorService interface in Java.md
-- [x] How would you explain the final keyword in Java.md
+- [x] What does the final keyword mean in Java.md
 - [x] How would you explain the final modifier on a static method in Java.md
 - [x] How would you explain the finalize method in Java and why it is discouraged.md
 - [x] How would you explain the finally block in Java.md
@@ -1148,7 +1147,6 @@
 - [x] How would you explain the SQL SELECT statement.md
 - [x] How would you explain the SQL UNION operator.md
 - [x] How would you explain the SQL VACUUM command in PostgreSQL.md
-- [x] How would you explain the static keyword in Java.md
 - [x] How would you explain the StringBuilder append method.md
 - [x] How would you explain the structure of a Maven pom.xml file.md
 - [x] How would you explain the term plain old Java object POJO.md
@@ -1166,7 +1164,6 @@
 - [x] How would you explain ThreadLocal variables in Java.md
 - [x] How would you explain ThreadPoolExecutor.md
 - [x] How would you explain tight versus loose coupling between software modules.md
-- [x] How would you explain to what constructs Java applied modifier static.md
 - [x] How would you explain to what variable are there access lambda.md
 - [x] How would you explain ToDoubleBiFunction ToIntBiFunction and ToLongBiFunction.md
 - [x] How would you explain ToDoubleFunction ToIntFunction and ToLongFunction.md
@@ -1479,7 +1476,6 @@
 - [x] What does isolation.level read_committed do in Kafka.md
 - [x] What does it mean that Java is object oriented.md
 - [x] What does it mean to put a Java thread to sleep.md
-- [x] What does keyword word final.md
 - [x] What does keyword word throws.md
 - [x] What does keyword word var.md
 - [x] What does Maven provide during a typical Java build.md
@@ -2874,7 +2870,6 @@
 - [x] Why can Around advice lose the join point return value.md
 - [x] Why can Kafka retries break ordering without idempotence.md
 - [x] Why can two unequal objects share the same hashCode value.md
-- [x] Why can you not declare method interface with modifier final.md
 - [x] Why can you not decrease Kafka partition count.md
 - [x] Why can you not use byte in in HashMap.md
 - [x] Why did transformers replace RNNs.md

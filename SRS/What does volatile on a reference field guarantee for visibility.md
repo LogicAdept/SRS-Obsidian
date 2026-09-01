@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Modifiers #Java/JMM #SRS
+#Java/Language/Modifiers/Volatile #Java/JMM #SRS
 
 # What does volatile on a reference field guarantee for visibility?
 
