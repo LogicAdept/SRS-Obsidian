@@ -49,6 +49,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **Runtime in the tree:** **`#Java/Runtime`** is the process-level API (`java.lang.Runtime`, `java.lang.System`: standard streams, `System.exit`, environment and properties, `Runtime.exec` / shutdown hooks). The **JRE product** (JVM + libraries, no compiler) is **`#Java/JRE`**, not Runtime. JVM internals (memory regions, GC, class loaders, JIT, launch flags, VM startup) stay **`#Java/JVM/...`**. Compile-time vs runtime **language** semantics (dynamic dispatch / polymorphism) stay **`#Java/OOP`** and **`#Java/Language`**. Do not put **`#Java/Runtime`** next to a more specific **`#Java/Runtime/...`** child on the same card.
 
+**Optional in the tree:** **`#Java/Language/Optional`** is `java.util.Optional` (what it is versus `null`, factories `of` / `ofNullable` / `empty`, `map` / `flatMap` / `filter` / `stream`, `isPresent` / `ifPresent` / `or` / `orElseThrow` / `get`, primitive `OptionalInt` / `OptionalLong` / `OptionalDouble`). **Usage** is intended-use rules: return type not field or parameter, never return a null `Optional`, do not wrap a collection, avoid `get()`, allocation cost, not `Serializable`. Primitive optionals dual-tag **`#Java/Language/Primitives`**. Stream bridging dual-tags **`#Java/Streams`**. Serialization of Optional dual-tags **`#Java/Serialization`**. Do not put **`#Java/Language/Optional`** next to **`#Java/Language/Optional/Usage`** on the same card.
+
 ---
 
 ## Tree (prefixes in cards)
@@ -108,6 +110,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Language/Assert`
 * `#Java/Language/Enum`
 * `#Java/Language/Optional`
+* `#Java/Language/Optional/Usage`
 * `#Java/Language/Primitives`
 * `#Java/Language/Primitives/ShortType`
 * `#Java/Language/Records`

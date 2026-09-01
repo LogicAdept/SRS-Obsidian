@@ -870,7 +870,6 @@
 - [x] How would you explain java.util.concurrent.Future style asynchronous results.md
 - [x] How would you explain java.util.concurrent.Phaser.md
 - [x] How would you explain java.util.function functional interfaces overview.md
-- [x] How would you explain java.util.Optional.md
 - [x] How would you explain java.util.StringJoiner.md
 - [x] How would you explain java.util.Vector and why it is legacy.md
 - [x] How would you explain JavaServer Pages JSP.md

@@ -17,7 +17,7 @@ priority: 0
 - If empty, no-arg `orElseThrow()` throws `NoSuchElementException` (`RuntimeException`, unchecked).
 - `orElseThrow(Supplier)` throws the exception from `supplier.get()`. A method reference to a no-arg constructor is the documented style: `IllegalStateException::new`.
 
-`Optional.get()` also throws `NoSuchElementException` on empty. The API’s preferred alternative is `orElseThrow()` ([[Why should you avoid calling get on an Optional]], [[How would you explain java.util.Optional]]).
+`Optional.get()` also throws `NoSuchElementException` on empty. The API’s preferred alternative is `orElseThrow()` ([[Why should you avoid calling get on an Optional]], [[What is Optional]]).
 
 ```d2
 direction: down

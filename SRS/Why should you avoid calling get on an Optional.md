@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Optional #Java/Exceptions/Unchecked #SRS
+#Java/Language/Optional/Usage #Java/Exceptions/Unchecked #SRS
 
 # Why should you avoid calling `get` on an `Optional`?
 
@@ -15,7 +15,7 @@ priority: 0
 
 `Optional` exists so absence is explicit. Blind `find(id).get()` treats “no user” as a crash, the same family of mistake as dereferencing `null`. `isPresent()` then `get()` is still that crash, with extra lines.
 
-The API’s preferred alternative to `get()` is **`orElseThrow()`** (same `NoSuchElementException` if empty, clearer “I mean to fail”). A supplier overload throws a type you choose ([[What does orElseThrow do on Optional]]). `orElse(default)` / `orElseGet(...)` supply a substitute. `ifPresent` / `map` keep the empty case in the pipeline ([[How would you explain java.util.Optional]], [[Why should a method that returns Optional never return null]], [[What are Optional.ofNullable and Optional.empty]]).
+The API’s preferred alternative to `get()` is **`orElseThrow()`** (same `NoSuchElementException` if empty, clearer “I mean to fail”). A supplier overload throws a type you choose ([[What does orElseThrow do on Optional]]). `orElse(default)` / `orElseGet(...)` supply a substitute. `ifPresent` / `map` keep the empty case in the pipeline ([[What is Optional]], [[Why should a method that returns Optional never return null]], [[What are Optional.ofNullable and Optional.empty]]).
 
 `get()` is unchecked: no `throws`. You may catch `NoSuchElementException`; that does not make `get()` a good unwrap ([[Can you catch an unchecked exception in Java]]).
 
