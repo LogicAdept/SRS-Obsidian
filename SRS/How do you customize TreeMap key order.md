@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/TreeMap #Java/Collections/Sorting #SRS
+#Java/Collections/Map/TreeMap #Java/Collections/Sorting/Comparator #SRS
 
 # How do you customize `TreeMap` key order?
 

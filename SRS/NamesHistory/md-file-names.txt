@@ -677,7 +677,6 @@
 - [x] How would you explain common levels and kinds of software testing.md
 - [x] How would you explain common principles for scaling software systems.md
 - [x] How would you explain common ways to optimize SQL queries.md
-- [x] How would you explain Comparable Comparator.md
 - [x] How would you explain compare and non-relational.md
 - [x] How would you explain compare and swap CAS and fetch and add FAA.md
 - [x] How would you explain compare and swap CAS in concurrent algorithms.md
