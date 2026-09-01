@@ -222,7 +222,6 @@
 - [x] How do you compare primitive and wrapper values in Java.md
 - [x] How do you compare primitive values in Java.md
 - [x] How do you compute the symmetric difference of two Java collections.md
-- [x] How do you ConcurrentModificationException time collection.md
 - [x] How do you configure a Spring Kafka producer and listener.md
 - [x] How do you configure initialization parameters for a JSP.md
 - [x] How do you configure logging in a Spring Boot application.md

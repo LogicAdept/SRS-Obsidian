@@ -7,19 +7,19 @@ priority: 0
 # How do you avoid `ConcurrentModificationException` while iterating a collection?
 
 > [!abstract] Short answer
-> **Mutate only through the iterator that is walking, or do not mutate that fail-fast collection during the walk.** Use `Iterator.remove()` after `next()`, or `Collection.removeIf` (default: same thing). Or iterate a **copy** and change the original (or the reverse). Or use a collection whose iterators are not fail-fast (`ConcurrentHashMap` weakly consistent; `CopyOnWriteArrayList` snapshot). Do not catch CME as the strategy.
+> **Mutate only through the iterator that is walking, or do not mutate that fail-fast collection during the walk.** Use `Iterator.remove()` after `next()`, or `Collection.removeIf`. Or iterate a **copy** / `toArray()` and change the original. Or use iterators that are not fail-fast (`ConcurrentHashMap` weakly consistent; `CopyOnWriteArrayList` snapshot). Do not catch CME. A lock and `ListIterator` do not make `list.remove` inside for-each legal.
 
-## Change the mutator, the collection, or the timing
+## Change the mutator, the collection, or the cursor
 
-Fail-fast iterators (`ArrayList`, `HashMap` views, …) throw `ConcurrentModificationException` if the collection is structurally modified after the iterator is created, except through **that** iterator’s `remove` (and list-iterator `add`). Enhanced `for` hides the iterator, so `coll.remove` / `add` in the body is the usual one-thread CME [[What is ConcurrentModificationException]], [[Can you modify a collection while iterating with a for-each loop]].
+Fail-fast iterators (`ArrayList`, `HashMap` views, …) throw `ConcurrentModificationException` if the collection is structurally modified after the iterator is created, except through **that** iterator’s `remove` (and list-iterator `add`). The check is on `next` / iterator `remove` (not always `hasNext()`), **best-effort**, and **one thread is enough**. Enhanced `for` hides the iterator, so `coll.remove` / `add` in the body is the usual case. [[What is ConcurrentModificationException]] [[Can you modify a collection while iterating with a for-each loop]] [[How can a single-threaded program get ConcurrentModificationException]]
 
-**Allowed in-walk delete (fail-fast):** keep `Iterator` in source and call `remove()` once after `next()`. `removeIf(Predicate)` (Java 8) walks `iterator()` and uses `Iterator.remove()`. `ListIterator` may `add` / `set` / `remove` under its own rules [[How do you remove an element from a collection while iterating]].
+**Allowed in-walk delete (fail-fast):** keep `Iterator` in source and call `remove()` once after `next()`. `removeIf(Predicate)` (Java 8) walks `iterator()` and uses `Iterator.remove()`. `ListIterator` may `add` / `set` / `remove` under its own rules — it is still **fail-fast**, not a snapshot. [[How do you remove an element from a collection while iterating]] [[Compare Iterator and ListIterator capabilities]]
 
-**After the walk:** gather keys/elements to drop, then `remove` / `removeAll` when no fail-fast iterator is live. Or `new ArrayList<>(coll)` and iterate the copy while mutating `coll` (the copy’s iterator does not see original `modCount`).
+**After the walk / a detached cursor:** gather keys to drop, then `remove` when no fail-fast iterator is live. Or `new ArrayList<>(coll)` and iterate the copy while mutating `coll`. Or `for (Object o : coll.toArray())` — `toArray()` allocates a **new** array the collection does not keep, so that loop is not the list iterator.
 
-**Different iterator contract:** `ConcurrentHashMap` iterators do **not** throw CME (weakly consistent; one thread per iterator). `CopyOnWriteArrayList` uses a snapshot and never throws CME; its iterator `remove` / `set` / `add` throw `UnsupportedOperationException` — mutate the **list**, not the iterator [[Are ConcurrentHashMap iterators fail-fast]], [[How can a single-threaded program get ConcurrentModificationException]].
+**Different iterator contract:** `ConcurrentHashMap` iterators do **not** throw CME (weakly consistent; one thread per iterator). `CopyOnWriteArrayList` uses a snapshot and never throws CME; its iterator `remove` / `set` / `add` throw `UnsupportedOperationException` — mutate the **list**, not the iterator. [[Are ConcurrentHashMap iterators fail-fast]]
 
-Fail-fast is **best-effort**. Programs must not depend on catching CME for correctness.
+Programs must not depend on catching CME for correctness.
 
 ```d2
 direction: down
@@ -32,8 +32,8 @@ own: "iterator.remove / removeIf" {
   height: 60
   style.fill: "#e8f5e9"
 }
-copy: "iterate a copy\nor mutate after" {
-  width: 260
+copy: "iterate a copy / toArray\nor mutate after" {
+  width: 280
   height: 60
   style.fill: "#e3f2fd"
 }
@@ -48,7 +48,7 @@ walk -> copy
 walk -> conc
 ```
 
-**Fig. 1.** Avoidance is a legal mutator, a second collection, or a non-fail-fast iterator — not `try/catch`.
+**Fig. 1.** Avoidance is a legal mutator, a second collection or array, or a non-fail-fast iterator — not `try/catch`, a lock, or `ListIterator` as “fail-safe.”
 
 ```java
 class AvoidCme {
@@ -72,16 +72,26 @@ class AvoidCme {
             }
         }
     }
+
+    static void stillCme(java.util.List<String> list) {
+        synchronized (list) {
+            for (String s : list) {
+                if (s.isEmpty()) {
+                    list.remove(s); // still typically CME — one thread
+                }
+            }
+        }
+    }
 }
 ```
 
-**Listing 1.** `removeIf` / `Iterator.remove` stay on the fail-fast list. The copy loop’s iterator belongs to the snapshot `ArrayList`, so `list.remove` does not invalidate it.
+**Listing 1.** `removeIf` / `Iterator.remove` stay on the fail-fast list. The copy loop’s iterator belongs to the snapshot `ArrayList`. `stillCme` is a lock around illegal `list.remove` — it does not avoid one-thread CME.
 
 > [!warning] Catching CME is not avoidance
 > Fail-fast is a bug detector. The collection may already be a bad state for this walk. Change how you mutate. Concurrent maps are not “ArrayList plus try/catch.”
 
-> [!warning] COW `iterator.remove` is not the ArrayList pattern
-> Snapshot iterators reject `remove` with `UnsupportedOperationException`. `list.remove` during for-each does not throw CME and does not change the remaining snapshot. Weakly consistent CHM iterators may see later puts; they are not a frozen copy.
+> [!warning] A lock and `ListIterator` are not snapshots
+> `synchronized` (or `Collections.synchronizedList`) is for **other threads** mutating structurally. This thread can still CME itself. `ArrayList.listIterator()` uses the same `modCount` story as `iterator()`. COW snapshot iterators reject `remove` with `UnsupportedOperationException`; weakly consistent CHM iterators may see later puts.
 
 > [!tip] Interview answer
-> **Use `Iterator.remove()` or `removeIf`, or iterate a copy, or a concurrent/snapshot collection.** For-each plus `coll.remove` is the classic CME, even on one thread. Do not rely on catching the exception.
+> **Use `Iterator.remove()` or `removeIf`, or iterate a copy, or a concurrent/snapshot collection.** For-each plus `coll.remove` is the classic CME, even on one thread and even inside `synchronized`. `ListIterator` is not fail-safe. Do not rely on catching the exception.
