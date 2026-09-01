@@ -3444,7 +3444,6 @@
 - [+] How do you test a Spring MVC controller in isolation.md
 - [+] How do you write a MockMvc test.md
 - [+] What is JSONAssert.md
-- [+] How do you write a Spring Boot integration test.md
 - [+] What is LocalServerPort.md
 - [+] What is TestRestTemplate.md
 - [+] What is the ContextConfiguration annotation.md
@@ -3468,7 +3467,6 @@
 - [+] What types of tests does Spring Boot support.md
 - [+] How do you handle test data in Spring integration tests.md
 - [+] What is the Sql annotation in Spring tests.md
-- [+] How do you test JPA repositories in Spring.md
 - [+] What is SpringBootTest WebEnvironment.md
 - [+] How do you test Spring Security in MockMvc tests.md
 - [+] What is the Spring TestContext Framework.md
@@ -4061,7 +4059,6 @@
 - [+] What object types can an annotation element return.md
 - [+] How does TYPE_USE differ from TYPE as an annotation target.md
 - [+] What package contains Java annotation types.md
-- [+] What is the difference between SOURCE CLASS and RUNTIME retention.md
 - [+] What is the difference between marker single-member and multi-member annotations.md
 - [+] What is the difference between annotations and comments.md
 - [+] How do you retrieve annotations at runtime.md

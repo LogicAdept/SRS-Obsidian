@@ -20,7 +20,7 @@ Dependency injection exists so you can **unit-test without Spring**. Escalate wh
 | Integration (mock web) | `@SpringBootTest` (default **`MOCK`**) | Full **`SpringApplication`**, **no** Tomcat |
 | Integration (HTTP) | `@SpringBootTest(webEnvironment = RANDOM_PORT)` | Full context **+ embedded server** |
 
-Slices are **not** Mockito-only: they still refresh an **`ApplicationContext`** (and hit the TestContext **cache**). They are **not** `@SpringBootTest`. Two `@…Test` slice annotations on one class are **unsupported**. Unit vs AOP: [[How do you test the service layer in Spring]]. Slices: [[What are Spring Boot test slices]]. Full context: [[What is SpringBootTest]]. Live HTTP: [[How do you test REST endpoints end to end]]. Recipe: [[How do you write a Spring Boot integration test]].
+Slices are **not** Mockito-only: they still refresh an **`ApplicationContext`** (and hit the TestContext **cache**). They are **not** `@SpringBootTest`. Two `@…Test` slice annotations on one class are **unsupported**. Unit vs AOP: [[How do you test the service layer in Spring]]. Slices: [[What are Spring Boot test slices]]. Full context: [[What is SpringBootTest]]. Live HTTP: [[How do you test REST endpoints end to end]].
 
 ```java
 @ExtendWith(MockitoExtension.class)

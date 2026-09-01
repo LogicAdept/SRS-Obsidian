@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core/IoC #Java/Annotations #SRS
+#Java/Spring/Core/IoC #SRS
 
 # How do you fix a circular dependency caused by self-injection in Spring?
 

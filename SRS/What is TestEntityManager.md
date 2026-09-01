@@ -13,7 +13,7 @@ priority: 0
 
 Official sample: **`entityManager.persist(new User(…))`** then **`repository.findByUsername(…)`**. **`persist`** delegates to **`EntityManager.persist`** and returns the **same instance** (now managed). **`flush()`** syncs SQL. **`persistAndFlush`** is persist then flush. **`persistFlushFind`** then **`find` by generated id** — useful when you need to prove the row **round-tripped**. **`clear()` / `detach()` / `refresh()`** match JPA.
 
-The slice already wraps each method in a **transaction that rolls back**. That is why setup persists do not leak. Slice: [[What is the DataJpaTest annotation]]. How-to: [[How do you test JPA repositories in Spring]]. Rollback: [[What is Transactional used for in tests]]. SQL seed: [[How do you handle test data in Spring integration tests]]. Family: [[What are Spring Boot test slices]].
+The slice already wraps each method in a **transaction that rolls back**. That is why setup persists do not leak. Slice: [[What is the DataJpaTest annotation]]. Rollback: [[What is Transactional used for in tests]]. SQL seed: [[How do you handle test data in Spring integration tests]]. Family: [[What are Spring Boot test slices]].
 
 ```java
 @DataJpaTest

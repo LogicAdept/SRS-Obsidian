@@ -2,18 +2,64 @@
 reps: 0
 priority: 0
 -->
-#Java/Annotations #SRS #New
+#Java/Annotations #SRS
 
-> [!warning] Untrusted draft
-> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
+# What is the difference between marker single-member and multi-member annotations?
 
-Dumps:
+> [!abstract] Short answer
+> Three **use-site shapes** of the same construct. A **marker** is `@Name` with **no element values** (shorthand for `@Name()`). A **single-member** (single-element) form is `@Name(expr)`, shorthand for `@Name(value = expr)`. A **multi-member** use is a **normal** annotation: `@Name(a = …, b = …)` with explicit names. The **interface** side matches: no elements, one element, or several.
 
-- Marker: no elements; presence is the data (`@Override`, `@Deprecated` as used). Cleaner than `@Flag(true)`.
-- Single-member: one element named `value`, used with the shorthand `@SuppressWarnings("unchecked")`.
-- Multi-member: named elements, each `name =` when you set them (`minLength`, `maxLength`, `pattern`).
+## Interface vs use-site
 
-All three still need `@Retention` / `@Target` like any custom type if you declare your own.
-> [!warning] Unverified traps from the dump
-> - A single member not named value is not the single-member shorthand form.
-> - Marker vs empty-body @interface with unused defaults: dumps treat “no elements” as the marker definition.
+A **marker annotation interface** declares **no** elements. Presence is the whole payload — `@Override`, `@FunctionalInterface`, `@Preliminary {}`. Prefer that over a boolean flag you always set to `true`.
+
+A **single-element annotation interface** declares **one** element. By convention it is named `value`, which unlocks [[How does the value element shorthand work]]: `@Copyright("…")` means `@Copyright(value = "…")`.
+
+Several elements → a **normal** annotation: every element-value pair is `name = …`. You must supply a pair for every element that has **no** default. Interview dumps call this **multi-member**.
+
+All three are still annotation types: they can take `@Target` / `@Retention` like any other [[What is a Java annotation]].
+
+```java
+@interface Flag {}                          // marker interface
+@interface Copyright { String value(); }    // single-element
+@interface Window { int min(); int max(); } // several elements
+
+@Flag
+@Copyright("Yoyodyne")
+@Window(min = 1, max = 80)
+class Widget {}
+```
+
+**Listing 1.** Three declarations and the three matching use-site forms.
+
+The shorthands are **not** locked to those interface shapes. `@Name` is legal even when the interface **has** elements, if **every** element has a default (`@Deprecated` is the usual example). `@Name(expr)` is legal on a **multi-element** type if one element is `value` and the rest have defaults.
+
+```d2
+direction: right
+m: "@Name\nmarker" {
+  width: 140
+  height: 70
+  style.fill: "#e3f2fd"
+}
+s: "@Name(expr)\nsingle-element" {
+  width: 160
+  height: 70
+  style.fill: "#e8f5e9"
+}
+n: "@Name(a=…, b=…)\nnormal / multi" {
+  width: 180
+  height: 70
+  style.fill: "#fff3e0"
+}
+
+m -> s: "add value"
+s -> n: "named pairs"
+```
+
+**Fig. 1.** Same `@` token; richness is how many element-value pairs you write.
+
+> [!warning] `value` is required for the parentheses shorthand
+> A lone element named `label()` is **not** a single-element *use*. `@Foo("x")` looks for `value`. You must write `@Foo(label = "x")`. Empty `@Bar` does **not** prove `Bar` has no elements — every element may simply have a default.
+
+> [!tip] Interview answer
+> Marker means no values at the use site, typically an empty @interface. Single-member means one element, conventionally value, so you can omit the name. Multi-member means a normal annotation with explicit names for each element you set. The compiler still expands the first two to the normal form; a type with only defaulted elements can still be written as a marker.

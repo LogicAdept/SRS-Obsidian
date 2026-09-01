@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Core/IoC/Scopes #Java/Annotations #SRS
+#Java/Spring/Core/IoC/Scopes #SRS
 
 # What is ObjectProvider and a scoped proxy in Spring?
 
