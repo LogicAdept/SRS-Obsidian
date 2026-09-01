@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Reflection #Java/JVM/ClassLoaders #Java/Exceptions/Hierarchy #Java/Exceptions/Error #Java/Exceptions/Checked #SRS
+#Java/Language/Reflection/Class #Java/JVM/ClassLoaders #Java/Exceptions/Hierarchy #Java/Exceptions/Error #Java/Exceptions/Checked #SRS
 
 # What is the difference between `ClassNotFoundException` and `NoClassDefFoundError`?
 

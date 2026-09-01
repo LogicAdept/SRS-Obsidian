@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Reflection #Java/JVM/ClassLoaders #Java/Versions/9 #SRS
+#Java/Language/Reflection/Class #Java/JVM/ClassLoaders #Java/Versions/9 #SRS
 
 # What does `Class.forName` do and what are its overloads?
 

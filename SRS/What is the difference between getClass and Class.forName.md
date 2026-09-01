@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Reflection #Java/JVM/ClassLoaders #SRS
+#Java/Language/Reflection/Class #Java/JVM/ClassLoaders #SRS
 
 # What is the difference between getClass and Class.forName?
 

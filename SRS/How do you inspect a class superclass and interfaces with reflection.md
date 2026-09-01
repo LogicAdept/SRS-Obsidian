@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Reflection #Java/OOP #SRS
+#Java/Language/Reflection/Class #Java/OOP #SRS
 
 # How do you inspect a class superclass and interfaces with reflection?
 

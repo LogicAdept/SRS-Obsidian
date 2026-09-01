@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Reflection #Java/JVM/ClassLoaders #SRS
+#Java/Language/Reflection/Class #Java/JVM/ClassLoaders #SRS
 
 # How can you get the Class object in Java?
 

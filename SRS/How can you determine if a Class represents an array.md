@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Reflection #Java/Arrays #SRS
+#Java/Language/Reflection/Class #Java/Arrays #SRS
 
 # How can you determine if a Class represents an array?
 

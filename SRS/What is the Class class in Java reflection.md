@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Reflection #SRS
+#Java/Language/Reflection/Class #SRS
 
 # What is the Class class in Java reflection?
 

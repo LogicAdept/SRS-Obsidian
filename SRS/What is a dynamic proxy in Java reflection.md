@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Reflection #SRS
+#Java/Language/Reflection/Proxy #SRS
 
 # What is a dynamic proxy in Java reflection?
 

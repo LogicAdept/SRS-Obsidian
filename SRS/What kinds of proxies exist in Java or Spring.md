@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Framework/AOP #Java/Language/Reflection #SRS
+#Java/Spring/Framework/AOP #Java/Language/Reflection/Proxy #SRS
 
 # What kinds of proxies exist in Java or Spring?
 

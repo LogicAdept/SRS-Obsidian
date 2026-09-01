@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Records #Java/Language/Reflection #SRS
+#Java/Language/Records #Java/Language/Reflection/Class #SRS
 
 # How do you inspect a Java record with reflection?
 
