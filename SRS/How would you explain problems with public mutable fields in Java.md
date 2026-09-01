@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #Paradigms/OOP #DataAndState/Mutability/Mutable #Java/Language/Modifiers/Access #SRS
+#Java/OOP/Encapsulation #Paradigms/OOP #DataAndState/Mutability/Mutable #Java/Language/Modifiers/Access #SRS
 
 # How would you explain problems with public mutable fields in Java?
 

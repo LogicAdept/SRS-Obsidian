@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #Java/Language #Java/Versions/8 #SRS
+#Java/OOP/Interfaces #Java/Language #Java/Versions/8 #SRS
 
 # How would you explain default interface methods since Java 8?
 

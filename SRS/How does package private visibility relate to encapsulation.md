@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Modifiers/Access #Java/OOP #SRS
+#Java/Language/Modifiers/Access #Java/OOP/Encapsulation #SRS
 
 # How does package private visibility relate to encapsulation?
 

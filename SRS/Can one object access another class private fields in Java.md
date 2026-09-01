@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Modifiers/Access #Java/OOP #SRS
+#Java/Language/Modifiers/Access #Java/OOP/Encapsulation #SRS
 
 # Can one object access another class private fields in Java?
 

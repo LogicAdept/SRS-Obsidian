@@ -7,7 +7,7 @@ priority: 0
 # When should you use an abstract class versus an interface?
 
 > [!abstract] Short answer
-> Use an **interface** for the **type you pass around** and for a **capability** unrelated classes can share (`implements` many). Use an **abstract class** when subclasses must share **instance state, a constructor, or protected helpers**—you have only **one** `extends` slot ([[Does Java support multiple inheritance for classes]]). Often **both**: interface as API, abstract class as a skeletal implementation. Differences: [[What is the difference between a Java interface and an abstract class]]. Garbled twin: [[How does abstract class differ from interface in which cases should you use abstract class and in which interf]].
+> Use an **interface** for the **type you pass around** and for a **capability** unrelated classes can share (`implements` many). Use an **abstract class** when subclasses must share **instance state, a constructor, or protected helpers**—you have only **one** `extends` slot ([[Does Java support multiple inheritance for classes]]). Often **both**: interface as API, abstract class as a skeletal implementation. Differences: [[What is the difference between a Java interface and an abstract class]].
 
 ## Decide by state, construction, and how many types
 

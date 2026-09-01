@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #Paradigms/OOP #Java/Language/Modifiers/Access #SRS
+#Java/OOP/Encapsulation #Paradigms/OOP #Java/Language/Modifiers/Access #SRS
 
 # What is encapsulation?
 

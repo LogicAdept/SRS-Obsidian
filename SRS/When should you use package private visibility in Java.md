@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #Java/Language/Modifiers/Access #SRS
+#Java/OOP/Encapsulation #Java/Language/Modifiers/Access #SRS
 
 # When should you use package private visibility in Java?
 

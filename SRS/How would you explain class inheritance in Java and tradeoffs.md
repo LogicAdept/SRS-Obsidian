@@ -15,7 +15,7 @@ The `extends` clause names the **direct superclass type** (implicitly `Object` i
 
 **Inherited.** Members of the superclass except `private` ones (and package-access ones from another package). Constructors, static initializers, and instance initializers are **not** members and are **not** inherited; the subclass still **runs** a superclass constructor. Overriding: [[How would you explain method overriding in Java]]. `super.m()`: [[How do you call superclass methods from a subclass in Java]].
 
-**Not inherited as a second class parent.** Multiple class inheritance is illegal. Multiple **types** go through `implements` ([[How does Java model multiple inheritance with interfaces]], [[Why does Java disallow multiple class inheritance]]). Abstract vs interface: [[How does abstract class differ from interface in which cases should you use abstract class and in which interf]].
+**Not inherited as a second class parent.** Multiple class inheritance is illegal. Multiple **types** go through `implements` ([[How does Java model multiple inheritance with interfaces]], [[Why does Java disallow multiple class inheritance]]). Abstract vs interface: [[What is the difference between a Java interface and an abstract class]].
 
 **Tradeoffs (language consequences)**
 

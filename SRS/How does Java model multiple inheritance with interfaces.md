@@ -102,7 +102,7 @@ class Pick implements Left, Right {
 > `implements Left, Right` is a compile-time error until you declare `name()` in the class. Two **abstract** `foo()` declarations with the same signature **do** merge into one method to implement.
 
 > [!warning] This is not C++ multiple inheritance of objects
-> You do not get two copies of fields, and you cannot `extends` two classes. Mix in **types** and **default behavior**; put **state** on the class (or on the one abstract superclass). Design split: [[How does abstract class differ from interface in which cases should you use abstract class and in which interf]].
+> You do not get two copies of fields, and you cannot `extends` two classes. Mix in **types** and **default behavior**; put **state** on the class (or on the one abstract superclass). Design split: [[When should you use an abstract class versus an interface]].
 
 > [!warning] `List<String>` and `List<Integer>` cannot both be implemented
 > Erasure would make both `List`. Name each generic interface at most once, with one parameterization (or the raw type, not both).

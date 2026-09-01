@@ -297,7 +297,6 @@
 - [x] How do you from class get access to field outer class.md
 - [x] How do you from List get List elements besides and.md
 - [x] How do you generate a sequence of unique random numbers in constant time.md
-- [x] How do you get access to override method class.md
 - [x] How do you get all numbers in set.md
 - [x] How do you get an entity by id in a Spring Boot REST service.md
 - [x] How do you get server information from a servlet.md
@@ -462,7 +461,6 @@
 - [x] How does a Spring application call another service.md
 - [x] How does a Spring IoC container differ from a web container or EJB container.md
 - [x] How does a trigram index help SQL search.md
-- [x] How does abstract class differ from interface in which cases should you use abstract class and in which interf.md
 - [x] How does an aggregate persist and publish events without a distributed transaction.md
 - [x] How does an event hub differ from a service bus.md
 - [x] How does Bean Validation work in Spring Boot.md

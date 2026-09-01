@@ -7,7 +7,7 @@ priority: 0
 # What is the difference between an abstract class with an abstract method and an interface with an abstract method in Java?
 
 > [!abstract] Short answer
-> The **method** is the same idea: a signature **without a body**; a **concrete** class must **implement** it. The **types** differ. An `abstract` method in a **class** must live in an **`abstract` class** (or enum); it may be `public`, `protected`, or package-private; the class still has **fields, constructors, and one `extends` slot**. An interface method without `default`/`static`/`private` is **implicitly `public abstract`**; you cannot make it `protected`. Full type comparison: [[What is the difference between a Java interface and an abstract class]]. When to use which: [[How does abstract class differ from interface in which cases should you use abstract class and in which interf]].
+> The **method** is the same idea: a signature **without a body**; a **concrete** class must **implement** it. The **types** differ. An `abstract` method in a **class** must live in an **`abstract` class** (or enum); it may be `public`, `protected`, or package-private; the class still has **fields, constructors, and one `extends` slot**. An interface method without `default`/`static`/`private` is **implicitly `public abstract`**; you cannot make it `protected`. Full type comparison: [[What is the difference between a Java interface and an abstract class]]. When to use which: [[When should you use an abstract class versus an interface]].
 
 ## Same missing body, different home
 
