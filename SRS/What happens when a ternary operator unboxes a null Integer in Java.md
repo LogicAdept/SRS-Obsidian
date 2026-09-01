@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Primitives #Java/Language/Wrappers/Autoboxing #SRS
+#Java/Language/Operators/Ternary #Java/Language/Wrappers/Autoboxing #SRS
 
 # What happens when a ternary operator unboxes a `null` `Integer` in Java?
 

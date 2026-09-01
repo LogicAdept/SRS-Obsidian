@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Primitives #SRS
+#Java/Language/Operators/Bitwise #SRS
 
 # What is the difference between signed right shift and unsigned right shift in Java?
 

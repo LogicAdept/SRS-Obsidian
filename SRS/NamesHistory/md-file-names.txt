@@ -1155,7 +1155,6 @@
 - [x] How would you explain the StringBuilder append method.md
 - [x] How would you explain the structure of a Maven pom.xml file.md
 - [x] How would you explain the term plain old Java object POJO.md
-- [x] How would you explain the ternary conditional operator in Java.md
 - [x] How would you explain the throws clause for checked exceptions.md
 - [x] How would you explain the transactional outbox pattern.md
 - [x] How would you explain the transient field modifier in Java.md
@@ -2056,7 +2055,6 @@
 - [x] What is Tarjan's algorithm.md
 - [x] What is TCP IP.md
 - [x] What is temperature in an LLM.md
-- [x] What is ternary operator choice.md
 - [x] What is Testcontainers.md
 - [x] What is testing.md
 - [x] What is the A star algorithm.md
@@ -2486,6 +2484,7 @@
 - [x] What is the synchronized keyword for in Java.md
 - [x] What is the TCP IP protocol suite.md
 - [x] What is the Test Message pattern.md
+- [x] What is the ternary conditional operator in Java.md
 - [x] What is the test pyramid.md
 - [x] What is the third-party registration pattern in microservices.md
 - [x] What is the time complexity of appending to an ArrayList.md
