@@ -91,7 +91,7 @@ Obtain an array `Class` with `String[].class`, `array.getClass()`, or `Class.for
 > Identity and `isAssignableFrom` treat them as different types. `isArray()` / `getComponentType()` are the API; do not scrape `getName()` for a leading `'['` unless you are matching binary names.
 
 > [!warning] `int[]` is not a primitive `Class`
-> `isPrimitive()` is true only for the eight primitives and `void`. `int[].class.isArray()` is true; `int[].class.isPrimitive()` is false. The **component** may be primitive ([[Is array is primitive in java]]).
+> `isPrimitive()` is true only for the eight primitives and `void`. `int[].class.isArray()` is true; `int[].class.isPrimitive()` is false. The **component** may be primitive ([[Is a Java array a primitive or an object]]).
 
 > [!tip] Interview answer
 > **`clazz.isArray()` — that is the check.** `true` for `String[].class` and `int[].class`, `false` for `String.class` and `int.class`. **`getComponentType()` peels one level** (`int[][]` → `int[]`, not `int`), and all arrays with the same component type share one `Class` regardless of length.

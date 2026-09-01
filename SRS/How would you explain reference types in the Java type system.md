@@ -2,32 +2,83 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Primitives #DataAndState/ReferenceSemantics #Java/OOP #SRS #New
+#Java/Language/Primitives #DataAndState/ReferenceSemantics #Java/OOP #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How would you explain reference types in the Java type system?
 
-**Расскажите про приведение типов. Что такое понижение и повышение типа?**
+> [!abstract] Short answer
+> **A reference type’s values are pointers to objects — or `null`.** There are four kinds: class types, interface types, type variables, and array types. An object is a class instance or an array. The variable holds the reference; two variables can name the same object. Primitives are the other kind of type.
 
-Java является строго типизированным языком программирования, а это означает, то что каждое выражение и каждая переменная имеет строго определенный тип уже на момент компиляции. Однако определен механизм _приведения типов (casting)_ - способ преобразования значения переменной одного типа в значение другого типа.
+## Four kinds, one kind of value
 
-В Java существуют несколько разновидностей приведения:
+The language has primitive types and reference types ([[How would you explain Java data types primitives and references]], [[What is the difference between primitive and reference types in Java]]). A reference value is a pointer to an object, or the null reference. You cannot declare a variable of the nameless **null type**; you assign `null` to any reference type ([[Why cannot a Java primitive variable be null]]).
 
-+ __Тождественное (identity)__. Преобразование выражения любого типа к точно такому же типу всегда допустимо и происходит автоматически.
-+ __Расширение (повышение, upcasting) примитивного типа (widening primitive)__. Означает, что осуществляется переход от менее емкого типа к более ёмкому. Например, от типа `byte` (длина 1 байт) к типу `int` (длина 4 байта). Такие преобразование безопасны в том смысле, что новый тип всегда гарантировано вмещает в себя все данные, которые хранились в старом типе и таким образом не происходит потери данных. Этот тип приведения всегда допустим и происходит автоматически.
-+ __Сужение (понижение, downcasting) примитивного типа (narrowing primitive)__. Означает, что переход осуществляется от более емкого типа к менее емкому. При таком преобразовании есть риск потерять данные. Например, если число типа `int` было больше `127`, то при приведении его к `byte` значения битов старше восьмого будут потеряны. В Java такое преобразование должно совершаться явным образом, при этом все старшие биты, не умещающиеся в новом типе, просто отбрасываются - никакого округления или других действий для получения более корректного результата не производится.
-+ __Расширение объектного типа (widening reference)__. Означает неявное восходящее приведение типов или переход от более конкретного типа к менее конкретному, т.е. переход от потомка к предку. Разрешено всегда и происходит автоматически.
-+ __Сужение объектного типа (narrowing reference)__. Означает нисходящее приведение, то есть приведение от предка к потомку (подтипу). Возможно только если исходная переменная является подтипом приводимого типа. При несоответствии типов в момент выполнения выбрасывается исключение `ClassCastException`. Требует явного указания типа.
-+ __Преобразование к строке (to String)__. Любой тип может быть приведен к строке, т.е. к экземпляру класса `String`.
-+ __Запрещенные преобразования (forbidden)__. Не все приведения между произвольными типами допустимы. Например, к запрещенным преобразованиям относятся приведения от любого ссылочного типа к примитивному и наоборот (кроме преобразования к строке). Кроме того невозможно привести друг к другу классы находящиеся на разных ветвях дерева наследования и т.п.
+| Kind | Example |
+| --- | --- |
+| Class type | `String`, `Point` |
+| Interface type | `Runnable`, `List<String>` |
+| Type variable | `T` in `class Box<T>` |
+| Array type | `int[]`, `Point[]` |
 
-При приведении ссылочных типов с самим объектом ничего не происходит, - меняется лишь тип ссылки, через которую происходит обращение к объекту.
+A class or interface type may be parameterized (`List<String>`). `Object` is a superclass of every class; class and array types inherit `Object`’s members. `String` literals are references to `String` instances. Arrays **are** objects ([[Is a Java array a primitive or an object]]).
 
-Для проверки возможности приведения нужно воспользоваться оператором `instanceof`:
+Creating an object (`new Point()`, `new int[10]`) yields a reference. Assigning that reference copies the pointer, not the object. Widening a reference (subtype to supertype) is compile-time only: the object is unchanged; the compiler regards the pointer as a more general type. Narrowing (`(Child) parent`) can throw `ClassCastException` ([[When can a ClassCastException be thrown in Java]]). `instanceof` tests before that downcast.
+
+```d2
+direction: down
+rt: "reference type" {
+  width: 180
+  height: 45
+  style.fill: "#fff3e0"
+}
+val: "reference value\npointer or null" {
+  width: 240
+  height: 70
+  style.fill: "#e3f2fd"
+}
+obj: "object\nclass instance or array" {
+  width: 260
+  height: 70
+  style.fill: "#e8f5e9"
+}
+
+rt -> val
+val -> obj
+```
+
+**Fig. 1.** The type lives on the variable. The object lives on the other end of the reference.
 
 ```java
-Parent parent = new Child();
-if (parent instanceof Child) {
-    Child child = (Child) parent;
+class Value { int val; }
+
+public final class ReferenceTypes {
+    public static void main(String[] args) {
+        int i1 = 3;
+        int i2 = i1;
+        i2 = 4;                    // i1 is still 3
+
+        Value v1 = new Value();
+        v1.val = 5;
+        Value v2 = v1;             // same object
+        v2.val = 6;                // v1.val is 6
+
+        Object o = v1;             // widening; same object
+        int[] cells = new int[2];  // array type, array object
+        Runnable r = null;
+
+        System.out.println(i1);
+        System.out.println(v1.val);
+        System.out.println(o == v1);
+        System.out.println(cells.length);
+        System.out.println(r);
+    }
 }
 ```
+
+**Listing 1.** Primitive assignment copies bits. Reference assignment copies a pointer. `Object o = v1` does not copy `Value`. `int[]` is a reference type.
+
+> [!warning] A cast does not convert the object, and `(String) 5` is not a thing
+> `(Child) parent` reinterprets the **reference**; if the object is not a `Child`, you get `ClassCastException`. Check with `instanceof` (or a pattern) first. Boxing `Integer` ↔ `int` is a conversion; it is not “forbidden” the way a dump that lists only string conversion claims. You do not write `(String) 5`; concatenation `+` can stringify a value. Primitive widening/narrowing is a different catalog ([[How would you explain widening and narrowing casts between Java primitive types]]).
+
+> [!tip] Interview answer
+> **Reference types are class, interface, type-variable, and array types; their values are pointers to objects or `null`.** An object is a class instance or an array. Assignment copies the pointer, so two variables can share one object. `null` is legal on references and illegal on primitives.

@@ -142,6 +142,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Language/Optional/Usage`
 * `#Java/Language/Parameters`
 * `#Java/Language/Primitives`
+* `#Java/Language/Primitives/Conversions`
 * `#Java/Language/Primitives/FloatingPoint`
 * `#Java/Language/Primitives/NumericPromotion`
 * `#Java/Language/Records`

@@ -1284,7 +1284,6 @@
 - [x] Is it accurate to say String is backed by a character array internally.md
 - [x] Is it safe to use a byte array as a HashMap key.md
 - [x] Is it true that primitives live on the stack and reference instances live on the heap.md
-- [x] Is it true that statement what primitive types data always stored in stack and instances reference types data.md
 - [x] Is Java a compiled or interpreted language.md
 - [x] Is Java LinkedList a singly or doubly linked list.md
 - [x] Is java.util.HashMap thread safe.md
