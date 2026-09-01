@@ -324,7 +324,6 @@
 - [x] How do you handle exceptions in Java applications.md
 - [x] How do you handle missing data in machine learning.md
 - [x] How do you handle transaction isolation anomalies.md
-- [x] How do you happens elements from ArrayList how in ArrayList.md
 - [x] How do you identify slow or non-performant SQL queries.md
 - [x] How do you implement a bounded buffer with ReentrantLock.md
 - [x] How do you implement a bounded buffer with synchronized in Java.md
@@ -630,7 +629,6 @@
 - [x] How would you explain ACK NACK DLQ.md
 - [x] How would you explain advantages of composition in object oriented design.md
 - [x] How would you explain advantages of Java NIO over classic blocking IO.md
-- [x] How would you explain algorithm elements from list ArrayList.md
 - [x] How would you explain algorithm work garbage in HotSpot.md
 - [x] How would you explain Allure.md
 - [x] How would you explain alternate or secondary keys in relational databases.md
@@ -798,7 +796,6 @@
 - [x] How would you explain how many elements will if Iterator.next will 10 Iterator.hasNext.md
 - [x] How would you explain how many happens in call HashMap.get(key by which are there in.md
 - [x] How would you explain how many memory when call LinkedList.add.md
-- [x] How would you explain how many must memory when call ArrayList.add.md
 - [x] How would you explain HTTP cookies.md
 - [x] How would you explain HTTP sessions in servlet based applications.md
 - [x] How would you explain HTTP.md
@@ -891,8 +888,6 @@
 - [x] How would you explain list main kinds selector.md
 - [x] How would you explain list main types data in JDBC how they related with Java.md
 - [x] How would you explain list principles you should you in much programming.md
-- [x] How would you explain List.of(1,2,3) vs new ArrayList().md
-- [x] How would you explain List.of(1,2,3) vs new ArrayList.md
 - [x] How would you explain literal syntax for values in Java.md
 - [x] How would you explain livelock in concurrent programs.md
 - [x] How would you explain Liveness vs Readiness probe.md
@@ -1208,7 +1203,6 @@
 - [x] How would you explain what will if override equals not override hashCode which can problems.md
 - [x] How would you explain what will if queue threads already.md
 - [x] How would you explain what will result execution operation int array = {8 -3 10 4} int result = Arrays.binaryS.md
-- [x] How would you explain what works ArrayList or LinkedList.md
 - [x] How would you explain what you do you know about function main.md
 - [x] How would you explain what you do you know about interface FileFilter.md
 - [x] How would you explain what you do you know about RandomAccessFile.md
@@ -1222,7 +1216,6 @@
 - [x] How would you explain which from about thread.md
 - [x] How would you explain which Java language constructs can be marked static.md
 - [x] How would you explain which on serialize modifiers static and final.md
-- [x] How would you explain which worst time work method add for ArrayList.md
 - [x] How would you explain which worst time work method contains for element which are there in LinkedList.md
 - [x] How would you explain which.md
 - [x] How would you explain why can be needed private.md
@@ -1231,7 +1224,6 @@
 - [x] How would you explain WireMock.md
 - [x] How would you explain with using which bash access.md
 - [x] How would you explain write collection throw ConcurrentModificationException.md
-- [x] How would you explain write minimum non-blocking ArrayList method — add get remove size.md
 - [x] How would you explain write minimum non-blocking stack two method — push and pop.md
 - [x] How would you explain write much with using ReentrantLock.md
 - [x] How would you explain write much with using synchronized.md
@@ -2121,7 +2113,6 @@
 - [x] What is the difference between AOP advice and pointcuts.md
 - [x] What is the difference between ArrayList and LinkedList.md
 - [x] What is the difference between ArrayList and Vector.md
-- [x] What is the difference between ArrayList from LinkedList in which cases better use and in which.md
 - [x] What is the difference between atomicity and consistency.md
 - [x] What is the difference between authentication and authorization.md
 - [x] What is the difference between Autowired and RequiredArgsConstructor.md
@@ -2203,7 +2194,7 @@
 - [x] What is the difference between L1 and L2 regularization.md
 - [x] What is the difference between LIKE ILIKE and full-text search.md
 - [x] What is the difference between linear regression and logistic regression.md
-- [x] What is the difference between List.of(1,2,3) new ArrayList().md
+- [x] What is the difference between List.of(1,2,3) and new ArrayList.md
 - [x] What is the difference between margin and padding in CSS.md
 - [x] What is the difference between method wait with and without.md
 - [x] What is the difference between methods GET and POST.md
