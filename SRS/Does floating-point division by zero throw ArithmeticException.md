@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions/Unchecked #Java/Language/Primitives #SRS
+#Java/Exceptions/Unchecked #Java/Language/Primitives/FloatingPoint #SRS
 
 # Does floating-point division by zero throw `ArithmeticException`?
 
