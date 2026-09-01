@@ -132,6 +132,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Language/Modifiers/Static`
 * `#Java/Language/NestedClasses`
 * `#Java/Language/Object`
+* `#Java/Language/Object/Clone`
+* `#Java/Language/Object/Finalize`
 * `#Java/Language/Operators`
 * `#Java/Language/Operators/Bitwise`
 * `#Java/Language/Operators/Logical`

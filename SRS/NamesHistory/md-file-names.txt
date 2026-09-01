@@ -717,7 +717,7 @@
 - [x] How would you explain Deadlock.md
 - [x] How would you explain Decision Table.md
 - [x] How would you explain Declarative vs Scripted Pipeline.md
-- [x] How would you explain deep versus shallow copying in Java.md
+- [x] What is the difference between shallow and deep copying in Java.md
 - [x] How would you explain default equals and hashCode inherited from Object.md
 - [x] How would you explain default interface methods since Java 8.md
 - [x] How would you explain default modifiers for fields and methods inside interfaces.md
@@ -855,7 +855,6 @@
 - [x] How would you explain Java generics and type erasure.md
 - [x] How would you explain Java method references and their bytecode form.md
 - [x] How would you explain Java primitive data types.md
-- [x] How would you explain java.lang.Object as the root class.md
 - [x] How would you explain java.lang.Object as the root of the class hierarchy.md
 - [x] How would you explain java.lang.String.md
 - [x] How would you explain java.lang.StringBuilder.md
@@ -1206,7 +1205,6 @@
 - [x] How would you explain what does operator EXISTS.md
 - [x] How would you explain what does operator MERGE.md
 - [x] How would you explain what equals.md
-- [x] How would you explain what happens garbage collector garbage if execution method finalize takes noticeably muc.md
 - [x] How would you explain what happens if in block initialization occurs exceptional situation.md
 - [x] How would you explain what happens when call Iterator.next without call Iterator.hasNext.md
 - [x] How would you explain what happens when in thread is thrown exception.md
@@ -1731,7 +1729,6 @@
 - [x] What is character.md
 - [x] What is CI CD.md
 - [x] What is CI.md
-- [x] What is class Object which in are there methods.md
 - [x] What is clear.md
 - [x] What is ClickHouse Keeper.md
 - [x] What is ClickHouse.md
@@ -2136,7 +2133,6 @@
 - [x] What is the difference between an OS process and a Java thread.md
 - [x] What is the difference between and index.md
 - [x] What is the difference between and what InputStream OutputStream Reader Writer.md
-- [x] What is the difference between and.md
 - [x] What is the difference between AOP advice and pointcuts.md
 - [x] What is the difference between ArrayList and LinkedList.md
 - [x] What is the difference between ArrayList and Vector.md
@@ -2951,7 +2947,6 @@
 - [x] Why is Thread.stop deprecated and unsafe.md
 - [x] Why LinkedList implements and List and Deque.md
 - [x] Why Liquibase Flyway.md
-- [x] Why method clone in class Object and not in interface Cloneable.md
 - [x] Why might a ClickHouse skip index not help.md
 - [x] Why might a Java interface declare no methods.md
 - [x] Why might PostgreSQL choose a sequential scan instead of an index.md

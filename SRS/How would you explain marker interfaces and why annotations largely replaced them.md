@@ -11,7 +11,7 @@ priority: 0
 
 ## Presence as a type vs presence as metadata
 
-`RandomAccess` is documented as a **marker interface**: `List` algorithms branch on `instanceof` to avoid quadratic `get` on a `LinkedList`. `Serializable` “has no methods or fields and serves only to identify the semantics of being serializable.” `Cloneable` tells `Object.clone()` the copy is allowed — and famously **does not declare `clone()`**, so implementing it does not give you a callable `clone` in the type system ([[Why method clone in class Object and not in interface Cloneable]]).
+`RandomAccess` is documented as a **marker interface**: `List` algorithms branch on `instanceof` to avoid quadratic `get` on a `LinkedList`. `Serializable` “has no methods or fields and serves only to identify the semantics of being serializable.” `Cloneable` tells `Object.clone()` the copy is allowed — and famously **does not declare `clone()`**, so implementing it does not give you a callable `clone` in the type system ([[Why is clone declared on Object rather than on Cloneable]]).
 
 That pattern is a **type**: subtypes inherit it (`Serializable` subtypes are serializable), you can write it in signatures and casts, and JLS even calls `Serializable` a marker interface type for lambda intersections.
 
