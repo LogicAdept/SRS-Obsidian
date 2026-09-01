@@ -4202,3 +4202,16 @@
 - [+] Why is Invalid Message Channel not only a development-environment pattern.md
 - [+] What is the JMS unprocessable message destination.md
 - [+] What is the difference between Datatype Channel and Invalid Message Channel.md
+- [+] What is the size of the Java boolean type.md
+- [+] When should you use the Java byte type.md
+- [+] Can a double be cast to a byte in Java.md
+- [+] Can a byte be assigned to a double without a cast in Java.md
+- [+] Why does a byte plus-equals compile when byte plus one does not.md
+- [+] Why cannot you assign 0 or TRUE to a Java boolean.md
+- [+] What happens when you cast 280 to a Java byte.md
+- [+] Why does assigning 128 to a byte without a cast fail to compile.md
+- [+] How do you convert a double to a float in Java.md
+- [+] What is the remainder of a negative integer in Java.md
+- [+] Why cannot Java logical operators be applied to integers.md
+- [+] What happens when you assign an int literal that exceeds the char range.md
+- [+] What does the Java strictfp modifier do.md

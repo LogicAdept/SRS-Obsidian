@@ -51,3 +51,7 @@ Interview question repositories used as SRS sources.
 
 - https://github.com/owaresabd/spring-interview-questions/blob/spring/spring-multiple-choice-questions.md
 + https://github.com/hedgehog-zowie/eips
++ https://github.com/seaboyz/java-interview
++ https://github.com/sisi-tarak/java-interview-questions
++ https://github.com/in28minutes/java-cheat-sheet
++ https://github.com/nomemory/java-interview-questions
