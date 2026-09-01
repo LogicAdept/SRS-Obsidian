@@ -207,7 +207,6 @@
 - [x] How do you call an overridden superclass method in Java.md
 - [x] How do you call superclass methods from a subclass in Java.md
 - [x] How do you can get object collection.md
-- [x] How do you can print on screen numbers using method map.md
 - [x] How do you capture a Java heap dump.md
 - [x] How do you capture a Java thread dump.md
 - [x] How do you choose a ClickHouse sharding key.md
@@ -393,8 +392,6 @@
 - [x] How do you prevent Java object serialization.md
 - [x] How do you print 10 random numbers in ascending order with streams.md
 - [x] How do you print 10 random numbers using forEach.md
-- [x] How do you print on screen 10 numbers in order.md
-- [x] How do you print on screen count string with using method filter.md
 - [x] How do you print unique squares of numbers using map.md
 - [x] How do you propagate an exception up the call stack in Java.md
 - [x] How do you protect a slower downstream service from overload.md
@@ -818,7 +815,6 @@
 - [x] How would you explain instance initializer blocks versus constructors.md
 - [x] How would you explain Integer cache valueOf(100)==valueOf(100) true, valueOf(200) false.md
 - [x] How would you explain integration testing and how it differs from unit tests.md
-- [x] How would you explain intermediate operations on Java streams.md
 - [x] How would you explain internationalization and localization in applications.md
 - [x] How would you explain InterruptedException in Java threads.md
 - [x] How would you explain inversion of control versus dependency injection.md
@@ -924,7 +920,6 @@
 - [x] How would you explain Overload vs Override.md
 - [x] How would you explain Pagination offset limit vs cursor-based.md
 - [x] How would you explain Pairwise testing.md
-- [x] How would you explain parallel in Java 8.md
 - [x] How would you explain parallel streams in Java.md
 - [x] How would you explain parameterized types and generics in Java.md
 - [x] How would you explain Patterns of Enterprise Applications Architecture PoEAA.md
@@ -2691,7 +2686,6 @@
 - [x] Which class allows from thread in types data.md
 - [x] Which class convert thread in character and.md
 - [x] Which class for using.md
-- [x] Which class in Java 8 for data.md
 - [x] Which class intended for work with elements file.md
 - [x] Which class reads primitive values from a Java InputStream.md
 - [x] Which classes convert between Java byte streams and character streams.md
@@ -2759,7 +2753,6 @@
 - [x] Which message delivery guarantees.md
 - [x] Which methods can implement inversion of control.md
 - [x] Which methods class File you do you know.md
-- [x] Which methods for work with array maps in Java 8.md
 - [x] Which methods work stream you do you know.md
 - [x] Which methods XML describe and method.md
 - [x] Which modifiers.md

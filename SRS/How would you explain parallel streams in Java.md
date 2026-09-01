@@ -7,17 +7,17 @@ priority: 0
 # How would you explain parallel streams in Java?
 
 > [!abstract] Short answer
-> **Same pipeline, different execution mode.** JDK streams are sequential unless you ask: `Collection.parallelStream()` or `stream.parallel()`. The mode on the stream when the **terminal** op runs applies to the whole pipeline. Results should match sequential except for explicitly nondeterministic ops (`findAny`, `forEach`). Splitting is via `Spliterator`; OpenJDK drives that with fork-join tasks.
+> **Same pipeline, different execution mode.** JDK streams are sequential unless you ask: `Collection.parallelStream()` or `stream.parallel()`. The **last** `parallel()` / `sequential()` before the **terminal** wins for the whole pipeline — not per op. Results should match sequential except for explicitly nondeterministic ops (`findAny`, `forEach`). Splitting is via `Spliterator`; OpenJDK drives that with fork-join on `ForkJoinPool.commonPool()`.
 
 ## Mode flag, then split-and-combine
 
-All stream operations can run serial or parallel. JDK factories create **serial** streams unless you opt in (`Collection.stream()` vs `parallelStream()`, or `IntStream.range(...).parallel()`). `isParallel()`, `sequential()`, and `parallel()` query and change the mode; the **latest** setting is what the terminal op uses ([[What is the difference between sequential and parallel streams in Java]], [[When does a Java stream pipeline actually start executing]]).
+All stream operations can run serial or parallel. JDK factories create **serial** streams unless you opt in (`Collection.stream()` vs `parallelStream()`, or `IntStream.range(...).parallel()`). `isParallel()`, `sequential()`, and `parallel()` query and change the mode; the **latest** setting is what the terminal op uses. `isParallel()` answers whether a terminal **if run now** would be parallel ([[What is the difference between sequential and parallel streams in Java]], [[When does a Java stream pipeline actually start executing]], [[What is Stream]]).
 
 `Collection.parallelStream()` is only a **possibly** parallel stream — the default implementation builds a parallel stream from the collection’s `Spliterator`, but the contract allows a sequential one.
 
 A `Spliterator` is the parallel analogue of an `Iterator`: advance, bulk traverse, and **split** a prefix for another worker ([[Does the Stream API use an Iterator internally]], [[Does the Java Stream API optimize for lists that implement RandomAccess]]). Reductions (`reduce`, `sum`, `collect`) combine partial results; the accumulator/combiner must be associative and stateless. Mutating a shared `ArrayList` in `forEach` is the anti-pattern the package doc replaces with `collect`.
 
-OpenJDK `AbstractTask` (Java 8) is a `CountedCompleter` that splits the spliterator until chunks are small. Default leaf fan-out uses `ForkJoinPool.getCommonPoolParallelism() << 2`, unless the caller is already a `ForkJoinWorkerThread`, in which case it uses **that** pool’s parallelism. `ForkJoinPool.commonPool()` is the pool for `ForkJoinTask`s not submitted to a named pool. The pool does **not** guarantee extra threads when tasks block on I/O ([[What backs Java parallelStream under the hood]]).
+OpenJDK `AbstractTask` (Java 8) is a `CountedCompleter` that splits the spliterator until chunks are small. Default leaf fan-out uses `ForkJoinPool.getCommonPoolParallelism() << 2`, unless the caller is already a `ForkJoinWorkerThread`, in which case it uses **that** pool’s parallelism. `ForkJoinPool.commonPool()` is the pool for `ForkJoinTask`s not submitted to a named pool. The pool does **not** guarantee extra threads when tasks block on I/O. Cap size with `java.util.concurrent.ForkJoinPool.common.parallelism`. `unordered()` drops the ordered constraint for **later** ops; it does not skip a `sorted()` you already paid for ([[What backs Java parallelStream under the hood]]).
 
 ```d2
 direction: down
@@ -61,6 +61,9 @@ class Demo {
 
 **Listing 1.** `parallelStream().reduce` is the documented parallel sum. `range(0,5).parallel().map(x -> x*2).toArray()` still yields `[0,2,4,6,8]` — encounter-order result, not encounter-order **mapping**.
 
+> [!warning] You cannot parallelize “just the `map`”
+> `parallel()` / `sequential()` change **pipeline mode**, not a single op. A dump that wires `peek` sequential, `map` parallel, `reduce` sequential still has **one** mode: whichever call is last. `parallelStream()` is allowed to return a sequential stream.
+
 > [!warning] Shared mutable state in lambdas is a data race
 > Parallel `map`/`forEach` may run on any worker thread, in any order. A `HashSet` or `ArrayList` updated from the lambda is broken without extra synchronization, and synchronizing kills the speedup. Use `reduce`/`collect`. Parallel `forEach` does not honor encounter order — use `forEachOrdered` if print order matters ([[What is the difference between forEach and forEachOrdered on a stream]]).
 
@@ -68,4 +71,4 @@ class Demo {
 > Parallel stream tasks are fork-join tasks; the common pool is what those tasks use unless they already run on another `ForkJoinWorkerThread`. Blocking I/O inside `map` can stall workers — `ForkJoinPool` does not promise to add threads for unmanaged blocking. Do not treat `new ForkJoinPool().submit(() -> list.parallelStream()…)` as a specified API for “private” parallel streams. Ordered `limit`/`distinct` on parallel pipelines can buffer heavily; `unordered()` or `sequential()` may be faster.
 
 > [!tip] Interview answer
-> **A parallel stream is the same lazy pipeline with a parallel execution flag, usually from `parallelStream()` or `.parallel()`.** The library splits a `Spliterator` and combines partial results; lambdas must stay associative and free of shared mutation. OpenJDK runs that as fork-join work on the common pool by default — blocking I/O there contends with every other common-pool task.
+> **A parallel stream is the same lazy pipeline with a parallel execution flag (`parallelStream()` / `.parallel()`).** Last `parallel()`/`sequential()` before the terminal wins for **all** ops. The library splits a `Spliterator` and combines partial results on `ForkJoinPool.commonPool()` by default. Lambdas must stay associative and free of shared mutation. Blocking I/O there contends with every other common-pool task.

@@ -57,6 +57,7 @@ class Demo {
 
     static void demo() {
         emptyCount(List.of("a", "", "  ", "", "b")); // 2
+        Stream.of("Hello", "", ", ", "world", "!").filter(String::isEmpty).count(); // 1
     }
 }
 ```

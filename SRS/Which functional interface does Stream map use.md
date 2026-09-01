@@ -11,7 +11,7 @@ priority: 0
 
 ## `Function.apply`, one-to-one
 
-`Stream.map(Function mapper)` “returns a stream consisting of the results of applying the given function to the elements of this stream.” Intermediate, always lazy. Parameters: a non-interfering, stateless **function** per element ([[What are map and mapToInt for in Java streams]], [[How would you explain intermediate operations on Java streams]]).
+`Stream.map(Function mapper)` “returns a stream consisting of the results of applying the given function to the elements of this stream.” Intermediate, always lazy. Parameters: a non-interfering, stateless **function** per element ([[What are map and mapToInt for in Java streams]], [[What intermediate stream operations do you know in Java]]).
 
 `java.util.function.Function<T,R>` (Java 8): “a function that accepts one argument and produces a result.” Functional method: `R apply(T t)`. Lambdas (`s -> s.toUpperCase()`) and method references (`String::toUpperCase`, `Widget::weight`) are assignment-compatible. Defaults: `compose`, `andThen`; static `identity()`. `UnaryOperator<T>` extends `Function<T,T>` — a same-type `map` may be a `UnaryOperator`, still a `Function`.
 

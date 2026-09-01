@@ -11,7 +11,7 @@ priority: 0
 
 ## Stream-producing stages, not a second collection
 
-A pipeline is source + zero or more intermediate ops + one terminal. Intermediate ops **return a new stream**. Calling `filter` does not filter yet; traversal starts at the terminal ([[How would you explain intermediate operations on Java streams]], [[When does a Java stream pipeline actually start executing]], [[What kinds of stream operations exist in Java]]).
+A pipeline is source + zero or more intermediate ops + one terminal. Intermediate ops **return a new stream**. Calling `filter` does not filter yet; traversal starts at the terminal ([[When does a Java stream pipeline actually start executing]], [[What kinds of stream operations exist in Java]]). A stream may be operated on only once — reuse **may** throw `IllegalStateException`.
 
 Package-summary split:
 
@@ -75,8 +75,8 @@ class Demo {
 
 **Listing 1.** Typical chain: stateless `filter`/`map`, stateful `sorted`, short-circuiting `limit`, then a terminal `collect`. Until `collect`, none of those stages have run.
 
-> [!warning] Lazy means “not yet,” and stateful stages can wreck parallel speedup
-> `list.stream().filter(...).map(...)` with no terminal does **zero** work. `peek` may not run when `count()` can take the size from the source. Ordered `limit` / `distinct` / `sorted` on a **parallel** pipeline may buffer heavily — `unordered()` or `sequential()` can be cheaper if order does not matter. `sorted()` on non-`Comparable` elements throws `ClassCastException` at the **terminal**, not at `sorted()`.
+> [!warning] Lazy means “not yet,” and stateful stages can hang or wreck parallel speedup
+> `list.stream().filter(...).map(...)` with no terminal does **zero** work. `peek` may not run when `count()` can take the size from the source. `sorted()` or `distinct()` on unlimited `Random.ints()` never completes — put `limit` **before** those stages. Ordered `limit` / `distinct` / `sorted` on a **parallel** pipeline may buffer heavily — `unordered()` or `sequential()` can be cheaper if order does not matter. `sorted()` on non-`Comparable` elements throws `ClassCastException` at the **terminal**, not at `sorted()`.
 
 > [!tip] Interview answer
 > **Name the lazy `Stream`-producing ops: `filter`, `map`/`mapToInt`, `flatMap`/`flatMapToInt`, `distinct`, `sorted`, `peek`, `limit`, `skip`, plus `takeWhile`/`dropWhile` (9).** They never start the pipeline; `collect`/`forEach`/`count` do. Split them as stateless vs stateful vs short-circuiting if the interviewer wants depth.

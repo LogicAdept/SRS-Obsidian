@@ -76,7 +76,7 @@ class Demo {
 **Listing 1.** Boxed `map` vs `IntStream.map`. `List.of(3, -3, 3, 2)` prints `9` and `4` (stable: first `9` kept). Distinct-then-map on the same list would print `9`, `9`, `4`.
 
 > [!warning] `distinct()` before `map` does not unique squares
-> Unique **sources** are not unique **squares**. `-3` and `3` are distinct integers; both square to `9`. Put `map` first when the cue is unique squares. `equals` on boxed `Integer` after `map` is value equality for typical range; `IntStream.distinct` compares `int`s and skips boxing.
+> Unique **sources** are not unique **squares**. `-3` and `3` are distinct integers; both square to `9`. Put `map` first when the cue is unique squares. `equals` on boxed `Integer` after `map` is value equality for typical range; `IntStream.distinct` compares `int`s and skips boxing. `map` itself does not print — `forEach` is the terminal.
 
 > [!warning] Parallel `distinct` is a full barrier
 > Stability on an ordered parallel `distinct` is expensive (buffering). If encounter order of first-wins does not matter, `unordered()` can be cheaper. Parallel `forEach` can also print the unique squares out of encounter order — use `forEachOrdered` or stay sequential.

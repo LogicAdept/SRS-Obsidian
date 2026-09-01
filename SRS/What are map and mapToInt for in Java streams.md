@@ -11,7 +11,7 @@ priority: 0
 
 ## Apply a function, keep one result per element
 
-`Stream.map(Function<? super T, ? extends R> mapper)` returns a stream consisting of the results of applying the given function to the elements of this stream. It is an **intermediate** operation: always lazy, mapper not run until a terminal starts. The mapper must be non-interfering and stateless ([[How would you explain intermediate operations on Java streams]], [[Which functional interface does Stream map use]]).
+`Stream.map(Function<? super T, ? extends R> mapper)` returns a stream consisting of the results of applying the given function to the elements of this stream. It is an **intermediate** operation: always lazy, mapper not run until a terminal starts. The mapper must be non-interfering and stateless ([[What intermediate stream operations do you know in Java]], [[Which functional interface does Stream map use]]).
 
 That is **one-to-one**. Length of the stream does not change; `filter` is what drops elements. If the function returns a collection or a stream, you still have `Stream<List<…>>` or `Stream<Stream<…>>` until you `flatMap` ([[What is the difference between Stream map and flatMap]], [[What are flatMap and flatMapToInt for in Java streams]]).
 

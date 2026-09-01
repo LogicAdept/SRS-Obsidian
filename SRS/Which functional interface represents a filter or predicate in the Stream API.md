@@ -11,7 +11,7 @@ priority: 0
 
 ## `Predicate.test`, keep or drop
 
-`Stream.filter` “returns a stream consisting of the elements of this stream that match the given predicate.” Intermediate, always lazy. The parameter is a non-interfering, stateless **predicate** ([[How would you explain what method filter in stream]], [[How would you explain intermediate operations on Java streams]], [[How do you count empty strings using filter]]).
+`Stream.filter` “returns a stream consisting of the elements of this stream that match the given predicate.” Intermediate, always lazy. The parameter is a non-interfering, stateless **predicate** ([[How would you explain what method filter in stream]], [[What intermediate stream operations do you know in Java]], [[How do you count empty strings using filter]]).
 
 `java.util.function.Predicate<T>` (Java 8): “a predicate (boolean-valued function) of one argument.” Functional method: `boolean test(T t)`. Lambdas (`s -> !s.isEmpty()`) and method references (`String::isBlank` is Java 11) are assignment-compatible.
 

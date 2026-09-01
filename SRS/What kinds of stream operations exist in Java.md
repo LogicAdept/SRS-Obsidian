@@ -13,7 +13,7 @@ priority: 0
 
 Package doc: operations combine into a **pipeline** — source, zero or more intermediates (`filter`, `map`, …), one terminal (`forEach`, `reduce`, …) ([[What is the Java Stream API]], [[When does a Java stream pipeline actually start executing]]).
 
-**Intermediate** — return a stream; **always lazy**. Calling `filter` does not filter yet. Traversal starts only at the terminal ([[How would you explain intermediate operations on Java streams]], [[When does a Java stream pipeline actually start executing]], [[What intermediate stream operations do you know in Java]]).
+**Intermediate** — return a stream; **always lazy**. Calling `filter` does not filter yet. Traversal starts only at the terminal ([[What intermediate stream operations do you know in Java]], [[When does a Java stream pipeline actually start executing]]).
 
 - **Stateless** — `filter`, `map`: no memory of earlier elements.
 - **Stateful** — `distinct`, `sorted`: may use previously seen elements. `sorted` cannot emit until it has seen everything; parallel pipelines may buffer or take extra passes ([[What is the Stream sorted method for]]).

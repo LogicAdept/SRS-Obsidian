@@ -11,7 +11,7 @@ priority: 0
 
 ## Sort the stream, not the collection
 
-`Stream.sorted()` returns a stream of this stream’s elements sorted by natural order. Non-`Comparable` elements may throw `ClassCastException` **when the terminal executes**. `sorted(Comparator)` takes a non-interfering, stateless comparator. Both are **stateful intermediate** operations ([[How would you explain intermediate operations on Java streams]]). Primitive streams have `sorted()` in natural numeric order (no `Comparator` overload).
+`Stream.sorted()` returns a stream of this stream’s elements sorted by natural order. Non-`Comparable` elements may throw `ClassCastException` **when the terminal executes**. `sorted(Comparator)` takes a non-interfering, stateless comparator. Both are **stateful intermediate** operations ([[What intermediate stream operations do you know in Java]]). Primitive streams have `sorted()` in natural numeric order (no `Comparator` overload).
 
 Dump’s “sorted representation” is that new stream: the source collection’s iteration order does **not** change. Package doc: stream ops are functional and do not modify the source. Nothing is ordered in memory until a terminal materializes it (`collect`, `toArray`, `forEachOrdered`) ([[What is the difference between Collection and Stream in Java]], [[When does a Java stream pipeline actually start executing]]).
 

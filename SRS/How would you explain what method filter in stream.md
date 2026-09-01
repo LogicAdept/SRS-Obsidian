@@ -11,7 +11,7 @@ priority: 0
 
 ## Keep matching elements, still a stream
 
-`Stream.filter(Predicate<? super T> predicate)` returns a stream consisting of the elements of this stream that match the given predicate. It is an **intermediate** operation: it produces another `Stream`, and intermediate ops are **always lazy**. Calling `filter` does not filter yet. The source is traversed only when a **terminal** op runs (`count`, `collect`, `forEach`, …) ([[How would you explain intermediate operations on Java streams]], [[When does a Java stream pipeline actually start executing]]).
+`Stream.filter(Predicate<? super T> predicate)` returns a stream consisting of the elements of this stream that match the given predicate. It is an **intermediate** operation: it produces another `Stream`, and intermediate ops are **always lazy**. Calling `filter` does not filter yet. The source is traversed only when a **terminal** op runs (`count`, `collect`, `forEach`, …) ([[What intermediate stream operations do you know in Java]], [[When does a Java stream pipeline actually start executing]]).
 
 The package doc classifies `filter` as **stateless**: each element is included or dropped on its own, with no memory of earlier elements (unlike `distinct` / `sorted`). The predicate is a functional-interface instance, usually a lambda or method reference (`String::isEmpty`, `x -> x > 0`) ([[Which functional interface represents a filter or predicate in the Stream API]], [[What is the Java Stream API]]).
 

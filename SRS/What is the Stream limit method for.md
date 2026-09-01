@@ -11,7 +11,7 @@ priority: 0
 
 ## Bound the walk, especially infinite ones
 
-`Stream.limit(long maxSize)` returns a stream consisting of this stream’s elements, truncated to be no longer than `maxSize`. Package doc: a short-circuiting intermediate op may turn infinite input into a finite stream; that is necessary but not sufficient — a terminal still has to run ([[How would you explain intermediate operations on Java streams]], [[When does a Java stream pipeline actually start executing]]).
+`Stream.limit(long maxSize)` returns a stream consisting of this stream’s elements, truncated to be no longer than `maxSize`. Package doc: a short-circuiting intermediate op may turn infinite input into a finite stream; that is necessary but not sufficient — a terminal still has to run ([[What intermediate stream operations do you know in Java]], [[When does a Java stream pipeline actually start executing]]).
 
 **Purpose in practice:** take a prefix (`list.stream().limit(10)`), page-sized chunks when paired with `skip`, or stop `iterate`/`generate` after *n* values. Dump’s “first elements” holds for **ordered** streams. Unordered sources may yield any *n* that satisfy the cap’s size, not a stable “head.”
 

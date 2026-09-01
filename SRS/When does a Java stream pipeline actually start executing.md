@@ -11,7 +11,7 @@ priority: 0
 
 ## Terminal = start; intermediates = recipe
 
-A pipeline is source + zero or more intermediates + one terminal ([[What is the Java Stream API]], [[What kinds of stream operations exist in Java]], [[What is Stream]]). Calling `filter` “creates a new stream that, when traversed, contains the matching elements” ([[How would you explain intermediate operations on Java streams]]). **Intermediate operations are always lazy.** Traversal of the source does not begin until the terminal operation executes.
+A pipeline is source + zero or more intermediates + one terminal ([[What is the Java Stream API]], [[What kinds of stream operations exist in Java]], [[What is Stream]]). Calling `filter` “creates a new stream that, when traversed, contains the matching elements” ([[What intermediate stream operations do you know in Java]]). **Intermediate operations are always lazy.** Traversal of the source does not begin until the terminal operation executes.
 
 Most terminals are **eager**: they finish walking (as far as they need) before they return (`collect`, `forEach`, `reduce`, `sum`, `findFirst`, …) ([[What terminal stream operations do you know in Java]], [[How do you count empty strings using filter]]). Short-circuiting terminals (`findFirst`, `anyMatch`, `limit` then `findFirst`) may stop early; they still **started** at the terminal call.
 

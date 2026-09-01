@@ -15,7 +15,7 @@ priority: 0
 
 `Stream.flatMap(Function<? super T, ? extends Stream<? extends R>>)` **replaces each element with the contents** of a mapped stream, then concatenates. JavaDoc API note: one-to-many, then flatten. Canonical: `orders.flatMap(order -> order.getLineItems().stream())`. Nested lists: `lists.flatMap(Collection::stream)` ([[What are flatMap and flatMapToInt for in Java streams]]).
 
-If the mapper returns `null`, `flatMap` uses an empty stream. Each mapped stream is **closed** after its contents are placed. Mapper must be non-interfering and stateless. Both stages are **always lazy** until a terminal ([[How would you explain intermediate operations on Java streams]]).
+If the mapper returns `null`, `flatMap` uses an empty stream. Each mapped stream is **closed** after its contents are placed. Mapper must be non-interfering and stateless. Both stages are **always lazy** until a terminal ([[What intermediate stream operations do you know in Java]]).
 
 `mapToInt` vs `flatMapToInt`: same one-to-one vs flatten split into `IntStream`.
 

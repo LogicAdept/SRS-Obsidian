@@ -69,7 +69,7 @@ class Demo {
 }
 ```
 
-**Listing 1.** `ints(10)` sizes the source. `ints().limit(10)` truncates an unlimited stream, then sorts. `ints(10, 0, 100)` is ten values in `[0, 100)`.
+**Listing 1.** `ints(10)` sizes the source. `ints().limit(10)` truncates an unlimited stream, then sorts. `ints(10, 0, 100)` is ten values in `[0, 100)`. This is **not** `1..10` in order — that is `IntStream.rangeClosed(1, 10)` with no `Random`.
 
 > [!warning] `ints().sorted().limit(10)` does not mean “ten smallest random ints”
 > `ints()` is unlimited. `sorted()` is stateful and waits for the whole stream. Putting `limit` **after** `sorted` on that source does not short-circuit the sort — it hangs or blows memory. Size with `ints(10)` or `limit(10)` **before** `sorted()`.

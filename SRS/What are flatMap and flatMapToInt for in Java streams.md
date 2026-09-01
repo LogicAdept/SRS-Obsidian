@@ -11,7 +11,7 @@ priority: 0
 
 ## Replace each element with the contents of a stream
 
-`Stream.flatMap(Function<? super T, ? extends Stream<? extends R>> mapper)` returns a stream of the results of replacing each element with the **contents** of the mapped stream. That is an **intermediate** operation (always lazy). The mapper must be non-interfering and stateless. Each mapped stream is **closed** after its contents are placed into the result. If the mapper returns `null`, an **empty** stream is used instead ([[How would you explain intermediate operations on Java streams]]). A `null` **element** still NPEs if the mapper dereferences it.
+`Stream.flatMap(Function<? super T, ? extends Stream<? extends R>> mapper)` returns a stream of the results of replacing each element with the **contents** of the mapped stream. That is an **intermediate** operation (always lazy). The mapper must be non-interfering and stateless. Each mapped stream is **closed** after its contents are placed into the result. If the mapper returns `null`, an **empty** stream is used instead ([[What intermediate stream operations do you know in Java]]). A `null` **element** still NPEs if the mapper dereferences it.
 
 JavaDoc API note: `flatMap` is a **one-to-many** transformation, then flatten. Canonical cases:
 
