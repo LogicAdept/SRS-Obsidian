@@ -42,7 +42,7 @@ expr -> err
 
 `Iterable<T>` has been in `java.lang` since **1.5**, the same release as enhanced `for`. Its contract is one abstract method: `Iterator<T> iterator()`. Default `forEach` / `spliterator` arrived later and are **not** what the loop uses.
 
-The rewrite of the loop itself: [[How would you explain the enhanced for each loop in Java]]. Making your type a target: [[What must a class implement to support enhanced for each iteration]], [[Can you use enhanced for with your own class in Java]].
+The rewrite of the loop itself: [[How would you explain the enhanced for each loop in Java]]. Making your type a target: [[What must a class implement to support enhanced for each iteration]].
 
 ```java
 class EnableForEach {

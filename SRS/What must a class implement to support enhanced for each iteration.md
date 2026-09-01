@@ -42,7 +42,7 @@ loop -> itbl
 
 `Iterable.iterator()` is the only abstract method you must write. `remove()` on `Iterator` is optional; the default throws `UnsupportedOperationException`. The for-each rewrite never calls `remove()`. `next()` with no remaining element throws `NoSuchElementException`.
 
-Why `Iterable` is the type test, and why arrays skip it: [[What language feature enables the enhanced for each loop]]. The rewrite: [[How would you explain the enhanced for each loop in Java]]. Using this on your type: [[Can you use enhanced for with your own class in Java]].
+Why `Iterable` is the type test, and why arrays skip it: [[What language feature enables the enhanced for each loop]]. The rewrite: [[How would you explain the enhanced for each loop in Java]]. You do not implement `Collection`; `Collection` already extends `Iterable`, so lists and sets work without extra code.
 
 ```java
 import java.util.Iterator;
@@ -92,10 +92,24 @@ final class Range implements Iterable<Integer> {
 
 **Listing 1.** `Range` implements `Iterable`, not `Iterator`. Each enhanced `for` calls `iterator()` and gets a **new** cursor, so a second loop over the same instance starts at `start` again.
 
-A type that implements only `Iterator` is a cursor, not a for-each source. You can write `while (it.hasNext())`, but `for (E e : it)` does not compile unless that type is also `Iterable`.
+A type that implements only `Iterator` is a cursor, not a for-each source. You can write `while (it.hasNext())`, but `for (E e : it)` does not compile unless that type is also `Iterable`. A duck-typed `iterator()` method that is not the `Iterable` method is the same compile-time error.
+
+```java
+class HasIteratorMethod {
+    public java.util.Iterator<String> iterator() {
+        return java.util.Collections.singletonList("x").iterator();
+    }
+
+    static void willNotCompile(HasIteratorMethod bag) {
+        // for (String s : bag) { }  // not Iterable, not an array
+    }
+}
+```
+
+**Listing 2.** The compiler checks `Iterable` (or array), not “a method named `iterator`.”
 
 > [!warning] Do not make the collection its own `Iterator`
-> If `iterator()` returns `this`, every loop shares one cursor. The first `for (T x : obj)` drains it; a second loop sees `hasNext() == false`. Enhanced `for` is specified to call `iterator()` at entry and then walk **that** iterator. Return a new iterator each time.
+> If `iterator()` returns `this`, every loop shares one cursor. The first `for (T x : obj)` drains it; a second loop sees `hasNext() == false`. Returning `null` fails the same way as `for (T x : (Iterable<T>) null)` — `NullPointerException` on `iterator()` / `hasNext()`. Enhanced `for` is specified to call `iterator()` at entry and then walk **that** iterator. Return a new iterator each time.
 
 > [!warning] `remove()` is not part of for-each support
 > You do not need `remove()` for `for (T x : obj)` to compile or run. The optional `remove` is a mutation API on the iterator, with unspecified behavior if the collection is modified any other way during iteration: [[Can you modify a collection while iterating with a for-each loop]].

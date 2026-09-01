@@ -76,7 +76,7 @@ class BindLocal {
 
 **Listing 2.** Reassignment of the loop variable never writes the source. Mutation **through** a reference element does. `null` as `expr` throws `NullPointerException` on `iterator()` or on `#a.length`.
 
-Use this form when you need each element and not the index. Keep a basic `for` for reverse walks, lockstep over two arrays, or an iterator you can `remove()` from. Your own type works when it is `Iterable`: [[Can you use enhanced for with your own class in Java]]. Changing a collection while this loop runs is the iterator contract: [[Can you modify a collection while iterating with a for-each loop]].
+Use this form when you need each element and not the index. Keep a basic `for` for reverse walks, lockstep over two arrays, or an iterator you can `remove()` from. Your own type works when it is `Iterable`: [[What must a class implement to support enhanced for each iteration]]. Changing a collection while this loop runs is the iterator contract: [[Can you modify a collection while iterating with a for-each loop]].
 
 > [!warning] The loop variable is not an alias for the slot
 > `for (int x : a) x = 0` copies the `int`. `for (String s : list) s = "z"` rebinds a local; the list is unchanged. Only if the element is a mutable object, and you call a mutator on it, does the collection’s object graph change.

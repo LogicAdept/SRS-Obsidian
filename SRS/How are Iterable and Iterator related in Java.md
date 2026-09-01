@@ -11,7 +11,7 @@ priority: 0
 
 ## Producer and cursor
 
-`Iterable<T>` (Java 5) is the type you walk with enhanced `for`. Its abstract method is `Iterator<T> iterator()`. Each call should produce a **fresh** cursor so nested loops do not share position [[What is the Iterable interface in Java]], [[Can you use enhanced for with your own class in Java]].
+`Iterable<T>` (Java 5) is the type you walk with enhanced `for`. Its abstract method is `Iterator<T> iterator()`. Each call should produce a **fresh** cursor so nested loops do not share position [[What is the Iterable interface in Java]], [[What must a class implement to support enhanced for each iteration]].
 
 `Iterator<T>` (Java 1.2) is the cursor: `hasNext` / `next`, optional `remove` [[What is the Iterator interface and why do Java collections use it]], [[In which Java version was Iterator introduced]]. It is **not** a for-each target. `for (E e : someIterator)` does not compile unless that object is also `Iterable`.
 

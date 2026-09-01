@@ -11,13 +11,13 @@ priority: 0
 
 ## Source of iterators, not the cursor
 
-`Iterable` exists so a type can be the expression of the enhanced `for` statement. The compiler calls `iterator()`, then `hasNext()` / `next()` on a hidden iterator [[How are Iterable Iterator and for-each related in Java]], [[Can you use enhanced for with your own class in Java]], [[What must a class implement to support enhanced for each iteration]].
+`Iterable` exists so a type can be the expression of the enhanced `for` statement. The compiler calls `iterator()`, then `hasNext()` / `next()` on a hidden iterator [[How are Iterable Iterator and for-each related in Java]], [[What must a class implement to support enhanced for each iteration]].
 
 You do not need to implement `Collection`. You must not return `null` from `iterator()` (the loop calls it immediately). Nested for-each over the same object needs two independent iterators — returning `this` if the type also implements `Iterator` shares one cursor and breaks inner loops [[How are Iterable and Iterator related in Java]].
 
 **Java 8 defaults:** `forEach(Consumer)` is specified as enhanced `for` over `this`. `spliterator()` default builds an early-binding spliterator from `iterator()` (poor split; collections override). `Collection.stream()` uses the spliterator.
 
-**Related types:** `Iterator` is the walker (`hasNext`/`next`/`remove`) since 1.2 [[What interface lets you traverse elements of a Java collection]], [[In which Java version was Iterator introduced]]. `Map` is not `Iterable`; walk `keySet()` / `values()` / `entrySet()`. Arrays are for-each targets **without** `Iterable`.
+**Related types:** `Iterator` is the walker (`hasNext`/`next`/`remove`) since 1.2 [[What is the Iterator interface and why do Java collections use it]], [[In which Java version was Iterator introduced]]. `Map` is not `Iterable`; walk `keySet()` / `values()` / `entrySet()`. Arrays are for-each targets **without** `Iterable`.
 
 ```d2
 direction: down

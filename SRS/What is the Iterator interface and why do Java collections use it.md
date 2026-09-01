@@ -11,7 +11,7 @@ priority: 0
 
 ## Uniform cursor, per-collection engine
 
-`Collection.iterator()` (and `Iterable.iterator()`) returns an `Iterator` over that source. There is **no** order promise unless the collection type documents one (`List` does; `HashSet` does not) [[How do you iterate the elements of a Java collection]], [[What interface lets you traverse elements of a Java collection]].
+`Collection.iterator()` (and `Iterable.iterator()`) returns an `Iterator` over that source. There is **no** order promise unless the collection type documents one (`List` does; `HashSet` does not) [[How do you iterate the elements of a Java collection]], [[What types of iterators or cursors exist in Java]].
 
 **Contract**
 
@@ -22,11 +22,11 @@ priority: 0
 
 **Why the framework standardized on it**
 
-The Collections Framework is a unified API so you manipulate a group of elements independently of representation. Indexing `get(i)` is `List`-only and slow on a linked list. `Enumeration` (1.0) had `hasMoreElements` / `nextElement` and **no** `remove`. `Iterator` is the 1.2 replacement: same idea, shorter names, optional `remove` with defined semantics [[What is the difference between Enumeration and Iterator in Java]], [[In which Java version was Iterator introduced]].
+The Collections Framework is a unified API so you manipulate a group of elements independently of representation. Indexing `get(i)` is `List`-only and slow on a linked list. `Enumeration` (1.0) had `hasMoreElements` / `nextElement` and **no** `remove`. `Iterator` is the 1.2 replacement: same idea, shorter names, optional `remove` with defined semantics. Hashtable `keys()` / `elements()` still return `Enumeration`, not `Iterator` [[What is the difference between Enumeration and Iterator in Java]], [[In which Java version was Iterator introduced]].
 
 Each collection type still **implements** its own iterator (inner class with a cursor). The **interface** is shared so client code and algorithms stay generic [[Why does each collection class supply its own Iterator implementation]], [[What is the Iterator design pattern in Java]]. There is no `Iterator.add`: the protocol does not promise encounter order, so “insert here” has no single meaning. `ListIterator` adds `add` / `set` / `previous` for lists only [[Why is there no add method on Iterator]], [[Compare Iterator and ListIterator capabilities]].
 
-Java 5 `Iterable` is the **source** that produces iterators. Enhanced `for` over a collection is exactly `iterator()` + `hasNext` / `next`. `Iterator` itself is **not** a for-each target [[How are Iterable and Iterator related in Java]], [[How are Iterable Iterator and for-each related in Java]], [[What is the Iterable interface in Java]]. `Map` is not `Iterable`; walk a collection view.
+Java 5 `Iterable` is the **source** that produces iterators. Enhanced `for` over a collection is exactly `iterator()` + `hasNext` / `next`. `Iterator` itself is **not** a for-each target [[How are Iterable and Iterator related in Java]], [[How are Iterable Iterator and for-each related in Java]], [[What is the Iterable interface in Java]]. `Map` is not a `Collection` and has no `iterator()`; walk `keySet()` / `values()` / `entrySet()`. `Spliterator` (Java 8) is the split/stream cursor, not `hasNext` / `next`.
 
 Fail-fast `ConcurrentModificationException` on `ArrayList` / `HashSet` iterators is a **concrete** policy, not part of the `Iterator` interface.
 
@@ -75,7 +75,7 @@ static int count(java.util.Collection<?> source) {
 }
 ```
 
-**Listing 1.** The same `Iterator` loop works for `ArrayList`, `HashSet`, or any other `Collection`. `hasNext()` does not consume; `next()` does.
+**Listing 1.** The same `Iterator` loop works for `ArrayList`, `HashSet`, or any other `Collection`. Enhanced `for` is the same walk with a hidden cursor — only this explicit variable can call `remove()`. `hasNext()` does not consume; `next()` does.
 
 > [!warning] `Iterator` is not `Iterable`
 > `for (E e : someIterator)` does not compile. Implement `Iterable` or use `while (it.hasNext())`. Returning `this` from `iterator()` if the collection also *is* an `Iterator` shares one cursor and breaks nested loops.

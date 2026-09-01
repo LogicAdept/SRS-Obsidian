@@ -93,7 +93,6 @@
 - [x] Can you try-finally without catch.md
 - [x] Can you turn a Java array into a stream.md
 - [x] Can you use a weaker access modifier when overriding a method.md
-- [x] Can you use enhanced for with your own class in Java.md
 - [x] Can you use JavaScript inside a JSP page.md
 - [x] Can you use strings in a Java switch statement.md
 - [x] Can you use the Servlet request object in every Spring application.md
@@ -1518,7 +1517,6 @@
 - [x] What ideas sit at the center of the functional programming paradigm.md
 - [x] What information should a task from an analyst typically include.md
 - [x] What interesting engineering problems have you solved.md
-- [x] What interface lets you traverse elements of a Java collection.md
 - [x] What intermediate stream operations do you know in Java.md
 - [x] What internal abstractions power a Java stream pipeline.md
 - [x] What internal structures back HashSet and TreeSet.md

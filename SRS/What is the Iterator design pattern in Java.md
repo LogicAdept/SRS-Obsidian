@@ -11,7 +11,7 @@ priority: 0
 
 ## Cursor separate from the collection
 
-The Collections Framework is a unified API so you manipulate a group of elements **independently of implementation details**. Traversal is part of that: you never index an `ArrayList` from client code that must also walk a `HashSet`. You ask the aggregate for an iterator and drive `hasNext` / `next` [[What is the Iterator interface and why do Java collections use it]], [[How do you iterate the elements of a Java collection]], [[What interface lets you traverse elements of a Java collection]].
+The Collections Framework is a unified API so you manipulate a group of elements **independently of implementation details**. Traversal is part of that: you never index an `ArrayList` from client code that must also walk a `HashSet`. You ask the aggregate for an iterator and drive `hasNext` / `next` [[What is the Iterator interface and why do Java collections use it]], [[How do you iterate the elements of a Java collection]].
 
 **Java mapping**
 
