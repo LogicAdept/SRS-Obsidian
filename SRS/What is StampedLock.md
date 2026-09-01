@@ -7,7 +7,7 @@ priority: 0
 # What is StampedLock?
 
 > [!abstract] Short answer
-> **`StampedLock`** is a **capability-based** reader/writer lock with **three modes**: **write** (exclusive), **read** (shared), and **optimistic read** (`tryOptimisticRead` + **`validate`**). Acquire methods return a **stamp**; **0** means try failed. It does **not** implement **`Lock`** or **`ReadWriteLock`** (use **`asReadLock()`** / **`asWriteLock()`** / **`asReadWriteLock()`** views). **Not reentrant.** **No owner** — another thread may unlock or convert a stamp. Vs RW: [[What is ReadWriteLock]], [[What is ReadWriteLock]]. Vs mutex: [[What is the difference between synchronized and ReentrantLock]]. No-owner cousin: [[What is Semaphore]].
+> **`StampedLock`** is a **capability-based** reader/writer lock with **three modes**: **write** (exclusive), **read** (shared), and **optimistic read** (`tryOptimisticRead` + **`validate`**). Acquire methods return a **stamp**; **0** means try failed. It does **not** implement **`Lock`** or **`ReadWriteLock`** (use **`asReadLock()`** / **`asWriteLock()`** / **`asReadWriteLock()`** views). **Not reentrant.** **No owner** — another thread may unlock or convert a stamp. Vs RW: [[What is ReadWriteLock]]. Vs mutex: [[What is the difference between synchronized and ReentrantLock]]. No-owner cousin: [[What is Semaphore]].
 
 ## Stamp, then unlock that stamp
 

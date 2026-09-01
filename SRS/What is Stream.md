@@ -2,28 +2,72 @@
 reps: 0
 priority: 0
 -->
-#Java/Versions/8 #Java/Streams #SRS #New
+#Java/Streams #Java/Versions/8 #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is `Stream`?
 
-**Что такое `Stream`?**
+> [!abstract] Short answer
+> **`java.util.stream.Stream` (Java 8) is a lazy, one-shot sequence of elements for aggregate ops — not a collection and not `java.io`.** A pipeline is source + intermediate ops (always lazy, each returns a **new** stream) + one terminal that starts the walk and consumes the pipeline. Sequential by default; `parallel()` / `parallelStream()` opt in. `IntStream` / `LongStream` / `DoubleStream` are the primitive twins (`sum`, `average`, …). `Map` has no `stream()` — stream `keySet()`, `values()`, or `entrySet()`.
 
-Интерфейс `java.util.Stream` представляет собой последовательность элементов, над которой можно производить различные операции.
+## A pipeline, not a bag of elements
 
-Операции над стримами бывают или _промежуточными (intermediate)_ или _конечными (terminal)_. Конечные операции возвращают результат определенного типа, а промежуточные операции возвращают тот же стрим. Таким образом вы можете строить цепочки из несколько операций над одним и тем же стримом.
+`Stream` is “a sequence of elements supporting sequential and parallel aggregate operations.” It does **not** store elements. It conveys them from a source (collection, array, generator, I/O) through a pipeline ([[What is the Java Stream API]], [[What is the difference between Collection and Stream in Java]]).
 
-У стрима может быть сколько угодно вызовов промежуточных операций и последним вызов конечной операции. При этом все промежуточные операции выполняются лениво и пока не будет вызвана конечная операция никаких действий на самом деле не происходит (похоже на создание объекта `Thread` или `Runnable`, без вызова `start()`).
+Package split:
 
-Стримы создаются на основе источников каких-либо, например классов из `java.util.Collection`.
+- **Intermediate** (`filter`, `map`, `sorted`, …) — return another `Stream`, **always lazy**. Calling them does not walk the source.
+- **Terminal** (`forEach`, `collect`, `count`, `reduce`, …) — produce a value or a side-effect. Traversal starts here. Afterward the pipeline is **consumed**; operate on a stream only once (`IllegalStateException` if reuse is detected).
 
-Ассоциативные массивы (maps), например `HashMap`, не поддерживаются.
+That is **not** the same object returned from every `filter`/`map`. You chain **new** streams. The Thread/`start()` analogy is course slang, not the spec: the accurate statement is “no source walk until the terminal” ([[When does a Java stream pipeline actually start executing]], [[What kinds of stream operations exist in Java]]).
 
-Операции над стримами могут выполняться как последовательно, так и параллельно.
+Sources include `Collection.stream()`, `Arrays.stream`, `Stream.of`, `IntStream.range`, `Files.lines`, … ([[What ways exist to create a Java stream]]). **`Map` is not a `Collection`** and has no `stream()`. `HashMap` is fine as a source of **views**: `map.keySet().stream()`, `values()`, `entrySet()` — those views are collections ([[What is the difference between Collection and Stream in Java]]).
 
-Потоки не могут быть использованы повторно. Как только была вызвана какая-нибудь конечная операция, поток закрывается.
+JDK factories create **sequential** streams unless you ask. Sequential vs parallel should not change the result except explicitly nondeterministic ops (`findAny`, `forEach`) ([[How would you explain parallel streams in Java]]).
 
-Кроме универсальных объектных существуют особые виды стримов для работы с примитивными типами данных `int`, `long` и `double`: `IntStream`, `LongStream` и `DoubleStream`. Эти примитивные стримы работают так же, как и обычные объектные, но со следующими отличиями:
+Most pipelines do **not** need `close()`. `Stream` is `AutoCloseable`; I/O-backed streams (`Files.lines`) must be closed (try-with-resources). After a terminal, the pipeline is consumed even if `close()` was never called.
 
-+ используют специализированные лямбда-выражения, например `IntFunction` или `IntPredicate` вместо `Function` и `Predicate`;
-+ поддерживают дополнительные конечные операции `sum()`, `average()`, `mapToObj()`.
+Primitive streams: `IntStream`, `LongStream`, `DoubleStream`. They take primitive functional interfaces (`IntPredicate`, `IntFunction`, …) and add reductions such as `sum()` and `average()`. **`mapToObj` is intermediate**, not a terminal.
+
+```d2
+direction: right
+src: "source\nCollection / array / range" {
+  width: 200
+  height: 60
+  style.fill: "#e3f2fd"
+}
+mid: "intermediate\n(new Stream, lazy)" {
+  width: 200
+  height: 60
+  style.fill: "#fff8e1"
+}
+term: "terminal\n(consumes)" {
+  width: 160
+  height: 60
+  style.fill: "#e8f5e9"
+}
+src -> mid
+mid -> term
+```
+
+**Fig. 1.** A `Stream` is a pipeline: source, lazy intermediates, one terminal.
+
+```java
+import java.util.List;
+
+class Demo {
+    static int redWeight(List<Widget> widgets) {
+        return widgets.stream()
+            .filter(w -> w.color() == Color.RED)
+            .mapToInt(Widget::weight)
+            .sum();
+    }
+}
+```
+
+**Listing 1.** `Collection.stream()` → `filter` → `mapToInt` → `sum`. Package-summary shape. `HashMap` would use `entrySet().stream()`, not `map.stream()`.
+
+> [!warning] Package name, reuse, and maps
+> The type is `java.util.stream.Stream`, not `java.util.Stream`, and not `java.io.InputStream`. After a terminal, get a **new** stream from the source. Intermediates return a new stream, not “the same” instance. `mapToObj` does not finish the pipeline. Do not call `close()` on a collection-backed stream expecting a required ritual — do call it for `Files.lines`.
+
+> [!tip] Interview answer
+> **`Stream` is a lazy, consumable pipeline over a source (Java 8), not a second `List`.** Intermediates are lazy and return streams; one terminal runs it. Sequential by default. Primitives: `IntStream`/`LongStream`/`DoubleStream`. Maps: stream the views, there is no `Map.stream()`.

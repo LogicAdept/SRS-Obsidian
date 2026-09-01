@@ -2,58 +2,82 @@
 reps: 0
 priority: 0
 -->
-#Java/IO #Java/Streams #SRS #New
+#Java/IO #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# Which subclasses class `InputStream` you do you know for what they intended?
 
-**Какие подклассы класса `InputStream` вы знаете, для чего они предназначены?**
+> [!abstract] Short answer
+> **`InputStream` is the abstract byte-input root (Java 1.0).** Directly useful types: `FileInputStream` (file bytes), `ByteArrayInputStream` (in-memory `byte[]`), `PipedInputStream` (pair with `PipedOutputStream`), `SequenceInputStream` (concatenate), `ObjectInputStream` (deserialize — untrusted data is dangerous). Decorators via `FilterInputStream`: `BufferedInputStream` (`mark`/`reset`), `DataInputStream` (primitives), `PushbackInputStream` (`unread`). **`StringBufferInputStream` is deprecated** — use `StringReader`. This is `java.io`, not `java.util.stream`.
 
-+ `InputStream` - абстрактный класс, описывающий поток ввода;
-+ `BufferedInputStream` - буферизованный входной поток;
-+ `ByteArrayInputStream` позволяет использовать буфер в памяти (массив байтов) в качестве источника данных для входного потока;
-+ `DataInputStream` - входной поток для байтовых данных, включающий методы для чтения стандартных типов данных Java;
-+ `FileInputStream` - входной поток для чтения информации из файла;
-+ `FilterInputStream` - абстрактный класс, предоставляющий интерфейс для классов-надстроек, которые добавляют к существующим потокам полезные свойства;
-+ `ObjectInputStream` - входной поток для объектов;
-+ `StringBufferInputStream` превращает строку (`String`) во входной поток данных `InputStream`;
-+ `PipedInputStream` реализует понятие входного канала;
-+ `PushbackInputStream` - разновидность буферизации, обеспечивающая чтение байта с последующим его возвратом в поток, позволяет «заглянуть» во входной поток и увидеть, что оттуда поступит в следующий момент, не извлекая информации.
-+ `SequenceInputStream` используется для слияния двух или более потоков `InputStream` в единый.
+## Byte-input tree, then the usual interview extras
 
-**Какие подклассы класса `OutputStream` вы знаете, для чего они предназначены?**
+`InputStream`: superclass of all **byte** input streams; a subclass must supply the next byte ([[What is the difference between and what InputStream OutputStream Reader Writer]], [[What kinds of input and output streams exist in Java]], [[What are common concrete InputStream and OutputStream implementations]]).
 
-+ `OutputStream` - это абстрактный класс, определяющий потоковый байтовый вывод;
-+ `BufferedOutputStream` - буферизированный выходной поток;
-+ `ByteArrayOutputStream` - все данные, посылаемые в этот поток, размещаются в предварительно созданном буфере;
-+ `DataOutputStream` - выходной поток байт, включающий методы для записи стандартных типов данных Java;
-+ `FileOutputStream` - запись данных в файл на физическом носителе;
-+ `FilterOutputStream` - абстрактный класс, предоставляющий интерфейс для классов-надстроек, которые добавляют к существующим потокам полезные свойства;
-+ `ObjectOutputStream` - выходной поток для записи объектов;
-+ `PipedOutputStream` реализует понятие выходного канала;
-+ `PrintStream` - выходной поток, включающий методы `print()` и `println()`.
+`java.io` package one-liners (dump list, checked):
 
-**Какие подклассы класса `Reader` вы знаете, для чего они предназначены?**
+| Class | Intended for |
+| --- | --- |
+| `FileInputStream` | Bytes from a file |
+| `ByteArrayInputStream` | Internal buffer of bytes as the source |
+| `FilterInputStream` | Wrap another stream; transform or add behavior |
+| `BufferedInputStream` | Buffer + `mark`/`reset` ([[How would you explain buffered streams in Java IO]]) |
+| `DataInputStream` | Primitive types from an underlying stream, machine-independent ([[Which class reads primitive values from a Java InputStream]]) |
+| `PushbackInputStream` | `unread` into a pushback buffer — you still `read`, then put back; default 1 byte ([[What is PushbackInputStream]]) |
+| `SequenceInputStream` | Logical concatenation of other `InputStream`s ([[What is SequenceInputStream]]) |
+| `PipedInputStream` | Connected to a `PipedOutputStream`; reads what the pipe writes |
+| `ObjectInputStream` | Deserialize primitives and objects previously written by `ObjectOutputStream` |
 
-+ `Reader` - абстрактный класс, описывающий символьный ввод;
-+ `BufferedReader` - буферизованный входной символьный поток;
-+ `CharArrayReader` - входной поток, который читает из символьного массива;
-+ `FileReader` - входной поток, читающий файл;
-+ `FilterReader` - абстрактный класс, предоставляющий интерфейс для классов-надстроек;
-+ `InputStreamReader`- входной поток, транслирующий байты в символы;
-+ `LineNumberReader` - входной поток, подсчитывающий строки;
-+ `PipedReader` - входной канал;
-+ `PushbackReader` - входной поток, позволяющий возвращать символы обратно в поток;
-+ `StringReader` - входной поток, читающий из строки.
+**Do not use `StringBufferInputStream`:** deprecated; it incorrectly treats bytes as characters. Prefer `StringReader`.
 
-**Какие подклассы класса `Writer` вы знаете, для чего они предназначены?**
+Dump also asked the other three roots — same package:
 
-+ `Writer` - абстрактный класс, описывающий символьный вывод;
-+ `BufferedWriter` - буферизованный выходной символьный поток;
-+ `CharArrayWriter` - выходной поток, который пишет в символьный массив;
-+ `FileWriter` - выходной поток, пишущий в файл;
-+ `FilterWriter` - абстрактный класс, предоставляющий интерфейс для классов-надстроек;
-+ `OutputStreamWriter` - выходной поток, транслирующий байты в символы;
-+ `PipedWriter` - выходной канал;
-+ `PrintWriter` - выходной поток символов, включающий методы `print()` и `println()`;
-+ `StringWriter` - выходной поток, пишущий в строку;
+**`OutputStream`:** `FileOutputStream`, `ByteArrayOutputStream`, `FilterOutputStream` → `BufferedOutputStream`, `DataOutputStream`, `PrintStream` (`print`/`println`), `PipedOutputStream`, `ObjectOutputStream`.
+
+**`Reader`:** `InputStreamReader` (bytes→chars + charset) ([[Which classes convert between Java byte streams and character streams]]), `FileReader`, `BufferedReader`, `CharArrayReader`, `StringReader`, `PipedReader`, `PushbackReader`, `LineNumberReader` (counts lines), `FilterReader`.
+
+**`Writer`:** `OutputStreamWriter` encodes **characters to bytes** (dump had the direction backwards), `FileWriter`, `BufferedWriter`, `CharArrayWriter`, `StringWriter`, `PipedWriter`, `PrintWriter` ([[What is the difference between PrintWriter and PrintStream]]), `FilterWriter`.
+
+```d2
+direction: down
+root: "InputStream" {
+  width: 160
+  height: 35
+  style.fill: "#e3f2fd"
+}
+src: "File / ByteArray / Piped\nSequence / Object" {
+  width: 260
+  height: 50
+  style.fill: "#fff8e1"
+}
+fil: "FilterInputStream\nBuffered / Data / Pushback" {
+  width: 280
+  height: 50
+  style.fill: "#e8f5e9"
+}
+root -> src
+root -> fil
+```
+
+**Fig. 1.** Sources vs `FilterInputStream` decorators. `StringBufferInputStream` is omitted on purpose (deprecated).
+
+```java
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+class Demo {
+    static int firstByte(String path) throws IOException {
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(path))) {
+            return in.read();
+        }
+    }
+}
+```
+
+**Listing 1.** Typical wrap: `FileInputStream` for the file, `BufferedInputStream` for buffering and `mark`/`reset`.
+
+> [!warning] Deprecated string-as-bytes, deserialization, and `java.util.stream`
+> `StringBufferInputStream` is deprecated. `ObjectInputStream` on untrusted bytes is a security hazard (package serialization warning). `PushbackInputStream` is not a non-consuming peek. `OutputStreamWriter` writes **chars as encoded bytes**, not “bytes to chars.” None of these types are `java.util.stream.Stream`.
+
+> [!tip] Interview answer
+> Recite **sources** (`File`, `ByteArray`, `Piped`, `Sequence`, `Object`) and **filters** (`Buffered`, `Data`, `Pushback`). Name `FilterInputStream` as the decorator base. Add `StringReader` instead of `StringBufferInputStream`. If they ask all four trees, pair each with its `OutputStream` / `Reader` / `Writer` twin and the charset bridges.

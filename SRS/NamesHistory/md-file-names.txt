@@ -760,8 +760,6 @@
 - [x] How would you explain for ArrayList or for LinkedList element in list.add(list.size 2 newElement.md
 - [x] How would you explain for what in Java used blocks initialization.md
 - [x] How would you explain for what in JUnit used @Ignore or @Disabled.md
-- [x] How would you explain for what in stream intended methods flatMap flatMapToInt flatMapToDouble flatMapToLong.md
-- [x] How would you explain for what in stream intended methods map and mapToInt mapToDouble mapToLong.md
 - [x] How would you explain for what intended dl dt dd.md
 - [x] How would you explain for what intended em.md
 - [x] How would you explain for what intended head.md
@@ -892,7 +890,6 @@
 - [x] How would you explain Kubernetes Pod, Deployment, Service.md
 - [x] How would you explain L3 vs L4 vs L7.md
 - [x] How would you explain lambda expressions in Java.md
-- [x] How would you explain lazy Stream.md
 - [x] How would you explain LazyInitializationException.md
 - [x] How would you explain limitations of the SQL UNION operator.md
 - [x] How would you explain LinkedHashMap - what in from LinkedList and what from HashMap.md
@@ -1045,7 +1042,6 @@
 - [x] How would you explain static nested classes in Java.md
 - [x] How would you explain static typing in Java.md
 - [x] How would you explain Sticky sessions.md
-- [x] How would you explain Stream API.md
 - [x] How would you explain Structured Concurrency.md
 - [x] How would you explain Stub vs Verify WireMock.md
 - [x] How would you explain Surefire vs Failsafe.md
@@ -1334,7 +1330,6 @@
 - [x] What are common concrete InputStream and OutputStream implementations.md
 - [x] What are common JDBC SQL types and how do they map to Java types.md
 - [x] What are common kinds of unchecked exceptions in Java.md
-- [x] What are common terminal operations on Java streams.md
 - [x] What are CopyOnWriteArrayList thread safety tradeoffs.md
 - [x] What are coupling and cohesion and how do they affect maintainability.md
 - [x] What are data streams in reactive programming.md
@@ -1751,7 +1746,6 @@
 - [x] What is CMS Concurrent Mark Sweep GC.md
 - [x] What is cold data and hot data.md
 - [x] What is CollapsingMergeTree.md
-- [x] What is collect for in Java streams.md
 - [x] What is collection.md
 - [x] What is CommandLineRunner and ApplicationRunner.md
 - [x] What is CompletableFuture for.md
@@ -1904,7 +1898,6 @@
 - [x] What is layered architecture.md
 - [x] What is lazy fetch in JPA or Hibernate.md
 - [x] What is LazyInitializationException.md
-- [x] What is limit for in Java streams.md
 - [x] What is linear programming.md
 - [x] What is linear regression.md
 - [x] What is linear search.md
@@ -1928,7 +1921,6 @@
 - [x] What is message passing in object oriented programming.md
 - [x] What is message TTL and queue max-length in RabbitMQ.md
 - [x] What is Metaspace and how does it differ from PermGen.md
-- [x] What is method collect in stream.md
 - [x] What is method inlining in the JIT.md
 - [x] What is method reference.md
 - [x] What is Micrometer observability in Spring Boot.md
@@ -2031,7 +2023,6 @@
 - [x] What is SOAP.md
 - [x] What is softmax.md
 - [x] What is SOLID.md
-- [x] What is sorted for in Java streams.md
 - [x] What is Spliterator.md
 - [x] What is Spring AOT and GraalVM native image support.md
 - [x] What is Spring Batch.md
@@ -2223,7 +2214,6 @@
 - [x] What is the difference between interrupted and isInterrupted in Java.md
 - [x] What is the difference between inversion of control and a service locator.md
 - [x] What is the difference between inversion of control and ApplicationContext.md
-- [x] What is the difference between Java Collection APIs and streams.md
 - [x] What is the difference between java.lang.Comparable and java.util.Comparator.md
 - [x] What is the difference between java.lang.Error and java.lang.Exception.md
 - [x] What is the difference between JPA as a specification and Hibernate.md
@@ -2819,7 +2809,6 @@
 - [x] Which levels OSI.md
 - [x] Which logical operation and operators you do you know.md
 - [x] Which main specifics in Servlet 3.md
-- [x] Which mechanism implements parallel streams in Java.md
 - [x] Which memory region holds objects in Java.md
 - [x] Which memory region holds reference types in Java.md
 - [x] Which memory region holds static fields and methods in Java.md
