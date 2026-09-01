@@ -95,7 +95,6 @@
 - [x] Can you use a weaker access modifier when overriding a method.md
 - [x] Can you use enhanced for with your own class in Java.md
 - [x] Can you use JavaScript inside a JSP page.md
-- [x] Can you use string in switch.md
 - [x] Can you use strings in a Java switch statement.md
 - [x] Can you use the Servlet request object in every Spring application.md
 - [x] Can you when override method modifier access type type or their count or their order order elements throws.md
