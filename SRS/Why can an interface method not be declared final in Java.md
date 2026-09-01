@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #Java/Language/Modifiers/Final #SRS
+#Java/Language/Modifiers/Final #Java/OOP/Interfaces #SRS
 
 # Why can an interface method not be declared final in Java?
 

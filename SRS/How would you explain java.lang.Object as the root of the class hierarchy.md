@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Object #Java/OOP #SRS
+#Java/Language/Object #Java/OOP/Inheritance #SRS
 
 # How would you explain `java.lang.Object` as the root of the class hierarchy?
 

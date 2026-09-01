@@ -15,7 +15,7 @@ An instance method always runs with respect to an object, which becomes `this`. 
 
 Invocation of a class method uses invocation mode `static`. `TypeName.method(...)` has no target reference. If you write `expr.method(...)` and `method` is a **class** method declared on a **class**, `expr` is still evaluated and then **discarded** — it is not `this`, and it is **not** checked for `null`. A `static` method declared on an **interface** must not be invoked that way at all.
 
-A subclass `static` method with an override-equivalent signature **hides** the superclass class method. The compile-time type of the qualifier chooses which class method runs. An instance method cannot override a `static` method; a `static` method cannot hide an instance method. Different signatures are ordinary overloading, even mixing `static` and instance: [[Can instance methods overload]]. `main`: [[Why is the main method static in Java]].
+A subclass `static` method with an override-equivalent signature **hides** the superclass class method. The compile-time type of the qualifier chooses which class method runs. An instance method cannot override a `static` method; a `static` method cannot hide an instance method. Different signatures are ordinary overloading, even mixing `static` and instance: [[Can an instance method overload a static method in Java]]. `main`: [[Why is the main method static in Java]].
 
 ```java
 class Counter {

@@ -2,130 +2,85 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #SRS #New
+#Paradigms/OOP #Java/OOP/Polymorphism #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is polymorphism?
 
-**Что такое _«полиморфизм»_?**
+> [!abstract] Short answer
+> **Polymorphism** means using a value through a **common type** without knowing the **run-time class**. In Java interviews that is **subtype polymorphism**: `Shape s = new Square(3); s.area();` runs `Square.area` ([[How would you explain dynamic runtime polymorphism in Java]]). The **compiler** picks a **signature**; the **JVM** picks the **body** ([[How would you explain Overload vs Override]]). Override: [[How would you explain method overriding in Java]]. Principles: [[What are the main oop principles]].
 
-__Полиморфизм__ – это свойство системы использовать объекты с одинаковым интерфейсом без информации о типе и внутренней структуре объекта.
+## Same type, different bodies
 
-Преимуществом полиморфизма является то, что он помогает снижать сложность программ, разрешая использование одного и того же интерфейса для задания единого набора действий. Выбор же конкретного действия, в зависимости от ситуации, возлагается на компилятор языка программирования. Отсюда следует ключевая особенность полиморфизма - использование объекта производного класса, вместо объекта базового (потомки могут изменять родительское поведение, даже если обращение к ним будет производиться по ссылке родительского типа).
+The dump’s useful sentence: work through one **interface** (type) without the internals. `callAnotherUser(int, AbstractPhone phone)` then `phone.call(n)` is that: the parameter is the abstract type; each model **overrides** `call`. `@Override` only checks the signature ([[How does the Override annotation work]]). Inheritance supplies the subtype ([[What is inheritance]]). Abstraction is the type you publish ([[What is abstraction]]). Java OO: [[What does it mean that Java is object oriented]].
 
-> Любое обучение вождению не имело бы смысла, если бы человек, научившийся водить, скажем, ВАЗ 2106 не мог потом водить ВАЗ 2110 или BMW X3. С другой стороны, трудно представить человека, который смог бы нормально управлять автомобилем, в котором педаль газа находится левее педали тормоза, а вместо руля – джойстик.
+**The dump contradicts itself.** First it says the **compiler** chooses the action; later the phone example correctly says **dynamic** choice at **run time**. For **overriding**, believe the second. The compiler proves `call` exists on `AbstractPhone`. It does **not** pick `VideoPhone.call`. That is overload resolution vs virtual dispatch ([[How would you explain method overloading in Java]]). A cast of the reference does **not** change which override runs. `super.m()` and `static` / `private` calls do **not** use this lookup. Mechanisms: [[What mechanisms implement polymorphism in Java]].
 
-> Всё дело в том, что основные элементы управления автомобиля имеют одну и ту же конструкцию и принцип действия. Водитель точно знает, что для того, чтобы повернуть налево, он должен повернуть руль, независимо от того, есть там гидроусилитель или нет.
-> Если человеку надо доехать с работы до дома, то он сядет за руль автомобиля и будет выполнять одни и те же действия, независимо от того, какой именно тип автомобиля он использует. По сути, можно сказать, что все автомобили имеют один и тот же интерфейс, а водитель, абстрагируясь от сущности автомобиля, работает именно с этим интерфейсом. Если водителю предстоит ехать по немецкому автобану, он, вероятно, выберет быстрый автомобиль с низкой посадкой, а если предстоит возвращаться из отдалённого маральника в Горном Алтае после дождя, скорее всего, будет выбран УАЗ с армейскими мостами. Но, независимо от того, каким образом будет реализовываться движение и внутреннее функционирование машины, интерфейс останется прежним.
+**Other senses (if asked).**
 
-_Полиморфная переменная_, это переменная, которая может принимать значения разных типов, а _полиморфная функция_, это функция у которой хотя бы один аргумент является полиморфной переменной.
-Выделяют два вида полиморфных функций:
+- **Ad hoc:** different bodies for different **compile-time** types—**overloading** (`draw(Circle)` vs `draw(Square)`), or operators on `int` vs `double`.
+- **Parametric:** one body for many type arguments—**generics** (`List.add`). Erasure: still one class at run time.
+- **Subtype / inclusion:** the Java OOP default, above.
 
-+ _ad hoc_, функция ведет себя по разному для разных типов аргументов (например, функция `draw()` — рисует по разному фигуры разных типов);
-+ _параметрический_, функция ведет себя одинаково для аргументов разных типов (например, функция `add()` — одинаково кладет в контейнер элементы разных типов).
+A **polymorphic variable** is a supertype reference that may denote subtype instances (`AbstractPhone phone = new VideoPhone(...)`).
 
-Принцип в ООП, когда программа может использовать объекты с одинаковым интерфейсом без информации о внутреннем устройстве объекта, называется полиморфизмом.
+```d2
+direction: down
+v: "phone : AbstractPhone" {
+  width: 220
+  height: 36
+  style.fill: "#e3f2fd"
+}
+a: "ThomasEdisonPhone.call" {
+  width: 240
+  height: 36
+  style.fill: "#fff8e1"
+}
+b: "VideoPhone.call" {
+  width: 200
+  height: 36
+  style.fill: "#e8f5e9"
+}
+v -> a: "phone.call"
+v -> b: "or"
+```
 
-Пример:
-
-Давайте представим, что нам в программе нужно описать пользователя, который может пользоваться любыми моделями телефона, чтобы позвонить другому пользователю. Вот как можно это сделать:
+**Fig. 1.** One compile-time type. The run-time class supplies `call`.
 
 ```java
-public class User {
-    private String name;
+abstract class Phone {
+    abstract void call(int n);
+}
 
-    public User(String name) {
-        this.name = name;
+class Landline extends Phone {
+    @Override
+    void call(int n) {}
+}
+
+class User {
+    void callOther(int n, Phone phone) {
+        phone.call(n);
     }
+}
 
-    public void callAnotherUser(int number, AbstractPhone phone) {
-// вот он полиморфизм - использование в коде абстрактного типа AbstractPhone phone!
-        phone.call(number);
+class Use {
+    static void go() {
+        User u = new User();
+        Phone p = new Landline();
+        u.callOther(1, p);
     }
 }
 ```
 
-Теперь опишем различные модели телефонов. Одна из первых моделей телефонов:
-```java
-public class ThomasEdisonPhone extends AbstractPhone {
+**Listing 1.** `callOther` is written against `Phone`. `p`’s run-time class chooses `call`. Adding another `extends Phone` does not change `User`.
 
-    public ThomasEdisonPhone(int year) {
-        super(year);
-    }
+> [!warning] The compiler does not pick the overriding body
+> Overload = compile-time signature from argument types. Override = run-time body for that signature. Mixing them is the dump’s first paragraph.
 
-    @Override
-    public void call(int outputNumber) {
-        System.out.println("Вращайте ручку");
-        System.out.println("Сообщите номер абонента, сэр");
-    }
+> [!warning] Overloading is not “OOP polymorphism” in a Java interview
+> `void f(Phone p)` vs `void f(Landline l)`: `Phone x = new Landline(); f(x);` calls `f(Phone)`. You need an **overridden instance method** on the object.
 
-    @Override
-    public void ring(int inputNumber) {
-        System.out.println("Телефон звонит");
-    }
-}
-```
+> [!warning] Same interface is a type, not a Java `interface` only
+> An `abstract class` or a superclass works the same. A public-field struct with no methods is not polymorphism.
 
-Обычный стационарный телефон:
-
-```java
-public class Phone extends AbstractPhone {
-
-    public Phone(int year) {
-        super(year);
-    }
-
-    @Override
-    public void call(int outputNumber) {
-        System.out.println("Вызываю номер" + outputNumber);
-    }
-
-    @Override
-    public void ring(int inputNumber) {
-        System.out.println("Телефон звонит");
-    }
-}
-```
-
-И, наконец, крутой видеотелефон:
-
-```java
-public class VideoPhone extends AbstractPhone {
-
-    public VideoPhone(int year) {
-        super(year);
-    }
-
-    @Override
-    public void call(int outputNumber) {
-        System.out.println("Подключаю видеоканал для абонента " + outputNumber);
-    }
-
-    @Override
-    public void ring(int inputNumber) {
-        System.out.println("У вас входящий видеовызов..." + inputNumber);
-    }
-}
-```
-
-Создадим объекты в методе main() и протестируем метод callAnotherUser:
-
-```java
-AbstractPhone firstPhone = new ThomasEdisonPhone(1879);
-AbstractPhone phone = new Phone(1984);
-AbstractPhone videoPhone=new VideoPhone(2018);
-User user = new User("Андрей");
-user.callAnotherUser(224466,firstPhone);
-// Вращайте ручку
-//Сообщите номер абонента, сэр
-user.callAnotherUser(224466,phone);
-//Вызываю номер 224466
-user.callAnotherUser(224466,videoPhone);
-//Подключаю видеоканал для абонента 224466
-```
-
-Используя вызов одного и того же метода объекта user, мы получили различные результаты. Выбор конкретной реализации метода call внутри метода callAnotherUser производился динамически на основании конкретного типа вызывающего его объекта в процессе выполнения программы. В этом и заключается основное преимущество полиморфизма – выбор реализации в процессе выполнения программы.
-
-В примерах классов телефонов, приведенных выше, мы использовали переопределение методов – прием, при котором изменяется реализация метода, определенная в базовом классе, без изменения сигнатуры метода. По сути это является заменой метода, и именно новый метод, определенный в подклассе, вызывается при выполнении программы.
-
-Обычно, при переопределении метода, используется аннотация @Override, которая подсказывает компилятору о необходимости проверить сигнатуры переопределяемого и переопределяющего методов.
+> [!tip] Interview answer
+> Polymorphism is using objects through a shared type while each class provides its own method body. In Java that is overriding and virtual dispatch: the compiler checks the supertype, the JVM runs the subclass method. Overloading is a different, compile-time mechanism. Generics are parametric polymorphism and still use overriding for instance calls.

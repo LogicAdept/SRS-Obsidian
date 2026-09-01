@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #Java/Annotations #SRS
+#Java/Annotations #Java/Versions/5 #Java/OOP/Interfaces #SRS
 
 # How would you explain marker interfaces and why annotations largely replaced them?
 
@@ -15,7 +15,7 @@ priority: 0
 
 That pattern is a **type**: subtypes inherit it (`Serializable` subtypes are serializable), you can write it in signatures and casts, and JLS even calls `Serializable` a marker interface type for lambda intersections.
 
-A **marker annotation** is an empty `@interface` ([[What is the difference between marker single-member and multi-member annotations]]). It is **not** a type of the instance. Nothing in the language runs it ([[Why do annotations have no direct effect on annotated code]]). A compiler, processor, or `isAnnotationPresent` must look.
+A **marker annotation** is an empty `@interface` ([[What is the difference between marker single-member and multi-member annotations]]). It is **not** a type of the instance. Nothing in the language runs it ([[Why do annotations have no direct effect on annotated code]]). A compiler, processor, or `isAnnotationPresent` must look. `@Override` is the usual example of a marker annotation on a method ([[How does the Override annotation work]]).
 
 Annotations **largely replaced** new markers because they are better *metadata*:
 

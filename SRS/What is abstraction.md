@@ -2,43 +2,89 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #SRS #New
+#Java/OOP #Paradigms/OOP #Java/Language/Modifiers/Abstract #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is abstraction?
 
-**Что такое _«абстракция»_?**
+> [!abstract] Short answer
+> **Abstraction** is keeping the **essential operations and type** and omitting **how** they are stored or computed. In Java you program to a **supertype**—an **interface** or **`abstract` class**—and call methods; the run-time class supplies the body ([[What is polymorphism]]). That is not the same as encapsulation (hiding fields) ([[What is encapsulation]]; [[How would you explain encapsulation in object oriented design]]). Ranking of types: [[Which has the highest abstraction level among class abstract class and interface]]. Principles: [[What are the main oop principles]].
 
-_Абстрагирование_ – это способ выделить набор общих характеристик объекта, исключая из рассмотрения частные и незначимые. Соответственно, __абстракция__ – это набор всех таких характеристик.
+## Essential type, omitted details
 
-> Представьте, что водитель едет в автомобиле по оживлённому участку движения. Понятно, что в этот момент он не будет задумываться о химическом составе краски автомобиля, особенностях взаимодействия шестерёнок в коробке передач или влияния формы кузова на скорость (разве что, автомобиль стоит в глухой пробке и водителю абсолютно нечем заняться). Однако руль, педали, указатель поворота он будет использовать регулярно.
+The dump’s driver picture is the idea: you use **steering and pedals**, not paint chemistry. In code, callers depend on `Shape.area()`, not on whether the shape stores `side` or `radius`.
 
-Пример:
+**Java tools (not a keyword `abstraction`).**
+
+- **Interface:** a type with no instances of its own. Highest usual abstraction ([[What is the difference between a Java interface and an abstract class]]; [[What is the difference between a Java interface and an abstract class]]).
+- **`abstract` class / `abstract` method:** a class you cannot `new`; some methods have no body yet. Still a **class**: fields and constructors are allowed.
+- **Concrete class:** one implementation of that type.
+
+Abstraction is the **type you publish**. Encapsulation is **what you do not publish** (private fields). You can have an interface (abstraction) whose only implementation leaks public fields (failed encapsulation). Types: [[How would you explain main concepts OOP class object interface]].
+
+The dump’s `Animal` / `Pig` sample is only **`abstract` class + override**. An `interface Shape` with `Square` and `Circle` is the same principle and usually the better API.
+
+```d2
+direction: down
+t: "abstract type\nShape.area()" {
+  width: 200
+  height: 40
+  style.fill: "#e8f5e9"
+}
+s: "Square" {
+  width: 100
+  height: 32
+  style.fill: "#e3f2fd"
+}
+c: "Circle" {
+  width: 100
+  height: 32
+  style.fill: "#fff8e1"
+}
+t -> s
+t -> c
+```
+
+**Fig. 1.** Callers see `area`. They do not see `side` or `radius`.
+
 ```java
-// Abstract class
-abstract class Animal {
-    // Abstract method (does not have a body)
-    public abstract void animalSound();
+interface Shape {
+    int area();
+}
 
-    // Regular method
-    public void sleep() {
-        System.out.println("Zzz");
+class Square implements Shape {
+    private final int side;
+
+    Square(int side) {
+        this.side = side;
+    }
+
+    @Override
+    public int area() {
+        return side * side;
     }
 }
 
-// Subclass (inherit from Animal)
-class Pig extends Animal {
-    public void animalSound() {
-        // The body of animalSound() is provided here
-        System.out.println("The pig says: wee wee");
-    }
-}
-
-class MyMainClass {
-    public static void main(String[] args) {
-        Pig myPig = new Pig(); // Create a Pig object
-        myPig.animalSound();
-        myPig.sleep();
+class Use {
+    static int total(Shape[] shapes) {
+        int n = 0;
+        for (Shape s : shapes) {
+            n += s.area();
+        }
+        return n;
     }
 }
 ```
+
+**Listing 1.** `Use` is written against `Shape`. Adding `Circle implements Shape` does not change `total`. That is abstraction. `side` staying private is encapsulation.
+
+> [!warning] Abstraction ≠ the `abstract` keyword
+> A fully concrete `List` API is still an abstraction. `abstract class` is one way to leave methods unimplemented. Prefer an **interface** for the type you pass around; use an abstract class when implementations share **state**.
+
+> [!warning] Abstraction ≠ encapsulation
+> Abstraction chooses **which operations exist**. Encapsulation chooses **what is hidden**. Public fields on a “shape” class give you a type name without an abstraction.
+
+> [!warning] The car metaphor is not a Java rule
+> The language does not rank “significant” vs “insignificant” characteristics. You do, by which methods and types you declare.
+
+> [!tip] Interview answer
+> Abstraction means depending on a type that names essential operations and hides implementation details. In Java that type is usually an interface or an abstract class, and the concrete class fills in the methods. Do not confuse it with encapsulation, which is access control, or with the `abstract` keyword alone.

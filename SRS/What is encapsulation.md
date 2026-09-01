@@ -2,48 +2,76 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #SRS #New
+#Java/OOP #Paradigms/OOP #Java/Language/Modifiers/Access #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is encapsulation?
 
-**Что такое _«инкапсуляция»_?**
+> [!abstract] Short answer
+> **Encapsulation** is putting **state and the methods that maintain it in one class** and **publishing only a chosen API**. Callers depend on `call()`, not on fields or helper methods. That lets you change the implementation without changing clients. Java does it with **access modifiers**, not a keyword `encapsulate`. Design: [[How would you explain encapsulation in object oriented design]]. vs abstraction: [[What is abstraction]]. Private vs other classes: [[Can one object access another class private fields in Java]]. Principles: [[What are the main oop principles]].
 
-__Инкапсуляция__ – это свойство системы, позволяющее объединить данные и методы, работающие с ними, в классе и скрыть детали реализации от пользователя, открыв только то, что необходимо при последующем использовании.
+## Combine, then hide
 
-Цель инкапсуляции — уйти от зависимости внешнего интерфейса класса (то, что могут использовать другие классы) от реализации. Чтобы малейшее изменение в классе не влекло за собой изменение внешнего поведения класса.
+The dump’s two parts are both required: **bundle** (fields live with the methods that use them) and **hide** (those fields are not the API). A class of public fields is a bundle without hiding ([[How would you explain problems with public mutable fields in Java]]).
 
-> Представим на минутку, что мы оказались в конце позапрошлого века, когда Генри Форд ещё не придумал конвейер, а первые попытки создать автомобиль сталкивались с критикой властей по поводу того, что эти коптящие монстры загрязняют воздух и пугают лошадей. Представим, что для управления первым паровым автомобилем необходимо было знать, как устроен паровой котёл, постоянно подбрасывать уголь, следить за температурой, уровнем воды. При этом для поворота колёс использовать два рычага, каждый из которых поворачивает одно колесо в отдельности. Думаю, можно согласиться с тем, что вождение автомобиля того времени было весьма неудобным и трудным занятием.
+**Access.** `private` is the usual field default: usable in the **nest** (the top-level class and its nested types), not from another top-level class. `public` methods are the steering wheel. Package-private is a team boundary ([[How does package private visibility relate to encapsulation]]). `protected` is for subclasses—still a published contract.
 
-> Теперь вернёмся в сегодняшний день к современным чудесам автопрома с коробкой-автоматом. На самом деле, по сути, ничего не изменилось. Бензонасос всё так же поставляет бензин в двигатель, дифференциалы обеспечивают поворот колёс на различающиеся углы, коленвал превращает поступательное движение поршня во вращательное движение колёс. Прогресс в другом. Сейчас все эти действия скрыты от пользователя и позволяют ему крутить руль и нажимать на педаль газа, не задумываясь, что в это время происходит с инжектором, дроссельной заслонкой и распредвалом. Именно сокрытие внутренних процессов, происходящих в автомобиле, позволяет эффективно его использовать даже тем, кто не является профессионалом-автомехаником с двадцатилетним стажем. Это сокрытие в ООП носит название инкапсуляции.
+**Goal.** The **binary and source contract** of the class is the public (and protected) members. You can rewrite a `private` helper, change field types, or cache, and callers of `call()` keep compiling. Returning a live internal array or a mutable `Date` undoes that ([[How would you explain copy constructors or defensive copying in Java]]). Large systems: [[What practical benefits does encapsulation bring to large systems]].
 
-Пример:
+The car story in the dump is the same idea as abstraction’s “pedals vs gearbox.” Abstraction names **which operations exist**; encapsulation names **what you must not touch**. You need both: `public void call()` (abstraction of “make a call”) plus `private` line setup (encapsulation).
+
+```d2
+direction: down
+api: "public call()" {
+  width: 160
+  height: 36
+  style.fill: "#e8f5e9"
+}
+hid: "private line, year, company" {
+  width: 240
+  height: 40
+  style.fill: "#e3f2fd"
+}
+api -> hid: "uses"
+```
+
+**Fig. 1.** Clients see `call`. They cannot call the private helper or assign the fields.
+
 ```java
-public class SomePhone {
+class Phone {
+    private final int year;
+    private final String company;
 
-    private int year;
-    private String company;
-    public SomePhone(int year, String company) {
+    Phone(int year, String company) {
         this.year = year;
         this.company = company;
     }
-    private void openConnection(){
-        //findComutator
-        //openNewConnection...
-    }
+
+    private void openLine() {}
+
     public void call() {
-        openConnection();
-        System.out.println("Вызываю номер");
+        openLine();
     }
 
-    public void ring() {
-        System.out.println("Динь-динь");
+    int year() {
+        return year;
     }
 
+    String company() {
+        return company;
+    }
 }
 ```
-Модификатор private делает доступными поля и методы класса только внутри данного класса. Это означает, что получить доступ к private полям из вне невозможно, как и нет возможности вызвать private методы.
 
-Сокрытие доступа к методу openConnection, оставляет нам также возможность к свободному изменению внутренней реализации этого метода, так как этот метод гарантированно не используется другими объектами и не нарушит их работу.
+**Listing 1.** `year` and `openLine` are not the API. `call` is. You can change `openLine` without touching callers of `call`.
 
-Для работы с нашим объектом мы оставляем открытыми методы call и ring с помощью модификатора public. Предоставление открытых методов для работы с объектом также является частью механизма инкапсуляции, так как если полностью закрыть доступ к объекту – он станет бесполезным.
+> [!warning] `private` is nest-wide, not “this object only”
+> Another instance of the same class can read `this.year` on a parameter. A nested class can too. A different top-level class cannot. Getters that return a mutable object still leak.
+
+> [!warning] All-`private` is not the goal
+> If every member is hidden, nobody can use the type. Encapsulation is **selective** publication: a small public surface, a large private interior. `public` fields are the usual failure, not “too many public methods” by itself.
+
+> [!warning] Encapsulation is not abstraction
+> Abstraction: depend on `Shape`. Encapsulation: `side` is `private`. A public-field `class Shape { public int side; }` has a type name and no encapsulation.
+
+> [!tip] Interview answer
+> Encapsulation means the class keeps its data and the code that maintains that data, and other types use only the methods you mark as the API. In Java that is `private` state plus `public` operations. The point is that you can change fields and helpers without breaking callers. It is not the same as abstraction, and it is not “make everything private.”

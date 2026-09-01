@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Modifiers/Static #Java/OOP #SRS
+#Java/Language/Modifiers/Static #Java/OOP/Polymorphism #SRS
 
 # Can static method be override or?
 
@@ -13,7 +13,7 @@ priority: 0
 
 A method declared `static` is a **class method**. It is invoked without a particular object as `this`. An instance method is invoked with respect to an object and, if overridden, is selected at run time. Overload resolution itself is always compile-time: the argument types pick a signature. If that signature is an instance method, the JVM then looks up an override. If it is a class method, the compile-time type of the target (or the class named in a qualified call) is the last word.
 
-Hiding: a class that declares or inherits a `static` method `m` hides an accessible superclass class method when the signature of `m` is a subsignature of that method’s signature. **It is a compile-time error if a `static` method hides an instance method.** The other mix is also illegal: an instance method cannot override a `static` method. Instance-on-static with a **different** signature is overloading, not hiding: [[Can instance methods overload]].
+Hiding: a class that declares or inherits a `static` method `m` hides an accessible superclass class method when the signature of `m` is a subsignature of that method’s signature. **It is a compile-time error if a `static` method hides an instance method.** The other mix is also illegal: an instance method cannot override a `static` method. Instance-on-static with a **different** signature is overloading, not hiding: [[Can an instance method overload a static method in Java]].
 
 A hidden class method is still callable through a name or receiver whose **compile-time type** is the class that declares it, or through `super`. `@Override` does not apply to hiding: that annotation is legal only when the method actually overrides a supertype method (or a few special `Object` / record-accessor cases), so putting it on a hiding `static` method is a compile-time error. A `final` class method cannot be hidden.
 

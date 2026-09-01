@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Modifiers/Access #Java/Language/Modifiers/Static #Java/Language/Modifiers/Final #Java/OOP #SRS
+#Java/Language/Modifiers/Access #Java/Language/Modifiers/Static #Java/Language/Modifiers/Final #Java/OOP/Interfaces #SRS
 
 # How would you explain default modifiers for fields and methods inside interfaces?
 

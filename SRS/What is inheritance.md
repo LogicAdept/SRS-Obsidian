@@ -2,69 +2,82 @@
 reps: 0
 priority: 0
 -->
-#Java/OOP #SRS #New
+#Paradigms/OOP #Java/OOP/Inheritance #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is inheritance?
 
-**Что такое _«наследование»_?**
+> [!abstract] Short answer
+> **Inheritance** is declaring a class (or interface) **from existing types** so it **gains members** of those types. In Java a class has **one** superclass (`extends`; `Object` if omitted) and any number of superinterfaces (`implements`). The subclass **is-a** the parent ([[What do in OOP expressions is-a and has-a]]). **Constructors and `{ }` / `static { }` are not inherited** ([[What does a Java class consist of]]). Tradeoffs: [[How would you explain class inheritance in Java and tradeoffs]]. Multiple class inheritance: [[Does Java support multiple inheritance for classes]]. `Object`: [[Do Java classes inherit from Object explicitly or implicitly]].
 
-__Наследование__ – это свойство системы, позволяющее описать новый класс на основе уже существующего с частично или полностью заимствующейся функциональностью.
+## Subclass reuses members, not constructors
 
-Класс, от которого производится наследование, называется _предком_, _базовым_ или _родительским_. Новый класс – _потомком_, _наследником_ или _производным_ классом.
+**What is inherited.** Accessible fields, methods, and nested types of the superclass and superinterfaces become members of the subclass unless a same-signature instance method **overrides** ([[How would you explain method overriding in Java]]) or a field **hides**. `private` members are not inherited. Package-private members are inherited only in the same package.
 
-> Представим себя, на минуту, инженерами автомобильного завода. Нашей задачей является разработка современного автомобиля. У нас уже есть предыдущая модель, которая отлично зарекомендовала себя в течение многолетнего использования. Всё бы хорошо, но времена и технологии меняются, а наш современный завод должен стремиться повышать удобство и комфорт выпускаемой продукции и соответствовать современным стандартам.
+**What is not.** Constructors. Static and instance initializers. You write `super(...)` (or get `super()` from the default constructor). A subclass that declares no constructor still does **not** inherit `Parent(int)` ([[How would you explain the default constructor synthesized by the Java compiler]]).
 
-> Нам необходимо выпустить целый модельный ряд автомобилей: седан, универсал и малолитражный хэтчбэк. Очевидно, что мы не собираемся проектировать новый автомобиль с нуля, а, взяв за основу предыдущее поколение, внесём ряд конструктивных изменений. Например, добавим гидроусилитель руля и уменьшим зазоры между крыльями и крышкой капота, поставим противотуманные фонари. Кроме того, в каждой модели будет изменена форма кузова.
+**Why.** Subtype polymorphism: a `Car` variable can refer to a `Sedan` ([[What is polymorphism]]). Shared implementation: protected helpers, common fields. Principles: [[What are the main oop principles]]. Encapsulation still applies: do not inherit to reach private state ([[What is encapsulation]]).
 
-> Очевидно, что все три модификации будут иметь большинство свойств прежней модели (старый добрый двигатель 1970 года, непробиваемая ходовая часть, зарекомендовавшая себя отличным образом на отечественных дорогах, коробку передач и т.д.). При этом каждая из моделей будет реализовать некоторую новую функциональность или конструктивную особенность. В данном случае, мы имеем дело с наследованием.
+The dump’s factory story is is-a reuse. The phone sample is incomplete (`AbstractPhone` never shown; `WirelessPhone` is `abstract` without the methods `CellPhone` claims to override). “Little new code” is a side effect, not the definition—and a deep `extends` chain is costly.
 
-Пример:
-Рассмотрим пример создания класса смартфон с помощью наследования. Все беспроводные телефоны работают от аккумуляторных батарей, которые имеют определенный ресурс работы в часах. Поэтому добавим это свойство в класс беспроводных телефонов:
+```d2
+direction: down
+p: "Point\nx, y, move" {
+  width: 160
+  height: 40
+  style.fill: "#e3f2fd"
+}
+c: "ColoredPoint extends Point\ncolor" {
+  width: 240
+  height: 40
+  style.fill: "#e8f5e9"
+}
+p -> c: "inherits members"
+```
+
+**Fig. 1.** `ColoredPoint` is a `Point`. It does not inherit `Point`’s constructors.
+
 ```java
-public abstract class WirelessPhone extends AbstractPhone {
+class Point {
+    int x, y;
 
-    private int hour;
+    Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
-    public WirelessPhone(int year, int hour) {
-        super(year);
-        this.hour = hour;
+    void move(int dx, int dy) {
+        x += dx;
+        y += dy;
+    }
+}
+
+class ColoredPoint extends Point {
+    int color;
+
+    ColoredPoint(int x, int y, int color) {
+        super(x, y);
+        this.color = color;
+    }
+}
+
+class Use {
+    static void go() {
+        Point p = new ColoredPoint(1, 2, 0xff0000);
+        p.move(1, 0);
     }
 }
 ```
-Сотовые телефоны наследуют свойства беспроводного телефона, мы также добавили в этот класс реализацию методов call и ring:
-```java
-public class CellPhone extends WirelessPhone {
-    public CellPhone(int year, int hour) {
-        super(year, hour);
-    }
 
-    @Override
-    public void call(int outputNumber) {
-        System.out.println("Вызываю номер " + outputNumber);
-    }
+**Listing 1.** `ColoredPoint` inherits `move`. `Use` treats it as a `Point`. `new ColoredPoint` must call `super`; there is no inherited `Point(int, int)` to invoke as a constructor of `ColoredPoint`.
 
-    @Override
-    public void ring(int inputNumber) {
-        System.out.println("Вам звонит абонент " + inputNumber);
-    }
-}
-```
-И, наконец, класс смартфон, который в отличие от классических сотовых телефонов имеет полноценную операционную систему. В смартфон можно добавлять новые программы, поддерживаемые данной операционной системой, расширяя, таким образом, его функциональность. С помощью кода класс можно описать так:
-```java
-public class Smartphone extends CellPhone {
+> [!warning] Inheritance is not “copy the parent’s constructors”
+> `new ColoredPoint(1, 2)` is a compile-time error unless you declare that constructor. `super` is required (explicitly or as `super()` in a default constructor).
 
-    private String operationSystem;
+> [!warning] `implements` is inheritance of types
+> A class inherits abstract/default methods from interfaces too. That is still is-a, not has-a. You cannot `extends` two classes.
 
-    public Smartphone(int year, int hour, String operationSystem) {
-        super(year, hour);
-        this.operationSystem = operationSystem;
-    }
+> [!warning] Less source is not automatically better
+> The dump’s `Smartphone extends CellPhone extends …` is the fragile-base-class shape. If you only needed `install`, a field (has-a) plus forwarding is often cheaper. Inherit for **substitutability**, not for two methods.
 
-    public void install(String program){
-        System.out.println("Устанавливаю " + program + "для" + operationSystem);
-    }
-
-}
-```
-Как видите, для описания класса Smartphone мы создали совсем немного нового кода, но получили новый класс с новой функциональностью. Использование этого принципа ООП java позволяет значительно уменьшить объем кода, а значит, и облегчить работу программисту.
+> [!tip] Interview answer
+> Inheritance means a new class is declared as a subclass (or an interface as a subinterface) and receives accessible members of the parent types. In Java that is one `extends` and many `implements`. Constructors are not inherited. Use it for is-a relationships and polymorphism, not as a way to steal a couple of methods.

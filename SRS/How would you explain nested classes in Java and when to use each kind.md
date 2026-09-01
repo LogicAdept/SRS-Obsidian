@@ -13,7 +13,7 @@ priority: 0
 
 A **top-level** class sits in a compilation unit. **Nested** means the declaration occurs inside another type. That splits into a **member** class (in the class body), a **local** class (in a block), or an **anonymous** class (`new Type() { }` or an enum constant body). **Inner** means nested and not (explicitly or implicitly) `static` ([[How would you explain categories of Java classes such as nested and anonymous]]).
 
-Why nest at all: the helper is used in one place, it can see `private` members of the enclosing type, and the code sits next to the use.
+Why nest at all: the helper is used in one place, it can see `private` members of the enclosing type ([[How can a nested class access fields of its enclosing class]]), and the code sits next to the use.
 
 ```d2
 direction: down

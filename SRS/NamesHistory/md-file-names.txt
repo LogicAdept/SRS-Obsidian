@@ -4145,3 +4145,30 @@
 - [+] Why cannot Java logical operators be applied to integers.md
 - [+] What happens when you assign an int literal that exceeds the char range.md
 - [+] What does the Java strictfp modifier do.md
+- [x] Can different objects be hashCode.md
+- [x] Can you use enhanced for with your own class in Java.md
+- [x] How do you can print on screen numbers using method map.md
+- [x] How do you ConcurrentModificationException time collection.md
+- [x] How do you methods hashCode and equals in class Object.md
+- [x] How do you print on screen 10 numbers in order.md
+- [x] How do you print on screen count string with using method filter.md
+- [x] How does the List interface differ from the Set interface.md
+- [x] How would you explain are there which recommendations about which fields should you use when hashCode.md
+- [x] How would you explain Comparable Comparator.md
+- [x] How would you explain count memory on type byte in LinkedList.md
+- [x] How would you explain HashSet from HashMap.md
+- [x] How would you explain how many memory when call LinkedList.add.md
+- [x] How would you explain intermediate operations on Java streams.md
+- [x] How would you explain number hashCode.md
+- [x] How would you explain override method Object.equals.md
+- [x] How would you explain parallel in Java 8.md
+- [x] How would you explain PriorityQueue.md
+- [x] How would you explain what equals.md
+- [x] How would you explain what will if elements in TreeSet by.md
+- [x] How would you explain which worst time work method contains for element which are there in LinkedList.md
+- [x] What interface lets you traverse elements of a Java collection.md
+- [x] What is the difference between the Java List and Set interfaces.md
+- [x] Which class in Java 8 for data.md
+- [x] Which methods for work with array maps in Java 8.md
+- [x] Why do you need equals how it differ from operation ==.md
+- [x] Why LinkedList implements and List and Deque.md

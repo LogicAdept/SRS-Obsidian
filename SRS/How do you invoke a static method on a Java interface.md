@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Modifiers/Static #Java/OOP #SRS
+#Java/Language/Modifiers/Static #Java/OOP/Interfaces #SRS
 
 # How do you invoke a static method on a Java interface?
 
