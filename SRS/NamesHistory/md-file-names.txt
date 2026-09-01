@@ -692,7 +692,6 @@
 - [x] How would you explain continuous integration and continuous delivery CI CD.md
 - [x] How would you explain copy constructors or defensive copying in Java.md
 - [x] How would you explain core functional interfaces in java.util.function.md
-- [x] How would you explain count memory on type byte in LinkedList.md
 - [x] How would you explain covariance of generic and return types in Java.md
 - [x] How would you explain Covering index.md
 - [x] How would you explain CQRS.md
@@ -787,7 +786,6 @@
 - [x] How would you explain horizontal database sharding.md
 - [x] How would you explain how many elements will if Iterator.next will 10 Iterator.hasNext.md
 - [x] How would you explain how many happens in call HashMap.get(key by which are there in.md
-- [x] How would you explain how many memory when call LinkedList.add.md
 - [x] How would you explain HTTP cookies.md
 - [x] How would you explain HTTP sessions in servlet based applications.md
 - [x] How would you explain HTTP.md
@@ -1203,7 +1201,6 @@
 - [x] How would you explain which from about thread.md
 - [x] How would you explain which Java language constructs can be marked static.md
 - [x] How would you explain which on serialize modifiers static and final.md
-- [x] How would you explain which worst time work method contains for element which are there in LinkedList.md
 - [x] How would you explain which.md
 - [x] How would you explain why can be needed private.md
 - [x] How would you explain widening and narrowing casts between Java primitive types.md
@@ -2901,7 +2898,6 @@
 - [x] Why is the main method static in Java.md
 - [x] Why is the singleton pattern often labeled an anti pattern.md
 - [x] Why is Thread.stop deprecated and unsafe.md
-- [x] Why LinkedList implements and List and Deque.md
 - [x] Why Liquibase Flyway.md
 - [x] Why might a ClickHouse skip index not help.md
 - [x] Why might a Java interface declare no methods.md
