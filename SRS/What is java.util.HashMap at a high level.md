@@ -50,7 +50,7 @@ Colliding hashes share a bucket. The public javadoc still calls these **buckets*
 
 ## What “high level” leaves out on purpose
 
-No guaranteed encounter order — `LinkedHashMap` adds a list through all entries for that. No compare-based sort — `TreeMap` is a red-black `NavigableMap` with guaranteed log(n). No monitor on each call — not synchronized. One `null` key and `null` values are allowed. [[How do HashMap, TreeMap, and LinkedHashMap differ at a high level]]
+No guaranteed encounter order — `LinkedHashMap` adds a list through all entries for that. No compare-based sort — `TreeMap` is a red-black `NavigableMap` with guaranteed log(n). No monitor on each call — not synchronized. One `null` key and `null` values are allowed. [[What is the difference between HashMap, TreeMap, and LinkedHashMap]]
 
 Capacity and load factor only matter once you care about **when** the table grows and **why** iteration can be slower than `size()`. Defaults and resize: [[What are the initial capacity and load factor parameters of HashMap]].
 

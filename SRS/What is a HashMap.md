@@ -46,7 +46,7 @@ map -> hm
 hm -> not
 ```
 
-**Fig. 1.** Default map when you need lookup by key and do not need order or a monitor on every call. [[How do HashMap, TreeMap, and LinkedHashMap differ at a high level]]
+**Fig. 1.** Default map when you need lookup by key and do not need order or a monitor on every call. [[What is the difference between HashMap, TreeMap, and LinkedHashMap]]
 
 ## Performance knobs, not identity
 

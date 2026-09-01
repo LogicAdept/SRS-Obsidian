@@ -169,7 +169,7 @@
 - [x] How do Docker image layers relate to a Dockerfile.md
 - [x] How do execute, executeQuery, and executeUpdate differ in JDBC.md
 - [x] How do generated columns work in PostgreSQL.md
-- [x] How do HashMap, TreeMap, and LinkedHashMap differ at a high level.md
+- [x] What is the difference between HashMap, TreeMap, and LinkedHashMap.md
 - [x] How do HashMap, TreeMap, and LinkedHashMap work at a high level.md
 - [x] How do HTTP PUT and PATCH semantics differ.md
 - [x] How do Java access modifiers work.md

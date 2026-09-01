@@ -37,7 +37,7 @@ mode -> acc
 
 **Fig. 1.** One boolean in `LinkedHashMap(int, float, boolean)`. Default constructors are insertion-order (`false`).
 
-That is **not** sort order. `TreeMap` orders by `compare`. [[How do HashMap, TreeMap, and LinkedHashMap differ at a high level]] is the three-way choice.
+That is **not** sort order. `TreeMap` orders by `compare`. [[What is the difference between HashMap, TreeMap, and LinkedHashMap]] is the three-way choice.
 
 ## Access-order is opt-in
 

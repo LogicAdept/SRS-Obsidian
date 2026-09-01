@@ -52,7 +52,7 @@ ord -> tm: yes
 ord -> hm: no
 ```
 
-**Fig. 1.** Order is the usual reason to accept log(n). Insertion-order or access-order is `LinkedHashMap`, not `TreeMap`. [[How do HashMap, TreeMap, and LinkedHashMap differ at a high level]] is the three-way split.
+**Fig. 1.** Order is the usual reason to accept log(n). Insertion-order or access-order is `LinkedHashMap`, not `TreeMap`. [[What is the difference between HashMap, TreeMap, and LinkedHashMap]] is the three-way split.
 
 ## Keys and extra API
 

@@ -57,7 +57,7 @@ A new `HashMap` key lands in one bin and may trigger resize when `size` exceeds 
 Re-`put` of an equal `HashMap`/`LinkedHashMap` key replaces the value in that node. Insertion-order `LinkedHashMap` does **not** relink. Access-order does, on the documented access methods. `TreeMap` replace is still a tree find; `compare == 0` is the same key.
 
 > [!warning] Two kinds of “linked”
-> Bin `next` is collision chaining inside one bucket. `LinkedHashMap.before`/`after` is a list of **all** mappings. Do not call `TreeMap` “a linked HashMap.” Sorted order is tree shape, not a list of insertion times. [[How do HashMap, TreeMap, and LinkedHashMap differ at a high level]] is which one to choose.
+> Bin `next` is collision chaining inside one bucket. `LinkedHashMap.before`/`after` is a list of **all** mappings. Do not call `TreeMap` “a linked HashMap.” Sorted order is tree shape, not a list of insertion times. [[What is the difference between HashMap, TreeMap, and LinkedHashMap]] is which one to choose.
 
 > [!tip] Interview answer
 > **`HashMap` works by hashing into an array of chains (sometimes trees). `LinkedHashMap` is that table plus a doubly-linked list through every entry so iteration has a defined encounter order. `TreeMap` works by comparing keys in a red-black tree. Same `Map` API, three lookup machines.**

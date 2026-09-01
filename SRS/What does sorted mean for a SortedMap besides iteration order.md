@@ -62,7 +62,7 @@ sorted.comparator();       // null ⇒ natural order
 
 **Listing 1.** Extra operations (Java SE 21). Ranges are **half-open** where both ends apply: low inclusive, high exclusive. `from.equals(to)` yields an empty `subMap`. The view is backed by the map; inserting a key outside the range throws `IllegalArgumentException`.
 
-`values()` is **not** sorted by value: it follows **ascending keys**. `reversed()` (Java 21) is a reverse-ordered `SortedMap` view. `putFirst` / `putLast` always throw: position is induced by comparison, so you cannot pin a mapping at an end. [[How do HashMap, TreeMap, and LinkedHashMap differ at a high level]]
+`values()` is **not** sorted by value: it follows **ascending keys**. `reversed()` (Java 21) is a reverse-ordered `SortedMap` view. `putFirst` / `putLast` always throw: position is induced by comparison, so you cannot pin a mapping at an end. [[What is the difference between HashMap, TreeMap, and LinkedHashMap]]
 
 `NavigableMap` (1.6) is the usual subtype (`TreeMap`, `ConcurrentSkipListMap`): inclusive/exclusive `subMap` overloads plus `floorKey` / `ceilingKey` / `lowerKey` / `higherKey` and snapshot `firstEntry` / `pollFirstEntry`. Those still rest on the same total order. Structure: [[What data structure backs TreeMap in Java]]. Why pick it: [[Compare HashMap and TreeMap tradeoffs]].
 

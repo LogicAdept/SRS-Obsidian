@@ -7,7 +7,7 @@ priority: 0
 # What are the main Java `Map` implementations?
 
 > [!abstract] Short answer
-> **Three general-purpose maps: `HashMap` (speed, unspecified order), `LinkedHashMap` (near-`HashMap` speed, encounter order), `TreeMap` (`SortedMap` / key order, guaranteed log(n)).** Special-purpose: `EnumMap`, `WeakHashMap`, `IdentityHashMap`. Concurrent: `ConcurrentHashMap` (and `ConcurrentSkipListMap` when you need a concurrent sorted map). `Hashtable` is the legacy synchronized table, not the default. [[How do HashMap, TreeMap, and LinkedHashMap differ at a high level]]
+> **Three general-purpose maps: `HashMap` (speed, unspecified order), `LinkedHashMap` (near-`HashMap` speed, encounter order), `TreeMap` (`SortedMap` / key order, guaranteed log(n)).** Special-purpose: `EnumMap`, `WeakHashMap`, `IdentityHashMap`. Concurrent: `ConcurrentHashMap` (and `ConcurrentSkipListMap` when you need a concurrent sorted map). `Hashtable` is the legacy synchronized table, not the default. [[What is the difference between HashMap, TreeMap, and LinkedHashMap]]
 
 ## General-purpose (the usual choice)
 
