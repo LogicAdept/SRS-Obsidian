@@ -1954,7 +1954,6 @@
 - [x] What is one-hot encoding versus embeddings.md
 - [x] What is OOP.md
 - [x] What is Open Session In View in Spring.md
-- [x] What is operator assert.md
 - [x] What is operator GROUP BY.md
 - [x] What is operator HAVING.md
 - [x] What is operator ORDER BY.md
@@ -2086,7 +2085,7 @@
 - [x] What is the approximate distance between Earth and the Moon.md
 - [x] What is the approximate memory overhead for one byte stored in a LinkedList.md
 - [x] What is the approximate memory overhead for one byte stored in an ArrayList.md
-- [x] What is the assert keyword for in Java.md
+- [x] What is the purpose of the assert keyword in Java.md
 - [x] What is the audit logging pattern in microservices.md
 - [x] What is the backtracking algorithm.md
 - [x] What is the Bellman-Ford algorithm.md
