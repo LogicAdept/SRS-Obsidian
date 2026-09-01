@@ -3443,11 +3443,13 @@
 - [+] What is the difference between WebMvcTest and SpringBootTest.md
 - [+] How do you test a Spring MVC controller in isolation.md
 - [+] How do you write a MockMvc test.md
+- [+] How do you write a Spring Boot integration test.md
 - [+] What is JSONAssert.md
 - [+] What is LocalServerPort.md
 - [+] What is TestRestTemplate.md
 - [+] What is the ContextConfiguration annotation.md
 - [+] What is the DataJpaTest annotation.md
+- [+] How do you test JPA repositories in Spring.md
 - [+] What is TestEntityManager.md
 - [+] What is the TestConfiguration annotation.md
 - [+] How do you test REST endpoints end to end.md
@@ -4045,6 +4047,7 @@
 - [+] Does throws IOException cover FileNotFoundException.md
 - [+] Is Throwable a checked exception.md
 - [+] How do Java annotation retention policies work.md
+- [+] What is the difference between SOURCE CLASS and RUNTIME retention.md
 - [+] What happens if you omit Retention on a custom annotation.md
 - [+] How does the Target meta-annotation restrict annotation placement.md
 - [+] How does Inherited annotation inheritance work.md
