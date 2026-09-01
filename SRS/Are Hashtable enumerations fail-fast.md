@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/Hashtable #Java/Collections/Iteration #SRS
+#Java/Collections/Map/Hashtable #Java/Collections/Iteration/FailFast #SRS
 
 # Are `Hashtable` enumerations fail-fast?
 

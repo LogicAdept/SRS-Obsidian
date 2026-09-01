@@ -2,35 +2,66 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Iteration #SRS #New
+#Java/Collections/Iteration/FailFast #Java/Exceptions/Unchecked #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is fail-fast iterator behavior in Java collections?
 
-**Fail-fast итератор.**
+> [!abstract] Short answer
+> **The iterator fails immediately with `ConcurrentModificationException` if the collection is structurally changed after the iterator was created, except through that iterator’s own `remove` (and list-iterator `add`).** `ArrayList` and `HashMap` view iterators are the usual examples. Detection is **best-effort** (`modCount`), not a lock, and **one thread** is enough. It exists to avoid later nondeterministic traversal, not to make concurrent mutation safe.
 
-ConcurrentModificationException при изменении коллекции не через сам итератор. Реализован через modCount. Не гарантирован в многопоточной среде — только best effort. Альтернатива: CopyOnWriteArrayList (fail-safe, работает с копией).
+## Fail quickly instead of walking a moving structure
 
-**Что такое fail-fast итератор?**
+General-purpose JRE collections document fail-fast iterators: if the collection is structurally modified at any time after the iterator is created, in any way except through the iterator’s own `remove` (ArrayList also: list-iterator `add`), the iterator throws `ConcurrentModificationException`. The alternative they contrast is “arbitrary, non-deterministic behavior at an undetermined time in the future” [[What is ConcurrentModificationException]], [[What counts as a structural modification for fail-fast iterators]].
 
-Итератор, который кидает ConcurrentModificationException, если коллекция изменена не через сам итератор. Так работают итераторы у HashMap, ArrayList.
+**Structural** means add/delete (and on `ArrayList`, an explicit backing-array resize). `List.set` and `HashMap.put` of an **existing** key are not. Enhanced `for` is a hidden fail-fast iterator, so `list.remove` in the body is the classic one-thread case [[How can a single-threaded program get ConcurrentModificationException]].
 
-**Fail-fast итератор.**
+**`modCount`:** `AbstractList` counts structural modifications. The iterator stores the value at creation (`expectedModCount`). If it differs, `next` / `remove` / `previous` / `set` / `add` throw CME. Not every iterator method checks: OpenJDK `ArrayList.hasNext` is `cursor != size` only.
 
-Кидает ConcurrentModificationException при изменении коллекции не через сам итератор. Так работают итераторы HashMap, ArrayList.
+Fail-fast **cannot be guaranteed** under unsynchronized concurrent modification. CME is best-effort and must not be used for program correctness — only to detect bugs [[How do you avoid ConcurrentModificationException while iterating a collection]].
 
-**Fail-fast итератор.**
+**Not fail-fast:** `CopyOnWriteArrayList` snapshot (no CME). `ConcurrentHashMap` weakly consistent (no CME). Hashtable `keys()` / Vector `elements()` — not fail-fast; results **undefined**. Do not call those “fail-safe” as if they were COW [[What is the difference between fail-fast and fail-safe iterators]], [[What are examples of fail-safe iterators in Java]].
 
-ConcurrentModificationException при изменении коллекции не через итератор. modCount-счётчик. Не гарантирован в многопоточке. Альтернатива: CopyOnWriteArrayList (fail-safe).
+```d2
+direction: down
+it: "fail-fast iterator\nexpectedModCount" {
+  width: 280
+  height: 70
+  style.fill: "#e3f2fd"
+}
+ok: "it.remove()\ncounts stay aligned" {
+  width: 260
+  height: 70
+  style.fill: "#e8f5e9"
+}
+cme: "coll.add / coll.remove\n→ CME on next()" {
+  width: 280
+  height: 70
+  style.fill: "#ffebee"
+}
 
-**Что такое «fail-fast поведение»?**
+it -> ok
+it -> cme
+```
 
-__fail-fast поведение__ означает, что при возникновении ошибки или состояния, которое может привести к ошибке, система немедленно прекращает дальнейшую работу и уведомляет об этом. Использование fail-fast подхода позволяет избежать недетерминированного поведения программы в течение времени.
+**Fig. 1.** Fail-fast compares modification counts. The iterator’s own `remove` is the structural change it expects.
 
-В Java Collections API некоторые итераторы ведут себя как fail-fast и выбрасывают `ConcurrentModificationException`, если после его создания была произведена модификация коллекции, т.е. добавлен или удален элемент напрямую из коллекции, а не используя методы итератора.
+```java
+class FailFastDemo {
+    static void throwsCme(java.util.List<String> list) {
+        for (String s : list) {
+            list.add("x"); // structural, not iterator.remove
+        }
+    }
+}
+```
 
-Реализация такого поведения осуществляется за счет подсчета количества модификаций коллекции (modification count):
+**Listing 1.** Typical fail-fast failure: one thread, enhanced `for`, collection `add`. CME on a later `next()`. `list.set(0, "x")` would not be this exception.
 
-+ при изменении коллекции счетчик модификаций так же изменяется;
-+ при создании итератора ему передается текущее значение счетчика;
-+ при каждом обращении к итератору сохраненное значение счетчика сравнивается с текущим, и, если они не совпадают, возникает исключение.
+> [!warning] Best-effort is not a memory barrier
+> Two threads without a lock may still corrupt the list **without** CME. Catching the exception does not repair the collection. Do not write `try { iterate } catch (ConcurrentModificationException e)`.
+
+> [!warning] `hasNext` may not throw
+> After an illegal write, `ArrayList.hasNext` can still return a boolean. CME is on `next()` / `remove()`, or the loop ends with a skipped tail and no throw. “No exception” is not “still valid.”
+
+> [!tip] Interview answer
+> **Fail-fast means the iterator throws `ConcurrentModificationException` if the collection is structurally changed except via that iterator’s `remove` — `ArrayList` and `HashMap` do this, even on one thread.** It uses `modCount` on a best-effort basis. CopyOnWriteArrayList and ConcurrentHashMap iterators are not fail-fast.

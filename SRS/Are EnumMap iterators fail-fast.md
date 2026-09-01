@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/EnumMap #Java/Collections/Iteration #SRS
+#Java/Collections/Map/EnumMap #Java/Collections/Iteration/FailFast #SRS
 
 # Are `EnumMap` iterators fail-fast?
 

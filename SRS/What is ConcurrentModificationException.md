@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions/Unchecked #Java/Collections/Iteration #Java/Collections/Concurrency #SRS
+#Java/Exceptions/Unchecked #Java/Collections/Iteration/FailFast #Java/Collections/Concurrency #SRS
 
 # What is `ConcurrentModificationException`?
 

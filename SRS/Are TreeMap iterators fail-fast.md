@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/TreeMap #Java/Collections/Iteration #SRS
+#Java/Collections/Map/TreeMap #Java/Collections/Iteration/FailFast #SRS
 
 # Are `TreeMap` iterators fail-fast?
 

@@ -218,7 +218,6 @@
 - [x] How do you choose the number of partitions for a Kafka topic.md
 - [x] How do you choose the size of a thread pool.md
 - [x] How do you close a database connection properly.md
-- [x] How do you collection if invoke iterator.remove.md
 - [x] How do you combine several indexes in one query.md
 - [x] How do you comment code in JSP.md
 - [x] How do you compare objects for equality in Java.md
@@ -1192,7 +1191,6 @@
 - [x] How would you explain what does operator MERGE.md
 - [x] How would you explain what equals.md
 - [x] How would you explain what happens if in block initialization occurs exceptional situation.md
-- [x] How would you explain what happens when call Iterator.next without call Iterator.hasNext.md
 - [x] How would you explain what happens when in thread is thrown exception.md
 - [x] How would you explain what has-a higher higher level - class abstract class or interface.md
 - [x] How would you explain what in Servlet 2.5 3.0 3.1 4.0.md
@@ -1312,8 +1310,7 @@
 - [x] What are examples of behavioral design patterns.md
 - [x] What are examples of common software anti patterns.md
 - [x] What are examples of creational design patterns.md
-- [x] What are examples of iterator behavior fail-safe.md
-- [x] What are examples of iterators with fail safe iteration semantics.md
+- [x] What are examples of fail-safe iterators in Java.md
 - [x] What are examples of structural design patterns.md
 - [x] What are examples where checked exceptions are a good fit.md
 - [x] What are exchange-to-exchange bindings in RabbitMQ.md

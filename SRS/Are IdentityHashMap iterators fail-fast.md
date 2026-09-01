@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/IdentityHashMap #Java/Collections/Iteration #SRS
+#Java/Collections/Map/IdentityHashMap #Java/Collections/Iteration/FailFast #SRS
 
 # Are `IdentityHashMap` iterators fail-fast?
 

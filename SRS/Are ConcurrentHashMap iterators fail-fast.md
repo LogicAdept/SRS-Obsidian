@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/ConcurrentHashMap #Java/Collections/Iteration #SRS
+#Java/Collections/Map/ConcurrentHashMap #Java/Collections/Iteration/FailFast #SRS
 
 # Are `ConcurrentHashMap` iterators fail-fast?
 
