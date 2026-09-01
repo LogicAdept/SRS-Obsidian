@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Enterprise/Integration/Channels #SRS #New
+#Patterns/Enterprise/Integration/Channels/DeadLetterChannel #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст собран из публичных списков вопросов по RabbitMQ (2026). Не сверен с официальной документацией RabbitMQ. Не считать ответом для ревью.

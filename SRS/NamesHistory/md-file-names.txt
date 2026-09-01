@@ -4134,3 +4134,71 @@
 - [x] What is checked and unchecked exception.md
 - [x] When can a finally block fail to execute in Java.md
 - [x] When in can be thrown exception ClassCastException.md
+- [x] How would you explain boxing and unboxing in Java.md
+- [x] How would you explain for Enum are there class java.util.EnumSet why how not HashSet or TreeSet.md
+- [x] How would you explain for what in stream intended methods flatMap flatMapToInt flatMapToDouble flatMapToLong.md
+- [x] How would you explain for what in stream intended methods map and mapToInt mapToDouble mapToLong.md
+- [x] How would you explain java.util.Optional.md
+- [x] How would you explain lazy Stream.md
+- [x] How would you explain OAuth.md
+- [x] How would you explain Stream API.md
+- [x] What are common terminal operations on Java streams.md
+- [x] What is autoboxing autoboxing in Java and what types in wrapper classes.md
+- [x] What is collect for in Java streams.md
+- [x] What is limit for in Java streams.md
+- [x] What is method collect in stream.md
+- [x] What is operator assert.md
+- [x] What is Reflection.md
+- [x] What is sorted for in Java streams.md
+- [x] What is the assert keyword for in Java.md
+- [x] What is the difference between Java Collection APIs and streams.md
+- [x] What is the main idea of reflection in Java.md
+- [x] Which mechanism implements parallel streams in Java.md
+- [+] How do you send a CSRF token in a JSON request.md
+- [+] How do you enable method security in Spring Security 6.md
+- [+] How does the Invalid Message Channel pattern work.md
+- [+] What is the difference between Invalid Message Channel and Dead Letter Channel.md
+- [+] Why should you not treat an application error as an invalid message.md
+- [+] Why must you monitor the Invalid Message Channel.md
+- [+] What happens if a receiver puts an invalid message back on the original channel.md
+- [+] Why should you not retry a structurally invalid message.md
+- [+] How do you implement Invalid Message Channel when the broker only has a dead-letter sub-queue.md
+- [+] Why is Invalid Message Channel not the same as a Dead Letter Queue.md
+- [+] When should you use the Invalid Message Channel pattern.md
+- [+] How does validity of a message depend on the receiver.md
+- [+] What happens when a message of the wrong type arrives on a Datatype Channel.md
+- [+] How does a receiving application move a poison message to an Invalid Message Channel.md
+- [+] How does a missing required header make a delivered message invalid.md
+- [+] How do you preserve the original Message ID when parking an invalid JMS message.md
+- [+] Why is an Invalid Message Channel like an error log.md
+- [+] What happens when a receiver gets an expired message.md
+- [+] What happens if a JMS MessageListener throws a RuntimeException instead of diverting an invalid message.md
+- [+] What is the difference between Invalid Message Channel and an error channel.md
+- [+] What is the difference between a BACKOUT queue and a Dead Letter Queue for unprocessable messages.md
+- [+] What happens when a sequenced message is missing its sequence identifier.md
+- [+] How does Apache Camel deadLetterChannel get used as an Invalid Message Channel.md
+- [+] How do you use XML or EDI validators with an Invalid Message Channel.md
+- [+] How does a Replier decide a request message is invalid.md
+- [+] When should you not use a separate Invalid Message Channel.md
+- [+] How does a Requestor decide a reply message is invalid.md
+- [+] How does Akka EventStream implement Invalid Message Channel.md
+- [+] What is the difference between an Invalid Message Channel and a broker queue or topic.md
+- [+] How does RabbitMQ dead-letter-exchange get used as an Invalid Message Channel.md
+- [+] How does schema evolution send a queued event to an Invalid Message Channel.md
+- [+] How do you replay messages from an Invalid Message Channel.md
+- [+] How does a Spring Integration filter discard-channel implement Invalid Message Channel.md
+- [+] Why can the receiver design Invalid Message Channel handling when Dead Letter Channel is broker defined.md
+- [+] Why should you log as well as park a message on the Invalid Message Channel.md
+- [+] Why would senders monitor the Invalid Message Channel.md
+- [+] What kinds of delivered messages does a receiver treat as invalid.md
+- [+] What happens when a sender puts a perfectly good message on the wrong channel.md
+- [+] How do receivers ignore a sender that publishes invalid messages.md
+- [+] How does an MSMQ Replier implement Invalid Message Channel.md
+- [+] What does a dump that equates Invalid Message Channel with a DLQ put on that channel.md
+- [+] How do you implement Invalid Message Channel as a secondary in-memory collection.md
+- [+] What is the difference between the Retry Pattern and Invalid Message Channel.md
+- [+] How does an error handler consume from the Invalid Message Channel.md
+- [+] Why must the administrator define one or more Invalid Message Channels.md
+- [+] Why is Invalid Message Channel not only a development-environment pattern.md
+- [+] What is the JMS unprocessable message destination.md
+- [+] What is the difference between Datatype Channel and Invalid Message Channel.md

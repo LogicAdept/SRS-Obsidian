@@ -539,7 +539,9 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/Enterprise/Integration`
 * `#Patterns/Enterprise/Integration/Channels`
 * `#Patterns/Enterprise/Integration/Channels/PublishSubscribe`
+* `#Patterns/Enterprise/Integration/Channels/DatatypeChannel`
 * `#Patterns/Enterprise/Integration/Channels/InvalidMessageChannel`
+* `#Patterns/Enterprise/Integration/Channels/DeadLetterChannel`
 * `#Patterns/Enterprise/Integration/Messages`
 * `#Patterns/Enterprise/Integration/Messages/EnvelopeWrapper`
 * `#Patterns/Enterprise/Integration/Messages/EventMessage`
