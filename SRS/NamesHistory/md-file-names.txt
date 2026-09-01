@@ -556,7 +556,6 @@
 - [x] How does the Java Memory Model define visibility and ordering.md
 - [x] How does the JVM decide an object is garbage.md
 - [x] How does the JVM help Java bytecode run across operating systems.md
-- [x] How does the List interface differ from the Set interface.md
 - [x] How does the Observer pattern underpin reactive programming.md
 - [x] How does the PostgreSQL query planner choose a plan.md
 - [x] How does the Queue interface differ from the Deque interface.md
@@ -1189,7 +1188,6 @@
 - [x] How would you explain what keyword word transient.md
 - [x] How would you explain what method filter in stream.md
 - [x] How would you explain what values initialized variable by default.md
-- [x] How would you explain what will if elements in TreeSet by.md
 - [x] How would you explain what will if override equals not override hashCode which can problems.md
 - [x] How would you explain what will if queue threads already.md
 - [x] How would you explain what will result execution operation int array = {8 -3 10 4} int result = Arrays.binaryS.md
@@ -2260,7 +2258,6 @@
 - [x] What is the difference between test stubs and mocks.md
 - [x] What is the difference between the Builder and Facade design patterns.md
 - [x] What is the difference between the Collection interface and the Collections utility class.md
-- [x] What is the difference between the Java List and Set interfaces.md
 - [x] What is the difference between the JDK and the JRE.md
 - [x] What is the difference between the JSTL set tag and jsp useBean.md
 - [x] What is the difference between the JVM and the JDK.md
