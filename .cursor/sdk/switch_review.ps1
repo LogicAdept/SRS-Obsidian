@@ -265,13 +265,16 @@ function Accept-Clone([string]$ClonePath, [string]$TargetTag) {
     $cloneDirty = @(& git -C $ClonePath status --porcelain)
     if ($cloneDirty.Count -ne 0) {
         # Git pathspecs, not a fully expanded file list: thousands of SRS/*.md
-        # arguments overflow the Windows command line.
-        & git -C $ClonePath add -- `
-            "SRS/Format/Tags.md" `
-            "SRS/NamesHistory/coverage-progress.json" `
-            "SRS/NamesHistory/md-file-names.txt" `
-            "SRS/NamesHistory/question-repositories.txt" `
-            ":(glob)SRS/*.md"
+        # arguments overflow the Windows command line. Skip NamesHistory files
+        # older clones never created.
+        $toAdd = @(
+            "SRS/Format/Tags.md",
+            "SRS/NamesHistory/coverage-progress.json",
+            "SRS/NamesHistory/md-file-names.txt",
+            "SRS/NamesHistory/question-repositories.txt"
+        ) | Where-Object { Test-Path -LiteralPath (Join-Path $ClonePath $_) }
+        $toAdd += ":(glob)SRS/*.md"
+        & git -C $ClonePath add -- @toAdd
         if ($LASTEXITCODE -ne 0) {
             throw "git add in the clone failed."
         }
