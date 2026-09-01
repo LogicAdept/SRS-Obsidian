@@ -50,12 +50,14 @@ need -> arr
 
 `String.intern` canonicalizes by `equals` so `s.intern() == t.intern()` iff `s.equals(t)`. Literals are interned. `HashMap` does not intern keys and does not need `==`. Two non-interned equal strings still `get`.
 
-The public `hashCode` formula does **not** say “computed at construction.” OpenJDK caches the polynomial in `hash` / `hashIsZero` on the **first** `hashCode()` call for that instance. `HashMap` also stores the mixed hash on the **node** at `put` (resize does not call `key.hashCode()` again). A lookup `get(other)` still hashes `other`; a new equal `String` pays the polynomial once, then caches on *itself*. Immutability makes those caches legal. [[Can two equal String objects both be keys in an IdentityHashMap]]
+The public `hashCode` formula does **not** say “computed at construction.” OpenJDK caches the polynomial in `hash` / `hashIsZero` on the **first** `hashCode()` call for that instance: if `hash` is still `0` and `hashIsZero` is false, it computes from the immutable `value` bytes, then writes **either** `hash` **or** `hashIsZero`. The copy constructor `String(String)` copies those fields if they were already filled; ordinary construction leaves `hash == 0`. Immutability makes that cache legal (the computation is idempotent and derived from immutable state). It is a later-call speed-up, not why `HashMap` accepts the key. [[Why is java.lang.String immutable and final]]
+
+`HashMap` also stores the mixed hash on the **node** at `put` (resize does not call `key.hashCode()` again). A lookup `get(other)` still hashes `other`; a new equal `String` pays the polynomial once, then caches on *itself*. [[Can two equal String objects both be keys in an IdentityHashMap]]
 
 `StringBuilder` is a mutable character sequence and **does not override `equals`**. Its javadoc warns that `Comparable` without `equals` is inconsistent; care if used as a `SortedMap` key. As a `HashMap` key it is identity, like an array. Call `toString()` and use the `String`.
 
 > [!warning] “String is interned, so HashMap is O(1) identity”
-> Dispersion still comes from `String.hashCode`, then `equals` on the bin. The pool does not replace that. `equalsIgnoreCase` is not `equals`; `"A"` and `"a"` are two keys.
+> Dispersion still comes from `String.hashCode`, then `equals` on the bin. The pool does not replace that. `equalsIgnoreCase` is not `equals`; `"A"` and `"a"` are two keys. `IdentityHashMap` is the `==` map. Do not claim the hash is computed in every constructor.
 
 > [!tip] Interview answer
-> **`String` is immutable and compares by character sequence, with a matching `hashCode`. Copies look up; mutation cannot invalidate the mapping. OpenJDK caches `hashCode` after the first call, not at `new`. That is why it is the usual key, unlike `byte[]` or `StringBuilder`. Interning is optional and unused by `HashMap`.**
+> **`String` is immutable and compares by character sequence, with a matching `hashCode`. Copies look up; mutation cannot invalidate the mapping. OpenJDK caches `hashCode` after the first call (`hash` / `hashIsZero`), not at `new`. That is why it is the usual key, unlike `byte[]` or `StringBuilder`. Interning is optional and unused by `HashMap`.**

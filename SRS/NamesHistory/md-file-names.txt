@@ -779,7 +779,6 @@
 - [x] How would you explain HAProxy vs Nginx vs Envoy.md
 - [x] How would you explain Hard assertions vs Soft assertions.md
 - [x] How would you explain has-a meaning index count.md
-- [x] How would you explain HashSet from HashMap.md
 - [x] How would you explain HashSet, hashCode.md
 - [x] How would you explain Health checks.md
 - [x] How would you explain Hibernate.md

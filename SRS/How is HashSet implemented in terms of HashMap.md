@@ -71,14 +71,26 @@ public boolean remove(Object o) {
 
 A mutable element is a mutable key. After it is in the set, changing fields that `equals` or `hashCode` use can hide it. [[Can you lose objects in a HashMap due to mutable or poorly chosen keys]] is the same failure.
 
+`LinkedHashSet` is a `HashSet` subclass. A package-private `HashSet` constructor installs a `LinkedHashMap` instead, which is how insertion-order iteration appears. [[How does HashSet differ from LinkedHashSet]] is that subclass. [[What is the difference between HashMap and HashSet]] is the collection-type contrast, not a second implementation. Since 1.2. Not synchronized. Null element allowed (the map’s null key). [[What is a HashSet]] [[What internal structures back HashSet and TreeSet]] [[Does HashSet allow a null element]] [[How do HashSet and TreeSet decide whether two elements are duplicates]]
+
 ## What this is not
 
 `HashSet` does not wrap a `HashMap` you pass in. You cannot get the map back. Values are not user data; do not expect `map.get(e)` from outside.
 
-`LinkedHashSet` is a `HashSet` subclass. A package-private `HashSet` constructor installs a `LinkedHashMap` instead, which is how insertion-order iteration appears. [[How does HashSet differ from LinkedHashSet]] is that subclass. [[What is the difference between HashMap and HashSet]] is the collection-type contrast, not a second implementation.
+`map.keySet()` is already a live `Set` view of that map’s keys. `new HashSet<>(map.keySet())` is a **copy**: it builds a *new* backing `HashMap` via the `HashSet(Collection)` constructor. Changing the copy does not change the map. [[What requirements apply to keys used in a HashMap]]
+
+```java
+Set<String> live = map.keySet();                 // view; map.remove("a") shrinks it
+HashSet<String> copy = new HashSet<>(map.keySet()); // independent HashSet
+```
+
+**Listing 3.** The dump recipe `new HashSet<>(map.keySet())` is not “how HashSet is implemented.” Implementation is the dummy-value map *inside* `HashSet`.
 
 > [!warning] “Set of values, map of pairs” is the right model
 > Interview answers that say `HashSet` is a `HashMap` with no values, or a separate hash table copied from `HashMap`, miss the dummy. There is always a value object. It is just unused. Tree bins, resize, and null (the `null` element is the `null` key) are whatever the backing `HashMap` does.
 
+> [!warning] `new HashSet<>(map.keySet())` is “the HashSet”
+> That call **copies** keys into a new backing map. The live key set is `map.keySet()`. Interview “HashSet = HashMap with dummy values” is the *implementation* of `HashSet`, not that constructor.
+
 > [!tip] Interview answer
-> **`HashSet` is a `HashMap<E,Object>`: elements are keys, every value is one static dummy `PRESENT`. `add`/`contains`/`remove` are `put`/`containsKey`/`remove`. Uniqueness, hashing, null, resize, and Java 8+ tree bins are the map’s. You do not get a second data structure.**
+> **`HashSet` is a `HashMap<E,Object>`: elements are keys, every value is one static dummy `PRESENT`. `add`/`contains`/`remove` are `put`/`containsKey`/`remove`. Uniqueness, hashing, null, resize, and Java 8+ tree bins are the map’s. `new HashSet<>(map.keySet())` copies those keys; `keySet()` is already a set view on the map.**
