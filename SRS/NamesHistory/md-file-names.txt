@@ -982,8 +982,7 @@
 - [x] How would you explain race conditions in concurrent programs.md
 - [x] How would you explain rate limiter.md
 - [x] How would you explain ReadWriteLock for reader writer coordination.md
-- [x] How would you explain Records (Java 16+).md
-- [x] How would you explain Records Java.md
+- [x] What is a Java record.md
 - [x] How would you explain Reed Solomon error correcting codes.md
 - [x] How would you explain reference types in the Java type system.md
 - [x] How would you explain reflexive relations in relational algebra.md
@@ -1982,7 +1981,6 @@
 - [x] What is RandomAccessFile in Java.md
 - [x] What is reactive programming and how does it differ from procedural programming.md
 - [x] What is ReadWriteLock.md
-- [x] What is record (Java 14+).md
 - [x] What is refactoring.md
 - [x] What is regression testing.md
 - [x] What is rejection sampling.md

@@ -66,7 +66,7 @@ Record **patterns** (`case User(String name, int age, String email)`) need Java 
 Records are a language construct with JVM metadata, not Lombok rewriting a class into JavaBeans getters. They are also **not** a new VM type and **not** an `ACC_RECORD` access-flag bit — see the JVM card and [[What is the difference between a Java record and Lombok Value]].
 
 > [!warning] “Java 14+” is the preview start, not the standard
-> Vault titles like [[What is record (Java 14+)]] mix first appearance with “safe to use.” If the interviewer says “from which version are records in the language,” answer **16**. Mention 14/15 only as preview, with `--enable-preview`.
+> Dump cues that say “Java 14+” on [[What is a Java record]] mix first appearance with “safe to use.” If the interviewer says “from which version are records in the language,” answer **16**. Mention 14/15 only as preview, with `--enable-preview`.
 
 > [!warning] Record patterns are Java 21
 > `record Point(int x, int y)` is 16. `if (p instanceof Point(int x, int y))` / `switch` record patterns are 21. Do not collapse both into “records came in 21” or “patterns came in 16.”

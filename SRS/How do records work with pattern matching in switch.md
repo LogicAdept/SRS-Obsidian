@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Records #Java/Versions/21 #SRS
+#Java/Language/Records #Java/Versions/21 #Java/Language/Switch #SRS
 
 # How do records work with pattern matching in switch?
 
