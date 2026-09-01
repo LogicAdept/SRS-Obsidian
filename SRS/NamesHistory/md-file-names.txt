@@ -749,7 +749,6 @@
 - [x] How would you explain exists problems race condition.md
 - [x] How would you explain exists thread input output.md
 - [x] How would you explain EXPLAIN ANALYZE.md
-- [x] How would you explain explain meaning in constructor HashMap(int initialCapacity float loadFactor.md
 - [x] How would you explain extends Queue extends Deque or Deque extends Queue.md
 - [x] How would you explain fetch and add FAA in concurrent programming.md
 - [x] How would you explain first normal form in relational databases.md
@@ -828,9 +827,7 @@
 - [x] How would you explain in how is difference between values 0 and auto in margin.md
 - [x] How would you explain in how meaning CAP theorem.md
 - [x] How would you explain in how SortedMap besides what toString all elements by.md
-- [x] How would you explain in WeakHashMap used WeakReferences and why not create PhantomHashMap on PhantomReference.md
 - [x] How would you explain in what better HTML-code.md
-- [x] How would you explain in what can be in HashMap.md
 - [x] How would you explain in which can thread.md
 - [x] How would you explain instance initializer blocks versus constructors.md
 - [x] How would you explain Integer cache valueOf(100)==valueOf(100) true, valueOf(200) false.md
@@ -1010,7 +1007,6 @@
 - [x] How would you explain Severity vs Priority.md
 - [x] How would you explain simple keys versus composite keys in databases.md
 - [x] How would you explain single service per host deployment.md
-- [x] How would you explain situation when HashMap in list with hashCode.md
 - [x] How would you explain Smoke Sanity Regression Confirmation.md
 - [x] How would you explain someObj.equals(null).md
 - [x] What is Spring Boot.md
@@ -1207,7 +1203,6 @@
 - [x] How would you explain what in Servlet 2.5 3.0 3.1 4.0.md
 - [x] How would you explain what keyword word transient.md
 - [x] How would you explain what method filter in stream.md
-- [x] How would you explain what over elements from HashMap HashMap element.md
 - [x] How would you explain what values initialized variable by default.md
 - [x] How would you explain what will if elements in TreeSet by.md
 - [x] How would you explain what will if override equals not override hashCode which can problems.md
@@ -1229,12 +1224,10 @@
 - [x] How would you explain which on serialize modifiers static and final.md
 - [x] How would you explain which worst time work method add for ArrayList.md
 - [x] How would you explain which worst time work method contains for element which are there in LinkedList.md
-- [x] How would you explain which worst time work method get(key for which are there in HashMap.md
 - [x] How would you explain which.md
 - [x] How would you explain why can be needed private.md
 - [x] How would you explain widening and narrowing casts between Java primitive types.md
 - [x] How would you explain wildcard bounded and unbounded types in Java generics.md
-- [x] How would you explain will HashMap if all hashCode.md
 - [x] How would you explain WireMock.md
 - [x] How would you explain with using which bash access.md
 - [x] How would you explain write collection throw ConcurrentModificationException.md
@@ -1277,7 +1270,6 @@
 - [x] Is caching only used with databases.md
 - [x] Is equals invoked when a HashMap bucket contains a single element.md
 - [x] Is it accurate to say String is backed by a character array internally.md
-- [x] Is it safe to use a byte array as a HashMap key.md
 - [x] Is it true that primitives live on the stack and reference instances live on the heap.md
 - [x] Is Java a compiled or interpreted language.md
 - [x] Is Java LinkedList a singly or doubly linked list.md
@@ -2869,7 +2861,6 @@
 - [x] Why can Kafka retries break ordering without idempotence.md
 - [x] Why can two unequal objects share the same hashCode value.md
 - [x] Why can you not decrease Kafka partition count.md
-- [x] Why can you not use byte in in HashMap.md
 - [x] Why did transformers replace RNNs.md
 - [x] Why did you choose or stick with the Java platform.md
 - [x] Why do array indexes start at zero in most languages.md
@@ -2884,7 +2875,6 @@
 - [x] Why do you disable CSRF for a JWT REST API.md
 - [x] Why do you need and which exist blocks initialization.md
 - [x] Why do you need equals how it differ from operation ==.md
-- [x] Why do you need HashMap if are there Hashtable.md
 - [x] Why do you need if are there container servlet.md
 - [x] Why do you need JSP.md
 - [x] Why do you need.md
@@ -2959,7 +2949,6 @@
 - [x] Why should JSP scriptlets be avoided in modern applications.md
 - [x] Why should you index foreign keys.md
 - [x] Why should you use Java.md
-- [x] Why string is-a in HashMap in Java.md
 - [x] Why use Java EE application servers when servlet containers exist.md
 - [x] Why use pgBouncer with PostgreSQL.md
 - [x] Why use separate RabbitMQ connections for publishing and consuming.md

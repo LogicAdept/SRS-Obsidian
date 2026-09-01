@@ -13,7 +13,7 @@ priority: 0
 
 `HashMap` (since 1.2) extends `AbstractMap`, permits `null` values and the `null` key, and is **not** synchronized. `Hashtable` (since 1.0) extends `Dictionary`, implements `Map` since 1.2, and maps **non-null** keys to **non-null** values. Its `put` javadoc: neither key nor value can be `null`. `get(null)` throws `NullPointerException`.
 
-As of Java 2, `Hashtable` is synchronized. If you do not need thread safety, use `HashMap`. If you want a concurrent map, use `ConcurrentHashMap`. That recommendation is on the `Hashtable` class page, not a blog rule.
+As of Java 2, `Hashtable` is synchronized. If you do not need thread safety, use `HashMap`. If you want a concurrent map, use `ConcurrentHashMap`. That recommendation is on the `Hashtable` class page, not a blog rule. `Hashtable` is **not** `@Deprecated`; `Properties` still extends it.
 
 ```d2
 direction: down

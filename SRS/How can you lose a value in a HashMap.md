@@ -64,7 +64,7 @@ q -> nul
 
 `Map` leaves behavior **unspecified** if you change a stored key in a way that affects `equals`. `HashMap` keeps the insertion-time hash on the node; a later `get` hashes the key’s **current** state and typically never matches. `size()` and iteration still see the entry. Restore is not a supported API. Use a stable key. [[What requirements apply to keys used in a HashMap]]
 
-A lookup key that is not `equals` to the stored key (second `byte[]`, broken `hashCode`) is the same symptom with a different cause: `get` is specified to return `null` when no key `k` satisfies `(key==null ? k==null : key.equals(k))`. [[Can you use byte array as key in Java HashMap]]
+A lookup key that is not `equals` to the stored key (second `byte[]`, broken `hashCode`) is the same symptom with a different cause: `get` is specified to return `null` when no key `k` satisfies `(key==null ? k==null : key.equals(k))`. [[Why is a byte array a poor or unsafe choice for a HashMap key]]
 
 ## `null` is not absence
 

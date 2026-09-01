@@ -44,11 +44,13 @@ need -> arr
 
 **Fig. 1.** Common is not “the JVM interned it.” Common is a value type the table can look up by text.
 
-`String` implements `Comparable`. `HashMap` may use comparison order among `Comparable` keys to break ties in tree bins; that is a secondary help when many hashes collide, not the reason to pick `String`. Boxed primitives (`Integer`, `Long`) are the same pattern for numeric ids. [[Why is a byte array a poor or unsafe choice for a HashMap key]]
+`String` implements `Comparable`. `HashMap` may use comparison order among `Comparable` keys to break ties in tree bins; that is a secondary help when many hashes collide, not the reason to pick `String`. Boxed primitives (`Integer`, `Long`) are the same pattern for numeric ids. OpenJDK 21 is `public final class String`. [[Why is a byte array a poor or unsafe choice for a HashMap key]]
 
 ## What is not the reason
 
 `String.intern` canonicalizes by `equals` so `s.intern() == t.intern()` iff `s.equals(t)`. Literals are interned. `HashMap` does not intern keys and does not need `==`. Two non-interned equal strings still `get`.
+
+The public `hashCode` formula does **not** say “computed at construction.” OpenJDK caches the polynomial in `hash` / `hashIsZero` on the **first** `hashCode()` call for that instance. `HashMap` also stores the mixed hash on the **node** at `put` (resize does not call `key.hashCode()` again). A lookup `get(other)` still hashes `other`; a new equal `String` pays the polynomial once, then caches on *itself*. Immutability makes those caches legal. [[Can two equal String objects both be keys in an IdentityHashMap]]
 
 `StringBuilder` is a mutable character sequence and **does not override `equals`**. Its javadoc warns that `Comparable` without `equals` is inconsistent; care if used as a `SortedMap` key. As a `HashMap` key it is identity, like an array. Call `toString()` and use the `String`.
 
@@ -56,4 +58,4 @@ need -> arr
 > Dispersion still comes from `String.hashCode`, then `equals` on the bin. The pool does not replace that. `equalsIgnoreCase` is not `equals`; `"A"` and `"a"` are two keys.
 
 > [!tip] Interview answer
-> **`String` is immutable and compares by character sequence, with a matching `hashCode`. Copies look up; mutation cannot invalidate the mapping. That is why it is the usual key, unlike `byte[]` or `StringBuilder`. Interning is optional and unused by `HashMap`.**
+> **`String` is immutable and compares by character sequence, with a matching `hashCode`. Copies look up; mutation cannot invalidate the mapping. OpenJDK caches `hashCode` after the first call, not at `new`. That is why it is the usual key, unlike `byte[]` or `StringBuilder`. Interning is optional and unused by `HashMap`.**

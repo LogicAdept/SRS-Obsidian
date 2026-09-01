@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/HashMap #Java/Collections/Map/TreeMap #Java/HashCodeEquals #Java/Versions/8 #SRS
+#Java/Collections/Map/HashMap #Java/Collections/Map/TreeMap #Java/HashCodeEquals #DSA/Complexity #Java/Versions/8 #SRS
 
 # What is the algorithmic complexity of `HashMap` operations?
 
@@ -85,30 +85,8 @@ If many keys share a `hashCode()` or only an index, one bin holds them. Then a `
 OpenJDK `HashMap` keeps a `size` field, so `size()` and `isEmpty()` do not scan. `clear()` nulls every slot of the current table, so it scales with **capacity**, not only with size.
 
 > [!warning] “Everything is O(1)”
-> Common false answers: `containsValue` is O(1); iteration is O(size); every `put` is O(1) including resize; Java 8 made worst-case `get` O(1) or unconditionally O(log n). The javadoc never said “guaranteed O(1),” and it never said “amortized O(1).” Those are textbook glosses, not the spec.
+> Common false answers: `containsValue` is O(1); iteration is O(size); every `put` is O(1) including resize; Java 8 made worst-case `get` O(1) or unconditionally O(log n); even hash spread yields O(log n). Even spread is the **expected O(1)** case. Log n is the tree-shaped **collision** case. The javadoc never said “guaranteed O(1),” and it never said “amortized O(1).” Those are textbook glosses, not the spec. `HashMap` does not binary-search the table.
 
 > [!tip] Interview answer
 > **`get`/`put`/`containsKey`/`remove` are expected constant-time if `hashCode` spreads keys; a rehashing `put` and a colliding bin are the exceptions. Iteration is O(capacity + size). `containsValue` scans. `TreeMap` is the map with a guaranteed log(n) lookup. Java 8 trees are a backstop for a bad bin, not a new contract.**
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
-
-**Сложность операций HashMap.**
-
-put, get, remove — O(1) в среднем. В худшем случае O(log n) благодаря дереву (Java 8+).
-
-**Сложность операций HashMap.**
-
-put, get, remove — O(1) в среднем. В худшем случае O(log n) благодаря дереву (Java 8+).
-
-**Какая сложность операций в HashMap?**
-
-Среднее: get / put / containsKey — O(1). Худший случай при плохих хэшах: O(log n) при treeified бакете, O(n) если treeify ещё не сработал.
-
-**Какая сложность у HashMap.get?**
-
-O(1) в среднем. O(log n) худший случай при treeified бакете (с Java 8). O(n) при катастрофически плохом hashCode.
-
-**Сложность операций HashMap: put, get, remove.**
-
-Амортизированная O(1), в худшем случае O(log n) (Java 8+) или O(n) (Java 7).

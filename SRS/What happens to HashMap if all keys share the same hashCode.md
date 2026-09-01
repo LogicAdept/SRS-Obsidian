@@ -86,22 +86,8 @@ The documented `get`/`put` complexity is constant time **assuming** hashes dispe
 After treeification, nodes are ordered first by stored hash. With a total hash tie, keys of the form `class C implements Comparable<C>` may be ordered by `compareTo`, which is what the `HashMap` API describes as breaking ties. OpenJDK then gives worst-case O(log n) in that bin. If the keys are **not** `Comparable`, a tree `find` cannot branch on hash and may walk much of the bin; the implementation notes treat that as a poor `hashCode`, not a repaired table.
 
 > [!warning] The map does not “lose” the keys
-> A constant `hashCode` is not the same bug as mutating a key after `put`. Entries remain reachable through `equals`. The usual false answers are: “later `put` overwrites everything,” “Java 8 makes it O(1) or always O(log n),” and “rehash spreads identical hashes.” Pre-Java 8 there is no tree bin at all, so that one bucket is a list of length `n`.
+> A constant `hashCode` is not the same bug as mutating a key after `put`. Entries remain reachable through `equals`. The usual false answers are: “later `put` overwrites everything,” “Java 8 makes it O(1) or always O(log n),” “rehash spreads identical hashes,” and “it becomes `java.util.LinkedList`.” Pre-Java 8 there is no tree bin at all, so that one bucket is a list of length `n`. Unique hashes are not required; the map **works**, it is just slow.
 
 > [!tip] Interview answer
-> **If every key returns the same `hashCode()`, `HashMap` keeps all unequal mappings in a single bucket. It still uses `equals`, so nothing is overwritten by accident. Resize cannot split that bin. Operations become linear in the map size unless Java 8+ treeifies the bin and the keys are `Comparable`, in which case that bin can be logarithmic. The public contract never promised constant time for this hash.**
+> **Yes, it still works. If every key returns the same `hashCode()`, `HashMap` keeps all unequal mappings in a single bucket. It still uses `equals`, so nothing is overwritten by accident. Resize cannot split that bin. Operations become linear in the map size unless Java 8+ treeifies the bin and the keys are `Comparable`, in which case that bin can be logarithmic. The public contract never promised constant time for this hash.**
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
-
-**Что будет, если hashCode возвращает константу (например, return 1)?**
-
-Все объекты попадут в один бакет HashMap. Поиск превратится в перебор связного списка (или дерева с Java 8) — деградация с O(1) до O(n) или O(log n). Карта работает, но медленно. Это любимый подвох на собесе.
-
-**Что будет, если hashCode() всегда возвращает одну константу?**
-
-В Java 7 — деградация HashMap до связного списка O(n). В Java 8+ при 8 коллизиях в бакете он превращается в red-black tree, O(log n). В обоих случаях производительность резко падает.
-
-**Как и когда происходит увеличение количества корзин в `HashMap`?**
-
-Помимо `capacity` у `HashMap` есть еще поле `loadFactor`, на основании которого, вычисляется предельное количество занятых корзин `capacity * loadFactor`. По умолчанию `loadFactor = 0.75`. По достижению предельного значения, число корзин увеличивается в 2 раза и для всех хранимых элементов вычисляется новое «местоположение» с учетом нового числа корзин.

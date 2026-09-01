@@ -159,15 +159,5 @@ map.get(new Key(1)); // works — hash and equals are stable
 **Listing 4.** In Java 16+, this record is a stable key because its only component is a primitive `int`. `HashSet` uses elements as keys in an internal map, so [[How is HashSet implemented in terms of HashMap]] inherits the same stability requirement.
 
 > [!tip] Interview answer
-> **Yes, but the mapping is not deleted. `HashMap` stores the insertion-time hash and computes a fresh hash for lookup; after key mutation, the lookup may inspect another bin or fail the stored-hash check in the same bin, while iteration still sees the node. Use keys with stable `equals` and `hashCode` state; a record is safe only when its components are stable too. A broken `equals`/`hashCode` contract can create separate mappings for equal keys, whereas a constant hash primarily damages performance.**
+> **Yes, but the mapping is not deleted. `HashMap` stores the insertion-time hash and computes a fresh hash for lookup; after key mutation, the lookup may inspect another bin or fail the stored-hash check in the same bin, while iteration still sees the node. Resize does **not** recompute `key.hashCode()` — it moves nodes with the stored `Node.hash`. Use keys with stable `equals` and `hashCode` state; a record is safe only when its components are stable too. A broken `equals`/`hashCode` contract can create separate mappings for equal keys, whereas a constant hash primarily damages performance.**
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
-
-**Что будет, если использовать как ключ изменяемый объект и потом его изменить?**
-
-Объект «потеряется». hashCode станет другим, и при поиске мы попадём не в тот bucket.
-
-**Можно ли использовать как ключ изменяемый объект (например, массив)?**
-
-Технически можно, но опасно: если изменить объект после добавления — его hashCode может измениться, и найти элемент станет невозможно.

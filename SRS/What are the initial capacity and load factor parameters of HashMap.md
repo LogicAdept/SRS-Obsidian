@@ -57,38 +57,8 @@ OpenJDK rounds the requested capacity up to a power of two when the table is all
 Identical `hashCode()` values still slow the table no matter how large you set capacity. These two parameters do not fix a bad hash. [[What happens to HashMap if all keys share the same hashCode]]
 
 > [!warning] `new HashMap<>(expectedSize)`
-> That argument is **buckets**, not “I will insert this many keys.” For load 0.75 you need buckets **> expectedSize / 0.75**, or use `newHashMap`. Passing `100` for 100 keys still rehashes.
+> That argument is **buckets**, not “I will insert this many keys.” For load 0.75 you need buckets **> expectedSize / 0.75**, or use `newHashMap`. Passing `100` for 100 keys still rehashes. Do not treat `loadFactor` as the current ratio `size / capacity` — that occupancy is not a field you read back; the constructor argument is the **ceiling** occupancy may pass. OpenJDK rounds requested capacity up to a power of two (`tableSizeFor`) when the table is allocated (lazy on first `put`).
 
 > [!tip] Interview answer
-> **Initial capacity is starting bucket count (default 16). Load factor is how full before doubling (default 0.75). Size capacity from expected entries / load factor to skip rehash. Oversized capacity hurts iteration. Negative capacity or nonpositive load factor is `IllegalArgumentException`.**
+> **Initial capacity is starting bucket count (default 16). Load factor is how full before doubling (default 0.75) — resize when size exceeds capacity times load factor. Size capacity from expected entries / load factor to skip rehash, or use `newHashMap` from Java 19. Oversized capacity hurts iteration. Negative capacity or nonpositive load factor is `IllegalArgumentException`.**
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
-
-**load factor и resize.**
-
-Порог 0.75 по умолчанию. При size >= capacity * loadFactor — resize: массив вдвое + перехеширование ВСЕХ элементов (дорого!). Совет: если знаешь количество элементов — задай initialCapacity = expectedSize / 0.75 + 1.
-
-**Что такое load factor?**
-
-Порог заполнения, по умолчанию 0.75. При size >= capacity * loadFactor происходит resize: новый массив вдвое больше + перехеширование всех элементов.
-
-**Что такое load factor?**
-
-Порог заполнения, по умолчанию 0.75. При size >= capacity * loadFactor — resize: новый массив вдвое больше + перехеширование всех элементов.
-
-**Что такое load factor?**
-
-Соотношение size / capacity, при котором происходит расширение таблицы. По умолчанию 0.75. То есть когда size превышает 75% от capacity, таблица расширяется в 2 раза и все элементы перехэшируются. Уменьшение load factor — меньше коллизий, больше памяти. Увеличение — наоборот.
-
-**Что такое load factor?**
-
-Порог заполнения (по умолчанию 0.75), при котором происходит resize — удвоение массива и rehashing всех элементов.
-
-**load factor и resize.**
-
-0.75 по умолчанию. size >= capacity * loadFactor → resize (вдвое + перехеширование всех). Совет: initialCapacity = expectedSize / 0.75 + 1.
-
-**load factor и resize.**
-
-Порог 0.75. При size >= capacity * loadFactor — resize: массив вдвое + перехеширование ВСЕХ элементов. Совет: initialCapacity = expectedSize / 0.75 + 1.

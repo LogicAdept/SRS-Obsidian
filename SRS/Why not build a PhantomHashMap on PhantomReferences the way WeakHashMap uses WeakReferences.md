@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/WeakHashMap #Java/JVM/Memory #SRS
+#Java/Collections/Map/WeakHashMap #Java/Collections/Map/HashMap #Java/JVM/Memory #SRS
 
 # Why not build a `PhantomHashMap` on `PhantomReference`s the way `WeakHashMap` uses `WeakReference`s?
 
@@ -46,7 +46,7 @@ lookup -> phant
 
 **Fig. 1.** A hash map of keys is a lookup structure. Phantom refs are a cleanup token. [[What is the difference between HashMap and WeakHashMap]]
 
-When the collector decides an object is phantom reachable, it **atomically clears** phantom references to it, then enqueues those registered with a queue. That is the opposite of “keep the key around for `get`.” The point is that a reclaimable object stays reclaimable.
+When the collector decides an object is phantom reachable, it **atomically clears** phantom references to it, then enqueues those registered with a queue. That is the opposite of “keep the key around for `get`.” The point is that a reclaimable object stays reclaimable. `refersTo(obj)` can test identity without strengthening; it is not enough for `equals`-based lookup, `keySet`, or `Map.Entry.getKey()`. [[How does WeakHashMap work]] [[What happens to a WeakHashMap entry when the last strong reference to the key is dropped]] [[How does WeakHashMap use ReferenceQueue]]
 
 ## What you would use phantom refs for instead
 
@@ -57,7 +57,7 @@ A `null` queue means the phantom reference is **never** enqueued. That is useles
 Soft refs are a different question: `get()` still returns the object until the GC clears them under memory pressure. The JDK still has no `SoftHashMap`; [[Why not build a SoftHashMap on SoftReferences the way WeakHashMap uses WeakReferences]] is why copying the `WeakHashMap` recipe there is also a bad fit.
 
 > [!warning] “Weaker than weak, so a better WeakHashMap”
-> Reachability order is strong → soft → weak → phantom. Weaker does not mean “same map, more GC.” Phantom is a **lifecycle notification** after finalization, with an API that forbids retrieving the referent. Building `keySet`/`get` on `get() == null` always is not a map.
+> Reachability order is strong → soft → weak → phantom. Weaker does not mean “same map, more GC.” Phantom is a **lifecycle notification** after finalization, with an API that forbids retrieving the referent. Building `keySet`/`get` on `get() == null` always is not a map. If a `WeakHashMap` **value** strongly refers to its own key, the key stays reachable and the entry never drops — unrelated to phantom.
 
 > [!tip] Interview answer
 > **`WeakHashMap` works because a live weak ref still yields the key for `equals` and iteration, and a queue tells the table the GC dropped it. `PhantomReference.get()` is always `null` by contract — cleanup, not lookup. There is no phantom-key `HashMap` in the JDK; use `Cleaner` / a `ReferenceQueue` for post-mortem work.**
