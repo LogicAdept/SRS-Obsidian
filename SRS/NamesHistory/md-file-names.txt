@@ -235,7 +235,6 @@
 - [x] How do you copy a collection into an array in one line.md
 - [x] How do you count empty strings using filter.md
 - [x] How do you count unique users in ClickHouse.md
-- [x] How do you create a Base64 encoder and decoder in Java 8.md
 - [x] How do you create a bean in Spring.md
 - [x] How do you create a custom Spring Boot starter.md
 - [x] How do you create a database index.md
@@ -912,7 +911,6 @@
 - [x] How would you explain Overload vs Override.md
 - [x] How would you explain Pagination offset limit vs cursor-based.md
 - [x] How would you explain Pairwise testing.md
-- [x] How would you explain parallel streams in Java.md
 - [x] How would you explain parameterized types and generics in Java.md
 - [x] How would you explain Patterns of Enterprise Applications Architecture PoEAA.md
 - [x] How would you explain PCI DSS AQA.md

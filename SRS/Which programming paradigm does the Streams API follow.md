@@ -17,7 +17,7 @@ Stream JavaDoc contrast with collections: collections **manage and access** elem
 
 Package “functional in nature”: filtering a stream from a collection produces a **new** stream, rather than removing from the source. Behavioral parameters are functional-interface instances, usually lambdas or method references, and must be non-interfering and (usually) stateless ([[Which functional interface does Stream map use]], [[What kinds of stream operations exist in Java]]).
 
-Laziness and fusion are how that style is implemented: intermediates don’t run until a terminal ([[When does a Java stream pipeline actually start executing]]). Parallelism is the same declarative pipeline with a mode flag — a `for` loop is “inherently serial” ([[How would you explain parallel streams in Java]]). Prefer `collect` / `reduce` over mutating a list in `forEach` ([[What is the collect terminal operation in Java streams]]).
+Laziness and fusion are how that style is implemented: intermediates don’t run until a terminal ([[When does a Java stream pipeline actually start executing]]). Parallelism is the same declarative pipeline with a mode flag — a `for` loop is “inherently serial” ([[What is the difference between sequential and parallel streams in Java]]). Prefer `collect` / `reduce` over mutating a list in `forEach` ([[What is the collect terminal operation in Java streams]]).
 
 ```d2
 direction: down

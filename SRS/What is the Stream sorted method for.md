@@ -17,7 +17,7 @@ Dump’s “sorted representation” is that new stream: the source collection�
 
 `sorted()` also **imposes encounter order** on an unordered source (`HashSet`). Downstream `limit(n)` then means “smallest *n* in sort order” (full sort). `limit` then `sorted` sorts only the prefix ([[What is the Stream limit method for]], [[How do you print 10 random numbers in ascending order with streams]]).
 
-Stability: equal elements keep relative encounter order **if** the stream was ordered. Parallel `sorted` still has to produce a globally ordered result and may buffer heavily ([[How would you explain parallel streams in Java]]).
+Stability: equal elements keep relative encounter order **if** the stream was ordered. Parallel `sorted` still has to produce a globally ordered result and may buffer heavily ([[What is the difference between sequential and parallel streams in Java]]).
 
 Primitive streams: `IntStream.sorted()` (natural numeric order; no `Comparator` overload).
 

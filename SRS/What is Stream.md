@@ -22,7 +22,7 @@ That is **not** the same object returned from every `filter`/`map`. You chain **
 
 Sources include `Collection.stream()`, `Arrays.stream`, `Stream.of`, `IntStream.range`, `Files.lines`, … ([[What ways exist to create a Java stream]]). **`Map` is not a `Collection`** and has no `stream()`. `HashMap` is fine as a source of **views**: `map.keySet().stream()`, `values()`, `entrySet()` — those views are collections ([[What is the difference between Collection and Stream in Java]]).
 
-JDK factories create **sequential** streams unless you ask. Sequential vs parallel should not change the result except explicitly nondeterministic ops (`findAny`, `forEach`) ([[How would you explain parallel streams in Java]]).
+JDK factories create **sequential** streams unless you ask. Sequential vs parallel should not change the result except explicitly nondeterministic ops (`findAny`, `forEach`) ([[What is the difference between sequential and parallel streams in Java]]).
 
 Most pipelines do **not** need `close()`. `Stream` is `AutoCloseable`; I/O-backed streams (`Files.lines`) must be closed (try-with-resources). After a terminal, the pipeline is consumed even if `close()` was never called.
 

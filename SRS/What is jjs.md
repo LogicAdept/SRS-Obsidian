@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Versions/8 #SRS
+#Java/Versions/8 #Java/Library/Nashorn #Java/Tooling #SRS
 
 # What is jjs
 

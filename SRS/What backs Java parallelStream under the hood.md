@@ -11,7 +11,7 @@ priority: 0
 
 ## Spliterator in, fork-join out
 
-`Collection.parallelStream()` returns a possibly parallel `Stream` with the collection as source. It is **allowable** to return a sequential stream. The default implementation **creates a parallel `Stream` from the collection’s `Spliterator`**. `Collection.stream()` is the sequential twin from the same spliterator ([[How would you explain parallel streams in Java]], [[What is the difference between sequential and parallel streams in Java]]).
+`Collection.parallelStream()` returns a possibly parallel `Stream` with the collection as source. It is **allowable** to return a sequential stream. The default implementation **creates a parallel `Stream` from the collection’s `Spliterator`**. `Collection.stream()` is the sequential twin from the same spliterator ([[What is the difference between sequential and parallel streams in Java]]).
 
 Package doc: `StreamSupport` is how `stream()` / `parallelStream()` / `Arrays.stream` are built. A `Spliterator` is the **parallel analogue of an `Iterator`**: advance, bulk traverse, and **split** a prefix for another worker. Poor splits (iterator wrapped with unknown size) parallelize badly. `List` that is `RandomAccess` typically splits by index; an iterator-backed list does not ([[Does the Stream API use an Iterator internally]], [[Does the Java Stream API optimize for lists that implement RandomAccess]], [[What internal abstractions power a Java stream pipeline]]).
 

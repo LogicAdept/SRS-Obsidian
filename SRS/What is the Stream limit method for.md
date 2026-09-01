@@ -17,7 +17,7 @@ priority: 0
 
 `skip(n)` drops a prefix (stateful, not short-circuiting). `takeWhile` (Java 9) takes a **predicate** prefix, not a count ([[What intermediate stream operations do you know in Java]]).
 
-API note: ordered parallel `limit(n)` must return the **first** *n* in encounter order, not any *n* — costly for large `maxSize`. `generate` or `unordered()` can speed it up if any *n* are enough. Need order and the parallel `limit` hurts → `sequential()` ([[How would you explain parallel streams in Java]]).
+API note: ordered parallel `limit(n)` must return the **first** *n* in encounter order, not any *n* — costly for large `maxSize`. `generate` or `unordered()` can speed it up if any *n* are enough. Need order and the parallel `limit` hurts → `sequential()` ([[What is the difference between sequential and parallel streams in Java]]).
 
 `limit` **before** `sorted` sorts a prefix; `sorted` then `limit` is a full sort then top-*n* ([[How do you print 10 random numbers in ascending order with streams]]).
 

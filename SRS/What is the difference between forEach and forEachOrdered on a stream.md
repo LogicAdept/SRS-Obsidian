@@ -11,7 +11,7 @@ priority: 0
 
 ## Same terminal, different order contract
 
-`Stream.forEach(Consumer)` “performs an action for each element.” Terminal. On **parallel** pipelines it **does not guarantee** encounter order — that would sacrifice parallelism. The action may run at whatever time, on whatever thread the library chooses. If it touches shared state, **you** synchronize ([[How would you explain parallel streams in Java]], [[What terminal stream operations do you know in Java]]).
+`Stream.forEach(Consumer)` “performs an action for each element.” Terminal. On **parallel** pipelines it **does not guarantee** encounter order — that would sacrifice parallelism. The action may run at whatever time, on whatever thread the library chooses. If it touches shared state, **you** synchronize ([[What is the difference between sequential and parallel streams in Java]], [[What terminal stream operations do you know in Java]]).
 
 `Stream.forEachOrdered(Consumer)` performs the action for each element **in the stream’s encounter order if one exists**. It processes elements **one at a time** in that order. Action *N* happens-before action *N+1*. The thread for a given element is still the library’s choice.
 
