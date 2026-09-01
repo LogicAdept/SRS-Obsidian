@@ -635,7 +635,7 @@
 - [x] How would you explain Allure.md
 - [x] How would you explain alternate or secondary keys in relational databases.md
 - [x] How would you explain and exists main implementation on and on method how HashMap why by in how and approach.md
-- [x] How would you explain anonymous classes in Java and typical use cases.md
+- [x] What are anonymous classes and where are they used.md
 - [x] How would you explain Apache Maven.md
 - [x] How would you explain are there class Point{int x y;} why code in form 31 x + y how x + y.md
 - [x] How would you explain are there method which can throw IOException and FileNotFoundException in which sequence.md
@@ -1693,7 +1693,6 @@
 - [x] What is an RNN and why do they struggle with long sequences.md
 - [x] What is an SVM.md
 - [x] What is and.md
-- [x] What is anonymous classes where they used.md
 - [x] What is antipattern which antipattern you do you know.md
 - [x] What is Apache Kafka.md
 - [x] What is Application server.md
