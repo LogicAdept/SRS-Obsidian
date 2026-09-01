@@ -390,8 +390,6 @@
 - [x] How do you optimize substring search in SQL.md
 - [x] How do you organize batch inserts for many rows.md
 - [x] How do you override equals correctly in Java.md
-- [x] How do you passed parameters in method by value or by reference.md
-- [x] How do you passed variable in methods by value or by reference.md
 - [x] How do you populate a JavaBean or object attributes from a request.md
 - [x] How do you pre-aggregate before a join.md
 - [x] How do you predict what a code snippet will do at runtime.md
