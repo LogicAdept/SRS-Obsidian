@@ -643,7 +643,6 @@
 - [x] How would you explain CI CD pipeline.md
 - [x] How would you explain CI vs CD.md
 - [x] How would you explain Circuit Breaker.md
-- [x] How would you explain class and classes.md
 - [x] How would you explain class in which cases they used.md
 - [x] How would you explain class inheritance in Java and tradeoffs.md
 - [x] How would you explain classic functional style interfaces before java.util.function.md
