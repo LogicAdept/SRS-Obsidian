@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions/TryCatch #Java/JVM/GarbageCollector #SRS
+#Java/Exceptions/TryCatch #Java/JVM/GarbageCollector #Java/Language/Object/Finalize #Java/Language/Modifiers/Final #SRS
 
 # What is the difference between `final` `finally` and `finalize`?
 

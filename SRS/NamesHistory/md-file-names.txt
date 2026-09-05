@@ -475,7 +475,6 @@
 - [x] How does full-text search work in PostgreSQL.md
 - [x] How does garbage collection treat cyclic references between live objects.md
 - [x] How does garbage collection work on the JVM.md
-- [x] How does garbage collector.md
 - [x] How does Git rebase differ from merge.md
 - [x] How does GROUP BY handle NULL in SQL.md
 - [x] How does HashMap access elements internally.md
@@ -544,7 +543,6 @@
 - [x] How does the garbage collector decide an object can be collected.md
 - [x] How does the Hibernate first-level cache work in Spring.md
 - [x] How does the Java Memory Model define visibility and ordering.md
-- [x] How does the JVM decide an object is garbage.md
 - [x] How does the JVM help Java bytecode run across operating systems.md
 - [x] How does the Observer pattern underpin reactive programming.md
 - [x] How does the PostgreSQL query planner choose a plan.md
@@ -613,7 +611,6 @@
 - [x] How would you explain ACK NACK DLQ.md
 - [x] How would you explain advantages of composition in object oriented design.md
 - [x] How would you explain advantages of Java NIO over classic blocking IO.md
-- [x] How would you explain algorithm work garbage in HotSpot.md
 - [x] How would you explain Allure.md
 - [x] How would you explain alternate or secondary keys in relational databases.md
 - [x] How would you explain and exists main implementation on and on method how HashMap why by in how and approach.md
@@ -1746,7 +1743,6 @@
 - [x] What is functional interface.md
 - [x] What is FutureTask.md
 - [x] What is G1 GC.md
-- [x] What is garbage collector.md
 - [x] What is generics.md
 - [x] What is Git for.md
 - [x] What is GLOBAL JOIN in ClickHouse.md
