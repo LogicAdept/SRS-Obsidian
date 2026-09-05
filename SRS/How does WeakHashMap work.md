@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/WeakHashMap #Java/Collections/Map/HashMap #Java/JVM/Memory #SRS
+#Java/Collections/Map/WeakHashMap #Java/Collections/Map/HashMap #Java/JVM/Memory/References #SRS
 
 # How does `WeakHashMap` work?
 

@@ -19,7 +19,7 @@ Threads communicate through **shared variables**, **monitors**, **volatiles**, *
 
 **`final`:** after a constructor **finishes**, and the reference was not published early, other threads that only see the object **then** see those finals — [[How would you explain immutability and its benefits in Java]]. Reflection can still rewrite finals; that is a special, easy-to-get-wrong case.
 
-Heap vs stack is **where** bytes live (JVMS), not this visibility spec — [[How would you explain the two main JVM memory regions stack and heap]].
+Heap vs stack is **where** bytes live (JVMS), not this visibility spec — [[How would you explain the Java stack and heap]].
 
 ```java
 final class Publish {

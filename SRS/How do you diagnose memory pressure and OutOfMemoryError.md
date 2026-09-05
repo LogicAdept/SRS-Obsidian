@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM/Memory #Java/JVM/GarbageCollector #Java/Exceptions/Error #SRS
+#Java/JVM/Memory/Heap #Java/JVM/GarbageCollector #Java/Exceptions/Error #SRS
 
 # How do you diagnose memory pressure and `OutOfMemoryError`?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/WeakHashMap #Java/Collections/Map/HashMap #Java/JVM/Memory #SRS
+#Java/Collections/Map/WeakHashMap #Java/Collections/Map/HashMap #Java/JVM/Memory/References #SRS
 
 # Why not build a `PhantomHashMap` on `PhantomReference`s the way `WeakHashMap` uses `WeakReference`s?
 

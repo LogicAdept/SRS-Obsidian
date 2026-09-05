@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Wrappers #Java/Language/Primitives #Java/JVM/Memory #SRS
+#Java/Language/Wrappers #Java/Language/Primitives #Java/JVM/Memory/Heap #SRS
 
 # How much memory does an `Integer` object use compared with `int`?
 

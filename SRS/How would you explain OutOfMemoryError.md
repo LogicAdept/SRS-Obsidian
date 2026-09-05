@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions/Error #Java/JVM/Memory #SRS
+#Java/Exceptions/Error #Java/JVM/Memory/Heap #SRS
 
 # How would you explain `OutOfMemoryError`?
 

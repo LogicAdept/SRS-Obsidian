@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM/Memory #Java/Language/Primitives #SRS
+#Java/JVM/Memory/Heap #Java/Language/Primitives #Java/JVM/Memory/Stack #SRS
 
 # Can primitive values reside on the Java heap?
 

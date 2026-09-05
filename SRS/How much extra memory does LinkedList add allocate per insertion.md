@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/List/LinkedList #Java/JVM/Memory #SRS
+#Java/Collections/List/LinkedList #Java/JVM/Memory/Heap #SRS
 
 # How much extra memory does LinkedList add allocate per insertion?
 

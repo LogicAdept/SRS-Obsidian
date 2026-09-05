@@ -9,7 +9,7 @@ priority: 0
 
 ## Two different “stacks”
 
-Interview wording “long-term storage” usually mixes **`java.util.Stack`** with the **Java Virtual Machine stack**. They share a name and LIFO shape. They are not the same thing ([[How would you explain the two main JVM memory regions stack and heap]]).
+Interview wording “long-term storage” usually mixes **`java.util.Stack`** with the **Java Virtual Machine stack**. They share a name and LIFO shape. They are not the same thing ([[How would you explain the Java stack and heap]]).
 
 Each thread has a private JVM stack that stores **frames**. A frame is created when a method is invoked and **destroyed when that invocation completes** (normal return or uncaught exception). That structure holds locals and partial results for the call; it is not a place you park application entities for the life of the process. (Implementations may even heap-allocate frames; the spec point is lifetime, not a RAM cartoon.)
 

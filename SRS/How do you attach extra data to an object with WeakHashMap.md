@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/WeakHashMap #Java/JVM/Memory #Java/HashCodeEquals #SRS
+#Java/Collections/Map/WeakHashMap #Java/JVM/Memory/References #Java/HashCodeEquals #SRS
 
 # How do you attach extra data to an object with `WeakHashMap`?
 

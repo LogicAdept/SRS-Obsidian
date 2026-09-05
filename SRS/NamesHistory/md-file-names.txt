@@ -571,7 +571,6 @@
 - [x] How is a Kafka topic structured.md
 - [x] How is an HttpServlet request processed.md
 - [x] How is HashSet implemented in terms of HashMap.md
-- [x] How is Java runtime memory organized.md
 - [x] How is java.lang.String implemented under the hood.md
 - [x] How is JSP configured in the web deployment descriptor.md
 - [x] How is the JSTL tag library organized.md
@@ -1113,7 +1112,6 @@
 - [x] How would you explain the throws clause for checked exceptions.md
 - [x] How would you explain the transactional outbox pattern.md
 - [x] How would you explain the transient field modifier in Java.md
-- [x] How would you explain the two main JVM memory regions stack and heap.md
 - [x] How would you explain the view in MVC web applications.md
 - [x] How would you explain the Visitor design pattern.md
 - [x] How would you explain the volatile field modifier in Java.md

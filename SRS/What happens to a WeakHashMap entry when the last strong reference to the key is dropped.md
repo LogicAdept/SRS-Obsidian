@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/WeakHashMap #Java/JVM/Memory #Java/JVM/GarbageCollector #SRS
+#Java/Collections/Map/WeakHashMap #Java/JVM/Memory/References #Java/JVM/GarbageCollector #SRS
 
 # What happens to a `WeakHashMap` entry when the last strong reference to the key is dropped?
 

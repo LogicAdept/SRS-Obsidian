@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/HashMap #Java/Collections/Map/WeakHashMap #Java/JVM/Memory #Java/HashCodeEquals #Java/Versions/8 #SRS
+#Java/Collections/Map/HashMap #Java/Collections/Map/WeakHashMap #Java/JVM/Memory/References #Java/HashCodeEquals #Java/Versions/8 #SRS
 
 # What is the difference between `HashMap` and `WeakHashMap`?
 

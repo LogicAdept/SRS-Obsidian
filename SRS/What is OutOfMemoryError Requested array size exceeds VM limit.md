@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions/Error #Java/JVM/Memory #SRS
+#Java/Exceptions/Error #Java/JVM/Memory/Heap #SRS
 
 # What is `OutOfMemoryError: Requested array size exceeds VM limit`?
 

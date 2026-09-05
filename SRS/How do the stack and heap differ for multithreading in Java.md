@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM/Memory #Java/Concurrency/Threads #SRS
+#Java/JVM/Memory/Heap #Java/Concurrency/Threads #Java/JVM/Memory/Stack #SRS
 
 # How do the stack and heap differ for multithreading in Java?
 

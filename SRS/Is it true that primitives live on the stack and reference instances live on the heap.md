@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM/Memory #DataAndState/ValueSemantics #DataAndState/ReferenceSemantics #Java/Language/Primitives #SRS
+#Java/JVM/Memory/Heap #DataAndState/ValueSemantics #DataAndState/ReferenceSemantics #Java/Language/Primitives #Java/JVM/Memory/Stack #SRS
 
 # Is it true that primitives live on the stack and reference instances live on the heap?
 

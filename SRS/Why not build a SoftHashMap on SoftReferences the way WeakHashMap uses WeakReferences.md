@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/WeakHashMap #Java/JVM/Memory #Caching #SRS
+#Java/Collections/Map/WeakHashMap #Java/JVM/Memory/References #Caching #SRS
 
 # Why not build a `SoftHashMap` on `SoftReference`s the way `WeakHashMap` uses `WeakReference`s?
 

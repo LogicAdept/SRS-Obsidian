@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/WeakHashMap #Java/JVM/Memory #SRS
+#Java/Collections/Map/WeakHashMap #Java/JVM/Memory/References #SRS
 
 # How does `WeakHashMap` use `ReferenceQueue`?
 

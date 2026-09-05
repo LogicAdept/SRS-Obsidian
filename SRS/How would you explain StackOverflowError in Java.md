@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions/Error #Java/JVM/Memory #SRS
+#Java/Exceptions/Error #Java/JVM/Memory/Stack #SRS
 
 # How would you explain `StackOverflowError` in Java?
 

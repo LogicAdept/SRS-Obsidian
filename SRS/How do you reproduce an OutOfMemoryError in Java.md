@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Exceptions/Error #Java/JVM/Memory #Java/Concurrency/Threads #SRS
+#Java/Exceptions/Error #Java/JVM/Memory/Heap #Java/Concurrency/Threads #SRS
 
 # How do you reproduce an `OutOfMemoryError` in Java?
 
