@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/String #Java/JVM #Java/Versions/9 #SRS
+#Java/String #Java/Versions/9 #SRS
 
 # Is it accurate to say String is backed by a character array internally
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM #Java/Concurrency/Threads #SRS
+#Java/JVM/Tuning #Java/Concurrency/Threads #SRS
 
 # How do you capture a Java thread dump?
 

@@ -2,4 +2,4 @@
 reps: 0
 priority: 0
 -->
-#Career/Interview/Exercises #Java/JVM #SRS #New
+#Career/Interview/Exercises #SRS #New

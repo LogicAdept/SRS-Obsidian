@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency/Threads #Java/JVM #SRS
+#Java/Concurrency/Threads #Java/JVM/Memory #SRS
 
 # What are Java threads composed of?
 

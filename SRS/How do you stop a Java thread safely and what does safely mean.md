@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency/Threads #Java/JVM #SRS
+#Java/Concurrency/Threads #SRS
 
 # How do you stop a Java thread safely and what does safely mean?
 

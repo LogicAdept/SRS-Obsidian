@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #Java/Concurrency/Atomics #Java/JVM #SRS
+#Java/JMM #Java/Concurrency/Atomics #SRS
 
 # How does volatile visibility differ from atomicity for compound updates?
 

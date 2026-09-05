@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM #SRS #New
+#Java/JVM/Tuning #Java/JVM/Memory #Java/Concurrency/Threads #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
