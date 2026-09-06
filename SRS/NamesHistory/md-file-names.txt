@@ -225,7 +225,6 @@
 - [x] How do you configure Spring as an OAuth2 resource server.md
 - [x] How do you connect a Spring Boot application to a database.md
 - [x] How do you connect to a database and add logging in a servlet.md
-- [x] How do you connection with data.md
 - [x] How do you consume RabbitMQ messages in Spring Boot.md
 - [x] How do you container servlet servlet when and which methods.md
 - [x] How do you convert a binary tree into a doubly linked list.md
@@ -346,13 +345,11 @@
 - [x] How do you integrate a database with a Java application.md
 - [x] How do you invoke a default interface method from an implementing class.md
 - [x] How do you invoke a static method on a Java interface.md
-- [x] How do you invoke.md
 - [x] How do you iterate all key value pairs in a Map.md
 - [x] How do you iterate all keys in a Map.md
 - [x] How do you iterate all values in a Map.md
 - [x] How do you iterate elements LinkedList in order not using get(index.md
 - [x] How do you iterate the elements of a Java collection.md
-- [x] How do you JDBC.md
 - [x] How do you learn validate information and apply it in practice.md
 - [x] How do you list directory entries that match a criterion in Java.md
 - [x] How do you make a RabbitMQ message survive a broker restart.md
@@ -748,7 +745,6 @@
 - [x] How would you explain foreign keys in relational databases.md
 - [x] How would you explain Frames.md
 - [x] How would you explain from which log4j.md
-- [x] How would you explain from which should you JDBC.md
 - [x] How would you explain Function DoubleFunction IntFunction and LongFunction variants.md
 - [x] How would you explain futex based userspace locking on Linux.md
 - [x] How would you explain FutureTask in Java concurrency.md
@@ -851,7 +847,6 @@
 - [x] How would you explain list main class and interface JDBC.md
 - [x] How would you explain list main function.md
 - [x] How would you explain list main kinds selector.md
-- [x] How would you explain list main types data in JDBC how they related with Java.md
 - [x] How would you explain list principles you should you in much programming.md
 - [x] How would you explain literal syntax for values in Java.md
 - [x] How would you explain livelock in concurrent programs.md
@@ -862,7 +857,6 @@
 - [x] How would you explain log4j layout formatters.md
 - [x] How would you explain logical operators in Java expressions.md
 - [x] How would you explain main concepts OOP class object interface.md
-- [x] How would you explain main work with data when using JDBC.md
 - [x] How would you explain major garbage collector algorithms on the JVM.md
 - [x] How would you explain Map.md
 - [x] How would you explain marker interfaces and why annotations largely replaced them.md
@@ -1162,7 +1156,6 @@
 - [x] How would you explain what you do you know about function main.md
 - [x] How would you explain what you do you know about servlet filter.md
 - [x] How would you explain when thenReturn vs doReturn when.md
-- [x] How would you explain when what query to data.md
 - [x] How would you explain WHERE vs HAVING.md
 - [x] How would you explain which count in HashMap.md
 - [x] How would you explain which design pattern ideas appear in StringBuilder and StringBuffer.md
@@ -1283,7 +1276,6 @@
 - [x] What are IMMUTABLE STABLE and VOLATILE functions in PostgreSQL.md
 - [x] What are Java CopyOnWrite collections.md
 - [x] What are Java threads composed of.md
-- [x] What are JDBC Statement PreparedStatement and CallableStatement.md
 - [x] What are JPA fetch types for entity associations.md
 - [x] What are Kafka commitSync and commitAsync for.md
 - [x] What are Kafka subscribe and poll for.md
@@ -1516,7 +1508,6 @@
 - [x] What is a hot partition in Kafka.md
 - [x] What is a hot row in PostgreSQL.md
 - [x] What is a HOT update in PostgreSQL.md
-- [x] What is a JDBC ResultSet for.md
 - [x] What is a JSON schema.md
 - [x] What is a k-d tree.md
 - [x] What is a Kafka consumer group coordinator for.md
@@ -1648,7 +1639,6 @@
 - [x] What is broken around you.md
 - [x] What is bubble sort.md
 - [x] What is caching used for.md
-- [x] What is calling stored procedures from JDBC.md
 - [x] What is causal masking in a transformer.md
 - [x] What is change data capture with Kafka.md
 - [x] What is chaos testing.md
@@ -1785,7 +1775,6 @@
 - [x] What is java.util.PriorityQueue.md
 - [x] What is Javascript.md
 - [x] What is JAXP.md
-- [x] What is JDBC for database access in Java.md
 - [x] What is JDBC ResultSet.md
 - [x] What is JDBC, an implementation or a specification.md
 - [x] What is JDBC.md
@@ -2202,7 +2191,6 @@
 - [x] What is the difference between SQL DELETE and TRUNCATE.md
 - [x] What is the difference between SQL UNION and UNION ALL.md
 - [x] What is the difference between SQL WHERE and HAVING clauses.md
-- [x] What is the difference between Statement from PreparedStatement.md
 - [x] What is the difference between static and dynamic binding in Java.md
 - [x] What is the difference between Stream map and flatMap.md
 - [x] What is the difference between streaming and logical replication in PostgreSQL.md
@@ -2705,7 +2693,6 @@
 - [x] Which kinds references on methods you do you know.md
 - [x] Which kinds relationships exist in structural diagram classes in UML.md
 - [x] Which languages besides Java can be used in development by executed in environment JVM.md
-- [x] Which levels isolation transactions in JDBC.md
 - [x] Which levels OSI.md
 - [x] Which logical operation and operators you do you know.md
 - [x] Which main specifics in Servlet 3.md
