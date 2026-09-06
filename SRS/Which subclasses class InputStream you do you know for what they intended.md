@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/IO #SRS
+#Java/IO/Streams #SRS
 
 # Which subclasses class `InputStream` you do you know for what they intended?
 
@@ -20,7 +20,7 @@ priority: 0
 | `FileInputStream` | Bytes from a file |
 | `ByteArrayInputStream` | Internal buffer of bytes as the source |
 | `FilterInputStream` | Wrap another stream; transform or add behavior |
-| `BufferedInputStream` | Buffer + `mark`/`reset` ([[How would you explain buffered streams in Java IO]]) |
+| `BufferedInputStream` | Buffer + `mark`/`reset` ([[What are buffered streams in Java]]) |
 | `DataInputStream` | Primitive types from an underlying stream, machine-independent ([[Which class reads primitive values from a Java InputStream]]) |
 | `PushbackInputStream` | `unread` into a pushback buffer — you still `read`, then put back; default 1 byte ([[What is PushbackInputStream]]) |
 | `SequenceInputStream` | Logical concatenation of other `InputStream`s ([[What is SequenceInputStream]]) |

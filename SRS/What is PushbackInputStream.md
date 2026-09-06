@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/IO #SRS
+#Java/IO/Streams #SRS
 
 # What is `PushbackInputStream`?
 
@@ -11,13 +11,13 @@ priority: 0
 
 ## Unread, then the next `read` sees it again
 
-`PushbackInputStream` wraps another `InputStream` and adds the ability to **push back** (unread) bytes, stored in an internal buffer (`buf` / `pos`). The JavaDoc use case: a parser reads until a terminator (for example an operator byte after an identifier), then **unreads** that terminator so the next reader sees it ([[What is PushbackInputStream for]], [[Which subclasses class InputStream you do you know for what they intended]], [[What are common concrete InputStream and OutputStream implementations]]).
+`PushbackInputStream` wraps another `InputStream` and adds the ability to **push back** (unread) bytes, stored in an internal buffer (`buf` / `pos`). The JavaDoc use case: a parser reads until a terminator (for example an operator byte after an identifier), then **unreads** that terminator so the next reader sees it ([[Which subclasses class InputStream you do you know for what they intended]], [[What are common concrete InputStream and OutputStream implementations]]).
 
 It is **not** a non-consuming peek. You still `read()`. `unread(int)` copies the low-order byte to the front of the pushback buffer; afterward the next byte read is `(byte) b`. Overloads unread a full `byte[]` or a slice. `read()` returns the most recently pushed-back byte if the buffer is not empty, otherwise it delegates to the underlying stream.
 
-Constructors: `PushbackInputStream(in)` — **1-byte** buffer; `PushbackInputStream(in, size)` — `size > 0` or `IllegalArgumentException`. Pushback is not the same as `BufferedInputStream`’s read-ahead cache ([[How would you explain buffered streams in Java IO]], [[What kinds of input and output streams exist in Java]]).
+Constructors: `PushbackInputStream(in)` — **1-byte** buffer; `PushbackInputStream(in, size)` — `size > 0` or `IllegalArgumentException`. Pushback is not the same as `BufferedInputStream`’s read-ahead cache ([[What are buffered streams in Java]], [[What kinds of input and output streams exist in Java]]).
 
-`markSupported()` is `false`. `mark` is a no-op; `reset` throws `IOException`. After `close()`, `read` / `unread` / `available` / `skip` throw `IOException`. This is a **byte** stream; character pushback is `PushbackReader` ([[What is the difference between and what InputStream OutputStream Reader Writer]]).
+`markSupported()` is `false`. `mark` is a no-op; `reset` throws `IOException`. After `close()`, `read` / `unread` / `available` / `skip` throw `IOException`. Closing the pushback stream **closes the underlying** `in`. This is a **byte** stream; character pushback is `PushbackReader` ([[What is the difference between and what InputStream OutputStream Reader Writer]]).
 
 ```d2
 direction: right

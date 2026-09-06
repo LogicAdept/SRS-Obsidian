@@ -191,7 +191,6 @@
 - [x] How do you add a week month year or decade with the Java 8 Date Time API.md
 - [x] How do you add constraints in a NoSQL database.md
 - [x] How do you add constraints to a database.md
-- [x] How do you all elements by with.md
 - [x] How do you already iterator for collection if invoke collection.remove.md
 - [x] How do you ALTER a replicated ClickHouse table.md
 - [x] How do you alter a table in a relational database.md
@@ -632,7 +631,7 @@
 - [x] How would you explain blocking versus non blocking methods in IO and concurrency.md
 - [x] How would you explain BlockingQueue.md
 - [x] How would you explain body path query headers.md
-- [x] How would you explain buffered streams in Java IO.md
+- [x] What are buffered streams in Java.md
 - [x] How would you explain busy spin or busy waiting in concurrent code.md
 - [x] How would you explain cache hit rate and cache miss rate.md
 - [x] How would you explain calculate the following function.md
@@ -721,7 +720,6 @@
 - [x] How would you explain Executors.md
 - [x] How would you explain Executors.newCachedThreadPool().md
 - [x] How would you explain exists problems race condition.md
-- [x] How would you explain exists thread input output.md
 - [x] How would you explain EXPLAIN ANALYZE.md
 - [x] How would you explain extends Queue extends Deque or Deque extends Queue.md
 - [x] How would you explain fetch and add FAA in concurrent programming.md
@@ -789,7 +787,6 @@
 - [x] How would you explain in how consist differences between CyclicBarrier and CountDownLatch.md
 - [x] How would you explain in how consist differences between java.util.concurrent.Atomic.compareAndSwap and java.u.md
 - [x] How would you explain in how consist differences between stack and heap with much.md
-- [x] How would you explain in how difference class PrintWriter from PrintStream.md
 - [x] How would you explain in how differences between volatile and Atomic variable.md
 - [x] How would you explain in how is between method submit and execute threads.md
 - [x] How would you explain in how is difference between IO and NIO.md
@@ -1163,8 +1160,6 @@
 - [x] How would you explain what will if queue threads already.md
 - [x] How would you explain what will result execution operation int array = {8 -3 10 4} int result = Arrays.binaryS.md
 - [x] How would you explain what you do you know about function main.md
-- [x] How would you explain what you do you know about interface FileFilter.md
-- [x] How would you explain what you do you know about RandomAccessFile.md
 - [x] How would you explain what you do you know about servlet filter.md
 - [x] How would you explain when thenReturn vs doReturn when.md
 - [x] How would you explain when what query to data.md
@@ -1335,7 +1330,6 @@
 - [x] What are the implicit EL scope objects in JSP and how do they differ from servlet scoped objects.md
 - [x] What are the initial capacity and load factor parameters of HashMap.md
 - [x] What are the main characteristics of software design patterns.md
-- [x] What are the main class threads input output.md
 - [x] What are the main components of Apache Kafka.md
 - [x] What are the main differences between Spring Framework major versions.md
 - [x] What are the main functions of an operating system.md
@@ -1893,7 +1887,6 @@
 - [x] What is producer fencing in Kafka transactions.md
 - [x] What is profiling.md
 - [x] What is prompt injection.md
-- [x] What is PushbackInputStream for.md
 - [x] What is PushbackInputStream.md
 - [x] What is quicksort.md
 - [x] What is RabbitMQ clustering.md
@@ -1926,7 +1919,6 @@
 - [x] What is selector.md
 - [x] What is self-attention.md
 - [x] What is Semaphore.md
-- [x] What is SequenceInputStream for.md
 - [x] What is SequenceInputStream.md
 - [x] What is Serial GC.md
 - [x] What is serialization.md
@@ -2650,7 +2642,6 @@
 - [x] Where may static and instance fields be initialized in Java.md
 - [x] Where should static resources live in a Spring MVC application.md
 - [x] Where should you prefer inheritance versus aggregation.md
-- [x] Which access to are there RandomAccessFile.md
 - [x] Which algorithms sorting arrays used in Java.md
 - [x] Which algorithms sorting.md
 - [x] Which annotations tell Spring to create beans from your classes.md
@@ -2658,11 +2649,7 @@
 - [x] Which are there specifics class String.md
 - [x] Which assertions.md
 - [x] Which bitwise operation you do you know.md
-- [x] Which character is-a when in file.md
 - [x] Which CI CD you do you know.md
-- [x] Which class allows from thread in types data.md
-- [x] Which class convert thread in character and.md
-- [x] Which class for using.md
 - [x] Which class intended for work with elements file.md
 - [x] Which class reads primitive values from a Java InputStream.md
 - [x] Which classes convert between Java byte streams and character streams.md

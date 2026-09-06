@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/IO #SRS
+#Java/IO/Streams #SRS
 
 # What is the difference between and what `InputStream` `OutputStream` `Reader` `Writer`?
 
@@ -22,7 +22,7 @@ priority: 0
 
 `Reader.read()` returns a character as an `int` in `0..65535` (`char`’s range) or `-1`. That is UTF-16 code units in the language, not “a Unicode stream type.” Encoding lives at the bridge, not on `InputStream` itself.
 
-Concrete trees: `FileInputStream`, `BufferedInputStream`, `PushbackInputStream`, `SequenceInputStream` under bytes; `FileReader`, `BufferedReader`, `InputStreamReader` under chars; `PrintStream` vs `PrintWriter` on the output side ([[What are common concrete InputStream and OutputStream implementations]], [[How would you explain buffered streams in Java IO]], [[What is the difference between PrintWriter and PrintStream]], [[What is PushbackInputStream]], [[What is SequenceInputStream]]).
+Concrete trees: `FileInputStream`, `BufferedInputStream`, `PushbackInputStream`, `SequenceInputStream` under bytes; `FileReader`, `BufferedReader`, `InputStreamReader` under chars; `PrintStream` vs `PrintWriter` on the output side ([[What are common concrete InputStream and OutputStream implementations]], [[What are buffered streams in Java]], [[What is the difference between PrintWriter and PrintStream]], [[What is PushbackInputStream]], [[What is SequenceInputStream]]).
 
 ```d2
 direction: down

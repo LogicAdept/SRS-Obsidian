@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/IO #SRS
+#Java/IO/Streams #SRS
 
 # What is `SequenceInputStream`?
 
@@ -11,7 +11,7 @@ priority: 0
 
 ## One logical byte stream from several
 
-`SequenceInputStream` extends `InputStream` (not `FilterInputStream`). It starts with an ordered collection of streams and reads from the first until EOF, then the second, until EOF on the last ([[What is SequenceInputStream for]], [[Which subclasses class InputStream you do you know for what they intended]], [[What are common concrete InputStream and OutputStream implementations]]).
+`SequenceInputStream` extends `InputStream` (not `FilterInputStream`). It starts with an ordered collection of streams and reads from the first until EOF, then the second, until EOF on the last ([[Which subclasses class InputStream you do you know for what they intended]], [[What are common concrete InputStream and OutputStream implementations]]).
 
 `SequenceInputStream(s1, s2)` reads `s1` then `s2`. `SequenceInputStream(Enumeration<? extends InputStream> e)` reads whatever the enumeration yields, in order. A `null` element from the enumeration is a `NullPointerException` (OpenJDK `peekNextStream`).
 
@@ -63,7 +63,7 @@ class Demo {
 **Listing 1.** Two-arg constructor: `s1` then `s2`. Closing `in` closes whichever substream is still open and any not yet started.
 
 > [!warning] Substreams are closed for you — and `available()` is not the total length
-> Do not keep using a substream after the sequence has moved past it; it is already closed. `available()` can be `0` between streams even when more data remains. Closing the sequence does not un-close anything you already exhausted. This class is **not** `java.util.stream.Stream`.
+> Do not keep using a substream after the sequence has moved past it; it is already closed. `available()` can be `0` between streams even when more data remains. Closing the sequence does not un-close anything you already exhausted. This class is **not** `java.util.stream.Stream`, and not a database `SEQUENCE` / `SERIAL` / `AUTO_INCREMENT`.
 
 > [!tip] Interview answer
 > **`SequenceInputStream` is concatenate-as-one-`InputStream`: two streams or an `Enumeration`.** It reads each to EOF, closes that one, continues. `close()` on the wrapper closes remaining members. Name that it is `java.io` concatenation, not Stream API `concat`.
