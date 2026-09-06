@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Modifiers #Java/Serialization #SRS
+#Java/Language/Modifiers #Java/Serialization/Transient #SRS
 
 # How would you explain the transient field modifier in Java?
 
@@ -13,7 +13,7 @@ priority: 0
 
 The language does not define a persistence service; it only labels the field. Java object serialization is the usual service: `ObjectOutputStream` writes non-`transient`, non-`static` field values (and follows references in those fields). `defaultWriteObject` / `defaultReadObject` do the same for the current class. `Externalizable` classes supply their own bytes; they do not use that default field list.
 
-On the way in, a serializable object’s fields are first set to defaults; constructors and instance field initializers of the serializable class **do not run**. Then `readObject` or `defaultReadObject` restores matching stream fields. A `transient` field never appears in that stream, so it stays at the default unless you restore it yourself. Sensitive data is often `private transient` so it cannot reappear from the stream.
+On the way in, a serializable object’s fields are first set to defaults; constructors and instance field initializers of the serializable class **do not run**. Then `readObject` or `defaultReadObject` restores matching stream fields. A `transient` field never appears in that stream, so it stays at the default unless you restore it yourself. Typical uses: derived or cached values, secrets, and references that must not pull a non-serializable helper into the graph. Sensitive data is often `private transient` so it cannot reappear from the stream.
 
 `serialPersistentFields` (a `private static final ObjectStreamField[]`) **overrides** the default list: a field can be serialized without a matching live field, or omitted even if it is not `transient`. Inner classes cannot declare that array (they cannot hold a suitable `static` field), and they contain an implicit **non-`transient`** reference to the enclosing instance — serializing the inner object serializes the outer one too.
 
@@ -76,5 +76,8 @@ obj -> drop: "not default serial fields"
 > [!warning] `transient` is not “non-static”
 > `static` fields are omitted too, because they are not instance serial fields. Marking a class variable `transient` does not change that. `final` instance fields **are** serialized under the default mechanism.
 
+> [!warning] `transient` is not a lock on the bytes
+> `writeExternal` can still emit the value. A `serialPersistentFields` entry can put the name in the stream even if the live field is `transient`. Records serialize every component.
+
 > [!tip] Interview answer
-> Transient means this instance field is not part of persistent state. Default Java serialization writes every non-static, non-transient field and, on the way back, leaves transient fields at default values because constructors do not run. Use it for caches, derived data, and secrets; restore what you still need in readObject.
+> Transient means this instance field is not part of persistent state. Default Java serialization writes every non-static, non-transient field and, on the way back, leaves transient fields at default values because constructors do not run. Use it for caches, derived data, secrets, and non-serializable references; restore what you still need in readObject.

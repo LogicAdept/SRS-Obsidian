@@ -198,7 +198,6 @@
 - [x] How do you avoid a sort with an index.md
 - [x] How do you avoid ConcurrentModificationException while iterating a collection.md
 - [x] How do you avoid deadlock in Java.md
-- [x] How do you behavior serialization deserialization.md
 - [x] How do you between thread.md
 - [x] How do you build a cache with invalidation using LinkedHashMap.md
 - [x] How do you calculate size which object in memory.md
@@ -241,7 +240,6 @@
 - [x] How do you create a Spring MVC controller.md
 - [x] How do you create a thread in Java.md
 - [x] How do you create an index without blocking writes in PostgreSQL.md
-- [x] How do you create serialization.md
 - [x] How do you create thread Singleton.md
 - [x] How do you customize default Java serialization behavior.md
 - [x] How do you customize Java serialization and deserialization.md
@@ -278,7 +276,6 @@
 - [x] How do you EXPLAIN ANALYZE.md
 - [x] How do you explain legacy code to a non-technical stakeholder.md
 - [x] How do you expose Spring Boot Actuator endpoints safely.md
-- [x] How do you fields from serialization.md
 - [x] How do you find bugs in a program and avoid mistakes.md
 - [x] How do you find the best talents and are you focused on acquiring them.md
 - [x] How do you find the intersection of three sorted arrays.md
@@ -362,7 +359,6 @@
 - [x] How do you monitor a model in production.md
 - [x] How do you monitor an application with Spring Boot Actuator.md
 - [x] How do you monitor database health and load.md
-- [x] How do you not serialization.md
 - [x] How do you number in set.md
 - [x] How do you obtain a read-only or unmodifiable collection in Java.md
 - [x] How do you obtain synchronized wrappers for standard Java collections.md
@@ -1147,7 +1143,6 @@
 - [x] How would you explain what happens when in thread is thrown exception.md
 - [x] How would you explain what has-a higher higher level - class abstract class or interface.md
 - [x] How would you explain what in Servlet 2.5 3.0 3.1 4.0.md
-- [x] How would you explain what keyword word transient.md
 - [x] How would you explain what method filter in stream.md
 - [x] How would you explain what values initialized variable by default.md
 - [x] How would you explain what will if override equals not override hashCode which can problems.md
@@ -1162,7 +1157,6 @@
 - [x] How would you explain which fields should be included when implementing hashCode in Java.md
 - [x] How would you explain which from about thread.md
 - [x] How would you explain which Java language constructs can be marked static.md
-- [x] How would you explain which on serialize modifiers static and final.md
 - [x] How would you explain which.md
 - [x] How would you explain why can be needed private.md
 - [x] How would you explain widening and narrowing casts between Java primitive types.md
@@ -2613,7 +2607,6 @@
 - [x] When should you use the JPA Column annotation if field and column names already match.md
 - [x] When should you use UNION ALL instead of UNION.md
 - [x] When should you use WebFlux versus Spring MVC versus virtual threads.md
-- [x] When should you value fields serialVersionUID.md
 - [x] When would you use Java-based Spring configuration.md
 - [x] When would you use prototype scope in Spring.md
 - [x] Where allowed initialization static instance.md
@@ -2756,7 +2749,6 @@
 - [x] Which variables can lambda expressions access in Java.md
 - [x] Which ways authentication access servlet.md
 - [x] Which ways can Java applications talk to a database.md
-- [x] Which ways control for values object.md
 - [x] Which ways log4j.md
 - [x] Which ways synchronization in Java.md
 - [x] Which ways XML.md
