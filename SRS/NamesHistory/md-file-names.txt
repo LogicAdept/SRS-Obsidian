@@ -845,7 +845,6 @@
 - [x] How would you explain Kubernetes Pod, Deployment, Service.md
 - [x] How would you explain L3 vs L4 vs L7.md
 - [x] How would you explain lambda expressions in Java.md
-- [x] How would you explain LazyInitializationException.md
 - [x] How would you explain limitations of the SQL UNION operator.md
 - [x] How would you explain LinkedHashMap - what in from LinkedList and what from HashMap.md
 - [x] How would you explain LinkedList — or list.md

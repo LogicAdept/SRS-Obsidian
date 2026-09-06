@@ -7,7 +7,7 @@ priority: 0
 # How would you explain DTO Entity?
 
 > [!abstract] Short answer
-> An **entity** is a **persistent domain object**: `@Entity`, **primary key**, managed in a **persistence context**, mapped to tables, with associations that may be **`LAZY`**. A **DTO / Transfer Object** is a **serializable snapshot** for one **boundary** call (HTTP, remote facade). It has **no** persistence identity and **no** lazy proxy. Do **not** return entities from a REST controller: map to a DTO so the API does not expose the schema, secrets, or unfetched associations. DTO: [[How would you explain DTO]]. Abstract entities: [[Can a JPA entity class be abstract]]. Lazy access after the context ends: [[How would you explain LazyInitializationException]].
+> An **entity** is a **persistent domain object**: `@Entity`, **primary key**, managed in a **persistence context**, mapped to tables, with associations that may be **`LAZY`**. A **DTO / Transfer Object** is a **serializable snapshot** for one **boundary** call (HTTP, remote facade). It has **no** persistence identity and **no** lazy proxy. Do **not** return entities from a REST controller: map to a DTO so the API does not expose the schema, secrets, or unfetched associations. DTO: [[How would you explain DTO]]. Abstract entities: [[Can a JPA entity class be abstract]]. Lazy access after the context ends: [[What is LazyInitializationException]].
 
 ## Persistence identity vs a wire snapshot
 

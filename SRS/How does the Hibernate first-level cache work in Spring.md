@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Data/JPA #Java/Persistence/Hibernate #SRS
+#Java/Spring/Data/JPA #Java/Persistence/Hibernate/Cache #SRS
 
 # How does the Hibernate first-level cache work in Spring?
 

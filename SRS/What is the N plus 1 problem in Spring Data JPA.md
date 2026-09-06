@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Data/JPA #Java/Persistence/Hibernate #SRS
+#Java/Spring/Data/JPA #Java/Persistence/Hibernate/Fetching #SRS
 
 # What is the N plus 1 problem in Spring Data JPA?
 

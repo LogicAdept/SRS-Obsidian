@@ -307,6 +307,10 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Persistence/JPA/Mapping`
 * `#Java/Persistence/JPA/Fetching`
 * `#Java/Persistence/Hibernate`
+* `#Java/Persistence/Hibernate/Session`
+* `#Java/Persistence/Hibernate/Query`
+* `#Java/Persistence/Hibernate/Fetching`
+* `#Java/Persistence/Hibernate/Cache`
 * `#Java/Persistence/JOOQ`
 * `#Java/Quarkus`
 * `#Java/Testing`
