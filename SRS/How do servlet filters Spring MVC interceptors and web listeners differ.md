@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Servlet #Java/Spring/Framework/WebMvc #Java/Listeners #SRS
+#Java/Servlet/Filters #Java/Spring/Framework/WebMvc #Java/Servlet/Listeners #SRS
 
 # How do servlet filters Spring MVC interceptors and web listeners differ?
 

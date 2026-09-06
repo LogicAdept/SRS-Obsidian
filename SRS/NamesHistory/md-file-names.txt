@@ -4119,3 +4119,34 @@
 - [x] Which methods for work with array maps in Java 8.md
 - [x] Why do you need equals how it differ from operation ==.md
 - [x] Why LinkedList implements and List and Deque.md
+- [x] How do you all elements by with.md
+- [x] How do you connection with data.md
+- [x] How do you invoke.md
+- [x] How do you JDBC.md
+- [x] How would you explain buffered streams in Java IO.md
+- [x] How would you explain exists thread input output.md
+- [x] How would you explain from which should you JDBC.md
+- [x] How would you explain in how difference class PrintWriter from PrintStream.md
+- [x] How would you explain JPA vs Hibernate.md
+- [x] How would you explain JPA.md
+- [x] How would you explain LazyInitializationException.md
+- [x] How would you explain list main types data in JDBC how they related with Java.md
+- [x] How would you explain main work with data when using JDBC.md
+- [x] How would you explain what you do you know about interface FileFilter.md
+- [x] How would you explain what you do you know about RandomAccessFile.md
+- [x] How would you explain when what query to data.md
+- [x] What are JDBC Statement PreparedStatement and CallableStatement.md
+- [x] What are the main class threads input output.md
+- [x] What is a JDBC ResultSet for.md
+- [x] What is calling stored procedures from JDBC.md
+- [x] What is a servlet container.md
+- [x] What is JDBC for database access in Java.md
+- [x] What is PushbackInputStream for.md
+- [x] What is SequenceInputStream for.md
+- [x] What is the difference between Statement from PreparedStatement.md
+- [x] Which access to are there RandomAccessFile.md
+- [x] Which character is-a when in file.md
+- [x] Which class allows from thread in types data.md
+- [x] Which class convert thread in character and.md
+- [x] Which class for using.md
+- [x] Which levels isolation transactions in JDBC.md

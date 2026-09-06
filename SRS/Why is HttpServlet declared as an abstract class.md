@@ -11,7 +11,7 @@ priority: 0
 
 ## Incomplete as a website servlet
 
-The Jakarta Servlet API gives two abstract classes that implement `Servlet`: `GenericServlet` and `HttpServlet`. For HTTP, you **extend `HttpServlet`**. The container still calls `init`, `service`, `destroy` on **your** class ([[How would you explain the servlet container lifecycle for servlets]]).
+The Jakarta Servlet API gives two abstract classes that implement `Servlet`: `GenericServlet` and `HttpServlet`. For HTTP, you **extend `HttpServlet`**. The container still calls `init`, `service`, `destroy` on **your** class ([[How does a servlet container manage the servlet lifecycle]]).
 
 **`service` is already written.** The public `service(ServletRequest, ServletResponse)` forwards to the HTTP `service`, which picks `doGet`, `doPost`, and the other `doXxx` methods. There is almost no reason to override `service` ([[When must you override the service method in a Java servlet]]).
 

@@ -79,6 +79,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **Versions in the tree:** **`#Java/Versions/N`** is Java SE **N** (the marketing number: **5** not 1.5). Use the child that matches the release the cue is about. Survey / LTS-roadmap / “which versions have you used” cards stay on **`#Java/Versions`**. Introductions that have no child yet (1.2 Collections, 1.4 `assert`, Java 6 `NavigableMap`, and other one-off SE numbers) also stay on the parent — do not add `/1.2`, `/6`, `/10`, `/15`, or `/25` for a single card. A feature that *shipped* in 8 and was later removed still uses **`#Java/Versions/8`** unless the cue is the removal release and that leaf exists. Dual-tag sibling version leaves when the cue is two specific SE lines (17 and 21). Do not put **`#Java/Versions`** next to **`#Java/Versions/N`** on the same card.
 
+**Servlet in the tree:** **`#Java/Servlet`** is the Jakarta Servlet API (what a servlet is, `HttpServlet` vs `GenericServlet`, request/response, URL mapping, spec versions). **Filters** is the filter chain (`Filter` / `FilterChain` / wrappers, vs MVC interceptors). **Listeners** is servlet lifecycle and attribute listeners (`ServletContextListener`, session/request listeners) — not JMS, Kafka, or Spring `@EventListener`. **Lifecycle** is `init` / `service` / `destroy`, constructor vs `init`, load-on-startup. **Container** is the servlet engine (responsibilities, vs a full Java EE / Jakarta EE server). **Sessions** is `HttpSession` and URL rewriting (`encodeURL` / `encodeRedirectURL`). **Context** is `ServletContext` / `ServletConfig` and scoped attributes. Dual-tag **`#Java/JSP`**, **`#Java/CGI`**, **`#Java/JavaEE`**, **`#Java/Security`** as they apply. There is **no `#Java/Listeners`**. Do not put **`#Java/Servlet`** next to a more specific **`#Java/Servlet/...`** child on the same card.
+
 ---
 
 ## Tree (prefixes in cards)
@@ -248,8 +250,13 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Tooling/Gradle`
 * `#Java/JavaEE`
 * `#Java/Servlet`
+* `#Java/Servlet/Filters`
+* `#Java/Servlet/Listeners`
+* `#Java/Servlet/Lifecycle`
+* `#Java/Servlet/Container`
+* `#Java/Servlet/Sessions`
+* `#Java/Servlet/Context`
 * `#Java/CGI`
-* `#Java/Listeners`
 * `#Java/JSP`
 * `#Java/JSP/JSTL`
 * `#Java/Spring`
