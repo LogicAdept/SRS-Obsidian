@@ -11,7 +11,7 @@ priority: 0
 
 ## Syntax that shipped with 8
 
-Oracle’s Java SE 8 language-enhancements list is the catalog. **Lambdas** package one unit of behavior to pass around (per-element work, completion, error). **Method references** are compact lambdas for an already-named method (`System.out::println`). Lambdas target a **functional interface** (one abstract method besides public `Object` methods) ([[What is lambda what and specifics using lambda]], [[What is method reference]], [[What is functional interface]]).
+Oracle’s Java SE 8 language-enhancements list is the catalog. **Lambdas** package one unit of behavior to pass around (per-element work, completion, error). **Method references** are compact lambdas for an already-named method (`System.out::println`). Lambdas target a **functional interface** (one abstract method besides public `Object` methods) ([[How would you explain lambda expressions in Java]], [[What is method reference]], [[What is functional interface]]).
 
 **Default methods** are interface methods with a body and the `default` keyword, so libraries can add API without breaking binaries. The same bullet adds **`static` methods on interfaces**. You still cannot write a `default` that overrides `Object` ([[How would you explain default interface methods since Java 8]]).
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/FunctionalInterfaces #Java/Lambdas #Java/Language/Primitives #SRS
+#Java/FunctionalInterfaces #Java/Lambdas #Java/Language/Primitives #Java/Versions/8 #SRS
 
 # How would you explain primitive specialized functional types named like `IntToLongFunction`?
 
@@ -23,7 +23,20 @@ priority: 0
 
 `Int…` on the left means the **argument** is `int` (`int`-consuming). `ToLong` means the **result** is `long` (`long`-producing). Put together: `IntToLongFunction`. The same `To` pattern is used for the other primitive pairs (`int`/`long`/`double`). When the result is still a reference type, there is no `To` (`IntFunction<R>`).
 
-The SAM is not `apply` when the result is `long`: it is `applyAsLong`. A lambda `i -> (long) i` targets `IntToLongFunction` ([[What is functional interface]]). `IntToLongFunction` does **not** copy `Function`’s `compose` / `andThen` / `identity` defaults — only `applyAsLong`.
+The SAM is not `apply` when the result is `long`: it is `applyAsLong`. A lambda `i -> (long) i` targets `IntToLongFunction` ([[What is functional interface]]). `IntToLongFunction` does **not** copy `Function`’s `compose` / `andThen` / `identity` defaults — only `applyAsLong`. Same primitive in and out is **`IntUnaryOperator`**, not `IntToIntFunction`.
+
+Six types cover every pair among `int` / `long` / `double`:
+
+| Type | SAM |
+| --- | --- |
+| `IntToLongFunction` | `applyAsLong(int)` |
+| `IntToDoubleFunction` | `applyAsDouble(int)` |
+| `LongToIntFunction` | `applyAsInt(long)` |
+| `LongToDoubleFunction` | `applyAsDouble(long)` |
+| `DoubleToIntFunction` | `applyAsInt(double)` |
+| `DoubleToLongFunction` | `applyAsLong(double)` |
+
+`IntStream.mapToLong` takes `IntToLongFunction`. Narrowing (`LongToIntFunction`) is a Java cast: overflow does not throw.
 
 ```d2
 direction: down
@@ -82,4 +95,4 @@ public final class IntToLongNaming {
 > A lambda can be compatible with more than one SAM if you ignore types, but `IntToLongFunction` is not a subtype of `Function`. Passing it where `Function<Integer,Long>` is required does not work without an adapter, and that adapter boxes. `applyAsLong` vs `apply` is a compile error, not a runtime surprise. Prefer the specialized type in hot `int`/`long` pipelines ([[Why prefer primitives over wrappers in hot loops in Java]]).
 
 > [!tip] Interview answer
-> **`IntToLongFunction` is `Function` with `int` in and `long` out — `applyAsLong(int)` — so nothing is boxed.** Names: left primitive is the argument, `ToX` is the result. `IntFunction` consumes `int` and returns an object; `ToLongFunction` returns `long` from an object. Use `applyAsLong`, not `apply`.
+> **`IntToLongFunction` is `Function` with `int` in and `long` out — `applyAsLong(int)` — so nothing is boxed.** Six types cover `int`/`long`/`double` pairs. Names: left primitive is the argument, `ToX` is the result. `IntFunction` consumes `int` and returns an object; `ToLongFunction` returns `long` from an object. Same primitive both sides is a unary operator, not `IntToIntFunction`.

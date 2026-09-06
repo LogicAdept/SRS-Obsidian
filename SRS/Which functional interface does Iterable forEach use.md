@@ -23,7 +23,7 @@ So it still goes through `iterator()` (or an override that does not). Overriding
 
 **Same `Consumer`, different type:** `Iterator.forEachRemaining(Consumer)` drains **that cursor**. `Collection` inherits `Iterable.forEach` unless a concrete class overrides it.
 
-**Not `Consumer`:** `Map.forEach` is `BiConsumer<? super K, ? super V>` — `(k, v) -> …` [[What is functional interface BiConsumerT,U]]. Passing a one-arg `Consumer` to a `Map` does not compile. Walk `keySet()` / `values()` / `entrySet()` if you want `Iterable.forEach`.
+**Not `Consumer`:** `Map.forEach` is `BiConsumer<? super K, ? super V>` — `(k, v) -> …` [[How would you explain the BiConsumer functional interface]]. Passing a one-arg `Consumer` to a `Map` does not compile. Walk `keySet()` / `values()` / `entrySet()` if you want `Iterable.forEach`.
 
 ```d2
 direction: down

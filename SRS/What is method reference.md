@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Lambdas #Java/Versions/8 #SRS
+#Java/Lambdas #Java/Versions/8 #Java/MethodReferences #SRS
 
 # What is method reference
 
@@ -11,7 +11,7 @@ priority: 0
 
 ## `::` names a call, then the SAM runs it
 
-A method reference refers to invoking a method (or constructing an object/array) **without performing that invocation**. Evaluating it produces a functional-interface instance; the referenced method runs later, when the SAM is invoked ([[What is lambda what and specifics using lambda]], [[What is functional interface]], [[What kinds of method references exist in Java]]).
+A method reference refers to invoking a method (or constructing an object/array) **without performing that invocation**. Evaluating it produces a functional-interface instance; the referenced method runs later, when the SAM is invoked ([[How would you explain lambda expressions in Java]], [[What is functional interface]], [[What kinds of method references exist in Java]]).
 
 It is a poly expression: assignment, invocation, or cast context only. You cannot write `Arrays::sort(int[])` to pick an overload — the FI’s function type feeds overload resolution. If that is too loose, use a lambda.
 

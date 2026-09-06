@@ -726,16 +726,7 @@
 - [x] How would you explain for what intended ol ul li.md
 - [x] How would you explain for what intended tr th td.md
 - [x] How would you explain for what keyword word UNION.md
-- [x] How would you explain for what needed functional interface BinaryOperatorT DoubleBinaryOperator IntBinaryOpera.md
-- [x] How would you explain for what needed functional interface ConsumerT DoubleConsumer IntConsumer and LongConsum.md
-- [x] How would you explain for what needed functional interface FunctionT,R DoubleFunctionR IntFunctionR and LongFu.md
-- [x] How would you explain for what needed functional interface ObjDoubleConsumerT ObjIntConsumerT and ObjLongConsu.md
-- [x] How would you explain for what needed functional interface PredicateT DoublePredicate IntPredicate and LongPre.md
 - [x] How would you explain for what needed functional interface SupplierT BooleanSupplier DoubleSupplier IntSupplie.md
-- [x] How would you explain for what needed functional interface To Function.md
-- [x] How would you explain for what needed functional interface ToDoubleBiFunctionT,U ToIntBiFunctionT,U and ToLong.md
-- [x] How would you explain for what needed functional interface ToDoubleFunctionT ToIntFunctionT and ToLongFunction.md
-- [x] How would you explain for what needed functional interface UnaryOperatorT DoubleUnaryOperator IntUnaryOperator.md
 - [x] How would you explain for what used operators IN BETWEEN LIKE.md
 - [x] How would you explain for which number types use operation.md
 - [x] How would you explain foreign keys in relational databases.md
@@ -813,7 +804,6 @@
 - [x] How would you explain java.time.ZonedDateTime.md
 - [x] How would you explain java.util.concurrent.Future style asynchronous results.md
 - [x] How would you explain java.util.concurrent.Phaser.md
-- [x] How would you explain java.util.function functional interfaces overview.md
 - [x] How would you explain java.util.StringJoiner.md
 - [x] How would you explain java.util.Vector and why it is legacy.md
 - [x] How would you explain JavaServer Pages JSP.md
@@ -1102,7 +1092,6 @@
 - [x] How would you explain ThreadLocal variables in Java.md
 - [x] How would you explain ThreadPoolExecutor.md
 - [x] How would you explain tight versus loose coupling between software modules.md
-- [x] How would you explain to what variable are there access lambda.md
 - [x] How would you explain ToDoubleBiFunction ToIntBiFunction and ToLongBiFunction.md
 - [x] How would you explain ToDoubleFunction ToIntFunction and ToLongFunction.md
 - [x] How would you explain tradeoffs among relational document and other database types.md
@@ -1711,9 +1700,6 @@
 - [x] What is foreign key foreign key.md
 - [x] What is Fork Join.md
 - [x] What is FTP.md
-- [x] What is functional interface BiConsumerT,U.md
-- [x] What is functional interface BiFunctionT,U,R.md
-- [x] What is functional interface BiPredicateT,U.md
 - [x] What is functional interface.md
 - [x] What is FutureTask.md
 - [x] What is G1 GC.md
@@ -1791,7 +1777,6 @@
 - [x] What is Kosaraju's algorithm.md
 - [x] What is Kruskal's algorithm.md
 - [x] What is Kubernetes.md
-- [x] What is lambda what and specifics using lambda.md
 - [x] What is layered architecture.md
 - [x] What is lazy fetch in JPA or Hibernate.md
 - [x] What is LazyInitializationException.md
@@ -2682,7 +2667,6 @@
 - [x] Which keyword throws an exception in Java.md
 - [x] Which kinds objects.md
 - [x] Which kinds of projects benefit most from CQRS.md
-- [x] Which kinds references on methods you do you know.md
 - [x] Which kinds relationships exist in structural diagram classes in UML.md
 - [x] Which languages besides Java can be used in development by executed in environment JVM.md
 - [x] Which levels OSI.md

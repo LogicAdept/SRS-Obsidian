@@ -62,7 +62,7 @@ map -> later: not these
 
 **Fig. 1.** Language feature first; factories and sequenced maps later. [[How do you iterate all key value pairs in a Map]] is `forEach` vs `entrySet()`.
 
-`getOrDefault` uses **no mapping**, not “value is null”: a stored `null` is returned, not the default. `putIfAbsent` / `compute*` / `merge` treat “mapped to `null`” like absent. `computeIfAbsent` skips a null result from the function (does not insert). `computeIfPresent` / `compute` / `merge` **remove** the mapping if the function returns `null`. `merge`’s value argument is non-null. `compute(..., (k, v) -> v.concat(...))` **NPEs** when `v` is null — use `(v == null) ? msg : v.concat(msg)` or `merge(key, msg, String::concat)` ([[What is functional interface BiConsumerT,U]], [[What is functional interface BiFunctionT,U,R]], [[Why should you use computeIfAbsent on ConcurrentHashMap]]).
+`getOrDefault` uses **no mapping**, not “value is null”: a stored `null` is returned, not the default. `putIfAbsent` / `compute*` / `merge` treat “mapped to `null`” like absent. `computeIfAbsent` skips a null result from the function (does not insert). `computeIfPresent` / `compute` / `merge` **remove** the mapping if the function returns `null`. `merge`’s value argument is non-null. `compute(..., (k, v) -> v.concat(...))` **NPEs** when `v` is null — use `(v == null) ? msg : v.concat(msg)` or `merge(key, msg, String::concat)` ([[How would you explain the BiConsumer functional interface]], [[How would you explain the BiFunction functional interface]], [[Why should you use computeIfAbsent on ConcurrentHashMap]]).
 
 `Map.Entry.comparingByKey` / `comparingByValue` (natural or a `Comparator`) are also 1.8 — on the nested type, not on `Map`.
 

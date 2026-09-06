@@ -15,7 +15,7 @@ A functional interface represents a **single** function contract: the set of abs
 
 `java.lang.Runnable` (`void run()`) is the textbook case. `NonFunc { boolean equals(Object); }` is **not** functional — it adds nothing beyond `Object`. `Comparator<T>` **is** functional: `compare` is the new method; `equals` does not count.
 
-`default` methods have a body, so they are not abstract. An interface can have many defaults (and statics) and still be functional ([[How would you explain default interface methods since Java 8]], [[How would you explain for what needed functional interface ConsumerT DoubleConsumer IntConsumer and LongConsum]]). Declaring `clone()` as a public abstract in an interface **does** count (it is not a public `Object` method), so `Foo { int m(); Object clone(); }` is not functional.
+`default` methods have a body, so they are not abstract. An interface can have many defaults (and statics) and still be functional ([[How would you explain default interface methods since Java 8]], [[How would you explain Consumer DoubleConsumer IntConsumer and LongConsumer]]). Declaring `clone()` as a public abstract in an interface **does** count (it is not a public `Object` method), so `Foo { int m(); Object clone(); }` is not functional.
 
 `@FunctionalInterface` is `@Documented`, `@Retention(RUNTIME)`, `@Target(TYPE)`. Compilers must error if it sits on a non-interface or on a type that is not functional. Any interface that meets the definition is still a functional interface **without** the annotation — `Runnable` was a SAM type before 8. The annotation is the `@Override`-style check the dump describes, not a new kind of interface.
 
@@ -66,7 +66,7 @@ class Demo {
 > Dump text that says you add the annotation “in order to define” a functional interface is backwards: the **shape** defines it. The annotation only fails the compile if you then add a second abstract method. `equals` on `Comparator` is not a second SAM.
 
 > [!warning] `Object` methods are a trap
-> `equals` / `hashCode` / `toString` restated on the interface do not destroy the SAM. A public `clone()` or `finalize()` declaration does. Lambdas cannot use `this` to call the interface’s own `default` methods ([[How would you explain to what variable are there access lambda]]).
+> `equals` / `hashCode` / `toString` restated on the interface do not destroy the SAM. A public `clone()` or `finalize()` declaration does. Lambdas cannot use `this` to call the interface’s own `default` methods ([[Which variables can lambda expressions access in Java]]).
 
 > [!tip] Interview answer
 > **Functional interface = one abstract method besides `Object`’s publics.** Java 8: lambda or `::`. `@FunctionalInterface` is an optional compiler check (`@since 1.8`). Defaults are allowed. `Runnable`, `Comparator`, `Consumer` / `Function` / `Predicate` / `Supplier`.

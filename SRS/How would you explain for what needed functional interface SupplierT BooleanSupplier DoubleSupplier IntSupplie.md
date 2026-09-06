@@ -13,7 +13,7 @@ priority: 0
 
 `Supplier<T>` (`@since 1.8`) is a `@FunctionalInterface` that supplies results. The SAM is `get`. There is **no** requirement that each call return a new or distinct value — a supplier may cache, share, or recompute. The dump method reference `LocalDateTime::now` matches: no arguments, a `LocalDateTime` out, then `now.get()` ([[What is functional interface]], [[How does Supplier differ from Consumer in Java]]).
 
-There are no `andThen` / `compose` defaults. `Consumer` is the opposite shape: one value in, void out ([[How would you explain for what needed functional interface ConsumerT DoubleConsumer IntConsumer and LongConsum]]).
+There are no `andThen` / `compose` defaults. `Consumer` is the opposite shape: one value in, void out ([[How would you explain Consumer DoubleConsumer IntConsumer and LongConsumer]]).
 
 The primitive four do **not** extend `Supplier`. Their SAMs are **not** named `get`:
 
