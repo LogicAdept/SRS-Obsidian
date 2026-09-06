@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/StringBuilder #Patterns/GoF #SRS #New
+#Java/StringBuilder #Patterns/GoF #Java/StringBuffer #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

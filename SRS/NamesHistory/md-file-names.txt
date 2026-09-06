@@ -1036,7 +1036,7 @@
 - [x] How would you explain the Java main method entry point.md
 - [x] How would you explain the Java Runtime Environment JRE.md
 - [x] How would you explain the Java stack and heap.md
-- [x] How would you explain the Java string pool.md
+- [x] What is the Java string pool.md
 - [x] How would you explain the Java Virtual Machine JVM.md
 - [x] How would you explain the java.io.File class and path representation.md
 - [x] How would you explain the java.lang.Error type hierarchy.md
@@ -1940,7 +1940,6 @@
 - [x] What is StampedLock.md
 - [x] What is Stream.md
 - [x] What is string hashing.md
-- [x] What is string pool.md
 - [x] What is StringJoiner.md
 - [x] What is structured logging and how does it compare with plaintext logs.md
 - [x] What is SummingMergeTree.md
@@ -2804,7 +2803,6 @@
 - [x] Why is a database preferable to plain text files for structured data.md
 - [x] Why is a stack trace important for exceptions.md
 - [x] Why is Autowired often omitted on a single constructor in modern Spring.md
-- [x] Why is char array preferred over String for passwords.md
 - [x] Why is ClickHouse fast for analytical queries.md
 - [x] Why is clone declared on Object rather than on Cloneable.md
 - [x] Why is composition often recommended over inheritance.md

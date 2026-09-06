@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/StringBuilder #Java/String #SRS
+#Java/StringBuilder #Java/StringBuffer #SRS
 
 # Is StringBuilder faster than StringBuffer without synchronization?
 

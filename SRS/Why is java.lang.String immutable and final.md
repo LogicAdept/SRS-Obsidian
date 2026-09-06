@@ -2,43 +2,68 @@
 reps: 0
 priority: 0
 -->
-#Java/String #Java/Immutability #SRS #New
+#Java/String #Java/Immutability #Java/Language/Modifiers/Final #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# Why is java.lang.String immutable and final
 
-**Почему String immutable?**
+> [!abstract] Short answer
+> **Immutable:** a `String` has a constant value, so the JDK can intern and share one instance for equal literals without one alias changing another. Threads can read it without synchronizing on the object. The cached `hashCode` stays valid. **`final`:** no subclasses, so those methods cannot be overridden into a mutable or inconsistent fake-`String`. That is not “passwords are safe” — you still cannot wipe a `String`.
 
-Четыре причины: 1) безопасность — строки передаются в конструкторы файлов, БД, сетевых соединений, изменение привело бы к уязвимостям; 2) потокобезопасность — можно шарить между потоками без синхронизации; 3) кэширование hashCode — вычисляется один раз; 4) String Pool — экономия памяти.
+## Constant value, then no subclasses
 
-**Почему String в Java immutable?**
+The language type is an unchanging sequence of Unicode code points. The class note: because `String` objects are immutable they can be shared. Intern relies on that: the pool keeps unique instances for a sequence; if those characters could change, every alias would see the mutation ([[What is the Java string pool]], [[What does the String intern method do in Java]]).
 
-Безопасность (передача в файлы, БД, сеть), потокобезопасность, кэширование hashCode, работа String Pool.
+Sharing without a monitor is the thread story: no `append` on a `String`. Hash maps: `equals` / `hashCode` are content-based; the JDK caches `hash` / `hashIsZero` on first `hashCode()` (not a public “at birth” contract). Immutability means that cache cannot go stale ([[How would you explain java.lang.String]]).
 
-**Что такое String Pool?**
+A `final` class has no subclasses; its methods are never overridden. `String` is `final`, so you cannot write a subclass that stores a mutable buffer behind `charAt` / `equals` while still typing as `String`. That protects intern, maps, and sharing. `final` does not mean the intern pool, and it does not encrypt secrets.
 
-Область в heap (раньше — в PermGen), где хранятся уникальные строковые литералы. String s = "hi" использует пул, new String("hi") — нет.
+Security interviews often mix two facts. Callers can pass a path, URL, or SQL identifier as `String` and know another thread cannot change those characters. Passwords as `String` are still a problem because you **cannot overwrite** them — prefer `char[]` ([[Why is a char array preferred over String for passwords]]).
 
-**Почему String immutable?**
+```d2
+direction: down
+imm: "Immutable value\nshare · intern · stable hash" {
+  width: 280
+  height: 50
+}
+fin: "final class\nno subclass override of charAt/equals" {
+  width: 300
+  height: 50
+}
+ok: "Safe to share the instance\nnot safe to use as a wipeable secret" {
+  width: 320
+  height: 50
+}
 
-Безопасность (передача в файлы, БД, сеть), потокобезопасность, кэширование hashCode, работа String Pool.
+imm -> ok
+fin -> ok
+```
 
-**Что такое String Pool?**
+**Fig. 1.** Immutability is the value. `final` closes the type so the value stays that way.
 
-Область в heap, где хранятся уникальные строковые литералы. String s = "hi" кладёт в пул, new String("hi") — создаёт новый объект в heap.
+```java
+public class StringWhyImmutable {
+    static int keyHash(String key) {
+        return key.hashCode(); // JDK may cache; key's chars cannot change
+    }
 
-**Почему String immutable?**
+    static void share(String path) {
+        // other threads may read path; no API mutates it
+        path.startsWith("/tmp");
+    }
+}
+```
 
-Безопасность: пароли, URL, classpath — нельзя случайно изменить. String Pool — иммутабельность нужна для безопасного шеринга. Хэш-структуры: hashCode у String кэшируется, нельзя ломать. Потокобезопасность: иммутабельный объект можно безопасно шарить между потоками без синхронизации.
+**Listing 1.** Sharing and hashing assume the characters never change. `class Evil extends String` does not compile.
 
-**Что такое String Pool? Почему String immutable?**
+```java
+// Conceptual — illegal
+// public class Evil extends String {}
+```
 
-Безопасность, потокобезопасность, кэширование hashCode, работа String Pool.
+**Listing 2.** Conceptual: `final` blocks subclassing. Do not compile this snippet.
 
-**String Pool и immutability.**
+> [!warning] Immutable ≠ secret, and hash is not “computed in the constructor”
+> Interning needs immutability; it does not put `new String("x")` in the pool. `hashCode` is cached **when first computed**, including a real zero via `hashIsZero`. Do not cite PermGen as the reason `String` is `final`. Do not treat immutability as a substitute for wiping `char[]`.
 
-Pool в heap — уникальные литералы. new String() — вне пула. intern() добавляет. Immutability: безопасность, потокобезопасность, кэширование hashCode, пул.
-
-**String Pool и immutability.**
-
-Pool в heap хранит уникальные литералы. new String("hi") — новый объект вне пула. intern() добавляет в пул. Immutability: безопасность, потокобезопасность, кэширование hashCode, переиспользование в пуле.
+> [!tip] Interview answer
+> **`String` is immutable so interned and shared instances cannot change under you, hashes stay valid, and no per-call lock is required.** **It is `final` so nobody can subclass it and break that contract.** That enables the pool and maps; it does not make passwords safe.
