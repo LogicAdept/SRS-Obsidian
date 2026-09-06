@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Persistence/JPA #Java/Annotations #SRS
+#Java/Persistence/JPA/Mapping #Java/Annotations #SRS
 
 # When should you use the JPA Column annotation if field and column names already match?
 

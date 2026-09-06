@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Persistence/JPA #Java/Language/Modifiers/Abstract #Java/OOP #SRS
+#Java/Persistence/JPA/Mapping #Java/Language/Modifiers/Abstract #Java/OOP #SRS
 
 # Can a JPA entity class be abstract?
 

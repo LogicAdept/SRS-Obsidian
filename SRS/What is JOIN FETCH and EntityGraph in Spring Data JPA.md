@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Data/JPA #Java/Persistence/JPA #SRS
+#Java/Spring/Data/JPA #Java/Persistence/JPA/Fetching #SRS
 
 # What is JOIN FETCH and EntityGraph in Spring Data JPA?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Language/Records #Java/Persistence/JPA #SRS
+#Java/Language/Records #Java/Persistence/JPA/Mapping #SRS
 
 # Can you use a Java record as a JPA entity?
 

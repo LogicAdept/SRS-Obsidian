@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Persistence/JPA #Java/Annotations #SRS
+#Java/Persistence/JPA/Mapping #Java/Annotations #SRS
 
 # What is the JPA Id annotation?
 

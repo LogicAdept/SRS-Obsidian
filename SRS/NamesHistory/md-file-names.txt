@@ -833,8 +833,6 @@
 - [x] How would you explain Jenkins Pipeline.md
 - [x] How would you explain JOIN.md
 - [x] How would you explain JOOQ vs Hibernate.md
-- [x] How would you explain JPA vs Hibernate.md
-- [x] How would you explain JPA.md
 - [x] How would you explain JSON vs XML.md
 - [x] How would you explain JSONPath.md
 - [x] How would you explain JSP - servlet - JSP.md
