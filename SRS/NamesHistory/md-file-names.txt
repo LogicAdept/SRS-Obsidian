@@ -806,7 +806,6 @@
 - [x] How would you explain java.util.concurrent.Phaser.md
 - [x] How would you explain java.util.StringJoiner.md
 - [x] How would you explain java.util.Vector and why it is legacy.md
-- [x] How would you explain JavaServer Pages JSP.md
 - [x] How would you explain JAXP for XML parsing and transformation in Java.md
 - [x] How would you explain JdbcTemplate Hibernate.md
 - [x] How would you explain Jenkins Pipeline.md
@@ -814,7 +813,6 @@
 - [x] How would you explain JOOQ vs Hibernate.md
 - [x] How would you explain JSON vs XML.md
 - [x] How would you explain JSONPath.md
-- [x] How would you explain JSP - servlet - JSP.md
 - [x] How would you explain JSTL the JSP Standard Tag Library.md
 - [x] How would you explain JVM memory regions and how the garbage collector uses them.md
 - [x] How would you explain JVM.md
@@ -896,7 +894,6 @@
 - [x] How would you explain Postman.md
 - [x] How would you explain Predicate DoublePredicate IntPredicate and LongPredicate.md
 - [x] How would you explain primitive specialized functional types named like IntToLongFunction.md
-- [x] How would you explain principles work with JSP.md
 - [x] How would you explain private constructors and common patterns that use them in Java.md
 - [x] How would you explain private.md
 - [x] How would you explain problems with public mutable fields in Java.md

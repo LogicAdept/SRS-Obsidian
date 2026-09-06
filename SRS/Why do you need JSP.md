@@ -7,7 +7,7 @@ priority: 0
 # Why do you need JSP?
 
 > [!abstract] Short answer
-> You need **JSP** when the response is **mostly template** (HTML/XML) with **holes for dynamic data**. Jakarta Pages **4.0**: **textual specification** of a response; **template data** is first-class; **translation** produces a **servlet**. A servlet **`println`s** the same markup as Java strings — easy to break, hard for a **page author** who is not a Java programmer. JSP **does not replace** servlets: it **is** a servlet after translation. What JSP is: [[What is Java Server Pages JSP]]. Explanation: [[How would you explain JavaServer Pages JSP]]. Servlet base: [[What is a servlet]]. Keep logic out of the page: [[Why should JSP scriptlets be avoided in modern applications]].
+> You need **JSP** when the response is **mostly template** (HTML/XML) with **holes for dynamic data**. Jakarta Pages **4.0**: **textual specification** of a response; **template data** is first-class; **translation** produces a **servlet**. A servlet **`println`s** the same markup as Java strings — easy to break, hard for a **page author** who is not a Java programmer. JSP **does not replace** servlets: it **is** a servlet after translation. What JSP is: [[What is Java Server Pages JSP]]. Servlet base: [[What is a servlet]]. Keep logic out of the page: [[Why should JSP scriptlets be avoided in modern applications]].
 
 ## What JSP buys you
 

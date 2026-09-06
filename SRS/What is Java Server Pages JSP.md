@@ -15,7 +15,7 @@ Jakarta Pages **4.0 §1.1**: the page defines a **JSP page implementation class*
 
 **Two phases.** **Translation** (once per page, any time from deploy to first request): validate syntax, produce the servlet class. **Request** (once per hit): instantiate/use that class like any servlet (`jspInit` / `_jspService` / `jspDestroy` align with servlet `init` / `service` / `destroy`). Translation can also be **ahead of time** so the first client is not paying compile cost.
 
-**Authoring pieces:** template data; standard **directives** and **actions**; **tag libraries**; **EL**; scripting (page authors are expected to **avoid** scriptlets). JSP inherits **web apps, `ServletContext`, sessions, request/response** from the servlet spec. A servlet can **forward/include** a JSP: [[How would you explain the servlet RequestDispatcher for forward and include]].
+**Authoring pieces:** template data; standard **directives** and **actions**; **tag libraries**; **EL**; scripting (page authors are expected to **avoid** scriptlets and **need not know Java**; **`scripting-invalid`** makes leftover `<%` a **translation error**). JSP inherits **web apps, `ServletContext`, sessions, request/response** from the servlet spec. A servlet can **forward/include** a JSP: [[How would you explain the servlet RequestDispatcher for forward and include]]. MVC hop: [[How does JSP servlet JSP interaction work]]. Page-author style: [[What are practical guidelines for working with JSP]].
 
 ```d2
 direction: down
@@ -51,7 +51,7 @@ impl -> req: "per request"
 > **Jasper** is **Tomcat’s** compiler. Any compliant **JSP container** may translate. Do not treat **`.ear`** as required: a JSP lives in a **web application** (often a **WAR**). **`javax.servlet.jsp`** is the pre-Jakarta package.
 
 > [!warning] First request can compile
-> If the container translates **on demand**, the **first hit** pays **translation + compile**. Precompile if that lag matters. A **`.jspf` segment** is not necessarily a legal top-level page. **`session="true"`** is the default on the generated servlet.
+> If the container translates **on demand**, the **first hit** pays **translation + compile**, and a bad page is **HTTP 500**, not a comment in the HTML. Precompile if that lag matters. A **`.jspf` segment** is not necessarily a legal top-level page. **`session="true"`** is the default on the generated servlet.
 
 > [!tip] Interview answer
 > JSP is a text document that mixes markup with JSP actions and EL. The container translates it into a servlet and then runs that class for each request. I use it as the view, not as a replacement for the servlet container, and I keep Java out of the page when I can.

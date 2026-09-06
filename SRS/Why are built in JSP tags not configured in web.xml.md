@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JSP #Java/Servlet #SRS
+#Java/JSP/Tags #Java/Servlet #SRS
 
 # Why are built in JSP tags not configured in web.xml?
 

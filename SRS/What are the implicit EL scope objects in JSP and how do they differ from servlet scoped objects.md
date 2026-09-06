@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JSP #Java/Servlet #SRS
+#Java/JSP/EL #Java/Servlet #SRS
 
 # What are the implicit EL scope objects in JSP and how do they differ from servlet scoped objects?
 

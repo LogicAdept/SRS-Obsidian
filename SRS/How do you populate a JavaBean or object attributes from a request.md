@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Servlet #Java/JSP #SRS
+#Java/Servlet #Java/JSP/Tags #SRS
 
 # How do you populate a JavaBean or object attributes from a request?
 
