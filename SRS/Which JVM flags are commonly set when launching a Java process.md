@@ -15,7 +15,7 @@ Standard options are guaranteed on every JVM implementation: class path, module 
 
 Boolean `-XX` switches use **`+` to enable** and **`-` to disable**. Sizes take `k`/`m`/`g`. `@argfile` expands a long command line before the VM parses it. `JDK_JAVA_OPTIONS` **prepends** more flags from the environment; it **must not** contain `-jar` or `-h` (the launcher aborts).
 
-Launch shapes: `java [options] MainClass`, `java [options] -jar app.jar` (the JAR’s `Main-Class`; **other class-path settings are ignored**), or `java [options] -m module[/main]`. Class path: [[How would you explain the Java classpath]].
+Launch shapes: `java [options] MainClass`, `java [options] -jar app.jar` (the JAR’s `Main-Class`; **other class-path settings are ignored**), or `java [options] -m module[/main]`. Class path: [[What is the Java classpath]].
 
 ## What production command lines actually pin
 
