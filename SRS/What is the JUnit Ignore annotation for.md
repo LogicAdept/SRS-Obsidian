@@ -15,7 +15,7 @@ priority: 0
 
 Jupiter’s analogue is `@Disabled` — same idea (class or method), **not inherited**. A disabled **method** skips `@BeforeEach` / `@AfterEach` for that method; the class may still be constructed and `@BeforeAll` / `@AfterAll` still run. A disabled **class** disables every test in it. The JUnit team wants a **reason** on `@Disabled` too.
 
-`@Ignore` on a Jupiter test is the **wrong type**; Vintage runs JUnit 4, Jupiter looks for `@Disabled`. See [[Which exist in JUnit4 or 5]] and [[How would you explain for what in JUnit used @Ignore or @Disabled]]. Fixtures: [[What fixture annotations exist in JUnit]].
+`@Ignore` on a Jupiter test is the **wrong type**; Vintage runs JUnit 4, Jupiter looks for `@Disabled`. The fixture annotation mapping and the test fixture concept: [[What fixture annotations exist in JUnit]].
 
 ```java
 @Ignore("flaky until #42")
