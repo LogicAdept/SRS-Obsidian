@@ -7,7 +7,7 @@ priority: 0
 # What is the difference between Thread.sleep and Thread.yield?
 
 > [!abstract] Short answer
-> **`Thread.sleep`** makes the **caller** **cease execution** for a duration (`TIMED_WAITING`; timer/scheduler precision). It **keeps every monitor**. Interrupt → **`InterruptedException`**, status **cleared**. **`Thread.yield`** is only a **hint** the scheduler **may ignore**; the thread stays **`RUNNABLE`**. Both are **`static`**. Timed pause: [[What does it mean to put a Java thread to sleep]]. Vs `wait`: [[How would you explain wait, sleep]]. Not cooperative: [[What is cooperative multitasking and which model does Java use]]. Interrupt: [[How would you explain InterruptedException in Java threads]].
+> **`Thread.sleep`** makes the **caller** **cease execution** for a duration (`TIMED_WAITING`; timer/scheduler precision). It **keeps every monitor**. Interrupt → **`InterruptedException`**, status **cleared**. **`Thread.yield`** is only a **hint** the scheduler **may ignore**; the thread stays **`RUNNABLE`**. Both are **`static`**. Timed pause: [[What does it mean to put a Java thread to sleep]]. Vs `wait`: [[What is the difference between wait and sleep]]. Not cooperative: [[What is cooperative multitasking and which model does Java use]]. Interrupt: [[How would you explain InterruptedException in Java threads]].
 
 ## Timed pause vs optional courtesy
 
