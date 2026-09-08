@@ -2,76 +2,67 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM/GarbageCollector #SRS #New
+#Java/JVM/GarbageCollector #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is garbage collector?
 
-**Для чего нужен сборщик мусора?**
+> [!abstract] Short answer
+> A **garbage collector** is the JVM's **automatic storage management**: per the JVM Specification (§2.5.3), "Heap storage for objects is reclaimed by an automatic storage management system (**known as a garbage collector**); objects are **never explicitly deallocated**." Its job is to find objects the program can no longer use and reclaim their memory. HotSpot detects garbage by **tracing**: an object is garbage when it "can no longer be reached from any reference of any other live object" (GC Tuning Guide) — reachability starts from live threads: "A reachable object is any object that can be accessed in any potential continuing computation from any live thread" (JLS §12.6.1). The classic alternative, **reference counting**, frees an object the moment its counter hits zero but cannot reclaim **cycles**. Mechanics of the tracing walk live in [[What structures does the garbage collector analyze to find garbage]]; the collector menu lives in [[Which garbage collectors in HotSpot]].
 
-Сборщик мусора (Garbage Collector) должен делать всего две вещи:
+## What the collector actually does
 
-+ Находить мусор - неиспользуемые объекты. (Объект считается неиспользуемым, если ни одна из сущностей в коде, выполняемом в данный момент, не содержит ссылок на него, либо цепочка ссылок, которая могла бы связать объект с некоторой сущностью приложения, обрывается);
-+ Освобождать память от мусора.
+The GC Tuning Guide opens with the purpose: "The purpose of a garbage collector is to **free the application developer from manual dynamic memory management**." It breaks the work into four operations: allocate from memory handed over by the OS, hand that memory to the application on request, determine which parts are still in use, and reclaim the unused parts for reuse. The Spec is deliberately non-committal about *how*: the JVM "assumes no particular type of automatic storage management system, and the storage management technique may be chosen according to the implementor's system requirements" (JVMS §2.5.3). That is why different HotSpot builds ship different collectors with the same language contract — and even the *existence* of a collector is an implementation choice, not a language mandate.
 
-Существует два подхода к обнаружению мусора:
+## Finding garbage: tracing vs counting
 
-+ _Reference counting_;
-+ _Tracing_
+Two families of approaches exist, and the difference is a favorite interview probe:
 
-__Reference counting__ (подсчёт ссылок). Суть этого подхода состоит в том, что каждый объект имеет счетчик. Счетчик хранит информацию о том, сколько ссылок указывает на объект. Когда ссылка уничтожается, счетчик уменьшается. Если значение счетчика равно нулю, - объект можно считать мусором. Главным минусом такого подхода является сложность обеспечения точности счетчика. Также при таком подходе сложно выявлять циклические зависимости (когда два объекта указывают друг на друга, но ни один живой объект на них не ссылается), что приводит к утечкам памяти.
+* **Reference counting** attaches a counter to every object, incremented on each new reference and decremented on each loss; zero means reclaimable. It reclaims eagerly and incrementally, but two failure modes are structural: the counters must be maintained **on every assignment** (constant overhead on the mutator), and objects that reference each other in a cycle never reach zero even when nothing outside points in — a guaranteed memory leak unless the collector adds cycle detection.
+* **Tracing** flips the question: instead of asking "who points at me?", it starts from the **roots** and marks everything reachable; whatever was not marked is garbage. Cycles of unreachable objects are reclaimed **for free**, because no root path reaches them. The cost is proportional to the number of **live** objects, which is why the young-generation design matters so much — see [[How does garbage collection work on the JVM]].
 
-Главная идея подхода __Tracing__ (трассировка) состоит в утверждении, что живыми могут считаться только те объекты, до которых мы можем добраться из корневых точек (_GC Root_) или других с живых объектов. Всё остальное - мусор.
+```java
+class Node {
+    Node next;
+    String label;
+    Node(String label) { this.label = label; }
+}
 
-Существует 4 типа корневых точки:
+class Demo {
+    public static void main(String[] args) {
+        Node a = new Node("a");
+        Node b = new Node("b");
+        a.next = b;
+        b.next = a;          // cycle: two objects referencing each other
 
-+ Локальные переменные и параметры методов;
-+ Потоки;
-+ Статические переменные;
-+ Ссылки из JNI.
+        a = null;
+        b = null;            // no live thread can reach them anymore
 
-Самое простое java приложение будет иметь корневые точки:
+        // Reference counting: counters are 1 and 1 -> never reclaimed.
+        // Tracing: no path from the roots -> the whole cycle is garbage.
+    }
+}
+```
 
-+ Локальные переменные внутри `main()` метода и параметры `main()` метода;
-+ Поток, который выполняет `main()`;
-+ Статические переменные класса, внутри которого находится `main()` метод.
+**Listing 1.** An unreachable cycle: the exact case that separates tracing collectors from naive reference counting.
 
-Таким образом, если мы представим все объекты и ссылки между ними как дерево, то нам нужно будет пройти с корневых узлов (точек) по всем рёбрам. При этом узлы, до которых мы сможем добраться - не мусор, все остальные - мусор. При таком подходе циклические зависимости легко выявляются. HotSpot VM использует именно такой подход.
+```d2
+direction: right
+roots: "GC roots\n(live threads, statics)" {style.fill: "#e3f2fd"}
+live: "reachable objects" {style.fill: "#e8f5e9"}
+garbage: "unreachable cycle\na <-> b" {style.fill: "#ffebee"}
+reclaim: "reclaimed" {style.fill: "#f0f0f0"}
+roots -> live: "trace"
+garbage -> reclaim: "no root path"
+```
 
----
-Для очистки памяти от мусора существуют два основных метода:
+**Fig. 1.** Tracing defines garbage negatively: everything without a root path is reclaimable, cycles included.
 
-+ _Copying collectors_
-+ _Mark-and-sweep_
+## What a collector does not promise
 
-При __copying collectors__ подходе память делится на две части «from-space» и «to-space», при этом сам принцип работы такой:
+Automatic memory management removes *deallocation* from the programmer's checklist, not *lifecycle design*. A long-lived static collection that quietly accumulates entries keeps them reachable — reachability, not intent, is what the collector obeys, which is why leak diagnosis starts from a heap dump. There is also no tie to *when* reclamation happens: the collector works "by its own discretion," and `System.gc()` only "suggests that the Java Virtual Machine expend effort toward recycling unused objects" (Javadoc). Resource cleanup therefore belongs to explicit constructs — try-with-resources, `close()` — not to the collector. How to investigate retention problems is in [[How do you diagnose memory pressure and OutOfMemoryError]].
 
-+ Объекты создаются в «from-space»;
-+ Когда «from-space» заполняется, приложение приостанавливается;
-+ Запускается сборщик мусора. Находятся живые объекты в «from-space» и копируются в «to-space»;
-+ Когда все объекты скопированы «from-space» полностью очищается;
-+ «to-space» и «from-space» меняются местами.
+> [!warning] "Reference counting" is not how HotSpot works
+> Answering "the JVM counts references and frees at zero" is a rejection-level mistake in interviews: it is falsified by the cycle case, which Java demonstrably handles — a cyclic structure left unreachable **is** reclaimed. Reference counting exists in the wild (CPython uses it plus a separate cycle detector), but HotSpot is a tracing collector from GC roots. The second trap is the mirror image: assuming a *tracing* collector cannot leak. It cannot leak by miscounting, but reachable-forever objects (statics, caches without eviction) are retained just the same.
 
-Главный плюс такого подхода в том, что объекты плотно забивают память. Минусы подхода:
-
-1. Приложение должно быть остановлено на время, необходимое для полного прохождения цикла сборки мусора;
-2. В худшем случае (когда все объекты живые) «form-space» и «to-space» будут обязаны быть одинакового размера.
-
-Алгоритм работы __mark-and-sweep__ можно описать так:
-
-+ Объекты создаются в памяти;
-+ В момент, когда нужно запустить сборщик мусора приложение приостанавливается;
-+ Сборщик проходится по дереву объектов, помечая живые объекты;
-+ Сборщик проходится по всей памяти, находя все не отмеченные куски памяти и сохраняя их в «free list»;
-+ Когда новые объекты начинают создаваться они создаются в памяти доступной во «free list».
-
-Минусы этого способа:
-
-1. Приложение не работает, пока происходит сборка мусора;
-2. Время остановки напрямую зависит от размеров памяти и количества объектов;
-3. Если не использовать «compacting», то память будет использоваться не эффективно.
-
-Сборщики мусора HotSpot VM используют комбинированный подход __Generational Garbage Collection__, который позволяет использовать разные алгоритмы для разных этапов сборки мусора. Этот подход опирается на том, что:
-
-+ большинство создаваемых объектов быстро становятся мусором;
-+ существует мало связей между объектами, которые были созданы в прошлом и только что созданными объектами.
+> [!tip] Interview answer
+> **A garbage collector is the JVM's automatic memory manager: the JVM Spec says heap storage is reclaimed by an automatic storage management system known as a garbage collector, and objects are never explicitly deallocated. Garbage is defined by reachability — anything a live thread can still access stays; HotSpot finds it by tracing from GC roots, so unreachable cycles are reclaimed too, unlike naive reference counting which leaks cycles. The collector decides when to run; it's not a resource-cleanup mechanism — that's what try-with-resources is for.**

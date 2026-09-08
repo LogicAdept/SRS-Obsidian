@@ -7,7 +7,7 @@ priority: 0
 # What is the Large Object Heap?
 
 > [!abstract] Short answer
-> The **large object heap (LOH)** is a **.NET** GC region for objects whose size is **≥ 85,000 bytes**. They skip generation 0/1, live on **LOH segments** (sometimes nicknamed “generation 3”), and are collected only with a **generation 2** (full) GC. The JVM has **no LOH**. Under G1 the analog is a **humongous object**: size **≥ half a heap region**, allocated as contiguous **old-generation** regions — [[How would you explain Young Old generation]], [[What JVM runtime memory regions exist]].
+> The **large object heap (LOH)** is a **.NET** GC region for objects whose size is **≥ 85,000 bytes**. They skip generation 0/1, live on **LOH segments** (sometimes nicknamed “generation 3”), and are collected only with a **generation 2** (full) GC. The JVM has **no LOH**. Under G1 the analog is a **humongous object**: size **≥ half a heap region**, allocated as contiguous **old-generation** regions — [[What are garbage collector generations]], [[What JVM runtime memory regions exist]].
 
 ## .NET: a separate heap because moving large objects is expensive
 

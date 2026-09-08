@@ -7,7 +7,7 @@ priority: 0
 # What structures does the garbage collector analyze to find garbage?
 
 > [!abstract] Short answer
-> HotSpot collectors are **tracing**: they do not hunt “unused” objects. They walk **paths from GC roots** and treat anything **without** such a path as unreachable, hence eligible to collect. Roots include **live-thread** state (stacks and registers) and **internal JVM** references (for example statics). A **young / incremental** pause also treats **remembered-set** locations and **compiled-code** oops as roots **into the collection set** — [[How would you explain the JVM stack and stack frames]], [[How would you explain Young Old generation]].
+> HotSpot collectors are **tracing**: they do not hunt “unused” objects. They walk **paths from GC roots** and treat anything **without** such a path as unreachable, hence eligible to collect. Roots include **live-thread** state (stacks and registers) and **internal JVM** references (for example statics). A **young / incremental** pause also treats **remembered-set** locations and **compiled-code** oops as roots **into the collection set** — [[How would you explain the JVM stack and stack frames]], [[What are garbage collector generations]].
 
 ## Trace live objects; the rest is garbage
 
