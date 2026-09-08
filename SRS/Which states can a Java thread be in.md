@@ -7,7 +7,7 @@ priority: 0
 # Which states can a Java thread be in?
 
 > [!abstract] Short answer
-> Exactly **six** `Thread.State` values, and **only one at a time**: **`NEW`**, **`RUNNABLE`**, **`BLOCKED`**, **`WAITING`**, **`TIMED_WAITING`**, **`TERMINATED`**. These are **virtual-machine** states, **not** OS run/wait bits. **`RUNNABLE` already includes both “on a CPU” and “waiting for the OS to give a CPU.”** There is **no** `Running` constant. **`getState()`** is for **monitoring**, not for locking. What is a thread: [[What is thread]]. `start` vs `run`: [[What is the difference between Thread start and run]]. Monitor (`BLOCKED`): [[What is monitor in Java]]. `wait` vs `sleep`: [[How would you explain wait, sleep]].
+> Exactly **six** `Thread.State` values, and **only one at a time**: **`NEW`**, **`RUNNABLE`**, **`BLOCKED`**, **`WAITING`**, **`TIMED_WAITING`**, **`TERMINATED`**. These are **virtual-machine** states, **not** OS run/wait bits. **`RUNNABLE` already includes both “on a CPU” and “waiting for the OS to give a CPU.”** There is **no** `Running` constant. **`getState()`** is for **monitoring**, not for locking. What is a thread: [[What is thread]]. `start` vs `run`: [[What is the difference between Thread start and run]]. Monitor (`BLOCKED`): [[What is monitor in Java]]. `wait` vs `sleep`: [[What is the difference between wait and sleep]].
 
 ## Six VM states
 
