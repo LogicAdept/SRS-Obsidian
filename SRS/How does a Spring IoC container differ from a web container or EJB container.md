@@ -11,7 +11,7 @@ priority: 0
 
 ## Three runtimes, often in one JVM
 
-**IoC** is inversion of control for **your objects**. DI is the usual form: the container injects constructor/factory/property dependencies instead of the bean calling `new` or a service locator. `ApplicationContext` **is** that container (a `BeanFactory` plus events, i18n, AOP integration, and web-specific types such as `WebApplicationContext`). Stand-alone: `AnnotationConfigApplicationContext`. Boot **always** bootstraps one; the type depends on web vs not ([[What ApplicationContext type does Spring Boot create for a web app]], [[How would you explain IoC DI]]).
+**IoC** is inversion of control for **your objects**. DI is the usual form: the container injects constructor/factory/property dependencies instead of the bean calling `new` or a service locator. `ApplicationContext` **is** that container (a `BeanFactory` plus events, i18n, AOP integration, and web-specific types such as `WebApplicationContext`). Stand-alone: `AnnotationConfigApplicationContext`. Boot **always** bootstraps one; the type depends on web vs not ([[What ApplicationContext type does Spring Boot create for a web app]], [[What is the difference between dependency injection and inversion of control]]).
 
 A **servlet container** (Tomcat, Jetty, …) is specified by **Jakarta Servlet**: part of a web/application server that speaks HTTP, decodes requests, and **manages servlets through their lifecycle**. It does **not** assemble your service layer. Spring’s web integration **starts an `ApplicationContext` inside** that container (`ContextLoaderListener` / Boot’s embedded server).
 

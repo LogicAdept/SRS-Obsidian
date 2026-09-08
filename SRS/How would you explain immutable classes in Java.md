@@ -7,7 +7,7 @@ priority: 0
 # How would you explain immutable classes in Java?
 
 > [!abstract] Short answer
-> An **immutable class** is one whose instances, once constructed, never change **observable state**. Typical recipe: **`final` class** (no subclass adding setters), **`private final` fields** assigned in the constructor, **no mutators**, **defensive copies** of any mutable parts, and **do not publish `this`** before the constructor finishes. `final` fields **freeze** when the constructor exits, so other threads that only see the object afterward see those fields correctly **without locking**. Platform examples: `String`, wrappers, `java.time`. Why it matters: [[Why is immutability valuable in Java programs]]. `String`: [[Why is java.lang.String immutable and final]]. APIs: [[How are immutable objects used in Java APIs]].
+> An **immutable class** is one whose instances, once constructed, never change **observable state**. Typical recipe: **`final` class** (no subclass adding setters), **`private final` fields** assigned in the constructor, **no mutators**, **defensive copies** of any mutable parts, and **do not publish `this`** before the constructor finishes. `final` fields **freeze** when the constructor exits, so other threads that only see the object afterward see those fields correctly **without locking**. Platform examples: `String`, wrappers, `java.time`. Why it matters: [[How would you explain immutability and its benefits in Java]]. `String`: [[Why is java.lang.String immutable and final]]. APIs: [[How are immutable objects used in Java APIs]].
 
 ## State frozen at the end of `new`
 
