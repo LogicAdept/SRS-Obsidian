@@ -2,224 +2,97 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Batch #SRS #New
+#Java/Spring/Batch #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What is Spring Batch?
 
-Spring Batch is a lightweight, comprehensive batch framework that is designed for use in developing robust batch applications. 
-**Why Is Spring Batch Useful** 
-* Restartability
-* Different readers and writers
-* Chunk Processing
-* Ease Of Transaction Management
-* Ease of parallel processing
+> [!abstract] Short answer
+> **Spring Batch** is a framework for **offline bulk jobs**: read a large set of records, apply rules, write results, with **transactions, restart, skip, and statistics**. A **`Job`** is an ordered **`Step`** graph. The usual step is **chunk-oriented**: `ItemReader` → optional `ItemProcessor` → `ItemWriter` inside a transaction every **commit interval**. A **`Tasklet`** step is one `execute` call instead of a chunk loop. It is **not a scheduler** (use Quartz, Control-M, cron, Kubernetes CronJob) and **not** Spring Cloud Stream.
 
-**Project Structure** 
-In this project, we will create a simple job with 2 step tasks and execute the job to observe the logs. Job execution flow will be –
+## Job, step, chunk
 
-1. Start job
-1. Execute task one
-1. Execute task two
-1. Finish job
+Enterprise batch: month-end files, benefit runs, load-and-validate into a system of record — **no user in the loop**. Spring Batch supplies logging, **job repository** metadata, **restart** from the last execution context, **skip**, and **partitioning** for volume. `JobRepository` is required by `Job`/`Step`; `@EnableBatchProcessing` (or `DefaultBatchConfiguration`) exposes `jobRepository` and related infrastructure ([[How do you handle security for a Spring Batch application]], [[What is Spring Cloud]]).
 
-* **Maven Dependencies**
+Chunk loop (simplified): read until the commit interval, optionally process, **write the list**, **commit**. `read()` returning **`null`** ends the step. Readers exist for files, XML, SQL, and others; you can implement `ItemReader` / `ItemWriter` (add `ItemStream` if restart must restore position).
 
-**pom.xml** 
-```xml
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd;">
-    <modelVersion>4.0.0</modelVersion>
- 
-    <groupId>com.springbatchexample</groupId>
-    <artifactId>App</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
- 
-    <name>App</name>
-    <url>http://maven.apache.org</url>
- 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.3.RELEASE</version>
-    </parent>
- 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
- 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-batch</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-    </dependencies>
- 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
- 
-    <repositories>
-        <repository>
-            <id>repository.spring.release</id>
-            <name>Spring GA Repository</name>
-            <url>http://repo.spring.io/release</url>
-        </repository>
-    </repositories>
-</project>
-```
-
-* **Add Tasklets**
-
-**TaskOne.java**
 ```java
-import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.repeat.RepeatStatus;
- 
-public class TaskOne implements Tasklet {
- 
-    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception
-    {
-        System.out.println("TaskOne start..");
-        // ... some code
-        System.out.println("TaskOne done..");
-        return RepeatStatus.FINISHED;
-    }   
+@Bean
+public Step loadStep(JobRepository jobRepository, PlatformTransactionManager tx) {
+	return new StepBuilder("loadStep", jobRepository)
+			.<Order, Order>chunk(100, tx)
+			.reader(orderReader())
+			.processor(orderProcessor())
+			.writer(orderWriter())
+			.build();
+}
+
+@Bean
+public Job loadJob(JobRepository jobRepository, Step loadStep) {
+	return new JobBuilder("loadJob", jobRepository)
+			.start(loadStep)
+			.build();
 }
 ```
 
-**TaskTwo.java**
-```java
-import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.repeat.RepeatStatus;
- 
-public class TaskTwo implements Tasklet {
- 
-    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception 
-    {
-        System.out.println("TaskTwo start..");
-        // ... some code
-        System.out.println("TaskTwo done..");
-        return RepeatStatus.FINISHED;
-    }   
-}
-```
-* **Spring Batch Configuration** 
-This is major step where you define all the job related configurations and it’s execution logic. 
+**Listing 1.** Conceptual. Batch **5** builders take `JobRepository`; this is not `JobBuilderFactory` from Batch 4.
 
-**BatchConfig.java** 
 ```java
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
- 
-import com.springbatchexample.demo.tasks.TaskOne;
-import com.springbatchexample.demo.tasks.TaskTwo;
- 
-@Configuration
-@EnableBatchProcessing
-public class BatchConfig {
-     
-    @Autowired
-    private JobBuilderFactory jobs;
- 
-    @Autowired
-    private StepBuilderFactory steps;
-     
-    @Bean
-    public Step stepOne(){
-        return steps.get("stepOne")
-                .tasklet(new TaskOne())
-                .build();
-    }
-     
-    @Bean
-    public Step stepTwo() {
-        return steps.get("stepTwo")
-                .tasklet(new TaskTwo())
-                .build();
-    }  
-     
-    @Bean
-    public Job demoJob() {
-        return jobs.get("demoJob")
-                .incrementer(new RunIdIncrementer())
-                .start(stepOne())
-                .next(stepTwo())
-                .build();
-    }
+public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
+	// one-shot work
+	return RepeatStatus.FINISHED;
 }
 ```
-* **Demo** 
-Now our simple job 'demoJob' is configured and ready to be executed. I am using CommandLineRunner interface to execute the job automatically, with JobLauncher, when the application is fully started.
 
-**App.java**
-```java
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
- 
-@SpringBootApplication
-public class App implements CommandLineRunner {
-    @Autowired
-    JobLauncher jobLauncher;
-     
-    @Autowired
-    Job job;
-     
-    public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
-    }
- 
-    @Override
-    public void run(String... args) throws Exception {
-        JobParameters params = new JobParametersBuilder()
-                    .addString("JobID", String.valueOf(System.currentTimeMillis()))
-                    .toJobParameters();
-        jobLauncher.run(job, params);
-    }
+**Listing 2.** Conceptual. `Tasklet` step — dumps that only show two `System.out` tasklets omit the **chunk** model interviews expect.
+
+```d2
+direction: down
+job: "Job" {
+  width: 120
+  height: 40
+  style.fill: "#e3f2fd"
 }
+s1: "Step (chunk)" {
+  width: 160
+  height: 40
+  style.fill: "#fff3e0"
+}
+read: "ItemReader" {
+  width: 140
+  height: 40
+  style.fill: "#e8f5e9"
+}
+proc: "ItemProcessor?" {
+  width: 140
+  height: 40
+  style.fill: "#e8f5e9"
+}
+write: "ItemWriter\ncommit interval" {
+  width: 180
+  height: 45
+  style.fill: "#fce4ec"
+}
+repo: "JobRepository\nrestart metadata" {
+  width: 200
+  height: 45
+  style.fill: "#fce4ec"
+}
+job -> s1
+s1 -> read
+read -> proc
+proc -> write
+s1 -> repo
 ```
-Console Logs
-```
-o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=demoJob]] launched with
-the following parameters: [{JobID=1530697766768}]
- 
-o.s.batch.core.job.SimpleStepHandler     : Executing step: [stepOne]
-TaskOne start..
-TaskOne done..
- 
-o.s.batch.core.job.SimpleStepHandler     : Executing step: [stepTwo]
-TaskTwo start..
-TaskTwo done..
- 
-o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=demoJob]] completed with
-the following parameters: [{JobID=1530697766768}] and the following status: [COMPLETED]
-```
+
+**Fig. 1.** Job sequences steps; a chunk step commits every N items and can restart from the repository.
+
+Launch with `JobOperator` / `JobLauncher` and `JobParameters` (a new identity for a restartable job, or an incrementer). Parallelism is **split/partition** of a step, not “the listener concurrency knob”.
+
+> [!warning] Batch 4 factories are gone
+> `JobBuilderFactory` / `StepBuilderFactory` plus a dump `pom` on Boot **2.0.3** are **not** current. Use `new JobBuilder(name, jobRepository)` / `new StepBuilder(name, jobRepository)`. `@EnableBatchProcessing` still means “give me infrastructure,” not “this XML from 2018”.
+
+> [!warning] Not a scheduler and not a web API
+> Cron/Quartz **starts** the JVM or calls `JobOperator`. Batch does **not** replace them. A `Job` bean is not an HTTP resource ([[How do you handle security for a Spring Batch application]]).
+
+> [!tip] Interview answer
+> Spring Batch runs finite, restartable bulk work: Job of Steps, usually chunk read/process/write with a commit interval and a JobRepository. Tasklets are the simple one-shot step. Pair it with an external scheduler. It is not Cloud Stream and not a replacement for Kafka listeners.
