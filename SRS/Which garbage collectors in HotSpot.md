@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM/GarbageCollector #SRS
+#Java/JVM/GarbageCollector #Java/Legacy #SRS
 
 # Which garbage collectors in HotSpot?
 
