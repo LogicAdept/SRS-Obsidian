@@ -7,7 +7,7 @@ priority: 0
 # What does it mean to put a Java thread to sleep?
 
 > [!abstract] Short answer
-> **`Thread.sleep`** makes the **currently executing** thread **cease execution** for a duration, subject to **timer and scheduler** precision. It is **`static`**: it always sleeps **the caller**, not some other `Thread` reference. The sleeper **does not lose any monitors**. Interrupt during sleep: **clears** the interrupt status and throws **`InterruptedException`**. State is **`TIMED_WAITING`**. Vs `yield`: [[What is the difference between Thread.sleep and Thread.yield]]. Vs `wait`: [[How would you explain wait, sleep]]. Interrupt: [[How would you explain InterruptedException in Java threads]]. States: [[Which states can a Java thread be in]]. Monitor `wait`: [[How would you explain the Object wait method and waiting on monitors]].
+> **`Thread.sleep`** makes the **currently executing** thread **cease execution** for a duration, subject to **timer and scheduler** precision. It is **`static`**: it always sleeps **the caller**, not some other `Thread` reference. The sleeper **does not lose any monitors**. Interrupt during sleep: **clears** the interrupt status and throws **`InterruptedException`**. State is **`TIMED_WAITING`**. Vs `yield`: [[What is the difference between Thread.sleep and Thread.yield]]. Vs `wait`: [[What is the difference between wait and sleep]]. Interrupt: [[How would you explain InterruptedException in Java threads]]. States: [[Which states can a Java thread be in]]. Monitor `wait`: [[How would you explain the Object wait method and waiting on monitors]].
 
 ## Pause this thread, keep the locks
 
