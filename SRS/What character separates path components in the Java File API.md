@@ -52,7 +52,7 @@ list: "path list\nbin + pathSeparator + lib" {
 one -> list: "different characters"
 ```
 
-**Fig. 1.** Name-separator vs path-separator. Interviews fail people who quote `:` or `;` for folders inside one path ([[How would you explain the Java classpath]], [[How do you list directory entries that match a criterion in Java]]).
+**Fig. 1.** Name-separator vs path-separator. Interviews fail people who quote `:` or `;` for folders inside one path ([[What is the Java classpath]], [[How do you list directory entries that match a criterion in Java]]).
 
 Hard-coding `/` in portable library code is the usual bug: it works on UNIX and often on Windows **input**, then `getPath()` still prints `\`. Prefer `File.separator` or `new File(parent, child)` so the platform fills the separator.
 
