@@ -7,7 +7,7 @@ priority: 0
 # How are immutable objects used in Java APIs?
 
 > [!abstract] Short answer
-> Core APIs treat **values that must be shared** as immutable (or unmodifiable) objects: `String`, wrapper types, `java.time`, and factory-made lists/sets/maps. Callers **share** them as keys, messages, and return values without copying. Mutating operations **return a new instance** (`plus`, `with`, `concat`) instead of setters. **Unmodifiable** is not always **immutable**: `Collections.unmodifiableList` is a **view** of a live list; `List.of` forbids structural change but still reflects mutable **elements**. Why String: [[Why is java.lang.String immutable and final]]. Why immutability: [[Why is immutability valuable in Java programs]].
+> Core APIs treat **values that must be shared** as immutable (or unmodifiable) objects: `String`, wrapper types, `java.time`, and factory-made lists/sets/maps. Callers **share** them as keys, messages, and return values without copying. Mutating operations **return a new instance** (`plus`, `with`, `concat`) instead of setters. **Unmodifiable** is not always **immutable**: `Collections.unmodifiableList` is a **view** of a live list; `List.of` forbids structural change but still reflects mutable **elements**. Why String: [[Why is java.lang.String immutable and final]]. Why immutability: [[How would you explain immutability and its benefits in Java]].
 
 ## Share values; copy on “change”
 
