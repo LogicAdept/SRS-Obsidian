@@ -60,7 +60,7 @@ shared -> hs: "not JVMS 2.5 names"
 ## HotSpot pieces interviewers add
 
 - **Metaspace** — native memory for class metadata (the method area after Java 8; PermGen is gone). `-XX:MaxMetaspaceSize` / `-XX:MetaspaceSize`, not `-Xmx`.
-- **Java heap layout** — Eden / survivor / old (G1: regions; humongous objects skip Eden) — [[How would you explain Young Old generation]].
+- **Java heap layout** — Eden / survivor / old (G1: regions; humongous objects skip Eden) — [[What are garbage collector generations]].
 - **Code cache** — JIT-compiled code; capped by `-XX:ReservedCodeCacheSize` (default 240 MB with tiered compilation).
 - **Direct / off-heap** — `ByteBuffer.allocateDirect` and similar native allocations; `-XX:MaxDirectMemorySize`. The `ByteBuffer` **object** is still on the Java heap — [[What is off-heap memory in the JVM]].
 

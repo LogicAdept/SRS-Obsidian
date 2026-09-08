@@ -4,71 +4,54 @@ priority: 0
 -->
 #Java/String #Java/JVM/Memory/Heap #SRS
 
-# How long do strings live in the Java string pool
+# How long do strings live in the Java string pool?
 
 > [!abstract] Short answer
-> **As long as the interned `String` object is reachable — not “until the JVM exits.”** `String.intern`’s pool does not keep a strong pin on the instance. HotSpot’s string table stores a **weak handle**; when nothing else refers to that `String`, GC can clear it and a later `intern` of the same characters may allocate a **new** interned object. Literals stay reachable through the class’s run-time constant pool while the class is loaded (bootstrap classes never unload).
+> Pooled strings are **ordinary, GC-managed heap objects** — "forever" is a myth. A **literal** lives as long as its declaring **class** stays loaded: the resolved constant-pool entry holds the reference, and when the class becomes unreachable its literals are collectable with it. A **runtime** `intern()`ed string lives as long as it is reachable from code; HotSpot cleans table entries whose strings become garbage. Inspect with `jcmd <pid> VM.stringtable` or `-XX:+PrintStringTableStatistics` — [[What is the Java string pool]], [[How does Java represent data in memory]].
 
-## Reachability, not a permanent generation forever
+## Who holds the reference decides the lifetime
 
-The intern pool is a private table of canonical `String`s (`equals` match → same instance). That is an identity cache, not a second immortal heap. The interned object is an ordinary heap `String` ([[Which memory region holds the string pool in Java]]).
+- **Literals** — after resolution, the class's run-time constant pool keeps a reference to the shared instance ([[How do string literals enter the Java string pool]]). Class reachable → literal reachable. In an app server, classes are tied to their **classloader**: as long as the loader is pinned, every literal of every class it loaded stays alive — one reason classloader leaks hurt so much ([[What is Metaspace and how does it differ from PermGen]]).
+- **Runtime `intern()`** — the string is a normal object; nothing resurrects it once your code drops it. The table's references are maintained by the JVM so that unreachable strings do not accumulate; exact cleaning behavior is an implementation detail, which is why the table statistics, not folklore, are the debugging tool.
+- **G1 string deduplication is a different mechanism** — `-XX:+UseStringDeduplication` (G1) merges the backing `byte[]` of *duplicate* `String` objects; it does not touch pool identity and does not need `intern()`.
 
-HotSpot (`StringTable`) inserts a `WeakHandle`. Table lookup treats `peek() == null` as a **dead** entry and cleans those after GC. A concurrent intern can fail to see a just-collected entry and retry. So interned strings **are** garbage-collected; the table is not a GC root that keeps them alive.
+```bash
+jcmd <pid> VM.stringtable -all                 # verbose table dump
+jcmd <pid> VM.stringtable                      # statistics: buckets, entries
+java -XX:+PrintStringTableStatistics -jar app.jar   # stats at JVM exit
+```
 
-What **does** keep them alive:
-
-- A live local, field, or collection holding the interned reference.
-- A loaded class’s run-time constant pool, which points at the interned instance for each `CONSTANT_String` ([[How do string literals enter the Java string pool]]). That lasts until the class can be unloaded — only if its defining loader can be reclaimed. Bootstrap-loaded classes **cannot** be unloaded, so JDK and application literals from those classes live for the VM lifetime.
-- Your own `intern()` result, until you drop it.
-
-A unique `intern()` of data you then forget (log lines, tokens, XML) can be collected. Filling the table with distinct interned strings still competes for **heap** (`-Xmx`); it is not a separate PermGen leak on modern HotSpot.
-
-Java 7 moved interned strings **out of PermGen onto the Java heap**. Java 8 removed PermGen (class metadata → Metaspace). The old interview line “interned strings live in PermGen until the JVM dies” describes neither current layout nor even old GC: interned strings were collected when PermGen was collected. G1 **string deduplication** is a different table; HotSpot will not deduplicate a string **after** it has been interned.
+**Listing 1.** The supported views of the string table: entry counts, bucket load, and per-literal sizes. Growth between two reads points at code that interns heavily; a flat table under load is healthy.
 
 ```d2
-direction: down
-obj: "Interned String\n(Java heap object)" {
+direction: right
+cls: "Class, reachable\nvia its classloader" {
   width: 260
-  height: 50
+  height: 60
+  style.fill: "#e8f5e9"
+  cp: "constant pool\n(resolved entry)" {
+    width: 200
+    height: 40
+  }
 }
-strong: "Strong refs\nCP of loaded class · fields · stacks" {
-  width: 320
-  height: 50
+str: "pooled String instance" {
+  width: 260
+  height: 48
+  style.fill: "#e3f2fd"
 }
-table: "StringTable WeakHandle\npeek() null → dead entry" {
-  width: 300
-  height: 50
+code: "your code's locals / fields" {
+  width: 270
+  height: 48
+  style.fill: "#fff8e1"
 }
-gc: "Unreachable?\nGC may collect; intern may recreate" {
-  width: 300
-  height: 50
-}
-
-strong -> obj: "keeps alive"
-table -> obj: "does not pin"
-obj -> gc: "no strong refs"
+cls.cp -> str: "holds while class is loaded"
+code -> str: "runtime intern: caller holds"
 ```
 
-**Fig. 1.** The intern table tracks interned instances weakly. Lifetime follows ordinary reachability, plus class-constant-pool refs for literals.
+**Fig. 1.** Two references keep a pooled string alive: the declaring class's constant pool (literals) and ordinary reachability from code (runtime `intern()`).
 
-```java
-public class InternLifetimeDemo {
-    static final String LITERAL = "lives with this class";
-
-    static String internAndKeep(String built) {
-        return built.intern(); // lives as long as the returned ref (and equals-matches)
-    }
-
-    static void internAndDrop(String built) {
-        built.intern(); // if built is unique and dropped, HotSpot may collect it
-    }
-}
-```
-
-**Listing 1.** Literals are rooted by the class. An `intern()` you discard is not promised to stay in the pool. Do not write tests that assume a given GC cycle.
-
-> [!warning] Intern is not immortality
-> `s.intern() == t.intern()` holds for two live interned strings with equal content. It does **not** mean a pooled object survives after you drop every strong reference. Do not intern unbounded unique text to “save memory.” Do not mix this up with G1 string deduplication. Bootstrap literals are long-lived because **those classes** never unload, not because the pool is eternal.
+> [!warning] Both absolutes are wrong
+> "Interned strings live for the JVM's lifetime" — true only for literals of classes that are never unloaded; a runtime-`intern()`ed string dies with its last reference. "The pool leaks memory" — HotSpot's table entries for dead strings are reclaimed, so churn is cost, not a leak. The genuinely unbounded case is *your code* holding interned values in a growing collection — [[How do you find the cause of a memory leak in Java]].
 
 > [!tip] Interview answer
-> **Interned strings live while they are reachable.** HotSpot’s intern table holds only a weak handle, so unused interned objects can be collected from the heap. Literals stay alive with their loaded class; bootstrap classes never unload. They are not immortal PermGen entries on Java 7+.
+> The pool stores references to normal heap objects, so lifetime follows reachability. A literal is held by its class's constant pool, so it lives exactly as long as that class does — which is why classloader leaks pin strings too. A runtime `intern()`ed string is just a referenced object; HotSpot reclaims dead entries. I watch it with `jcmd VM.stringtable` or `PrintStringTableStatistics`, and I don't confuse G1's string deduplication, which merges backing arrays, with the pool.

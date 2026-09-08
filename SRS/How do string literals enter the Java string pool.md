@@ -2,97 +2,72 @@
 reps: 0
 priority: 0
 -->
-#Java/String #Java/JVM/Memory #SRS
+#Java/String #Java/JVM/Memory/Heap #SRS
 
-# How do string literals enter the Java string pool
+# How do string literals enter the Java string pool?
 
 > [!abstract] Short answer
-> **They are interned when their class is created, not when `javac` finishes and not when the line of code runs.** The compiler writes a `CONSTANT_String` (Utf8 payload) into the class file. Loading that class builds the run-time constant pool: if `String.intern` has already seen that Unicode sequence, the constant is a reference to the existing interned instance; otherwise the VM allocates a `String` and intern()s it into `String`’s private pool. Compile-time constant concatenations are treated as literals. Run-time `+` and `new String(...)` do not enter the pool unless you intern them.
+> Through **class file constant-pool entries and resolution**. The compiler writes each literal as a `CONSTANT_String_info` entry in the class's constant pool ([[What is the JVM class constant pool]]). When the code first uses it (`ldc`), the JVM **resolves** the symbolic reference: it looks for an equal string in the string table and reuses it, or interns a new one — JLS 3.10.5 says every literal "always refers to the same instance of class String", interned "as if by `String.intern`". The same literal in two different classes therefore resolves to **one** instance — [[What is the Java string pool]], [[What does the String intern method do in Java]].
 
-## Class file first, intern pool at class creation
+## Compile time, then lazily at first use
 
-A string literal (and a text block) is a reference to a `String` that **always denotes the same instance**. Sharing is intern: unique instance per distinct sequence of code points, as if `String.intern` ran. The same rule covers **string-valued constant expressions** — `"Hel"+"lo"`, `"The integer " + Long.MAX_VALUE`, a concatenation that uses only literals, text blocks, and `static final` constant variables.
-
-That is not a compile-time heap. `javac` records the characters as a **`CONSTANT_String_info`** in the class-file `constant_pool`. That table is **not** the intern pool ([[What is the JVM class constant pool]]).
-
-When the VM **creates** the class, it constructs the **run-time** constant pool from that table. A `CONSTANT_String` is a **static** constant (no later resolution step):
-
-1. Look at the code points in the Utf8 payload.
-2. If `intern` has already been invoked on a `String` with that sequence, the constant is a reference to **that** instance.
-3. Otherwise create a new `String` with those code points, then invoke `intern` on it.
-
-`ldc` / `ldc_w` then push that interned reference. Literals in the same class, other classes, or other packages all land in **one** intern pool, so `"Hello" == Other.hello` is true when both are literals. Bootstrap and JDK classes fill the pool the same way as they are created; the pool is specified as **initially empty**, then grows as classes appear — not as a scan of every string in a JAR at JVM start ([[What is the Java string pool]]).
-
-`String.intern` is the same table for hand-built strings: if the pool already has an `equals` match, return that instance; else add **this** object and return it ([[What does the String intern method do in Java]]).
-
-```d2
-direction: down
-src: "Source\n\"Hello\" or \"Hel\"+\"lo\"" {
-  width: 280
-  height: 50
-}
-cf: "Class file constant_pool\nCONSTANT_String → Utf8" {
-  width: 300
-  height: 50
-}
-create: "Class creation\nderive string constant" {
-  width: 280
-  height: 50
-}
-hit: "intern already saw\nthis code-point sequence?" {
-  width: 280
-  height: 55
-}
-reuse: "Reuse interned String" {
-  width: 240
-  height: 45
-}
-alloc: "new String, then intern()" {
-  width: 240
-  height: 45
-}
-pool: "String intern pool\n(private to String)" {
-  width: 280
-  height: 50
-}
-ldc: "ldc / ldc_w\npush interned reference" {
-  width: 280
-  height: 50
-}
-
-src -> cf: "compile"
-cf -> create: "load / create class"
-create -> hit
-hit -> reuse: "yes"
-hit -> alloc: "no"
-reuse -> pool
-alloc -> pool
-pool -> ldc
-```
-
-**Fig. 1.** Compile time only stores characters. Intern happens while the run-time constant pool is built. `ldc` does not intern a second time.
+1. **Compile time** — `javac` stores `"srs"` in the class's constant pool. **Constant expressions** (`"sr" + "s"`, `final String F = "s" + "r"`) are **folded by the compiler** into a single literal — no runtime concatenation happens.
+2. **Resolution (lazy)** — the entry is a *symbolic* reference until the instruction that uses it executes; only then does the JVM canonicalize the string into the table. Unloaded or unused literals cost nothing at runtime.
+3. **Runtime concatenation is different** — `prefix + "s"` with a non-constant `prefix` runs `StringConcatFactory`-based code and yields a **fresh** object; only an explicit `intern()` puts it in the pool.
 
 ```java
-public class LiteralPoolDemo {
-    static final String LO = "lo"; // constant variable
+public class Entry {
+    static final String F = "sr" + "s";   // folded at compile time
 
     public static void main(String[] args) {
-        String hello = "Hello";
-        String lo = "lo";
-        System.out.println(hello == "Hello");             // true — same interned instance
-        System.out.println(hello == ("Hel" + "lo"));      // true — compile-time constant
-        System.out.println(hello == ("Hel" + LO));        // true — constant variable
-        System.out.println(hello == ("Hel" + lo));        // false — run-time concatenation
-        System.out.println(hello == ("Hel" + lo).intern()); // true
-        System.out.println(hello == new String("Hello")); // false — extra copy
+        String a = "srs";                 // CONSTANT_String_info
+        String b = F;                     // same folded literal
+        String c = "s".repeat(3);         // runtime-built, NOT pooled
+        System.out.println(a == b);       // true  — one constant
+        System.out.println(a == c);       // false — fresh instance
+        System.out.println(a == c.intern()); // true — canonicalized
     }
 }
 ```
 
-**Listing 1.** Literals and constant concatenations share identity. A run-time `+` and `new String("Hello")` allocate distinct objects; `intern()` joins the pool. The `"Hello"` argument of `new String` was interned when this class was created.
+**Listing 1.** `a` and `b` reference the identical pooled instance because the compiler folded `F`; `repeat(3)` builds a runtime string that needs `intern()` to join the pool. Verified on JDK 21.
 
-> [!warning] Intern is not “any String with those characters”
-> `"Hel" + lo` is **always a new** `String` when `lo` is not a constant. `new String("Hello")` is another object even though the literal `"Hello"` is already interned. `==` is identity, not `equals`. Loading a class interns its literals even if you never run the method that mentions them. Do not confuse the per-class `constant_pool` (Utf8 bytes on disk / metadata) with `String`’s intern pool (canonical `String` instances).
+```d2
+direction: down
+src: "javac: literal →\nCONSTANT_String_info in class file" {
+  width: 320
+  height: 66
+  style.fill: "#e3f2fd"
+}
+ldc: "first execution of ldc\n(lazy resolution)" {
+  width: 300
+  height: 56
+  style.fill: "#fff8e1"
+}
+tbl: "String table\nequal contents?" {
+  width: 230
+  height: 60
+  style.fill: "#fce4ec"
+}
+reuse: "reuse pooled instance" {
+  width: 260
+  height: 48
+  style.fill: "#e8f5e9"
+}
+add: "intern a new one\nand add to table" {
+  width: 260
+  height: 48
+  style.fill: "#e8f5e9"
+}
+src -> ldc -> tbl
+tbl -> reuse: "yes"
+tbl -> add: "no"
+```
+
+**Fig. 1.** A literal enters the pool when its constant-pool entry is resolved at first use — reused if equal contents are already pooled, interned otherwise.
+
+> [!warning] "Loaded into the pool at class load" is imprecise
+> The JVM is allowed to defer resolution until the entry is actually used, so a class full of literals does not populate the pool merely by being loaded. And the flip side of sharing: interning means one instance per content **globally** — mutation is impossible only because `String` is immutable ([[Why is java.lang.String immutable and final]]). Do not claim literals are "copied into the heap at startup"; they enter through resolution, class by class.
 
 > [!tip] Interview answer
-> **Literals (and compile-time string constants, including text blocks) enter the intern pool when the class is created.** The class file holds `CONSTANT_String`; the VM intern()s that sequence into `String`’s private pool, reusing an equal instance if one exists. Runtime concatenation and `new String(...)` stay outside until you call `intern()`.
+> Literals get into the pool in two steps: the compiler records them as constant-pool entries in the class file, and the JVM canonicalizes the entry at first use, sharing or interning the instance in the string table — JLS 3.10.5 guarantees every literal always refers to the same instance. Compile-time constant expressions are folded before this, so `"sr"+"s"` is just another literal; runtime-built strings only enter via `intern()`.

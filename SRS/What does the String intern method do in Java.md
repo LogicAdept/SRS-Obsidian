@@ -4,69 +4,64 @@ priority: 0
 -->
 #Java/String #SRS
 
-# What does the String intern method do in Java
+# What does the String intern method do in Java?
 
 > [!abstract] Short answer
-> **`intern()` returns the canonical interned `String` for this sequence.** `String` keeps a private pool, initially empty. If the pool already has an `equals` match, that pooled instance is returned. Otherwise **this** object is added and `intern()` returns **this** — it does not allocate a second copy. Literals and string-valued constant expressions are interned already. For live interned `s` and `t`, `s.intern() == t.intern()` iff `s.equals(t)`.
+> `intern()` returns the **canonical instance** of the string's contents. Contract (from the javadoc): a pool of strings is "maintained privately by the class `String`"; if the pool already contains an `equals`-equal string, that pooled instance is returned — otherwise **this** object is added to the pool and returned. Therefore `s.intern() == t.intern()` holds **if and only if** `s.equals(t)`. Literals and constant expressions are interned automatically; `intern()` lets runtime-built strings join the same club — [[What is the Java string pool]], [[How do string literals enter the Java string pool]].
 
-## Lookup by `equals`, then maybe install `this`
+## What it buys and what it costs
 
-The pool is the intern table, not the class-file `constant_pool` ([[What is the Java string pool]]). Matching is `String.equals` (same characters), not `==`.
-
-Call `s.intern()`:
-
-1. If some interned instance `p` satisfies `s.equals(p)`, return `p` (even if `s != p`).
-2. Else put `s` in the pool and return `s`.
-
-So `new String("Hello").intern() == "Hello"` is true: the literal was interned at class creation; intern on the copy finds it ([[How do string literals enter the Java string pool]]). A unique runtime string’s first `intern()` is identity-preserving for that object until it is no longer reachable. HotSpot’s table does not pin the object with a strong ref ([[How long do strings live in the Java string pool]]).
-
-`intern()` is `native` in the JDK. Do not intern secrets or unbounded unique user text ([[How would you explain security implications of string interning and the string pool]]).
-
-```d2
-direction: down
-call: "s.intern()" {
-  width: 200
-  height: 40
-}
-hit: "pool has t with s.equals(t)?" {
-  width: 280
-  height: 45
-}
-ret: "return pooled t" {
-  width: 200
-  height: 40
-}
-add: "add s to pool\nreturn s" {
-  width: 200
-  height: 45
-}
-
-call -> hit
-hit -> ret: "yes"
-hit -> add: "no"
-```
-
-**Fig. 1.** Canonical instance: reuse or install `this`. No third object is created on a miss.
+- **Deduplication** — long-lived, repeated strings (country codes, statuses, parsed identifiers) collapse to one instance each; a stream of duplicates stops multiplying heap usage.
+- **Identity shortcut** — after interning, `==` is a valid equality check for those references (canonical instance per content), which is why interning is sometimes used before cheap comparisons.
+- **Cost** — every `intern()` is a hash lookup in the JVM's string table (HotSpot default capacity 65536 buckets, `-XX:StringTableSize`); runtime-interned strings stay reachable as long as referenced, and churn adds table maintenance. HotSpot's table is cleaned by GC, so entries for unreachable strings do go away — but interning unbounded user input is still a footgun ([[What are the security implications of string interning]]).
 
 ```java
 public class InternDemo {
-    static void demo() {
-        String lit = "Hello";
-        String copy = new String("Hello");
-        String pooled = copy.intern();
-        boolean foundLiteral = lit == pooled;   // true
-        boolean copyNotPooled = copy != pooled; // true — copy was not installed
-
-        String built = "prefix-" + new String("unique-runtime");
-        boolean firstInstall = built.intern() == built; // true if that sequence was not pooled yet
+    public static void main(String[] args) {
+        String s1 = "2026-09-09";                      // literal: pooled
+        String s2 = new StringBuilder("2026-0")        // runtime-built
+                .append(9).append("-09").toString();
+        System.out.println(s1 == s2);                  // false
+        System.out.println(s1 == s2.intern());         // true: canonical
+        String s3 = s2.intern();
+        System.out.println(s2.intern() == s3.intern()); // true: contract
     }
 }
 ```
 
-**Listing 1.** Hit: intern returns the literal. Miss: intern returns the receiver. `new String("Hello")` itself stays a distinct object.
+**Listing 1.** A runtime-built copy is a distinct object until `intern()` maps it to the canonical pooled instance; two `intern()` calls with equal contents always return the same reference. Verified on JDK 21.
 
-> [!warning] Intern is not `new String` and not a copy factory
-> A miss adds **the instance you called it on**, not a fresh interned clone. A hit returns someone else’s object — your `new String(...)` remains eligible for GC. `==` after intern is identity of interned content, not a substitute for `equals` on non-interned strings. Filling the pool with unique keys is a heap cost, not a `HashMap`.
+```d2
+direction: right
+rt: "runtime String\n\"2026-09-09\" (fresh)" {
+  width: 260
+  height: 60
+  style.fill: "#fce4ec"
+}
+pool: "String.intern()" {
+  width: 200
+  height: 50
+  style.fill: "#fff8e1"
+}
+canon: "canonical instance\n(the pooled one)" {
+  width: 260
+  height: 56
+  style.fill: "#e8f5e9"
+}
+lit: "literal \"2026-09-09\"\n(same instance)" {
+  width: 260
+  height: 56
+  style.fill: "#e3f2fd"
+}
+rt -> pool: "lookup"
+pool -> canon: "existing: return it\nmissing: add this object"
+canon == lit
+```
+
+**Fig. 1.** `intern()` either hands back the pooled instance for equal contents or installs the argument as the new canonical one; the literal already points at that instance.
+
+> [!warning] Never lock on an interned string
+> Interned strings are **globally shared**, so `synchronized (someInternedString)` can interleave with completely unrelated code that interned the same contents — same monitor, unrelated subsystems, deadlocks that make no sense in a stack trace. And do not `intern()` unbounded, attacker-shaped input: the table is JVM-global, and churn there is felt process-wide.
 
 > [!tip] Interview answer
-> **`intern()` returns the unique pooled `String` with the same characters.** If none exists, the receiver is placed in `String`’s private pool and returned. Literals are interned already, so `new String("x").intern() == "x"`. It is lookup-or-install, not “make a copy in PermGen.”
+> `intern()` gives me the one canonical instance for the string's contents: if the pool already has an equal string it returns that, otherwise it adds this object. So `s.intern() == t.intern()` iff `s.equals(t)`. I use it to dedup long-lived repeated values; literals and compile-time constants are interned anyway. I avoid it for unbounded input and never use interned strings as lock objects, because the monitor is shared process-wide.

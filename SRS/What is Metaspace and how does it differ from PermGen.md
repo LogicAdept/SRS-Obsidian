@@ -17,7 +17,7 @@ priority: 0
 
 With compressed oops / compressed class pointers, metadata uses **two** native regions: ordinary Metaspace plus **compressed class space** (`-XX:CompressedClassSpaceSize`, default **1 GB** reserved). `MaxMetaspaceSize` applies to the **sum** of **committed** class space and other class metadata.
 
-What did **not** stay in Metaspace: JEP 122 moved **interned Strings** and **class statics** onto the **Java heap**, so `-Xmx` may need a bump after the change. Object **instances** were never PermGen/Metaspace; they stay on the object heap — [[How does object memory allocation work]]. Young/old generations are still **object-heap** pools, not Metaspace — [[How would you explain Young Old generation]].
+What did **not** stay in Metaspace: JEP 122 moved **interned Strings** and **class statics** onto the **Java heap**, so `-Xmx` may need a bump after the change. Object **instances** were never PermGen/Metaspace; they stay on the object heap — [[How does object memory allocation work]]. Young/old generations are still **object-heap** pools, not Metaspace — [[What are garbage collector generations]].
 
 ```text
 java -XX:MaxMetaspaceSize=256m \

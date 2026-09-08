@@ -17,7 +17,7 @@ What does **not** count as garbage in that sense:
 
 - A **primitive local** (`int n` in a frame). It is not a heap object. The frame is popped when the method returns; that is not a GC of `n`.
 - A **reference local** that the compiler has proved will never be used again. The *object* may already be garbage while the slot still exists; the slot itself is not “collected.”
-- **Method-area / Metaspace** class metadata. It goes away when the class is unloaded because its **loader** became garbage — a different pool than `-Xmx` ([[How would you explain JVM memory regions and how the garbage collector uses them]]).
+- **Method-area / Metaspace** class metadata. It goes away when the class is unloaded because its **loader** became garbage — a different pool than `-Xmx` ([[What JVM runtime memory regions exist]]).
 - Objects that are only **softly, weakly, or phantom-reachable**, or **finalizer-reachable**. They are not strongly reachable, but they are not yet reclaimable storage in the `java.lang.ref` / finalization sense ([[How does the garbage collector decide an object can be collected]], [[What reference types exist in Java such as strong weak soft and phantom]]).
 
 So “garbage from the JVM’s perspective” is **unreachable heap objects**. The popular slogan “objects with no references” is wrong twice: cycles have references and are still garbage; a forgotten `static` is a reference and they are not.

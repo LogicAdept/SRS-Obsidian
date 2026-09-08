@@ -11,7 +11,7 @@ priority: 0
 
 ## Write a copy; break aliases
 
-Constructors initialize a **new** instance ([[What is constructor]]). `Box(Box other) { this.data = other.data; }` shares the array. Independence needs a **new** array (and copies of **mutable** elements if you need a deep freeze). `Object.clone` states that explicitly: after `super.clone()`, replace references to mutable internals with copies; primitives and immutable refs (`String`) usually need nothing more. Cloneable: [[Why is clone declared on Object rather than on Cloneable]]. Why immutability: [[Why is immutability valuable in Java programs]]. `String`: [[Why is java.lang.String immutable and final]].
+Constructors initialize a **new** instance ([[What is constructor]]). `Box(Box other) { this.data = other.data; }` shares the array. Independence needs a **new** array (and copies of **mutable** elements if you need a deep freeze). `Object.clone` states that explicitly: after `super.clone()`, replace references to mutable internals with copies; primitives and immutable refs (`String`) usually need nothing more. Cloneable: [[Why is clone declared on Object rather than on Cloneable]]. Why immutability: [[How would you explain immutability and its benefits in Java]]. `String`: [[Why is java.lang.String immutable and final]].
 
 **Inbound.** Constructor or setter takes `int[]` / `List` / `Date`-like mutables → store `data.clone()`, `Arrays.copyOf(data, data.length)`, `new ArrayList<>(c)`, or `List.copyOf(c)` (unmodifiable copy; no nulls).
 

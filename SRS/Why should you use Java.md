@@ -11,7 +11,7 @@ priority: 0
 
 ## Language guarantees, then the SE catalog
 
-**Portability.** Compile time yields a `class` file, not a Windows or Linux `exe`. The same bytes run wherever a compatible JVM exists ([[How does the JVM help Java bytecode run across operating systems]], [[Why is Java described as platform independent]]).
+**Portability.** Compile time yields a `class` file, not a Windows or Linux `exe`. The same bytes run wherever a compatible JVM exists ([[What is the JVM]], [[Why is Java described as platform independent]]).
 
 **Robustness.** Automatic storage management avoids `free`/`delete` use-after-free. Array access is **bounds-checked**. Exceptions are objects (`Throwable`); the compiler tracks **checked** exceptions so handlers exist ([[How would you explain distinctive traits of the Java programming language]]). Strong static typing catches many mistakes before run time ([[How would you explain static typing in Java]]).
 

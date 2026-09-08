@@ -7,7 +7,7 @@ priority: 0
 # How would you explain immutability and its benefits in Java?
 
 > [!abstract] Short answer
-> An object is **immutable** when its observable state **cannot change** after the constructor finishes. Java has **no `immutable` keyword**; you get it with **`final` fields**, no mutators, and **no leaked mutable internals**. Benefits: **share without locks**, **stable `hashCode`** (map/set keys), cheaper sharing (`String` is constant and **can be shared**), and **`final`-field freeze** so another thread that only sees the object **after construction** reads the initialized finals — even if the reference was passed in a **data race**. How to build one: [[How do you implement an immutable class in Java]]. Concurrency value: [[Why are immutable objects valuable in concurrent code]]. Why `String`: [[Why is java.lang.String immutable and final]].
+> An object is **immutable** when its observable state **cannot change** after the constructor finishes. Java has **no `immutable` keyword**; you get it with **`final` fields**, no mutators, and **no leaked mutable internals**. Benefits: **share without locks**, **stable `hashCode`** (map/set keys), cheaper sharing (`String` is constant and **can be shared**), and **`final`-field freeze** so another thread that only sees the object **after construction** reads the initialized finals — even if the reference was passed in a **data race**. How to build one: [[How would you explain immutable classes in Java]]. Concurrency value: [[Why are immutable objects valuable in concurrent code]]. Why `String`: [[Why is java.lang.String immutable and final]].
 
 ## Freeze the state, then share the reference
 

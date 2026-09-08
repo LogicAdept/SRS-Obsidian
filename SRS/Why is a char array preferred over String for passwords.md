@@ -13,7 +13,7 @@ priority: 0
 
 A `String` has a constant value. Sharing is the point of immutability; it is the wrong property for a secret. Crypto APIs clone the `char[]`, let you `clearPassword()`, and make `getPassword()` your copy to zero ([[How would you explain java.lang.String]]). Zero that copy too — it is a second array.
 
-`toCharArray()` is a **copy** of UTF-16 units; wiping that array does not change the `String` ([[How do you turn a Java string into a char array]]). `intern()` publishes a canonical un-wipeable instance — never intern a password ([[How would you explain security implications of string interning and the string pool]]). Wrapping `char[]` in `new String(...)` creates that un-wipeable object on purpose.
+`toCharArray()` is a **copy** of UTF-16 units; wiping that array does not change the `String` ([[How do you turn a Java string into a char array]]). `intern()` publishes a canonical un-wipeable instance — never intern a password ([[What are the security implications of string interning]]). Wrapping `char[]` in `new String(...)` creates that un-wipeable object on purpose.
 
 Official advice still has a limit: clearing mutable structures has **reduced effectiveness** on typical JVMs because objects are moved in memory. Zeroing is still required; it is not a perfect erase. Do not log the password.
 

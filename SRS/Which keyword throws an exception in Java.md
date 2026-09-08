@@ -11,7 +11,7 @@ priority: 0
 
 ## `throw` throws; `throws` declares
 
-`throw expr;` evaluates `expr` and completes abruptly with that exception. The value must be a `Throwable`. `throw null;` becomes `NullPointerException` ([[Can you throw an object that is not a Throwable]], [[Which operator allows throw exception]]). Control then searches for a matching `catch` or continues to the caller.
+`throw expr;` evaluates `expr` and completes abruptly with that exception. The value must be a `Throwable`. `throw null;` becomes `NullPointerException` ([[Can you throw an object that is not a Throwable]], [[Should you throw NullPointerException or IllegalArgumentException for a null argument]]). Control then searches for a matching `catch` or continues to the caller.
 
 `throws` is part of a method or constructor declaration. For a **checked** exception, the compiler requires `catch` or `throws` on that path. Unchecked exceptions (`RuntimeException`, `Error`) need no `throws` ([[How would you explain the throws clause for checked exceptions]], [[Must you declare RuntimeException in a throws clause]], [[What does the throws keyword mean]]).
 

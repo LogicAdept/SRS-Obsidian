@@ -2,66 +2,53 @@
 reps: 0
 priority: 0
 -->
-#Java/String #Java/JVM/Memory #SRS
+#Java/String #Java/JVM/Memory/Heap #SRS
 
-# Is the Java string pool empty when a JAR application starts
+# Is the Java string pool empty when a JAR application starts?
 
 > [!abstract] Short answer
-> **No — not by the time `main` runs.** `String`’s intern pool is specified as **initially empty**, then it fills as classes are **created**. Startup loads, links, and initializes the initial class (and `Object` above it) **before** invoking `main`. Those creations intern literals. Bootstrap `java.lang` types are already in play. Your JAR’s main class interns its own `CONSTANT_String`s when it is created, still before `main`.
+> **No.** By the time your `main()` runs, the JVM has loaded, linked, and initialized a large part of the core library, and literals of those classes are interned as they resolve ([[How do string literals enter the Java string pool]]). On a stock JDK 21 hello-world, `-XX:+PrintStringTableStatistics` reports on the order of **~2 700 entries** — all without a single line of your code interning anything. The `intern()` javadoc's "a pool of strings, initially empty" describes the JVM's zero point, not the state at application start — [[What is the Java string pool]], [[What happens in the JVM when a Java application starts]].
 
-## Empty at birth, not empty at `main`
+## What populates it before main
 
-The pool is private to `String` and starts empty. Entry is intern: literals and constant concatenations when the class is created; anything else only via `intern()` ([[What is the Java string pool]], [[How do string literals enter the Java string pool]]).
+- **Bootstrap loading** — `String`, `System`, `Integer`, charsets, collections, and the launcher machinery are loaded and initialized before your class; each resolved literal ("java", "main", format strings, exception messages' fragments) lands in the table.
+- **Lazy, per use** — resolution canonicalizes a literal the first time the instruction using it runs ([[How do string literals enter the Java string pool]]), so the table grows with *executed* core code paths, not with every class file on the module path.
+- **Your classes** — literals of your `main` class join only when reached, which is why the count keeps creeping up during a slow warm-up.
 
-Virtual machine startup does **not** jump to your `main` on a blank slate. It **creates** the initial class (bootstrap loader or a user-defined loader), **links**, **initializes** it, then calls `public static void main(String[])`. Initialization of that class requires initializing superclasses, in the simple case all the way to `Object`. Creating a class builds its run-time constant pool and interns each `CONSTANT_String`. Loading a class that contains a literal **may** allocate a new interned `String` if that sequence is not already pooled.
+```bash
+java -XX:+PrintStringTableStatistics -jar app.jar   # statistics at JVM exit
+# StringTable statistics:
+#   Number of buckets       : 65536
+#   Number of entries       : 2697      <- hello-world, JDK 21
+jcmd <pid> VM.stringtable                            # same view, live process
+```
 
-So when `main` first executes:
-
-- Many bootstrap / `java.base` literals are already interned.
-- Literals in your main class (and classes initialized as a consequence of its init) are already interned.
-- `main`’s `String[] args` are ordinary arguments, not a spec promise of interned content.
-- The pool is **not** preloaded with every string in the JAR — only classes that have actually been created.
-
-HotSpot interned objects live on the heap; bootstrap classes never unload, so those interned literals stay ([[How long do strings live in the Java string pool]]).
+**Listing 1.** Reproduce it yourself: run any trivial app with `PrintStringTableStatistics` and read the entry count at exit; attach `jcmd VM.stringtable` seconds after start and it is already in the thousands on a real application. Verified on JDK 21.
 
 ```d2
 direction: down
-empty: "Pool initially empty" {
-  width: 220
-  height: 40
+zero: "JVM zero point\npool 'initially empty' (intern() javadoc)" {
+  width: 340
+  height: 66
+  style.fill: "#fff8e1"
 }
-boot: "Create java.base / Object / …\nintern CONSTANT_String" {
-  width: 300
-  height: 50
+boot: "Bootstrap classes load + resolve literals\nString, System, collections, charsets…" {
+  width: 380
+  height: 66
+  style.fill: "#e3f2fd"
 }
-app: "Create Main-Class\nintern its literals" {
-  width: 260
-  height: 50
+main: "main() starts\npool already holds thousands of entries" {
+  width: 380
+  height: 60
+  style.fill: "#e8f5e9"
 }
-main: "invoke main(String[])" {
-  width: 220
-  height: 40
-}
-
-empty -> boot -> app -> main
+zero -> boot -> main
 ```
 
-**Fig. 1.** “Application start” in a JAR is `main`. Interning of bootstrap and main-class literals has already happened.
+**Fig. 1.** Application start is not the pool's start: the bootstrap phase fills the table before your first statement.
 
-```java
-public class PoolAtStart {
-    static final String MINE = "app-only-token";
-
-    public static void main(String[] args) {
-        boolean alreadyInterned = MINE == "app-only-token"; // true — class created before main
-    }
-}
-```
-
-**Listing 1.** The main class’s literals are interned at class creation, which startup performs before calling `main`.
-
-> [!warning] “Initially empty” is not “empty in main”
-> The intern javadoc describes VM-lifetime start of the table, not the first line of your program. Do not assume the JAR was scanned into the pool, and do not assume `args[i]` is interned. A class you never load contributes no literals.
+> [!warning] "Empty at start" and "all literals at load" are both myths
+> The pool is neither empty when `main` begins, nor preloaded with every literal your JAR contains — resolution is lazy, so a big fat JAR does not mean a big table at startup. And the pre-sized bucket count (`-XX:StringTableSize`, default 65536 on JDK 21) is capacity planning for the hash table, not the number of strings in it.
 
 > [!tip] Interview answer
-> **The pool starts empty, then fills as classes are created.** Before `main`, the VM has already created bootstrap types and your initial class, so their string literals are interned. It is not empty when a JAR’s `main` runs, and it is not filled with the whole archive either.
+> No — and I can prove it: `-XX:+PrintStringTableStatistics` on a hello-world shows thousands of entries on JDK 21. The launcher and core bootstrap classes resolve their literals before `main()` runs, and each resolution interns into the table. It is still lazy though: your own classes contribute only the literals they actually execute, so at startup the table is populated by the platform, not by your JAR.

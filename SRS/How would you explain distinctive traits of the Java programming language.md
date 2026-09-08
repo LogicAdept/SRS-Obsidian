@@ -17,7 +17,7 @@ priority: 0
 
 **Safety and structure.** Unreachable objects may be reclaimed; there is no language-level `free`. `if` / `while` / `for` conditions are `boolean` or `Boolean` ([[Why cannot Java logical operators be applied to integers]]). Methods declare **checked** exceptions the compiler tracks. `synchronized` methods and statements are the basic monitor API; the language also defines a **memory model**. Packages (and modules) name and hide members. No `goto`; labeled `break` / `continue` instead.
 
-**Compilation.** Compile time translates programs into a machine-independent bytecode representation. Run time loads, links, and initializes classes, may generate native code, and executes. That bytecode format is defined by the JVM specification — other languages can target it ([[Which programming languages besides Java compile to JVM bytecode]], [[How does the JVM help Java bytecode run across operating systems]]). JDK vs JRE: [[What is the difference between the JDK and the JRE]].
+**Compilation.** Compile time translates programs into a machine-independent bytecode representation. Run time loads, links, and initializes classes, may generate native code, and executes. That bytecode format is defined by the JVM specification — other languages can target it ([[Which languages besides Java run on the JVM]], [[Why is Java described as platform independent]]). JDK vs JRE: [[What is the difference between the JVM the JRE and the JDK]].
 
 ```d2
 direction: down
