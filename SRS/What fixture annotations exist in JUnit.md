@@ -20,7 +20,7 @@ A **fixture** here is code that prepares or cleans the test’s world — not `@
 
 They are **inherited** unless overridden. Superclass `@BeforeEach` runs **before** subclass; superclass `@AfterEach` runs **after** subclass.
 
-Default instance lifecycle is **per-method**: a **new** test-class instance per test, so instance fields do not carry state between tests. `@BeforeAll` / `@AfterAll` therefore attach to the **class** (`static`) unless you opt into `@TestInstance(Lifecycle.PER_CLASS)` — required for non-static class-level hooks and for `@Nested` inner classes that cannot hold statics (before Java 16). See [[How would you explain test fixtures in JUnit]] and [[Which exist in JUnit4 or 5]].
+Default instance lifecycle is **per-method**: a **new** test-class instance per test, so instance fields do not carry state between tests. `@BeforeAll` / `@AfterAll` therefore attach to the **class** (`static`) unless you opt into `@TestInstance(Lifecycle.PER_CLASS)` — required for non-static class-level hooks and for `@Nested` inner classes that cannot hold statics (before Java 16). The fixture concept itself: [[What is a test fixture in JUnit]].
 
 ```java
 class LedgerTest {
