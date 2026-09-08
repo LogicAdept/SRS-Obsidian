@@ -21,9 +21,9 @@ A naive collector traces every live object every time. Generational collection u
 
 Cost of a minor collection tracks **live objects copied**, so a nursery full of garbage is cheap.
 
-**Old generation** — objects that were promoted. When it fills, a **major** collection usually scans the **entire heap** and lasts longer. Parallel compactes old **as a whole**. G1 still has young vs old, but as **regions** (eden, survivor, old, humongous) laid out noncontiguously; mixed collections evacuate some old regions without always doing a full heap ([[What is G1 GC]], [[What is Minor GC Major GC]]).
+**Old generation** — objects that were promoted. When it fills, a **major** collection usually scans the **entire heap** and lasts longer. Parallel compactes old **as a whole**. G1 still has young vs old, but as **regions** (eden, survivor, old, humongous) laid out noncontiguously; mixed collections evacuate some old regions without always doing a full heap ([[What is G1 GC]], [[What are Minor GC and Full GC]]).
 
-G1 is generational by default. ZGC in Java 21 is generational only with `-XX:+ZGenerational`. **Metaspace** is class metadata in native memory, not a third heap generation (PermGen is gone) ([[How would you explain JVM memory regions and how the garbage collector uses them]]).
+G1 is generational by default. ZGC in Java 21 is generational only with `-XX:+ZGenerational`. **Metaspace** is class metadata in native memory, not a third heap generation (PermGen is gone) ([[What JVM runtime memory regions exist]]).
 
 ```d2
 direction: right
