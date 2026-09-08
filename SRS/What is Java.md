@@ -7,56 +7,56 @@ priority: 0
 # What is Java?
 
 > [!abstract] Short answer
-> **Java is a programming language and a platform.** The language is **general-purpose, concurrent, class-based, object-oriented**, and **strongly and statically typed**, normally compiled to **bytecode**. The platform is the **Java Virtual Machine** plus the **Java SE libraries** that run those `class` files on any host that has a JVM. Designed at **Sun Microsystems** (James Gosling); first appearance **23 May 1995**; **Oracle** has stewarded it since **2010**. Specs go through the **Java Community Process**. Language traits: [[How would you explain distinctive traits of the Java programming language]]. Platform: [[How would you explain distinctive traits of the Java platform]]. JVM: [[What is the JVM]].
+> Java is two things sold under one name: a statically typed, class-based, object-oriented programming language, and the platform it targets — the JVM with its runtime libraries. The language was developed at Sun Microsystems and released in 1995; Sun's core assets went to Oracle in 2010, and the reference implementation, OpenJDK, is developed in the open under the GNU GPL with the Classpath Exception.
 
-## Language, bytecode, platform
+## Language and platform
 
-**Language.** You write classes (and interfaces); objects are class instances and arrays; instance methods have `this` ([[What does it mean that Java is object oriented]]). Types are known at compile time and constrain values and operators ([[How would you explain static typing in Java]], [[What does strong typing mean in Java]]). Primitives are not objects ([[Why is Java described as not purely object oriented]]).
-
-**Compilation.** `javac` (or another compiler) emits a machine-independent `class` file. A JVM **loads, links, initializes**, and executes that file — optionally compiling further to native code. The same binaries run wherever a compatible JVM exists ([[What is the JVM]], [[Why is Java described as platform independent]]). Tools vs runtime: [[What is the difference between the JVM the JRE and the JDK]]. Entry: [[How would you explain the Java main method entry point]].
-
-**Who specifies and who ships.** The JCP (from **8 December 1998**) is the process for Java **technical specifications**. **OpenJDK** is the open-source implementation of the Java Platform (GPLv2 with the Classpath Exception). Oracle also ships JDK builds from that code under Oracle’s own license. The **Java** trademark is Oracle’s. “Java is GPL” as a blanket sentence is false: the **language spec** is not a GPL program; **OpenJDK** is.
+The language half is the syntax you write: classes, interfaces, records, generics, a compile-time type system, and a standard library API. The platform half is what executes it: `javac` compiles `.java` sources into `.class` bytecode, and a JVM — HotSpot in OpenJDK builds — loads and runs that bytecode with managed memory and JIT compilation. Keeping the two apart answers most "what is Java" follow-ups: the language defines what programs may express; the platform defines how they run and how fast.
 
 ```d2
-direction: down
-src: ".java language" {
-  width: 180
-  height: 40
+direction: right
+lang: "Java the language\nsyntax · typing · javac compiles it" {
+  width: 300
+  height: 90
   style.fill: "#e3f2fd"
 }
-cls: "class file bytecode" {
-  width: 200
-  height: 40
+cf: "class files\nbytecode" {
+  width: 190
+  height: 80
   style.fill: "#fff3e0"
 }
-vm: "JVM + SE libraries" {
-  width: 200
-  height: 40
+plat: "Java the platform\nJVM · GC · JIT · standard libraries" {
+  width: 320
+  height: 90
   style.fill: "#e8f5e9"
 }
-src -> cls
-cls -> vm
+lang -> cf
+cf -> plat
 ```
 
-**Fig. 1.** “Java” in an interview is usually all three: source language, portable binary, implementing VM and libraries.
+**Fig. 1.** Java as language plus platform: sources compile to bytecode, and the platform runs the bytecode.
+
+## Governance and releases
+
+The platform moves on a predictable six-month release train, with long-term-support (LTS) releases — 8, 11, 17, 21 — chosen for production lifetimes. Language and library changes go through the JEP process and, where a language standard is needed, the JCP. OpenJDK is the canonical implementation; vendors build certified distributions from it, which is why "Java" can mean a version, a distribution, or the platform as a whole.
 
 ```java
-class Test {
+public class Hello {
     public static void main(String[] args) {
-        System.out.println("Hello, world.");
+        System.out.println("Java " + System.getProperty("java.version")
+            + " on " + System.getProperty("java.vm.name"));
     }
 }
+// javac Hello.java && java Hello
+// → Java 21.0.12 on OpenJDK 64-Bit Server VM
 ```
 
-**Listing 1.** Language surface: a class and `main`. After `javac Test.java`, `java Test` is the platform running the `class` file.
+**Listing 1.** One artifact, both halves: the code you wrote (language) executed by an implementation (platform).
 
-Oak began as an embedded language; the specified language was retargeted at the Internet. Today Java SE is used for services, libraries, and desktop/server programs. **Android** apps may be written in the Java *language* but run on Android’s runtime (historically Dalvik / ART), not a Java SE JVM — do not list “Android” as a Java SE deployment.
+> [!warning] "Java" gets blamed for things that belong to other layers
+> Three mix-ups recur in interviews. "Java is slow" describes a 1990s interpreter story, not the platform — today's throughput comes from JIT-compiled native code; see [[Is Java a compiled or interpreted language]]. "Java is verbose" is often a statement about pre-8 idiom, while the language ships records, lambdas, and pattern matching in modern releases. And JavaScript has nothing to do with Java — the similar name is a 1995 marketing decision, not a technical relationship. Judge each claim against the version you actually run; see [[How would you explain distinctive traits of the Java platform]].
 
-> [!warning] Language is not the JVM, and OpenJDK is not the trademark
-> A Kotlin `class` file is not “Java source.” A JVM without the SE libraries is not the Java SE platform. Oracle owns the name **Java**; OpenJDK is the GPL+CE implementation. Oracle JDK and OpenJDK builds can share a codebase and differ in license.
-
-> [!warning] Dump popularity and “everything is GPL”
-> Oracle has called Java widely used (2020: “3 billion devices,” “12 million developers” — marketing counts, not a spec). It is not automatically “the default enterprise stack.” Enterprise APIs (Jakarta EE, Spring) sit **on** Java SE; they are not the language. SQLJ / JDO / a particular HTTP client are libraries, not “what Java is.”
+For the machine under the platform, see [[What is the JVM]]; for why one binary runs everywhere, [[Why is Java described as platform independent]]; for when Java is a sensible choice, [[Why should you use Java]].
 
 > [!tip] Interview answer
-> **Java is both a class-based, statically typed language and the JVM-plus-libraries platform that runs its bytecode.** Sun shipped it in 1995; Oracle stewards it; JCP writes the specs; OpenJDK is the GPL+Classpath implementation. You compile to `class` files so the same program can run on any compatible VM — that is not the same thing as “Android is Java SE.”
+> Java is a statically typed, object-oriented programming language plus the platform that runs it. Sun Microsystems released it in 1995, Oracle owns it now, and OpenJDK is the open-source reference implementation. The language compiles to bytecode; the JVM executes it with garbage collection and JIT compilation — and the two halves move on a six-month release train with LTS milestones.

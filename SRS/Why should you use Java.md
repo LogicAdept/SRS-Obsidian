@@ -7,70 +7,78 @@ priority: 0
 # Why should you use Java?
 
 > [!abstract] Short answer
-> Use it when you want a **portable binary**, a **specified** language (types, exceptions, threads, GC), and a **large Standard Edition API** on one VM. Source compiles to **machine-independent bytecode**; a JVM runs that `class` file on another host. Memory is **reclaimed**, not `free`’d. `try`/`catch`/`throw` are in the language; so are **threads and monitors**. Libraries then add collections, I/O filters, **JDBC**, and **HTTP**. What Java *is*: [[What is Java]]. Language vs VM: [[How would you explain distinctive traits of the Java programming language]], [[How would you explain distinctive traits of the Java platform]].
+> Java buys you a managed, portable run time with a 30-year-compatible ecosystem: bytecode runs on any JVM for the target platform, the GC frees you from manual memory management, JIT gives near-native steady-state performance, static typing catches whole error classes at compile time, and LTS releases plus the largest enterprise library ecosystem make long-lived systems maintainable.
 
-## Language guarantees, then the SE catalog
+## The reasons that hold up technically
 
-**Portability.** Compile time yields a `class` file, not a Windows or Linux `exe`. The same bytes run wherever a compatible JVM exists ([[What is the JVM]], [[Why is Java described as platform independent]]).
-
-**Robustness.** Automatic storage management avoids `free`/`delete` use-after-free. Array access is **bounds-checked**. Exceptions are objects (`Throwable`); the compiler tracks **checked** exceptions so handlers exist ([[How would you explain distinctive traits of the Java programming language]]). Strong static typing catches many mistakes before run time ([[How would you explain static typing in Java]]).
-
-**Concurrency in the language.** `Thread`, `synchronized`, and a **memory model** are specified, not a bolt-on C library. Pools and virtual threads are libraries on top of that ([[How would you explain Virtual Threads]]).
-
-**Standard libraries (Java SE, not “the language”).** `java.util` is the **collections framework** (`List`, `Set`, `Map`, `Deque`, plus legacy `Stack` / `Vector`). Arrays are a language construct; lists are not. `FilterInputStream` / `FilterOutputStream` wrap another stream and transform or extra-function it (`BufferedInputStream`, `DataInputStream`, …). `java.net` covers sockets; `java.net.http.HttpClient` (**since 11**) sends HTTP/1.1 or HTTP/2 and reads responses. Older `HttpURLConnection` is still there. **JDBC** (`java.sql` / `javax.sql`) is the SE API for SQL against pluggable drivers ([[What is JDBC]]). **RMI** (`java.rmi`, since 1.1) invokes a `Remote` object on another JVM; it is a real SE API, not the usual 2026 reason to pick Java.
-
-**Later language surface.** Generics are **Java 5** (`@since 1.5`) ([[In which Java version were generics introduced]]). Lambdas and method references are **Java 8**; they capture enclosing locals that are final or effectively final — that is Java’s “closure.” Streams and `java.util.function` are **libraries** from the same release ([[What major language features arrived in Java 8]], [[How would you explain lambda expressions in Java]]).
-
-Third-party libraries exist in volume; that is an ecosystem fact, not a count in the spec.
+**Portability.** One compiled artifact runs on every platform that has a JVM — recompilation is per-platform only for native code; see [[Why is Java described as platform independent]]. **Managed memory.** Allocation is a pointer bump and reclamation is the garbage collector's job; whole bug classes (use-after-free, double free) do not exist in safe Java code. **Steady-state performance.** The JIT compiles hot paths to native code while the program runs; long-running services spend most of their life compiled, not interpreted — see [[What is the execution engine of the JVM]]. **Static typing at scale.** Compile-time types, interfaces, and (since 21) records make refactoring tools reliable on million-line codebases. **Ecosystem and continuity.** Build tools, drivers, frameworks, and monitoring agents for Java are mature, and the platform's backward-compatibility discipline means old bytecode still runs on new JVMs.
 
 ```d2
-direction: down
-lang: "language + VM\nbytecode, GC, exceptions, threads" {
-  width: 320
-  height: 55
+direction: right
+code: "your code" {
+  width: 160
+  height: 60
   style.fill: "#e3f2fd"
 }
-se: "Java SE API\ncollections, I/O, JDBC, HTTP" {
-  width: 300
-  height: 55
-  style.fill: "#e8f5e9"
-}
-eco: "libraries on top of SE\nnot the language" {
-  width: 280
-  height: 50
+pillars: "what the platform gives" {
+  width: 260
+  height: 60
   style.fill: "#fff3e0"
 }
-lang -> se
-se -> eco
+port: "portability\none class file, many OS" {
+  width: 280
+  height: 90
+  style.fill: "#fff3e0"
+}
+mem: "managed memory\nGC, no manual free" {
+  width: 260
+  height: 90
+  style.fill: "#fff3e0"
+}
+perf: "performance\nJIT native code" {
+  width: 240
+  height: 90
+  style.fill: "#fff3e0"
+}
+eco: "ecosystem\nLTS · libraries · tooling" {
+  width: 280
+  height: 90
+  style.fill: "#fff3e0"
+}
+code -> pillars
+pillars -> port
+pillars -> mem
+pillars -> perf
+pillars -> eco
 ```
 
-**Fig. 1.** Interview “why Java” is three layers. Do not quote Jakarta or a random HTTP client as if they were the language.
+**Fig. 1.** The four pillars interviewers expect: portability, managed memory, JIT performance, ecosystem continuity.
 
 ```java
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.List;
+import java.util.concurrent.Executors;
 
-class Demo {
-    static int n() throws Exception {
-        List<String> names = List.of("a", "b");
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest req = HttpRequest.newBuilder(URI.create("https://example.com/")).GET().build();
-        client.send(req, HttpResponse.BodyHandlers.discarding());
-        return names.size();
+public class ModernJava {
+    record Money(long cents) {                     // concise, typed value model
+        Money add(Money other) {
+            return new Money(Math.addExact(cents, other.cents));
+        }
+    }
+
+    public static void main(String[] args) {
+        var pool = Executors.newFixedThreadPool(4); // concurrency in the standard library
+        pool.submit(() -> System.out.println("on a worker thread"));
+        pool.shutdown();
+        System.out.println(new Money(2).add(new Money(3)).cents());
     }
 }
 ```
 
-**Listing 1.** SE catalog on one VM: collections plus `HttpClient` (Java 11). JDBC and filters are the same idea — standard APIs, vendor drivers or stream wrappers underneath.
+**Listing 1.** Modern Java is compact: records for values, lambdas for behavior, executors for threads — no framework required.
 
-> [!warning] SQLJ, JDO, and JPA are not “why the Java language”
-> **JDBC** is Java SE. **SQLJ** is embedded SQL in source, not a Java SE language feature. **JDO** is a separate persistence JSR. **JPA** is **Jakarta Persistence**, commonly used *with* Java, not a reason the *language* exists. Do not list them as core “use Java because.”
+> [!warning] "Java suits everything" is the wrong takeaway
+> The same properties have costs. GC-managed memory means you do not control reclamation timing — latency-critical, allocation-light code needs GC tuning or native alternatives; see [[How does garbage collection work on the JVM]]. Startup and memory footprint are worse than native or scripting alternatives for short-lived scripts. And write-once-run-anywhere stops at native dependencies: JNI libraries and OS paths stay platform-specific. Choosing Java is choosing managed long-lived services — not a universal default.
 
-> [!warning] Threads were not “ported to Python from Java”
-> Java specified monitors and a memory model. Other languages have threads independently. RMI is also not “simple networking”: it is remote *Java* objects. Prefer sockets / HTTP for a general networking answer. `java.util.Stack` is a legacy vector-backed class; say `Deque` unless the interviewer asked for the old name.
+For what "Java" even names, see [[What is Java]]; for the machine under the promises, [[What is the JVM]].
 
 > [!tip] Interview answer
-> **I use Java for portable bytecode, GC, specified exceptions and threads, and a huge SE API — collections, I/O, JDBC, HTTP — plus the library ecosystem on that VM.** Generics landed in 5, lambdas in 8. I do not sell SQLJ/JDO/JPA or “Python copied our threads” as the language pitch.
+> I choose Java when a system is long-lived and needs portability, safe memory management, and steady throughput: one bytecode runs anywhere a JVM exists, the GC removes manual memory bugs, the JIT compiles hot code to native speed, and the static type system plus a huge backward-compatible ecosystem keep big codebases maintainable. The trade-offs are GC timing you do not control, higher startup cost, and native dependencies that break portability.
