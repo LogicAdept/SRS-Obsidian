@@ -1065,6 +1065,69 @@
       },
       "status": "dirty",
       "taxonomy_fingerprint": "b84f987df648701fd963b471d5b81def1cd1cdb607cea7b54372d2017dec7f54"
+    },
+    "Java/Quarkus": {
+      "budget_hit": false,
+      "candidate_search_exhausted": true,
+      "children": [],
+      "coverage_dimensions": {
+        "comparison": {
+          "evidence": [
+            "New Quarkus vs Spring Boot difference, faster-startup mechanism, build-time vs runtime config, and when-to-use decision cues; both sides tagged on Spring comparisons."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "definition": {
+          "evidence": [
+            "New What is Quarkus positioning card; new What is ArC and What is a Quarkus extension definitions; Dev Services definition."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "mechanism": {
+          "evidence": [
+            "New build-time augmentation, ArC build-time DI, dev mode live reload, native-image support, and imperative-reactive unification mechanism cards."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "failure_version_lie": {
+          "evidence": [
+            "No question dumps exist for Quarkus (jd-java-backend-relevant-questions notes Quarkus absent); popular-lie coverage relies on fill stage warnings (build-time config is not editable at runtime; @QuarkusTest is not native testing)."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "procedure_operations": {
+          "evidence": [
+            "New how-do-you-configure and how-do-you-test procedure cards; dev mode usage covered by How does Quarkus dev mode work."
+          ],
+          "required": true,
+          "satisfied": true
+        },
+        "rationale_decision": {
+          "evidence": [
+            "New When should you use Quarkus instead of Spring Boot with constraint-driven decision (startup, RSS, native, K8s density, team ecosystem)."
+          ],
+          "required": true,
+          "satisfied": true
+        }
+      },
+      "coverage_fingerprint": "b9d862381f396b407f79f264a8c605d0ff3f0d98acbf0f5618c65f73fea4f576",
+      "deferred_candidates": [
+        "MicroProfile/SmallRye specs overview (Health, Metrics, JWT, Fault Tolerance, OpenAPI) — fold into fill-stage links or a separate card if owner wants depth",
+        "Spring API compatibility layer detail (spring-di, spring-web, spring-data-jpa) — deferred; partial coverage inside Quarkus vs Spring Boot",
+        "Quarkus REST rename from RESTEasy Reactive in 3.9 — covered as version fact inside unification card during fill"
+      ],
+      "last_created": 14,
+      "last_error": null,
+      "passes": 1,
+      "sources_searched": [
+        "quarkus.io official guides and FAQ (fetched 2026-09-10 into scripts/docs/quarkus/)"
+      ],
+      "status": "complete",
+      "taxonomy_fingerprint": "7b4312c39d216ed733fc297e0b0a95cff2ec09f6201ac03d08a367eaa3fdf681"
     }
   },
   "version": 2
