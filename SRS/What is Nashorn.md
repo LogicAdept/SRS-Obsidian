@@ -11,7 +11,7 @@ priority: 0
 
 ## ES5.1 on HotSpot, then gone
 
-Nashorn shipped in Java 8 (JEP 174) as a new engine in the JDK: `javax.script` (JSR 223) plus `jjs`. The language target is **ES5.1** only — no Edition 6, no DOM/CSS, no jQuery, no browser plugin ([[How would you explain the Nashorn JavaScript engine on the JVM]], [[What is jjs]], [[How would you explain the jjs command line tool for Nashorn]]).
+Nashorn shipped in Java 8 (JEP 174) as a new engine in the JDK: `javax.script` (JSR 223) plus `jjs`. The language target is **ES5.1** only — no Edition 6, no DOM/CSS, no jQuery, no browser plugin ([[What is jjs]]).
 
 Pipeline: lexer → parser → bytecode (ASM) → `defineClass` on a **custom class loader** → run. Calls use `invokedynamic`. A Java receiver can bind to a Java method, including JavaBean getters/setters as script properties. From Java you obtain an engine via `ScriptEngineManager` / `NashornScriptEngineFactory` and `eval`. From JS, `Java.type("java.lang.System")` (preferred over walking `Packages`).
 

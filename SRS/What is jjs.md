@@ -11,7 +11,7 @@ priority: 0
 
 ## Nashorn’s shell, 8 through 14
 
-Nashorn (JEP 174, Java 8) replaced Rhino as the JDK’s ECMAScript-262 Edition **5.1** engine, exposed through `javax.script` and through a new tool **`jjs`** for scripts, shebang files, and a REPL ([[What is Nashorn]], [[How would you explain the jjs command line tool for Nashorn]], [[How would you explain the Nashorn JavaScript engine on the JVM]]).
+Nashorn (JEP 174, Java 8) replaced Rhino as the JDK’s ECMAScript-262 Edition **5.1** engine, exposed through `javax.script` and through a new tool **`jjs`** for scripts, shebang files, and a REPL ([[What is Nashorn]]).
 
 Synopsis: `jjs [options] [script-files] [-- arguments]`. No files → interactive `jjs>` prompt (`println`, `quit()`). `jjs script.js` runs a file. `jjs -- a b c` then `arguments.join(", ")` yields `a, b, c`. Useful flags from the Java 8 tool page: `-cp` / `-classpath`, `-Dname=value`, `--language=es5` (the default), `-strict` (ES5.1 strict mode), `-scripting`, `-fx` (JavaFX), `-doe` (full stack on error).
 
