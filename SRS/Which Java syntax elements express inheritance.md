@@ -65,7 +65,7 @@ class Circle extends Shape implements Fillable {
 **Listing 1.** `Circle` inherits class members from `Shape` and interface contracts from `Fillable` (and thus `Drawable`). `Fillable extends Drawable` is interface-to-interface inheritance.
 
 > [!warning] Generic `extends` is a bound, not a superclass clause
-> `class Box<T extends Shape>` constrains the type argument. It does not make `Box` a subclass of `Shape`. Wildcard `? extends Shape` is the same idea ([[How would you explain between extends and super when generics]]).
+> `class Box<T extends Shape>` constrains the type argument. It does not make `Box` a subclass of `Shape`. Wildcard `? extends Shape` is the same idea ([[What is the difference between extends and super wildcards in Java generics]]).
 
 > [!warning] `@Override` is not inheritance syntax
 > It asks the compiler to check that a method overrides or implements a supertype method. The relationship still comes from `extends` / `implements`.
