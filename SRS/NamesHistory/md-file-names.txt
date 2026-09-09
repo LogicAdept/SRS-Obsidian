@@ -680,7 +680,6 @@
 - [x] How would you explain DDL DML and DCL in SQL.md
 - [x] How would you explain deadlock between threads or resources.md
 - [x] How would you explain Deadlock, livelock, starvation.md
-- [x] How would you explain Deadlock.md
 - [x] How would you explain Decision Table.md
 - [x] How would you explain Declarative vs Scripted Pipeline.md
 - [x] What is the difference between shallow and deep copying in Java.md
