@@ -1,9 +1,21 @@
 - [+] How can you emulate CountDownLatch with Phaser.md
+- [+] How do you configure a Quarkus application.md
+- [+] How do you test a Quarkus application.md
 - [+] How do you use CountDownLatch so several threads start together.md
 - [+] How does CyclicBarrier run a barrier action when all parties arrive.md
 - [+] How does Exchanger swap data between two threads.md
 - [+] How does Phaser differ from CyclicBarrier.md
+- [+] How does Quarkus dev mode work.md
+- [+] How does Quarkus support GraalVM native images.md
+- [+] How does Quarkus unify imperative and reactive programming.md
+- [+] What are Dev Services in Quarkus.md
 - [+] What does the fair flag on Semaphore change.md
+- [+] What happens at build time in Quarkus.md
+- [+] What is a Quarkus extension.md
+- [+] What is ArC in Quarkus.md
+- [+] What is Quarkus.md
+- [+] What is the difference between build-time and runtime configuration in Quarkus.md
+- [+] What is the difference between Quarkus and Spring Boot.md
 - [+] What Phaser methods register arrive and awaitAdvance do.md
 - [+] How do you get a concurrent Set in Java.md
 - [+] How do you implement producer-consumer with a BlockingQueue.md
@@ -17,6 +29,8 @@
 - [+] What is the difference between ArrayList Vector and CopyOnWriteArrayList.md
 - [+] What is the difference between ConcurrentLinkedQueue and a BlockingQueue.md
 - [+] What makes a BlockingQueue blocking.md
+- [+] When should you use Quarkus instead of Spring Boot.md
+- [+] Why does Quarkus start faster than a typical Spring Boot application.md
 - [+] Why use concurrent collections instead of Collections synchronized wrappers.md
 - [+] Can you modify a collection while iterating with a for-each loop.md
 - [+] How do you iterate a List in reverse using ListIterator.md
