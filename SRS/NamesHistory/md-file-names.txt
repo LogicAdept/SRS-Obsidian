@@ -1133,7 +1133,7 @@
 - [x] How would you explain what values initialized variable by default.md
 - [x] How would you explain what will if override equals not override hashCode which can problems.md
 - [x] How would you explain what will if queue threads already.md
-- [x] How would you explain what will result execution operation int array = {8 -3 10 4} int result = Arrays.binaryS.md
+- [x] What does Arrays.binarySearch return for an unsorted array.md
 - [x] How would you explain what you do you know about function main.md
 - [x] How would you explain what you do you know about servlet filter.md
 - [x] How would you explain when thenReturn vs doReturn when.md
