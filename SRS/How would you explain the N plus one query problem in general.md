@@ -2,39 +2,42 @@
 reps: 0
 priority: 0
 -->
-#Problems/Persistence #Databases #SRS #New
+#Problems/Persistence #Databases #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How would you explain the N plus one query problem in general
 
-**N+1 — детально.**
+> [!abstract] Short answer
+> **N+1 is when fetching a list of N parent records takes one query, and then touching a related record of each parent issues one more query per parent — 1 + N round trips where one join or batched fetch would do.** It is the default failure mode of lazy loading in ORMs, and it scales linearly with list size.
 
-1 findAll() + N доп. запросов на lazy-коллекции. 1000 заказов → 1001 SQL. Обнаружение: hibernate.generate_statistics=true, datasource-proxy. Решения: JOIN FETCH, @EntityGraph, @BatchSize(100), @Fetch(FetchMode.SUBSELECT), DTO-проекция. EAGER — неправильный ответ.
+## The mechanism, step by step
 
-**Проблема N+1.**
+`orderRepository.findAll()` runs `SELECT * FROM orders` (that is the 1). The view then renders `order.customer.name` for each row; the association is lazy, so the first access per order fires `SELECT * FROM customers WHERE id = ?` — one per order (the N). One thousand orders → one thousand and one statements, each paying network round-trip and planning cost; the page that "should" be one query takes seconds. Hibernate's guide describes the same shape for EAGER associations: a secondary select issued per parent when the association is not covered by the driving query.
 
-При итерации по списку на каждую связанную сущность делается отдельный SELECT. Решения: JOIN FETCH, @EntityGraph, @BatchSize, @Fetch(FetchMode.SUBSELECT).
+Detection is mechanical, not mystical: log or count statements — Hibernate's `generate_statistics`, a datasource proxy that asserts statement counts in tests (fail the build when a repository method issues more than K queries), or simply the slow log filling with one-row selects that repeat with different ids.
 
-**Что такое N+1?**
+```java
+List<Order> orders = orderRepository.findAll();      // 1 query
+for (Order o : orders) {
+    out.add(o.getCustomer().getName());              // +1 query per order
+}
+```
 
-Загрузил список из N сущностей одним запросом. Потом в цикле обращаешься к их LAZY-связям — на каждую идёт отдельный SELECT. Итого 1 + N запросов. На 100 сущностях это 101 запрос — катастрофа для производительности.
+**Listing 1.** The canonical shape: one list query, then a lazy association touched inside the loop.
 
-**Как решить N+1?**
+The fixes collapse the N into the 1 or into a handful: a join fetch so parents and relations come in one statement (`JOIN FETCH` in JPQL, an `@EntityGraph` on the repository method), batch fetching so Hibernate loads ids 1..1000 in chunks of `@BatchSize` (or the global `default_batch_fetch_size`) with `WHERE id IN (...)`, or a subselect fetch for whole-collection loads. The same problem and the same cures exist outside Java — Django's `select_related`/`prefetch_related`, GraphQL's DataLoader — because the root cause is per-parent round trips, not a particular ORM.
 
-(1) JPQL с JOIN FETCH: select o from Order o join fetch o.user. (2) @EntityGraph — атрибут на репозиторий-методе, говорит «подгрузить эти поля сразу». (3) Hibernate batch_size — группирует SELECT'ы по пачкам. (4) DTO-проекция через JPQL select new com.x.OrderDto(...) — сразу плоский результат без загрузки entity.
+```sql
+SELECT o.*, c.name
+FROM orders o
+JOIN customers c ON c.id = o.customer_id;
+```
 
-**N+1 проблема в Spring Data JPA.**
+**Listing 2.** The join fetch version: one statement regardless of list size.
 
-При fetch = LAZY на связи, при итерации по списку делается +1 запрос за каждую связанную сущность. Решения: JOIN FETCH, @EntityGraph, BatchSize.
+> [!warning] EAGER on the association does not fix N+1 — it hides it
+> Marking the relation EAGER makes every load of the entity pay for the extra selects even when the caller does not need them, and a JPQL query that omits the association still triggers one secondary select per row. Fetch strategy is a default, not a guarantee; the query must request the join explicitly. Also distinguish N+1 from lazy loading being *wrong* in general — the bug is the per-row round trip, not laziness itself, per [[What are the drawbacks of lazy loading]].
 
-**N+1 в JPA — как диагностировать?**
+For the JPA mechanics see [[What is lazy fetch in JPA or Hibernate]] and [[What is JOIN FETCH and EntityGraph in Spring Data JPA]]; for counting the damage, [[How do you systematically diagnose a slow SQL query]].
 
-Включить логи SQL (spring.jpa.show-sql=true), смотреть количество запросов на эндпоинт, использовать p6spy или Hibernate Statistics.
-
-**N+1 проблема.**
-
-1 findAll() + N доп. запросов на lazy-коллекции. Решения: JOIN FETCH, @EntityGraph, @BatchSize(100), DTO-проекция. EAGER — неправильный ответ.
-
-**N+1 SQL rewrite?**
-
-Batch with JOIN / IN / ANY. Index children by parent_id. Avoid JOIN that multiplies then DISTINCT. APM: N similar queries, not one slow SQL.
+> [!tip] Interview answer
+> N+1 is one query for the parents plus one per parent for a lazy or uncovered association, so cost grows with list size. I detect it by counting statements in tests — statistics or a datasource proxy — and fix it by fetching the relation in the driving query: join fetch or an entity graph, batch-size IN-loading as the fallback. EAGER is not a fix; it just moves the extra selects to every load.
