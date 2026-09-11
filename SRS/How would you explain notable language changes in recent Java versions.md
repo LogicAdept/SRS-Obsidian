@@ -41,25 +41,7 @@ Still **preview in 25**: primitive types in patterns / `instanceof` / `switch`. 
 
 ```d2
 direction: down
-a: "8 lambdas / defaults\n10 var  14 switch expr  15 \"\"\"" {
-  width: 340
-  height: 55
-  style.fill: "#fff8e1"
-}
-b: "16 records + instanceof\n17 sealed" {
-  width: 280
-  height: 55
-  style.fill: "#e8f5e9"
-}
-c: "21 record patterns + pattern switch\n22 _   25 import module / compact main / pre-super" {
-  width: 360
-  height: 70
-  style.fill: "#e3f2fd"
-}
-
-a -> b
-b -> c
-```
+a: "8 lambdas / defaults\n10 var  14 switch expr  15 \"\"\"" {\n  width: 340\n  height: 55\n  style.fill: "#fff8e1"\n}\nb: "16 records + instanceof\n17 sealed" {\n  width: 280\n  height: 55\n  style.fill: "#e8f5e9"\n}\nc: "21 record patterns + pattern switch\n22 _   25 import module / compact main / pre-super" {\n  width: 360\n  height: 70\n  style.fill: "#e3f2fd"\n}\n\na -> b\nb -> c\n```
 
 **Fig. 1.** Language only. Virtual threads (21) and sequenced collections (21) are APIs. Pattern `switch` is 21, not 17.
 
