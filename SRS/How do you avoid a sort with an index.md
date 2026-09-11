@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you avoid a sort with an index?
+
 > [!abstract] Short answer
 > A sort disappears when an index already supplies the required order: build (or extend) an index whose key sequence equals the `ORDER BY` sequence — including direction and filter column. `WHERE category = ? ORDER BY price` wants the composite `(category, price)`: the equality pins the prefix, the index returns rows in price order, no sort node. SQLite plans the before/after difference as `USE TEMP B-TREE FOR ORDER BY` present versus absent ([[What is filesort or an external merge in a plan]]).
 

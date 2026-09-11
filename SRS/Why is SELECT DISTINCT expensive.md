@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# Why is SELECT DISTINCT expensive?
+
 > [!abstract] Short answer
 > `DISTINCT` is a blocking dedup operator: the engine must compare **every output row** against all rows seen so far — via a sort or a hash — before it can emit anything. Cost grows with result size, not with table size, and it cannot stream. `EXPLAIN QUERY PLAN` names it explicitly on SQLite: `USE TEMP B-TREE FOR DISTINCT`.
 

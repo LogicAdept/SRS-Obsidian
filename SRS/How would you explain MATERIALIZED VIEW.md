@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain MATERIALIZED VIEW?
+
 > [!abstract] Short answer
 > A **materialized view** stores the query's *result* on disk and serves reads from storage; it is refreshed (`REFRESH MATERIALIZED VIEW` in PostgreSQL) rather than live. The trade: reads skip the computation entirely (fast aggregates over big tables), but data is stale between refreshes and the refresh itself is a full recompute (optionally `CONCURRENTLY` to avoid blocking readers). SQLite and MySQL have no materialized views — the pattern is emulated with summary tables plus triggers or scheduled jobs ([[What is a SQL view and what is it used for]]).
 

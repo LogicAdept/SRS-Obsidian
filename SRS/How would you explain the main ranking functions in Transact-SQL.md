@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain the main ranking functions in Transact-SQL?
+
 > [!abstract] Short answer
 > The T-SQL (and standard) ranking functions, all evaluated over a window (`OVER (PARTITION BY ... ORDER BY ...)`): **ROW_NUMBER** — unique sequential numbers regardless of ties; **RANK** — ties share a rank, the next rank *skips* (1, 2, 2, 4); **DENSE_RANK** — ties share, no gaps (1, 2, 2, 3); **NTILE(n)** — buckets rows into n near-equal groups; plus **PERCENT_RANK**/**CUME_DIST** for relative position. SQLite and PostgreSQL implement the same set — the syntax is portable; T-SQL's documentation merely popularized the family ([[How would you explain the SQL ORDER BY clause]]).
 

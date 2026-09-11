@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain VIEW vs MATERIALIZED VIEW?
+
 > [!abstract] Short answer
 > **View**: stored query, zero storage, always current, pays the query cost on every read. **Materialized view**: stored *result*, pays at refresh time, reads are fast but see a snapshot. Choose by freshness requirement and read/write ratio: live correctness -> view; expensive aggregate read many times -> matview with a refresh policy ([[What is a SQL view and what is it used for]], [[How would you explain MATERIALIZED VIEW]]).
 

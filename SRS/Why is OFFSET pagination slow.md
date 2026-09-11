@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# Why is OFFSET pagination slow?
+
 > [!abstract] Short answer
 > `OFFSET n` makes the engine *produce and discard* n rows before returning the page: page 1000 with size 20 walks 20,000 rows. The work grows linearly with page depth even with perfect indexes — `LIMIT 20 OFFSET 100000` plans as a scan of 100,020 index entries. It is fine for shallow, fixed pages (top-N, admin views); it is the wrong tool for deep, unbounded feeds — keyset pagination replaces it ([[What is keyset pagination]]).
 

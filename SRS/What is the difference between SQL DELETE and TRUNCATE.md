@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between SQL DELETE and TRUNCATE?
+
 > [!abstract] Short answer
 > **DELETE** is DML: row-by-row removal, fires triggers, respects FK constraints, logs each row, and (PostgreSQL) leaves dead tuples for vacuum. **TRUNCATE** is DDL-level: deallocates the whole table's storage in one operation — faster by orders of magnitude on big tables, fires only statement-level TRUNCATE triggers, and resets identity sequences by default. SQL Server/MySQL: TRUNCATE is minimally logged, non-row-wise. PostgreSQL's twist: TRUNCATE is *transactional* — it can be rolled back ([[What integrity constraints exist in SQL]]).
 

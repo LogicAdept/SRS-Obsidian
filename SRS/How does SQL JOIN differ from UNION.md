@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How does SQL JOIN differ from UNION?
+
 > [!abstract] Short answer
 > `JOIN` and `UNION` solve opposite problems. `JOIN` combines **columns** — it extends rows horizontally by matching two tables pairwise. `UNION` combines **rows** — it stacks the outputs of two queries with the same column count vertically. They are not interchangeable: one changes the width of the result, the other its length.
 

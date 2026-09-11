@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# Why is SELECT star a performance problem?
+
 > [!abstract] Short answer
 > `SELECT *` moves every column's bytes even when the consumer needs three; it **defeats covering indexes** (any column outside the index forces the table row fetch); it fetches large values (TEXT/BLOB) nobody displays; and it couples the query to the schema — adding a column silently changes every `*` consumer. The plan-level proof: the same query with and without the wide projection plans as covering-index scan versus table scan ([[How do you identify slow or non-performant SQL queries]]).
 

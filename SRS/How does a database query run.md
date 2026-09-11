@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How does a database query run?
+
 > [!abstract] Short answer
 > Five stages: **parse** (text to a parse tree, checking syntax and names), **plan** (choose access paths, join order and algorithms from statistics), **optimize** (cost the alternatives, pick the cheapest), **execute** (run the plan tree, pulling rows through operators), and **fetch/return** (project columns, transmit). `EXPLAIN` inspects the plan stage without executing ([[What is a query plan in a relational database]]).
 

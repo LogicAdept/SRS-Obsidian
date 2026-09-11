@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# In SQL does the engine conceptually apply JOIN or WHERE filtering first?
+
 > [!abstract] Short answer
 > Conceptually the engine applies **`FROM`/`JOIN` first, then `WHERE`** — joins build the row source, and `WHERE` filters that source afterwards. That is why a filter on the right table of a `LEFT JOIN` behaves differently in `ON` (applied during the join, unmatched left rows survive with `NULL`s) than in `WHERE` (applied after the join, and `NULL`-extended rows are dropped).
 

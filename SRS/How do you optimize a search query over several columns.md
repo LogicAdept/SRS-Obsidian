@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you optimize a search query over several columns?
+
 > [!abstract] Short answer
 > Searching over several columns has three index strategies: a **composite index** when the query pins several columns together (`WHERE city = ? AND name LIKE 'A%'` — equality columns first, prefix tail: one seek); **multiple single-column indexes** when conditions come independently or as OR — the engine combines them (SQLite MULTI-INDEX OR, PostgreSQL bitmap OR); and **FTS/trigram machinery** when "search" means text relevance. The plan decides which happened — read it ([[What is Index Cond versus Filter in EXPLAIN]], [[What is a bitmap index scan in SQL plans]]).
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain the SQL HAVING clause?
+
 > [!abstract] Short answer
 > `HAVING` filters **groups** after aggregation, the way `WHERE` filters rows before it. It exists because aggregates are computed after WHERE runs, so "groups with SUM over 100" cannot be expressed in WHERE. Its conditions may reference aggregates and grouping keys ([[What is the difference between SQL WHERE and HAVING clauses]]).
 

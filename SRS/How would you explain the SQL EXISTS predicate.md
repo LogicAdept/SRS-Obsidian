@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain the SQL EXISTS predicate?
+
 > [!abstract] Short answer
 > `EXISTS (subquery)` is a boolean predicate that is true when the subquery returns **at least one row** — the engine stops scanning at the first match and ignores what the subquery selects. `NOT EXISTS` is its negation and the NULL-safe way to spell an anti-join ([[What is an anti-join in SQL]]).
 

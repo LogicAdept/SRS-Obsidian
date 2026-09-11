@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you design a 100 million row table with fast lookup by int32?
+
 > [!abstract] Short answer
 > For "100M rows, instant lookup by int32 id": make the id the **clustered primary key** — `INTEGER PRIMARY KEY` in SQLite (a rowid alias: the table *is* the B-tree keyed by id), the PK of an index-organized/clusters table elsewhere, `WITHOUT ROWID` in SQLite when a non-integer key must lead. Lookup is one B-tree descent (`SEARCH ... USING INTEGER PRIMARY KEY`); the anti-pattern is a heap table with the id in a secondary index (extra hop) or, worse, unindexed ([[What is a query plan in a relational database]]).
 

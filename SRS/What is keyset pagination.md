@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is keyset pagination?
+
 > [!abstract] Short answer
 > **Keyset pagination** fetches the next page with a *seek*: remember the last row's sort key and ask for rows strictly after it — `WHERE (at, id) > (:last_at, :last_id) ORDER BY at, id LIMIT :n`. The plan is an index seek per page regardless of page number; no skipped-row walk. It replaces `OFFSET`, whose cost grows linearly with page depth, and requires a deterministic, unique-able sort key ([[Why is OFFSET pagination slow]]).
 

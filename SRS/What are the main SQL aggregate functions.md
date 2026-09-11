@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What are the main SQL aggregate functions?
+
 > [!abstract] Short answer
 > The five core aggregates: `COUNT` (rows or non-NULL values), `SUM`, `AVG`, `MIN`, `MAX`. They share one defining rule: **every aggregate except COUNT(*) ignores NULL inputs**. Beyond the five: `GROUP_CONCAT`/`string_agg` (lists), `array_agg`, statistical sets (`STDDEV`, `VARIANCE`), boolean aggregates (`BOOL_AND`/`BOOL_OR`, SQLite has none) and JSON aggregates in newer engines.
 

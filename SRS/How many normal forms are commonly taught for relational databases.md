@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How many normal forms are commonly taught for relational databases?
+
 > [!abstract] Short answer
 > The commonly taught ladder is **1NF, 2NF, 3NF** (Codd), plus **BCNF** as the stricter 3NF refinement; some curricula continue to 4NF (multivalued dependencies) and 5NF/6NF (join dependencies). The interview-standard answer: name the first three precisely, say "and BCNF when a 3NF table still has a composite key overlapping a non-key dependency", and know that practical schemas usually target 3NF/BCNF with deliberate denormalization for read performance ([[What is a SQL view and what is it used for]]).
 

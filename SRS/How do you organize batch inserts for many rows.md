@@ -87,7 +87,3 @@ Spring `JdbcTemplate.batchUpdate` / `BatchPreparedStatementSetter` is this same 
 > [!tip] Interview answer
 > For many inserts, use one `PreparedStatement`, `addBatch()` after each row’s binds, then `executeBatch()`. That is JDBC’s batch list, not a special SQL keyword. Check `supportsBatchUpdates()`, handle `BatchUpdateException` because leftover commands may or may not have run, and wrap the batch in a transaction if auto-commit is off.
 
-## See also
-
-- [[What JDBC statement types exist]]
-- [[What JDBC statement types exist]]

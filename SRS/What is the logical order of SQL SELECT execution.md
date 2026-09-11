@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the logical order of SQL SELECT execution?
+
 > [!abstract] Short answer
 > The **logical processing order** (binding order) of a `SELECT` is: `FROM` → `ON` → `JOIN` → `WHERE` → `GROUP BY` → aggregates/`ROLLUP` → `HAVING` → `SELECT` → `DISTINCT` → `ORDER BY` → `LIMIT/TOP`. Each clause can only reference names and aliases produced by an earlier step. It is called *logical* because the engine is free to physically reorder work — but only when that cannot change the declared result ([[In SQL does the engine conceptually apply JOIN or WHERE filtering first]]).
 

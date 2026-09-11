@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How does implicit type conversion hide an index?
+
 > [!abstract] Short answer
 > When a predicate compares values of different types, the engine **converts one side** — and *which* side it converts decides whether the index survives. If the column side is converted (SQL Server's classic `varchar_col = N'literals'` or `varchar_col = 12345`), the seek becomes a scan: every row's column is cast before comparing. Engines that convert the *literal* side (SQLite's type affinity) keep the index usable ([[What is sargability in SQL]]).
 

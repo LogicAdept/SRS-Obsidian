@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain SQL injection attacks and defenses?
+
 > [!abstract] Short answer
 > **SQL injection** is the failure of building SQL by string concatenation with untrusted input: the input's quote characters terminate a literal and inject SQL *structure* (`x' OR '1'='1'` makes the WHERE always true). The defense is **parameterized queries** (PreparedStatement, `?`/`:name` binding): SQL structure and data travel separately, so input can never change the statement's shape. Secondary layers: least-privilege accounts, input validation, escaping as a last resort — the OWASP SQL Injection Prevention Cheat Sheet orders exactly these ([[What does the SQL MERGE statement do]]).
 

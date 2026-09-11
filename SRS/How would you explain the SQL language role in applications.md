@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain the SQL language role in applications?
+
 > [!abstract] Short answer
 > In an application, SQL is the **boundary language between app code and data**: the application owns the UI, business rules, and orchestration, while SQL expresses every read and write against the database. Even when you never type SQL yourself — an ORM, a query builder, or a reporting tool generates it — the statement that finally executes is still SQL, which is why backend engineers are expected to read, review, and tune it.
 

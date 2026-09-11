@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you rewrite a correlated subquery for performance?
+
 > [!abstract] Short answer
 > The two standard rewrites of a slow correlated subquery: (1) **aggregate first, join second** — compute per-group values in a derived table or CTE, then join the aggregate to the base rows; (2) **window functions** — `AVG(...) OVER (PARTITION BY ...)` computes the group value while scanning, no self-join at all. Both replace "N re-executions" with "one aggregation pass plus one join".
 

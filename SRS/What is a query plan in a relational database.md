@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is a query plan in a relational database?
+
 > [!abstract] Short answer
 > A **query plan** is the engine's chosen execution strategy for one SQL statement: an ordered tree of operations (scan this table, seek that index, join these inputs, sort, aggregate). The same SQL can have many plans; the **planner** picks one from statistics and available indexes. `EXPLAIN` prints the plan without running it ([[How do you use EXPLAIN ANALYZE in SQL]]).
 

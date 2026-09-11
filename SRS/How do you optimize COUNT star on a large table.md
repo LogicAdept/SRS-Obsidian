@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you optimize COUNT star on a large table?
+
 > [!abstract] Short answer
 > `COUNT(*)` is an O(N) walk in MVCC engines — there is no cached row count, because concurrent transactions make "the count" a function of the *snapshot*, not the table. Optimizations: keep the count on a **covering index** (smallest index wins — SQLite plans `SCAN ... USING COVERING INDEX`), accept **approximate** counts from catalog statistics (PostgreSQL `pg_class.reltuples`), or **maintain** the count yourself (counter table / cached value) when exact real-time counts are a business requirement ([[What is the difference between COUNT star and COUNT of a column]]).
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What do cost rows and loops mean in EXPLAIN?
+
 > [!abstract] Short answer
 > In PostgreSQL's EXPLAIN: **cost** = planner's arbitrary units of estimated work (`cost=startup..total`, relative only); **rows** = estimated output rows of the node; **loops** = how many times the node repeats. Total time of a repeated node is per-loop time times loops — the number that actually matters. SQLite exposes the same idea through actual row counts per step in ANALYZE output ([[How do you use EXPLAIN ANALYZE in SQL]]).
 

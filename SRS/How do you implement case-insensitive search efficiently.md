@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you implement case-insensitive search efficiently?
+
 > [!abstract] Short answer
 > Case-insensitive search has three tiers: (1) **case-insensitive LIKE** — SQLite's default for ASCII; PostgreSQL needs `ILIKE` or `lower(col) = lower(?)`; (2) **case-insensitive indexes** — SQLite `COLLATE NOCASE`, PostgreSQL `citext` type or a `lower()` expression index — restoring index seeks for the insensitive comparison; (3) **full-text/collation-aware machinery** for Unicode-correct folding at scale ([[What is the difference between LIKE ILIKE and full-text search]], [[Why does a function on a column prevent index use]]).
 

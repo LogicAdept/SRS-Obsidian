@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you use EXPLAIN ANALYZE in SQL?
+
 > [!abstract] Short answer
 > `EXPLAIN` shows the planned strategy; `EXPLAIN ANALYZE` **additionally executes** the statement and annotates every plan node with *actual* measurements — real row counts, loops, and time. It is the only way to see where estimates diverge from reality. PostgreSQL spells it `EXPLAIN ANALYZE`; SQLite embeds the counts in `EXPLAIN ANALYZE` output of the CLI and exposes per-step counting through its bytecode `EXPLAIN`.
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# When should you use full-text search instead of LIKE?
+
 > [!abstract] Short answer
 > Prefer **full-text search** over LIKE when the requirement is word-shaped: find documents *containing words* (any of / all of / phrase), rank by relevance, handle morphology (stemming), scale beyond a few thousand rows. Keep **LIKE** for exact substring semantics: codes, IDs, partial words, completion-as-you-type on anchored prefixes. The signal is the query language itself — FTS exposes boolean operators and ranking; LIKE exposes wildcards ([[What is the difference between LIKE ILIKE and full-text search]]).
 

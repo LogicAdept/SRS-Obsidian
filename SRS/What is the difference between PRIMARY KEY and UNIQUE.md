@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between PRIMARY KEY and UNIQUE?
+
 > [!abstract] Short answer
 > **PRIMARY KEY** = row identity: UNIQUE **plus NOT NULL**, at most one per table, and it is the key other tables reference. **UNIQUE** is just non-duplication: a table may carry many UNIQUE constraints, and — the interview point — NULLs are allowed *multiple times* in most engines, because NULL is not a value and no two NULLs are equal for the uniqueness test ([[What does NULL mean in SQL]]).
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is filesort or an external merge in a plan?
+
 > [!abstract] Short answer
 > **Filesort** is MySQL's name for a sort node in the plan — rows are collected and sorted (in memory, or spilled to disk in runs and merged) because no index supplied the required order. SQLite names the equivalent `USE TEMP B-TREE FOR ORDER BY`; PostgreSQL shows a `Sort` node. It is a blocking operator: output starts only after all input is read and ordered.
 

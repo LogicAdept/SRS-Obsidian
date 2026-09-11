@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you forbid NULL or empty values in a database column?
+
 > [!abstract] Short answer
 > Two constraints layered: `NOT NULL` forbids the missing value; a `CHECK` forbids the empty *content* — `CHECK (col <> '')` for strings, `CHECK (length(trim(col)) > 0)` when whitespace-only must also fail. Either alone is half a guarantee: NOT NULL still allows `''`, and an empty-check alone still allows NULL ([[What integrity constraints exist in SQL]]).
 

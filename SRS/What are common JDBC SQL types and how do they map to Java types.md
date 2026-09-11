@@ -89,8 +89,3 @@ public final class CommonJdbcTypes {
 > [!tip] Interview answer
 > Common JDBC types live in `java.sql.Types`: `VARCHAR`→`String`, `INTEGER`→`int`, `BIGINT`→`long`, `DECIMAL`→`BigDecimal`, `TIMESTAMP`→`java.sql.Timestamp`, `BLOB`→`Blob`. `getObject` boxes primitives and maps `TINYINT`/`SMALLINT` to `Integer`. Always `wasNull()` after primitive getters.
 
-## See also
-
-- [[How are database query results processed in JDBC]]
-- [[How would you explain list main class and interface JDBC]]
-- [[What is JDBC ResultSet]]

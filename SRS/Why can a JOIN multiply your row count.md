@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# Why can a JOIN multiply your row count?
+
 > [!abstract] Short answer
 > A join against the *many* side of a one-to-many relationship outputs **one row per match**, not one row per left row: a customer with 3 orders becomes 3 rows. Any aggregate computed over that result counts each parent row N times — the classic "totals are too big after joining" bug. The fix is to aggregate children first (pre-aggregation) or to aggregate parent columns before the join.
 

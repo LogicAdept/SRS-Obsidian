@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between prefix search and contains search?
+
 > [!abstract] Short answer
 > **Prefix search** (`LIKE 'abc%'`) pins the left edge of the match, so a B-tree can seek the range `['abc', 'abd')` — the engine plans a SEARCH. **Contains search** (`LIKE '%abc%'`) has no left boundary; every key is a candidate, so the plan is a full scan regardless of indexes. The wildcard's *position* is the whole performance story ([[Why does LIKE with a leading wildcard not use a B-tree index]], [[What is sargability in SQL]]).
 

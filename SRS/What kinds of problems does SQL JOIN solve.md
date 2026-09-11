@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What kinds of problems does SQL JOIN solve?
+
 > [!abstract] Short answer
 > Joins solve the problems normalization creates: **reassembling** facts split across tables (order + customer + items), **enrichment/lookup** (attach a name or category to a bare foreign key), **filtering by related data** (rows whose related rows satisfy a condition), and **aggregation across entities** (totals per customer computed from child rows). Any query touching more than one entity at SQL level is a join in disguise.
 

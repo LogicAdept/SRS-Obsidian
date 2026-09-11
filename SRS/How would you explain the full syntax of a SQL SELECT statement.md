@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain the full syntax of a SQL SELECT statement?
+
 > [!abstract] Short answer
 > The full `SELECT` syntax is the ordered stack of optional clauses: `[WITH ...] SELECT [DISTINCT|ALL] select_list [INTO ...] FROM sources [JOIN ... ON ...] [WHERE ...] [GROUP BY ...] [HAVING ...] [WINDOW ...] [ORDER BY ...] [LIMIT/OFFSET | FETCH FIRST] [FOR UPDATE]`. Only the `SELECT` list is mandatory in the standard; every other clause is additive, and each appears in a fixed position.
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is a temporary table in SQL and when is it used?
+
 > [!abstract] Short answer
 > A **temporary table** is a table scoped to a session (or transaction): created with `CREATE TEMP TABLE`, it lives in the session's private namespace, vanishes at session end, and is invisible to other connections — ideal for multi-step query work (stage, transform, join) without touching production tables or contending for locks ([[When should you use a subquery JOIN or CTE in SQL]]).
 

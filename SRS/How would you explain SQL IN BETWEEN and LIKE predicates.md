@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain SQL IN BETWEEN and LIKE predicates?
+
 > [!abstract] Short answer
 > Three row predicates from the standard's toolbox: `IN (list | subquery)` — membership against explicit values or a subquery result; `BETWEEN a AND b` — a range *inclusive on both ends* (exactly `col >= a AND col <= b`); `LIKE` — pattern matching where `%` matches any run of characters and `_` exactly one. All three are sargable when the left side is a bare indexed column and the shape cooperates (BETWEEN and LIKE-prefix seek; IN seeks per value) ([[What is sargability in SQL]]).
 

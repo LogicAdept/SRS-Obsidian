@@ -72,9 +72,3 @@ public final class CursorName {
 > [!tip] Interview answer
 > JDBC’s cursor is the ResultSet’s current-row pointer; start before row 1 and call `next()`. SQL’s cursor is a named server object you `DECLARE`, `FETCH`, and `CLOSE`, usually inside a transaction. JDBC can expose the SQL cursor name for `WHERE CURRENT OF`. They are related only when the driver supports that name; most Java loops never see it.
 
-## See also
-
-- [[How does JDBC ResultSet behave and what configuration options exist]]
-- [[How would you explain ResultSet types scrolling and concurrency modes]]
-- [[What is a database cursor]]
-- [[How are database query results processed in JDBC]]
