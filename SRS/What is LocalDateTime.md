@@ -66,7 +66,7 @@ class Demo {
 }
 ```
 
-**Listing 1.** `of` / `plus*` copies / `isAfter` / split / `atZone`. `now()` uses a clock; the result is still zoneless. `LocalDateTime::now` is a `Supplier` ([[How would you explain for what needed functional interface SupplierT BooleanSupplier DoubleSupplier IntSupplie]]).
+**Listing 1.** `of` / `plus*` copies / `isAfter` / split / `atZone`. `now()` uses a clock; the result is still zoneless. `LocalDateTime::now` is a `Supplier` ([[How would you explain Supplier BooleanSupplier IntSupplier LongSupplier and DoubleSupplier]]).
 
 > [!warning] No zone means no instant
 > Two `LocalDateTime`s that look equal can be different UTC instants in different regions. DST gaps/overlaps appear only after `atZone`. `plusHours` does not apply zone rules — it just adds civil hours. Do not use `==`.

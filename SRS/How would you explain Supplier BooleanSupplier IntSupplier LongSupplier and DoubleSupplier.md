@@ -4,7 +4,7 @@ priority: 0
 -->
 #Java/FunctionalInterfaces #Java/Lambdas #Java/Versions/8 #SRS
 
-# How would you explain for what needed functional interface SupplierT BooleanSupplier DoubleSupplier IntSupplie
+# How would you explain Supplier BooleanSupplier IntSupplier LongSupplier and DoubleSupplier
 
 > [!abstract] Short answer
 > **They are Java 8 zero-in, one-out factories.** `Supplier<T>`’s SAM is `T get()`. `BooleanSupplier` / `IntSupplier` / `LongSupplier` / `DoubleSupplier` are the **primitive-result** specializations (`getAsBoolean` / `getAsInt` / `getAsLong` / `getAsDouble`), not `Boolean` / `Integer` / `Long` / `Double`. Nothing is passed in. `Stream.generate` takes `Supplier`; `IntStream.generate` takes `IntSupplier`.

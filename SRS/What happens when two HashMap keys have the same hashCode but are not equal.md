@@ -4,7 +4,7 @@ priority: 0
 -->
 #Java/Collections/Map/HashMap #Java/HashCodeEquals #Java/Versions/8 #SRS
 
-# How does `HashMap` behave when two keys have the same `hashCode` but `equals` is false?
+# What happens when two HashMap keys have the same hashCode but are not equal
 
 > [!abstract] Short answer
 > **Both mappings stay.** Same `hashCode` is a **collision**, not equality. The mixed hash picks one bucket; `equals` (after `==`) decides whether to **replace** a value or **insert** another node. Unequal keys with the same hash share that bin as a list, or as a tree once the bin is long enough (Java 8+).

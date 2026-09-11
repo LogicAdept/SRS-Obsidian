@@ -372,7 +372,6 @@
 - [x] How do you monitor a model in production.md
 - [x] How do you monitor an application with Spring Boot Actuator.md
 - [x] How do you monitor database health and load.md
-- [x] How do you number in set.md
 - [x] How do you obtain a read-only or unmodifiable collection in Java.md
 - [x] How do you obtain synchronized wrappers for standard Java collections.md
 - [x] How do you on which should you.md
@@ -618,7 +617,6 @@
 - [x] How would you explain advantages of Java NIO over classic blocking IO.md
 - [x] How would you explain Allure.md
 - [x] How would you explain alternate or secondary keys in relational databases.md
-- [x] How would you explain and exists main implementation on and on method how HashMap why by in how and approach.md
 - [x] What are anonymous classes and where are they used.md
 - [x] How would you explain Apache Maven.md
 - [x] How would you explain are there class Point{int x y;} why code in form 31 x + y how x + y.md
@@ -2666,7 +2664,6 @@
 - [x] Which message delivery guarantees.md
 - [x] Which methods can implement inversion of control.md
 - [x] Which methods class File you do you know.md
-- [x] Which methods work stream you do you know.md
 - [x] Which methods XML describe and method.md
 - [x] Which modifiers.md
 - [x] Which new Map methods were added in Java 8.md

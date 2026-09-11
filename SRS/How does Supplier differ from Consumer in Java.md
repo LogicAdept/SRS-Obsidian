@@ -34,7 +34,7 @@ sup -> val: "produces"
 val -> con: "consumed"
 ```
 
-**Fig. 1.** `get()` yields a `T`. `accept` takes that `T` and returns nothing. See [[What is functional interface]] and [[How would you explain for what needed functional interface SupplierT BooleanSupplier DoubleSupplier IntSupplie]].
+**Fig. 1.** `get()` yields a `T`. `accept` takes that `T` and returns nothing. See [[What is functional interface]] and [[How would you explain Supplier BooleanSupplier IntSupplier LongSupplier and DoubleSupplier]].
 
 `Consumer` has a default `andThen(after)`: run this `accept`, then `after.accept`, in that order. If this operation throws, `after` is **not** run. `andThen(null)` throws `NullPointerException` at composition time. `Supplier` has no `andThen` / `compose`. `Function.apply` is the type that both takes an argument and produces a result (`andThen` / `compose` / `identity` live there).
 
