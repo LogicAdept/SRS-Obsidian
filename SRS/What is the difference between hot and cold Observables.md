@@ -40,7 +40,7 @@ hotSource.emitNext("orange", Sinks.EmitFailureHandler.FAIL_FAST);
 **Listing 1.** Verified on Reactor Core 3.6: cold runs per subscriber; the late hot subscriber missed `blue`.
 
 > [!warning] "Nothing happens before you subscribe" is a cold-publisher rule
-> Treating it as universal is the classic interview trap: a hot source — a market feed, sensor stream, or a `Sinks` in a long-running service — is emitting whether or not anyone subscribed, and a subscriber that arrives later cannot rewind. The replay exception: `replay()` retains history, `share()` does not. Also `Mono.just(value)` already holds its captured value at assembly time — side effects in the argument happen even with zero subscribers ([[How does the Observer pattern underpin reactive programming]]).
+> Treating it as universal is the classic interview trap: a hot source — a market feed, sensor stream, or a `Sinks` in a long-running service — is emitting whether or not anyone subscribed, and a subscriber that arrives later cannot rewind. The replay exception: `replay()` retains history, `share()` does not. Also `Mono.just(value)` already holds its captured value at assembly time — side effects in the argument happen even with zero subscribers ([[What is Observer]]).
 
 ```d2
 direction: down
