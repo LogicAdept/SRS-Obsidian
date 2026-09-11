@@ -2,49 +2,34 @@
 reps: 0
 priority: 0
 -->
-#Patterns/GoF/Behavioral #SRS #New
+#Patterns/GoF/Behavioral #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# What are examples of behavioral design patterns
 
-**Приведите примеры основных шаблонов проектирования.**
+> [!abstract] Short answer
+> The GoF behavioral set is ten patterns: **Chain of Responsibility, Command, Iterator, Mediator, Memento, Observer, State, Strategy, Template Method, Visitor**. They are about algorithms and the assignment of responsibilities — who does what, and how objects talk.
 
-+ __Делегирование (Delegation pattern)__ - Сущность внешне выражает некоторое поведение, но в реальности передаёт ответственность за выполнение этого поведения связанному объекту.
-+ __Функциональный дизайн (Functional design)__ - Гарантирует, что каждая сущность имеет только одну обязанность и исполняет её с минимумом побочных эффектов на другие.
-+ __Неизменяемый интерфейс (Immutable interface)__ - Создание неизменяемого объекта.
-+ __Интерфейс (Interface)__ - Общий метод структурирования сущностей облегчающий их понимание.
-+ __Интерфейс-маркер (Marker interface)__ - В качестве атрибута (как пометки объектной сущности) применяется наличие или отсутствие реализации интерфейса-маркера. В современных языках программирования вместо этого применяются атрибуты или аннотации.
-+ __Контейнер свойств (Property container)__ - Позволяет добавлять дополнительные свойства сущности в контейнер внутри себя, вместо расширения новыми свойствами.
-+ __Канал событий (Event channel)__ - Создаёт централизованный канал для событий. Использует сущность-представитель для подписки и сущность-представитель для публикации события в канале. Представитель существует отдельно от реального издателя или подписчика. Подписчик может получать опубликованные события от более чем одной сущности, даже если он зарегистрирован только на одном канале.
+## The catalog set
 
-**Приведите примеры порождающих шаблонов проектирования.**
+Chain of Responsibility passes a request along a line of handlers until one processes it. Command turns a request into a stand-alone object, which enables queues, scheduling, and undo. Iterator traverses a collection without exposing its internals — the Java `Iterator` interface is the everyday example. Mediator replaces a web of direct object links with one hub. Memento snapshots and restores an object's state without leaking its internals. Observer defines subscription so a publisher can notify many subscribers. State makes an object change behavior as its internal state changes. Strategy makes a family of algorithms interchangeable. Template Method fixes the algorithm skeleton in a superclass and lets subclasses override steps. Visitor separates an algorithm from the object structure it walks. The most drilled members get their own cards — [[What is Observer]], [[What is the Strategy pattern used for]], and [[How would you explain the Command design pattern]].
 
-+ __Абстрактная фабрика (Abstract factory)__ - Класс, который представляет собой интерфейс для создания других классов.
-+ __Строитель (Builder)__ - Класс, который представляет собой интерфейс для создания сложного объекта.
-+ __Фабричный метод (Factory method)__ - Делегирует создание объектов наследникам родительского класса. Это позволяет использовать в коде программы не специфические классы, а манипулировать абстрактными объектами на более высоком уровне.
-+ __Прототип (Prototype)__ - Определяет интерфейс создания объекта через клонирование другого объекта вместо создания через конструктор.
-+ __Одиночка (Singleton)__ - Класс, который может иметь только один экземпляр.
+## Four ways to connect a sender and a receiver
 
-**Приведите примеры структурных шаблонов проектирования.**
+The catalog itself contrasts four of these patterns by how they link senders to receivers: Chain of Responsibility passes the request sequentially through potential receivers until one handles it; Command builds a one-way connection through a command object; Mediator removes direct links and forces communication through itself; Observer lets receivers subscribe and unsubscribe dynamically. This contrast is a compact way to answer "how do these differ" without reciting definitions.
 
-+ __Адаптер (Adapter)__ - Объект, обеспечивающий взаимодействие двух других объектов, один из которых использует, а другой предоставляет несовместимый с первым интерфейс.
-+ __Мост (Bridge)__ - Структура, позволяющая изменять интерфейс обращения и интерфейс реализации класса независимо.
-+ __Компоновщик (Composite)__ - Объект, который объединяет в себе объекты, подобные ему самому.
-+ __Декоратор (Decorator)__ - Класс, расширяющий функциональность другого класса без использования наследования.
-+ __Фасад (Facade)__ - Объект, который абстрагирует работу с несколькими классами, объединяя их в единое целое.
-+ __Приспособленец (Flyweight)__ - Это объект, представляющий себя как уникальный экземпляр в разных местах программы, но по факту не являющийся таковым.
-+ __Заместитель (Proxy)__ - Объект являющийся посредником между двумя другими объектами и реализующий/ограничивающий доступ к объекту, к которому обращаются через него.
+```d2
+direction: right
+cor: "Chain of Responsibility\nforward until handled" { width: 230; height: 80; style.fill: "#e3f2fd" }
+cmd: "Command\nrequest as an object" { width: 220; height: 80; style.fill: "#fff3e0" }
+med: "Mediator\none hub object" { width: 190; height: 80; style.fill: "#e8f5e9" }
+obs: "Observer\ndynamic subscriptions" { width: 220; height: 80; style.fill: "#fff3e0" }
+cor -> cmd -> med -> obs: sender to receiver styles
+```
 
-**Приведите примеры поведенческих шаблонов проектирования.**
+**Fig. 1.** Four connection styles among the behavioral patterns, from a linear chain to live subscriptions.
 
-+ __Цепочка обязанностей (Chain of responsibility)__ - Предназначен для организации в системе уровней ответственности.
-+ __Команда (Command)__ - Представляет действие. Объект команды заключает в себе само действие и его параметры.
-+ __Интерпретатор (Interpreter)__ - Решает часто встречающуюся, но подверженную изменениям, задачу.
-+ __Итератор (Iterator)__ - Представляет собой объект, позволяющий получить последовательный доступ к элементам объекта-агрегата без использования описаний каждого + __из объектов, входящих в состав агрегации.
-+ __Посредник (Mediator)__ - Обеспечивает взаимодействие множества объектов, формируя при этом слабую связанность и избавляя объекты от необходимости явно ссылаться друг на друга.
-+ __Хранитель (Memento)__ - Позволяет не нарушая инкапсуляцию зафиксировать и сохранить внутренние состояния объекта так, чтобы позднее восстановить его в этих состояниях.
-+ __Наблюдатель (Observer)__ - Определяет зависимость типа «один ко многим» между объектами таким образом, что при изменении состояния одного объекта все зависящие от него оповещаются об этом событии.
-+ __Состояние (State)__ - Используется в тех случаях, когда во время выполнения программы объект должен менять своё поведение в зависимости от своего состояния.
-+ __Стратегия (Strategy)__ - Предназначен для определения семейства алгоритмов, инкапсуляции каждого из них и обеспечения их взаимозаменяемости.
-+ __Шаблонный метод (Template method)__ - Определяет основу алгоритма и позволяет наследникам переопределять некоторые шаги алгоритма, не изменяя его структуру в целом.
-+ __Посетитель (Visitor)__ - Описывает операцию, которая выполняется над объектами других классов. При изменении класса Visitor нет необходимости изменять обслуживаемые классы.
+> [!warning] MVC is not a GoF behavioral pattern
+> MVC is an architectural pattern for structuring whole applications; the Spring card [[What design patterns does the Spring Framework use]] lists it alongside GoF names, but the GoF catalog itself contains no MVC. Calling MVC "one of the ten behavioral patterns" is a recognizable mistake.
+
+> [!tip] Interview answer
+> Behavioral patterns distribute responsibilities: Chain of Responsibility, Command, Iterator, Mediator, Memento, Observer, State, Strategy, Template Method, and Visitor. A clean mental grouping is by communication style — chains, command objects, mediators, subscriptions — plus the behavior-switching pair State and Strategy and the structure-walking Visitor.
