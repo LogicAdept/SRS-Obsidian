@@ -11,7 +11,7 @@ priority: 0
 
 ## CLOSED → OPEN → HALF_OPEN
 
-Resilience4j records successes and failures in a **sliding window** (count-based or time-based). It opens when **failure rate** or **slow-call rate** is **≥** the threshold — but only after **`minimumNumberOfCalls`** in the window. Default **`failureRateThreshold` is 50%**. Slow calls use **`slowCallDurationThreshold`** and **`slowCallRateThreshold`**. **OPEN** waits **`waitDurationInOpenState`** (default 60s), then **HALF_OPEN** allows **`permittedNumberOfCallsInHalfOpenState`** (default 10). Those probes decide CLOSED vs OPEN again. Special states: **DISABLED**, **FORCED_OPEN**, **METRICS_ONLY** ([[How does Resilience4j circuit breaker work with Spring]], [[How would you explain the circuit breaker pattern for resilient calls]]).
+Resilience4j records successes and failures in a **sliding window** (count-based or time-based). It opens when **failure rate** or **slow-call rate** is **≥** the threshold — but only after **`minimumNumberOfCalls`** in the window. Default **`failureRateThreshold` is 50%**. Slow calls use **`slowCallDurationThreshold`** and **`slowCallRateThreshold`**. **OPEN** waits **`waitDurationInOpenState`** (default 60s), then **HALF_OPEN** allows **`permittedNumberOfCallsInHalfOpenState`** (default 10). Those probes decide CLOSED vs OPEN again. Special states: **DISABLED**, **FORCED_OPEN**, **METRICS_ONLY** ([[How does Resilience4j circuit breaker work with Spring]], [[How do you protect a slower downstream service from overload]]).
 
 By default **every exception is a failure**. **`recordExceptions`** / **`ignoreExceptions`**: ignored types count as **neither** failure nor success (typical for **business** exceptions you do not want to trip the breaker).
 
