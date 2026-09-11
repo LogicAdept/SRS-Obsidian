@@ -13,7 +13,7 @@ priority: 0
 
 `java.time` replaced mutable `Date`/`Calendar` with immutable ISO-8601 types ([[What is the java.time API and why did it replace Date and Calendar]]). `CompletableFuture` composable async pipelines arrived (`supplyAsync`/`thenCompose`/`allOf`) ([[What is CompletableFuture]]). Streams gave the aggregation vocabulary; `Optional` gave absence a type; `Spliterator` powered parallel traversal ([[What is Spliterator]]). `java.util.Base64` ended the `sun.misc` hack. Nashorn shipped as the ES 5.1 engine with `jjs` ([[What is Nashorn]], [[What is jjs]]) — later removed in 15.
 
-The JVM changed shape too: **PermGen died** and class metadata moved to native-memory Metaspace, sized by `-XX:MaxMetaspaceSize` instead of fixed Perm bounds ([[What is Metaspace and how does it differ from PermGen]]). `HashMap` got treeified bins (JEP 180): a crowded bucket becomes a red-black tree, capping worst-case lookup at O(log n) ([[How does HashMap handle collisions]]). `ConcurrentHashMap` was rewritten to CAS+`synchronized` bins ([[How would you explain ConcurrentHashMap Java 8]]).
+The JVM changed shape too: **PermGen died** and class metadata moved to native-memory Metaspace, sized by `-XX:MaxMetaspaceSize` instead of fixed Perm bounds ([[What is Metaspace and how does it differ from PermGen]]). `HashMap` got treeified bins (JEP 180): a crowded bucket becomes a red-black tree, capping worst-case lookup at O(log n) ([[How does HashMap handle collisions]]). `ConcurrentHashMap` was rewritten to CAS+`synchronized` bins ([[How would you explain ConcurrentHashMap Java 8]]). The version-attributed view of all these internal swaps: [[How did the implementations of core data structures change across Java versions]].
 
 ```d2
 direction: down

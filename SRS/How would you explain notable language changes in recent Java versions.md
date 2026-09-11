@@ -71,7 +71,7 @@ class Demo {
 **Listing 1.** 15 text block + 14 switch expression + 16 record + 21 record pattern + 22 unnamed `_`. Compact `void main()` and `import module` need 25.
 
 > [!warning] Preview is not “recent Java”
-> Pattern `switch` in 17 required `--enable-preview`. String templates never graduated. Primitive patterns are still preview in 25. Quoting a JEP number from a project page without checking **Permanent vs Preview** is the usual wrong answer.
+> Pattern `switch` in 17 required `--enable-preview`. String templates never graduated. Primitive patterns are still preview in 25. Quoting a JEP number from a project page without checking **Permanent vs Preview** is the usual wrong answer. The 25-era syntax finals get their own cards: [[What are unnamed variables and patterns]], [[What are flexible constructor bodies]], [[What are compact source files and instance main methods]], [[What are module import declarations]].
 
 > [!warning] `var` and `_` are narrow
 > `var` needs an initializer and a denotable (or allowed) type — not `null`, not a lambda without a target type, not a field. `_` does not go in a method signature. `case L ->` does not fall through; mixing that muscle memory with `case L:` is a bug.

@@ -7,7 +7,7 @@ priority: 0
 # What are the typical problems when upgrading from Java 8 to 17
 
 > [!abstract] Short answer
-> **The 8→17 upgrade breaks in four layers: (1) removed modules — Java EE (JAXB/JAX-WS/annotation) and CORBA left the JDK (JEP 320); (2) strong encapsulation — reflection on JDK internals now needs `--add-opens` (JEP 403); (3) toolchain floor — bytecode 61 requires upgraded ASM/CGLIB/byte-buddy, modern Gradle/Kotlin/IDEs; (4) runtime shifts — default GC is G1 (since 9, CMS removed in 14), new language features, changed defaults like UTF-8 (18).** `javax`→`jakarta` rides along with Spring Boot 3/Tomcat 10, but is ecosystem, not JDK ([[What Java EE modules were removed in Java 11]], [[What is strong encapsulation of JDK internals]]).
+> **The 8→17 upgrade breaks in four layers: (1) removed modules — Java EE (JAXB/JAX-WS/annotation) and CORBA left the JDK (JEP 320); (2) strong encapsulation — reflection on JDK internals now needs `--add-opens` (JEP 403); (3) toolchain floor — bytecode 61 requires upgraded ASM/CGLIB/byte-buddy, modern Gradle/Kotlin/IDEs; (4) runtime shifts — default GC is G1 (since 9, CMS removed in 14 — the full collector timeline: [[Which garbage collectors were added or removed in each Java version]]), new language features, changed defaults like UTF-8 (18).** `javax`→`jakarta` rides along with Spring Boot 3/Tomcat 10, but is ecosystem, not JDK ([[What Java EE modules were removed in Java 11]], [[What is strong encapsulation of JDK internals]]).
 
 ## The four layers in upgrade order
 
