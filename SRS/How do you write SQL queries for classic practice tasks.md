@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you write SQL queries for classic practice tasks?
+
 > [!abstract] Short answer
 > The classic interview tasks and their canonical shapes: **second-highest salary** — `DENSE_RANK() OVER (ORDER BY amount DESC)` filtered to rank 2 (handles ties correctly) or portable `ORDER BY amount DESC LIMIT 1 OFFSET 1`; **find duplicates** — `GROUP BY key HAVING COUNT(*) > 1`; **running total** — `SUM(...) OVER (PARTITION BY ... ORDER BY ...)`; **top-N per group** — `ROW_NUMBER() OVER (PARTITION BY ... ORDER BY ...)` filtered to N; **Nth-highest per group** — DENSE_RANK again ([[How would you explain the SQL GROUP BY clause]], [[How would you explain the SQL HAVING clause]]).
 

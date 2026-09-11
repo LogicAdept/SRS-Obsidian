@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you optimize substring search in SQL?
+
 > [!abstract] Short answer
 > Substring search in SQL is `LIKE '%str%'`, and the string functions around it — `SUBSTR`/`SUBSTRING`, `INSTR`/`POSITION`/`STRPOS`, `LOCATE` — locate or extract pieces. Performance law: no B-tree index can serve an unanchored substring, so it is a full scan by construction; the upgrades are trigram indexes (index every 3-char window), full-text search (token semantics), or external engines ([[How does a trigram index help SQL search]], [[What is the difference between prefix search and contains search]]).
 

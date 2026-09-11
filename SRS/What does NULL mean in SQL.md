@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What does NULL mean in SQL?
+
 > [!abstract] Short answer
 > `NULL` in SQL means **"value unknown or absent"** — not zero, not empty string, not false. Comparisons with NULL yield **UNKNOWN** (three-valued logic), so `= NULL` never matches; the dedicated operators are `IS NULL` / `IS NOT NULL`. Aggregates skip NULLs, concatenation propagates them, and the NOT IN subquery trap follows directly ([[Why is NOT IN dangerous with NULL]]).
 

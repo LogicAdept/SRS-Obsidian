@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between Nested Loop Hash Join and Merge Join?
+
 > [!abstract] Short answer
 > Three physical join algorithms exist: **Nested Loop** probes the inner side per outer row (great when the probe is an index seek and the outer side is small); **Hash Join** builds an in-memory hash table of one side and probes it with rows of the other (great for large unsorted inputs with equality conditions); **Merge Join** walks two inputs sorted on the join key in lockstep (great for large sorted or presorted inputs, and the only one that feeds ordered output directly).
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What SQL operators exist?
+
 > [!abstract] Short answer
 > SQL operators fall into a handful of families: **arithmetic** (`+ - * / %`), **comparison** (`= <> != < <= > >=`, plus `IS NULL`, `IS DISTINCT FROM`, `BETWEEN`, `IN`, `LIKE`), **logical** (`AND`, `OR`, `NOT`), **set operators** (`UNION`, `INTERSECT`, `EXCEPT`), **string** (`||` concatenation, `LIKE`/`SIMILAR TO` patterns), and **bitwise** (`& | ^ ~ << >>`). The engine gives comparison operators the three-valued logic of `NULL`, which is where most operator surprises live.
 

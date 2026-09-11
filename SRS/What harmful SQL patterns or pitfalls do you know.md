@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What harmful SQL patterns or pitfalls do you know?
+
 > [!abstract] Short answer
 > The recurring harmful patterns: `SELECT *` (movement and coupling), non-sargable predicates (functions/conversions on columns), `NOT IN` against nullable subqueries (empty results via UNKNOWN), `LIKE '%x%'` on large tables (unseekable), fan-out joins summed incorrectly, unbounded queries without LIMIT, N+1 fetching from application code, implicit type conversions, and accidental cartesian products from comma-joins. Each is a *semantic or plan* failure with a one-line detection ([[What is sargability in SQL]], [[Why is NOT IN dangerous with NULL]], [[What is the N plus 1 problem in SQL]]).
 

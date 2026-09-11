@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is a database cursor?
+
 > [!abstract] Short answer
 > A **cursor** is a named, positioned handle over a result set that the client (or a procedure) steps through row by row: DECLARE (bind the query), OPEN, FETCH (advance and retrieve), CLOSE. Standard SQL has them; PostgreSQL exposes DECLARE/FETCH/MOVE/CLOSE. The modern default is *not* to declare them: language APIs (JDBC ResultSet, sqlite3 Cursor) already iterate results as cursors, and set-at-a-time SQL beats row-by-row processing ([[What is the N plus 1 problem in SQL]]).
 

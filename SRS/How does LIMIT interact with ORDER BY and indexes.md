@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How does LIMIT interact with ORDER BY and indexes?
+
 > [!abstract] Short answer
 > `LIMIT` truncates the *output* of ORDER BY, not its work: without an index, the engine sorts **all** matching rows and then keeps the first K (a top-N optimization bounds memory, not the scan). With an index matching the ORDER BY, the engine reads exactly K entries and stops — the plan loses the sort node and the read count collapses from N to K ([[How do you avoid a sort with an index]]).
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain JOIN?
+
 > [!abstract] Short answer
 > A `JOIN` combines rows of two tables into one result by matching them against a join condition: for every pair of rows that satisfies the condition (typically `t1.key = t2.key`), one output row is produced from the concatenated columns. `FROM a JOIN b ON ...` is an **inner** join by default; `LEFT`, `RIGHT`, `FULL` and `CROSS` variants change which unmatched rows survive ([[What kinds of SQL JOIN exist]]).
 

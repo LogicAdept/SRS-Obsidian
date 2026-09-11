@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain the SQL GROUP BY clause?
+
 > [!abstract] Short answer
 > `GROUP BY` collapses rows that share the same values in the grouped expressions into **one group per distinct combination**, then computes aggregate functions per group. Every selected column must be either a grouped expression or an aggregate — anything else has no single value for the group. `GROUP BY` runs after `WHERE` (row filter) and before `HAVING` (group filter) in the logical order ([[What is the logical order of SQL SELECT execution]]).
 

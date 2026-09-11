@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# When should you prefer JOINs versus subqueries in SQL?
+
 > [!abstract] Short answer
 > Prefer subqueries when the question is **membership, existence, or a scalar per row**; prefer JOINs when you actually need **columns from both sides** or want the optimizer to reorder freely for set-at-a-time filtering. They are frequently equivalent in results *and* plans — the differences that matter are NULL behavior in negation, row multiplication, and readability ([[What is the difference between IN EXISTS and JOIN in SQL]]).
 

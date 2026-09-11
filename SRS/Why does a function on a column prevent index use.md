@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# Why does a function on a column prevent index use?
+
 > [!abstract] Short answer
 > A B-tree index stores the column's *values*, so it can only seek values that exist as keys. `WHERE f(col) = x` asks for a computed value — absent from the index — so the plan degrades to a full scan. The fix is to index the expression itself: PostgreSQL supports expression indexes, SQLite indexes expressions since 3.9, SQL Server since 2008 via computed columns.
 

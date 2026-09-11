@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is an anti-join in SQL?
+
 > [!abstract] Short answer
 > An **anti-join** returns rows of the left table that have **no** match on the right. Idioms: `NOT EXISTS (correlated subquery)`, `LEFT JOIN ... WHERE right.key IS NULL`, or — only when the subquery column cannot contain NULL — `NOT IN`. The first is the default recommendation: NULL-safe, plan-efficient, and unambiguous.
 

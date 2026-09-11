@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What does the SQL MERGE statement do?
+
 > [!abstract] Short answer
 > `MERGE` ("upsert") applies a batch of changes to a target table in one statement: rows from the source that **match** the target on a key get `UPDATE`, unmatched source rows get `INSERT`, optionally unmatched target rows get `DELETE` — SQL:2003 syntax, standard in PostgreSQL (15+), Oracle and SQL Server. Engines without MERGE spell the same contract with `INSERT ... ON CONFLICT DO UPDATE` (SQLite, PostgreSQL 9.5+) or `ON DUPLICATE KEY UPDATE` (MySQL) ([[What integrity constraints exist in SQL]]).
 

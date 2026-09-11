@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you optimize ORDER BY with a filter?
+
 > [!abstract] Short answer
 > Combine the filter and the sort into **one composite index**: equality predicates as the leading columns, ORDER BY columns as the trailing ones. `WHERE category = 'books' ORDER BY price` seeks `(category, price)` once — rows arrive already filtered and ordered, no separate filter pass, no sort. Both the WHERE and the ORDER BY are satisfied by a single key layout ([[How do you avoid a sort with an index]]).
 

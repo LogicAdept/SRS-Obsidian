@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you search for a suffix efficiently in SQL?
+
 > [!abstract] Short answer
 > A suffix search (`LIKE '%pdf'`) has the same unseekable shape as contains-search — no left anchor. The classic B-tree-compatible trick: store a **reversed copy** of the string in an indexed column and search the reversed pattern as a *prefix* (`WHERE rname LIKE 'fdp%'` — here as GLOB on a binary index), which converts the unanchored suffix into a seekable range. pg_trgm serves the same need with a GIN index without the extra column ([[How does a trigram index help SQL search]]).
 

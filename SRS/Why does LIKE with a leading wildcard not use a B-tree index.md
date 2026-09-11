@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# Why does LIKE with a leading wildcard not use a B-tree index?
+
 > [!abstract] Short answer
 > A B-tree finds values by **range navigation**: `LIKE 'abc%'` is equivalent to `col >= 'abc' AND col < 'abd'` — a seekable range. `LIKE '%abc'` specifies *no leading boundary*: every key in the tree is a potential match start, so no range exists to seek and the plan must scan. The wildcard's position, not LIKE itself, decides index usability.
 

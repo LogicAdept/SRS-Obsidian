@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is a correlated subquery and why can it be slow?
+
 > [!abstract] Short answer
 > A **correlated subquery** references columns of the outer query, so it is logically re-evaluated for each outer row — "for this row, compute something from the related rows". It is the natural spelling of per-row questions (compare each employee to their department average), but a naive plan executes it N times, which is why the interview always attaches "and it can be slow" ([[How do you rewrite a correlated subquery for performance]]).
 

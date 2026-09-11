@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between SQL DATETIME and TIMESTAMP?
+
 > [!abstract] Short answer
 > **DATETIME** (SQL Server, MySQL) stores a *naive* wall-clock value — no time zone. **TIMESTAMP** is overloaded: in PostgreSQL, `timestamptz` stores a UTC instant and renders per session zone (the recommended type); in MySQL, TIMESTAMP is UTC-stored zone-converted; in the SQL standard it is an unqualified or zone-qualified point in time. SQLite has neither — TEXT/REAL/INTEGER columns with date functions ([[What is the difference between SQL char and varchar types]]).
 

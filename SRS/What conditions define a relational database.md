@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What conditions define a relational database?
+
 > [!abstract] Short answer
 > A relational database is a database that **conforms to the relational model**: data lives in *relations* (tables) — unordered sets of *tuples* (rows), each with the same set of named *attributes* (columns) drawn from declared domains (types) — and the model provides three things: well-defined **structures**, clearly defined **operations** that manipulate them, and **integrity rules** that constrain what the data may say. SQL is the standard language on top of that model, not the model itself.
 

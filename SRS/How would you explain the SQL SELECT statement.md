@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain the SQL SELECT statement?
+
 > [!abstract] Short answer
 > `SELECT` is the DML statement that **retrieves a result set** from the database. Its core flow is: pick columns (`SELECT list`), pick the source (`FROM`, with joins), filter rows (`WHERE`), group and aggregate (`GROUP BY`, `HAVING`), sort (`ORDER BY`), and cut a page (`LIMIT`/`OFFSET` or `FETCH FIRST`). The result of a `SELECT` is itself a table-like set — which is why queries nest and compose.
 

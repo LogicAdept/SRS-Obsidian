@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How does GROUP BY handle NULL in SQL?
+
 > [!abstract] Short answer
 > In `GROUP BY`, **all NULLs belong to one group**. Grouping uses distinctness semantics, not the `=` operator: two NULL values are "not distinct" from each other for grouping purposes, so they collapse into a single NULL-keyed group — exactly as two NULL rows collapse under `UNION` or `DISTINCT` ([[What does NULL mean in SQL]]).
 

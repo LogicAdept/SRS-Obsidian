@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain database triggers in SQL?
+
 > [!abstract] Short answer
 > A **trigger** is procedural code bound to a table event: `CREATE TRIGGER name BEFORE|AFTER|INSTEAD OF INSERT|UPDATE|DELETE ON table FOR EACH ROW BEGIN ... END` (statement-level forms exist). Uses: audit logging, denormalized counters, enforcing complex invariants, computed-column upkeep. Costs: hidden write-time work, cascade complexity, and debugging opacity — modern designs prefer explicit constraints and application/services logic where possible ([[What integrity constraints exist in SQL]]).
 

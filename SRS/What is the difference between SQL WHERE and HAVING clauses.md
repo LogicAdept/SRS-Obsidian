@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between SQL WHERE and HAVING clauses?
+
 > [!abstract] Short answer
 > `WHERE` filters **individual rows** before grouping; `HAVING` filters **groups** after aggregation. They run at different stages of the logical pipeline, so WHERE cannot see aggregates (the rows are not grouped yet) and HAVING should not re-filter plain row conditions ([[What is the logical order of SQL SELECT execution]]).
 

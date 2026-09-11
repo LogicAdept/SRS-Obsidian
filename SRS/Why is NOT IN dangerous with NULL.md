@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# Why is NOT IN dangerous with NULL?
+
 > [!abstract] Short answer
 > `NOT IN` compares each outer value against the subquery result with ordinary equality. If the subquery returns even one NULL, every comparison yields UNKNOWN (neither true nor false), `NOT IN` rejects it, and the query returns **zero rows** — silently. `NOT EXISTS` avoids the trap because it tests for the absence of a *row*, not the comparison of a *value*.
 

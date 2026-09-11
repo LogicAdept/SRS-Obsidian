@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is a semi-join in SQL?
+
 > [!abstract] Short answer
 > A **semi-join** returns rows of the left table that *have at least one match* on the right — without concatenating right-side columns and without left-side duplicates. Idioms: `EXISTS` (correlated), `IN (subquery)`, or `JOIN` + `DISTINCT`. The engine may implement any of them with the same semi-join plan.
 

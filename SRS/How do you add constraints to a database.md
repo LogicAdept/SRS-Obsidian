@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you add constraints to a database?
+
 > [!abstract] Short answer
 > PostgreSQL: `ALTER TABLE ... ADD CONSTRAINT name UNIQUE/PK/FK/CHECK (...)`, plus column-level additions (`SET NOT NULL`, `SET DEFAULT`, typed `ADD COLUMN`) — constraints can also be added `NOT VALID` and validated later to avoid long locks. SQLite: ALTER is narrower — you can `ADD COLUMN` (with DEFAULT, CHECK, or a UNIQUE-with-index via `CREATE UNIQUE INDEX`), but not add a constraint to existing columns; the documented path is the 12-step table-rebuild recipe ([[How do you alter a table in a relational database]]).
 

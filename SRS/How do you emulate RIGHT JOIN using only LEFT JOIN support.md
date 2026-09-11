@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you emulate RIGHT JOIN using only LEFT JOIN support?
+
 > [!abstract] Short answer
 > `A RIGHT JOIN B` is definitionally `B LEFT JOIN A` with the same condition: the *right* table's rows all survive, so swapping the operands and using LEFT yields an identical result. Right joins exist for syntactic comfort when reading `FROM a JOIN b JOIN c` chains left to right; logically they add no power beyond LEFT.
 

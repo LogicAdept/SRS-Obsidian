@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you pre-aggregate before a join?
+
 > [!abstract] Short answer
 > **Pre-aggregation** means pushing `GROUP BY` before the join: aggregate each child stream to the parent's key first, then join the small aggregates. It fixes fan-out inflation (`SUM` over a multiplied parent column), removes duplicate parent rows from memory, and often lets the engine hash-join two compact inputs instead of streaming a huge multiplied one.
 

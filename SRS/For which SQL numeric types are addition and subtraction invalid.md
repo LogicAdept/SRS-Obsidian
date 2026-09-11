@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# For which SQL numeric types are addition and subtraction invalid?
+
 > [!abstract] Short answer
 > The numeric-ish type where `+` and `-` are invalid is **BIT** — in both major spellings. T-SQL's `bit` (its boolean) is documented as excluded from the `+`/`-` operators ("Operand data type bit is invalid for add operator"); PostgreSQL's `bit` is a *bit string* type with no arithmetic operators at all (`B'101' + B'010'` errors). SQLite has no BIT type — flags are INTEGER 0/1 and arithmetic is valid, which makes the contrast the demo ([[What are the main SQL aggregate functions]]).
 

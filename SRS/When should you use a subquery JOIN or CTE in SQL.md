@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# When should you use a subquery JOIN or CTE in SQL?
+
 > [!abstract] Short answer
 > A **CTE** (`WITH name AS (...)`) is a named subquery in scope for one statement. Use a **subquery** for a single inline helper, a **CTE** when the helper is reused, recursive, or needs a name for readability, and a **JOIN** when combining rows of two existing row sources. They are composition tools, not competitors — most real queries nest all three.
 

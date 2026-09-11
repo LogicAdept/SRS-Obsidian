@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How does LEFT JOIN differ from INNER JOIN in SQL?
+
 > [!abstract] Short answer
 > `INNER JOIN` returns only rows with a match on **both** sides; `LEFT JOIN` returns **all** rows of the left table, and for rows with no match produces NULLs for every right-table column. So `INNER` can only shrink a result relative to the left table, while `LEFT` preserves its row multiplicity — that is the entire semantic difference.
 
