@@ -2,14 +2,50 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Enterprise/Integration/Channels/InvalidMessageChannel #Patterns/Enterprise/Integration/Channels/DatatypeChannel #SRS #New
+#Patterns/Enterprise/Integration/Channels/InvalidMessageChannel #Patterns/Enterprise/Integration/Channels/DatatypeChannel #Messaging #SRS
 
-> [!warning] Untrusted draft
-> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
+# What is the difference between Datatype Channel and Invalid Message Channel
 
-Datatype Channel is the idea that all data on a channel is the same type so the receiver already knows how to process it. That is why a messaging system needs many channels: if any type could travel on one pipe, two applications would need only one channel in each direction.
+> [!abstract] Short answer
+> Datatype Channel is the **preventive** contract: every message on a channel has one type, so receivers know how to process it. Invalid Message Channel is the **corrective** quarantine for the moment that contract breaks after delivery. One says "this is what belongs here"; the other says "this is where it goes when it does not".
 
-Invalid Message Channel is what the receiver does when that contract is broken after delivery. The broker may still transmit a byte message on a text channel, or XML that is not well formed or not valid for the agreed schema. The receiver cannot process it, so it moves the improper message to a special channel for messages that could not be processed. The working Datatype Channel stays a typed pipe; the invalid channel is the quarantine, not a second datatype.
-> [!warning] Unverified traps from the dump
-> - Putting mixed types on one channel and sorting them in the consumer is not Datatype Channel; the Invalid Message Channel then becomes a dumping ground.
-> - The invalid channel is not itself a Datatype Channel for bad data in the happy-path sense; dumps say it is not used for successful communication.
+## Agreement and its enforcement
+
+The book derives Datatype Channel from a simple observation: a messaging system needs many channels because if any type could travel on one pipe, two applications would need only a single channel in each direction — and receivers could no longer assume anything about the payload. The typing is an application convention layered over the transport, which is why the broker happily transmits a byte payload on a text channel and only the receiver's check notices — the mechanics of that failure are in [[What happens when a message of the wrong type arrives on a Datatype Channel]]. When the check fails, the receiver moves the message to the Invalid Message Channel: the working channel stays a typed pipe, the quarantine receives whatever breached it, and the two never swap roles — the invalid channel is not used for successful communication and is not itself a "second datatype".
+
+```d2
+direction: right
+prod: "Sender" {
+  width: 170
+  height: 55
+  style.fill: "#e3f2fd"
+}
+dt: "Datatype Channel\none agreed type" {
+  width: 240
+  height: 70
+  style.fill: "#e8f5e9"
+}
+rcv: "Receiver\nchecks the contract" {
+  width: 230
+  height: 70
+  style.fill: "#e3f2fd"
+}
+imc: "Invalid Message Channel\ncontract breaches only" {
+  width: 280
+  height: 75
+  style.fill: "#ffebee"
+}
+prod -> dt
+dt -> rcv: "typed traffic"
+rcv -> imc: "breach found\nafter delivery" {
+  style.stroke-dash: 4
+}
+```
+
+**Fig. 1.** The quarantine hangs off the receiver, not off the channel: a Datatype Channel carries no invalid traffic by definition — until a sender breaks the agreement.
+
+> [!warning] Sorting in the consumer is not a Datatype Channel
+> Putting mixed types on one pipe and branching on type inside the consumer abandons the contract while keeping the channel shape; every receiver now needs every type, and the invalid channel turns into a dumping ground for whatever did not match this consumer's case. How the pattern split degrades when roles are merged is the theme of [[What is the difference between an Invalid Message Channel and a broker queue or topic]].
+
+> [!tip] Interview answer
+> Datatype Channel prevents: one type per channel so receivers can assume the payload's shape. Invalid Message Channel corrects: when a delivered message breaks that agreement — wrong type, bad format, missing headers — the receiver parks it on a dedicated quarantine channel. They are two halves of one design: the contract, and where messages go when the contract fails.

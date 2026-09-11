@@ -2,13 +2,50 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Enterprise/Integration/Channels/InvalidMessageChannel #SRS #New
+#Patterns/Enterprise/Integration/Channels/InvalidMessageChannel #SRS
 
-> [!warning] Untrusted draft
-> Copied from an external question dump. Not checked against official documentation. Do not treat this as a review answer.
+# How does validity of a message depend on the receiver
 
-A message is neither inherently valid nor invalid. The receiver's context and expectations decide. A payload that is valid for one receiver may be invalid for another; those two receivers should not share a channel. If a message is valid for one receiver on a channel, it should be valid for every other receiver on that channel. If one receiver treats it as invalid, the others should as well.
+> [!abstract] Short answer
+> A message is not inherently valid or invalid. The **receiver's expectations** — its datatype, schema, and required headers — decide. The same bytes can be valid for one endpoint and garbage for another, so validity is a property of the message-receiver pair, not of the message alone.
 
-It is the sender's job to publish something every receiver on that channel will accept. Otherwise receivers will ignore the sender by rerouting those messages to the Invalid Message Channel.
-> [!warning] Unverified traps from the dump
-> - Sharing one channel across receivers with different contracts turns the Invalid Message Channel into a dumping ground for messages that are valid for someone else.
+## Consequences of the receiver-relative definition
+
+The definition drives three rules the book states explicitly. First, it is the **sender's responsibility** to publish messages that every receiver of the channel will consider valid; a sender that breaks the contract is "ignored" by the receivers, which reroute its messages to the Invalid Message Channel instead of processing them. Second, if a message is valid for one receiver on a channel, it should be valid for **every** receiver on that channel — a channel is an agreement, and receivers that disagree about validity expose a broken agreement. Third, receivers with genuinely different contracts should **not share the channel** at all; that is the Datatype Channel discipline described in [[What is the Datatype Channel pattern]].
+
+```d2
+direction: right
+sender: "Sender publishes\none payload" {
+  width: 220
+  height: 70
+  style.fill: "#e3f2fd"
+}
+ch: "Channel with one\nagreed contract" {
+  width: 250
+  height: 70
+  style.fill: "#fff3e0"
+}
+r1: "Receiver A\nparses, processes" {
+  width: 220
+  height: 70
+  style.fill: "#e8f5e9"
+}
+imc: "Receiver B cannot process\n-> Invalid Message Channel" {
+  width: 300
+  height: 80
+  style.fill: "#ffebee"
+}
+sender -> ch
+ch -> r1
+ch -> imc: "contract mismatch\n= agreement broken"
+```
+
+**Fig. 1.** When two receivers on one channel disagree about validity, the fix is splitting the channel, not arguing about which receiver is right.
+
+> [!warning] The dumping-ground failure
+> One channel shared across endpoints with different contracts turns the invalid channel into a landfill of messages that were valid for somebody else. The symptom is a quarantine that never empties while every receiver claims it is not its problem — the mixed-types anti-shape is the mirror image of [[What is the difference between Datatype Channel and Invalid Message Channel]].
+
+What counts as "cannot process" in practice — parsing, schema, headers, wrong channel — is cataloged in [[What kinds of delivered messages does a receiver treat as invalid]], and the case where the message is actually fine but the business fails is separated in [[Why should you not treat an application error as an invalid message]].
+
+> [!tip] Interview answer
+> Validity is judged by the receiver against its own contract, so it is relative, not absolute. The sender owes every receiver on the channel a processable message; if one receiver parks a payload as invalid, all receivers sharing that contract would. Two receivers that disagree should never share a channel — split it — and receivers "ignore" contract-breaking senders by moving their traffic to the invalid channel.
