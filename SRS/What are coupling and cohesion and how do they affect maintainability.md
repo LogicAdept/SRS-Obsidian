@@ -22,6 +22,53 @@ low coupling, high cohesion (the target):
 maintainability = cost of change = f(coupling) ; findability = f(cohesion)
 ```
 
+```d2
+direction: right
+mud: "mudball" {
+  style.stroke: "#c62828"
+  P: "pricing logic" {
+    width: 150
+    height: 45
+  }
+  O: "Order" {
+    width: 100
+    height: 40
+  }
+  U: "UI" {
+    width: 80
+    height: 40
+  }
+  R: "Report" {
+    width: 100
+    height: 40
+  }
+  E: "Email" {
+    width: 100
+    height: 40
+  }
+  O -> P
+  P -> U
+  P -> R
+  E -> P
+  O -> R
+  U -> E
+}
+bound: "bounded" {
+  style.stroke: "#2e7d32"
+  C: "clients" {
+    width: 110
+    height: 45
+  }
+  PM: "PricingModule\n(high cohesion)" {
+    width: 190
+    height: 60
+  }
+  C -> PM: "narrow interface"
+}
+```
+
+**Fig. 1.** Left: one concern scattered with tangled edges - a pricing change hits five files. Right: the concern owns its boundary and meets clients through one narrow interface.
+
 **Listing 1.** The same change in a mudball versus a well-bounded design.
 
 ## How they shape maintainability

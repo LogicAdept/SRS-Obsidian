@@ -23,6 +23,29 @@ cost: slower delivery, more failure modes, onboarding tax, decision debt
 antidote: YAGNI + measured requirements + documented seams
 ```
 
+```d2
+direction: right
+req: "add one column" {
+  width: 180
+  height: 55
+  style.fill: "#e8f5e9"
+}
+simple: "entity + migration\n(2 files)" {
+  width: 210
+  height: 60
+  style.fill: "#e3f2fd"
+}
+ceremony: "repository -> service ->\nDTO -> mapper -> spec ->\nconfig -> template" {
+  width: 300
+  height: 85
+  style.fill: "#fde8e8"
+}
+req -> simple: "what the requirement needs"
+req -> ceremony: "what the architecture demands"
+```
+
+**Fig. 1.** The same requirement through two designs: the ceremony path is where delivery speed and onboarding tax are paid.
+
 **Listing 1.** The symptom list, the cost, and the counter-policy.
 
 ## The counter-policy and the honest tradeoff
