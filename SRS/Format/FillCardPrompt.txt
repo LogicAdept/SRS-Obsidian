@@ -245,6 +245,9 @@ DataFormats
 #DataFormats
 #DataFormats/XML
 #DataFormats/JSON
+#DataFormats/Documents
+#DataFormats/Documents/HTML
+#DataFormats/Documents/CSS
 
 Security
 #Security
@@ -379,8 +382,7 @@ Networking
 #Networking/UDP
 #Networking/DNS
 #Networking/Web
-#Networking/Web/HTML
-#Networking/Web/CSS
+#Networking/Web/MIME
 #Networking/Web/Protocols
 #Networking/Web/Protocols/HTTP
 #Networking/Web/Protocols/TLS
@@ -571,6 +573,7 @@ System
 ProgrammingLanguages
 #ProgrammingLanguages
 #ProgrammingLanguages/CSharp
+#ProgrammingLanguages/JavaScript
 #ProgrammingLanguages/Compilation
 #ProgrammingLanguages/Interpretation
 #ProgrammingLanguages/ExecutionModel
