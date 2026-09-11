@@ -2,34 +2,49 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #SRS #New
+#Databases/SQL #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+> [!abstract] Short answer
+> SQL operators fall into a handful of families: **arithmetic** (`+ - * / %`), **comparison** (`= <> != < <= > >=`, plus `IS NULL`, `IS DISTINCT FROM`, `BETWEEN`, `IN`, `LIKE`), **logical** (`AND`, `OR`, `NOT`), **set operators** (`UNION`, `INTERSECT`, `EXCEPT`), **string** (`||` concatenation, `LIKE`/`SIMILAR TO` patterns), and **bitwise** (`& | ^ ~ << >>`). The engine gives comparison operators the three-valued logic of `NULL`, which is where most operator surprises live.
 
-**Какие существуют операторы SQL?**
+The standard families, with dialect notes:
 
-__операторы определения данных (Data Definition Language, DDL)__:
+- **Arithmetic**: `+ - * / %`; integer/integer division truncates in many engines (`7/2 = 3` in SQLite/PostgreSQL, `3.5` in engines with true numeric promotion); `* /` bind tighter than `+ -`, parentheses override.
+- **Comparison**: `= <> < <= > >=` return true/false/**unknown**; `NULL = NULL` is not true — use `IS NULL` / `IS NOT NULL`, and `IS DISTINCT FROM` for `NULL`-safe inequality ([[What does NULL mean in SQL]]). Range and membership sugar: `BETWEEN a AND b`, `IN (list)`, `IN (subquery)` ([[How would you explain SQL IN BETWEEN and LIKE predicates]]).
+- **Logical**: `AND`, `OR`, `NOT` over three-valued logic; `NOT (unknown)` is still unknown, so negated predicates do not rescue `NULL` rows ([[Why is NOT IN dangerous with NULL]]).
+- **Pattern/string**: `LIKE` with `%`/`_`, `ILIKE` in PostgreSQL, `||` concatenation (T-SQL uses `+` and `CONCAT`).
+- **Set operators**: `UNION [ALL]`, `INTERSECT`, `EXCEPT` combine whole result sets, not scalars ([[How would you explain the SQL UNION operator]]).
+- **Bitwise**: `& | ^ << >> ~` on integer types. Operator precedence is engine-defined but follows the same intuition as most languages — arithmetic over comparison, comparison over logical — so explicit parentheses are the cheap way to make intent survive code review.
 
-+ `CREATE` создает объект БД (базу, таблицу, представление, пользователя и т. д.),
-+ `ALTER` изменяет объект,
-+ `DROP` удаляет объект;
+```sql
+-- Operator families side by side (SQLite).
+SELECT 7 / 2 AS int_div, 7.0 / 2 AS real_div, 7 % 3 AS modulo, 2 * 3 AS mul;
+-- 3|3.5|1|6
+SELECT 5 > 3 AS gt, 'abc' < 'abd' AS str_cmp, NULL = NULL AS null_eq, NULL IS NULL AS null_is;
+-- 1|1||1        (null_eq is NULL: empty output between pipes)
+SELECT 1 AND 0 AS and01, 1 OR 0 AS or01, NOT 1 AS not01;
+-- 0|1|0
+SELECT 'data' || 'base' AS concat;
+-- database
+```
 
-__операторы манипуляции данными (Data Manipulation Language, DML)__:
+**Listing 1.** Verified on SQLite 3.53.1. Note the two traps in the middle row: `NULL = NULL` yields unknown (empty), while `IS NULL` yields true; and `7 / 2` truncates to `3` because both operands are integers — the same expression on `7.0` gives `3.5`.
 
-+ `SELECT` выбирает данные, удовлетворяющие заданным условиям,
-+ `INSERT` добавляет новые данные,
-+ `UPDATE` изменяет существующие данные,
-+ `DELETE` удаляет данные;
+```d2
+direction: right
+arith: "Arithmetic\n+ - * / %" {width: 160; height: 80}
+cmp: "Comparison\n= <> < > IS NULL" {width: 200; height: 80}
+logic: "Logical\nAND OR NOT" {width: 150; height: 80}
+sets: "Set ops\nUNION INTERSECT EXCEPT" {width: 210; height: 80}
+pattern: "String/Pattern\n|| LIKE ILIKE" {width: 180; height: 80}
+cmp -> logic
+cmp -> pattern
+```
 
-__операторы определения доступа к данным (Data Control Language, DCL)__:
+**Fig. 1.** The families compose: comparison operators feed logical operators, and pattern predicates are comparisons over strings; set operators sit one level above, joining whole queries.
 
-+ `GRANT` предоставляет пользователю (группе) разрешения на определенные операции с объектом,
-+ `REVOKE` отзывает ранее выданные разрешения,
-+ `DENY` задает запрет, имеющий приоритет над разрешением;
+> [!warning] `=` is the equality of a single value — it never reports "both unknown"
+> Writing `WHERE col = NULL` is always false-or-unknown, never true; the engine does not warn you, the query just returns fewer rows. The same three-valued logic hides inside `IN`, `NOT IN`, and joins on nullable keys ([[Why is NOT IN dangerous with NULL]]).
 
-__операторы управления транзакциями (Transaction Control Language, TCL)__:
-
-+ `COMMIT` применяет транзакцию,
-+ `ROLLBACK` откатывает все изменения, сделанные в контексте текущей транзакции,
-+ `SAVEPOINT` разбивает транзакцию на более мелкие.
+> [!tip] Interview answer
+> I group SQL operators as arithmetic, comparison, logical, set, string/pattern, and bitwise. The part that matters in practice is three-valued logic: comparisons with NULL return unknown, so you test with IS NULL or IS DISTINCT FROM, and AND/OR/NOT propagate that unknown through filters. Also worth naming: BETWEEN and IN as comparison sugar, LIKE for patterns, UNION/INTERSECT/EXCEPT as set-level operators, and dialect quirks like integer division or `+` vs `||` for strings.
