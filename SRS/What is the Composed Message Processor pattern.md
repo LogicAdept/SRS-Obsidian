@@ -15,8 +15,7 @@ The order flow again: an order arrives with line items, each item needs an inven
 
 ```d2
 direction: down
-ord: "Order
-3 line items" {
+ord: "Order\n3 line items" {
   width: 170
   height: 60
   style.fill: "#e3f2fd"
@@ -26,8 +25,7 @@ sp: "Split" {
   height: 45
   style.fill: "#fff3e0"
 }
-rt: "Route per item
-(content-based)" {
+rt: "Route per item\n(content-based)" {
   width: 220
   height: 60
   style.fill: "#fff3e0"
@@ -42,8 +40,7 @@ s2: "Inventory B" {
   height: 50
   style.fill: "#e8f5e9"
 }
-ag: "Aggregate
-responses -> one order" {
+ag: "Aggregate\nresponses -> one order" {
   width: 240
   height: 65
   style.fill: "#fff3e0"

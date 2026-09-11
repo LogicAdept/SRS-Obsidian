@@ -2,49 +2,58 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #SRS
+#Databases/SQL #Databases/Indexes #Databases/Relational/PostgreSQL #SRS
+
+# How do you search JSON fields efficiently in SQL?
 
 > [!abstract] Short answer
-> JSON in SQL is queried with a path language, not LIKE: `json_extract(col, '$.city')` (SQLite/MySQL), the `->`/`->>` operators (PostgreSQL/SQLite), `JSON_VALUE` (SQL Server). Efficient search means **indexing the extracted path** — an expression index on the path, or a generated column with an index — turning `WHERE json_extract(data, '$.city') = 'Berlin'` into a seek. Scanning raw JSON text per row is the anti-pattern ([[What is sargability in SQL]]).
+> Match the operator to the index. Containment — documents that include this sub-document or value — uses jsonb operators @>, ?, and path queries against a GIN index (jsonb_ops or jsonb_path_ops). Scalar equality on one extracted field uses a B-tree expression index over the accessor. Full lexical search over text inside JSON belongs to full-text search over an extracted tsvector. Plain json cannot be indexed at all — convert to jsonb.
 
-The verified demo covers the full arc on SQLite: `json_extract(data, '$.city')` pulls the scalar from a TEXT-stored JSON document; creating an expression index on that *same expression* upgrades the equality search to `SEARCH profiles USING COVERING INDEX idx_city (<expr>=?)` — the JSON path behaves like any other indexed key because the extraction ran once per row at index build time ([[Why does a function on a column prevent index use]]). PostgreSQL's production equivalents: `->` returns json(b), `->>` returns text; GIN indexes over the jsonb document (`CREATE INDEX ON t USING GIN (data)` with jsonb_ops or jsonb_path_ops) answer containment queries (`data @> '{"city": "Berlin"}'`) from the index — the documented approach for "search inside JSON" at scale; expression indexes on `data->>'city'` serve equality seeks. The design trade worth stating: JSON columns trade schema for flexibility — validation moves to application or CHECK(json_valid(...)) constraints, and every indexed path is a hand-maintained schema decision; the moment paths multiply and dominate queries, the columns want promotion to real columns ([[How do you alter a table in a relational database]], [[What harmful SQL patterns or pitfalls do you know]]).
+## The three query families
 
 ```sql
-CREATE TABLE profiles (id INTEGER PRIMARY KEY, data TEXT);
-INSERT INTO profiles VALUES
- (1, '{"city": "Berlin", "age": 30}'), (2, '{"city": "Oslo", "age": 25}');
+-- 1. containment (GIN-served)
+SELECT * FROM docs WHERE body @> '{"author": "kim", "tags": ["sale"]}';
+SELECT * FROM docs WHERE body ? 'isbn';
 
-SELECT id, json_extract(data, '$.city') FROM profiles ORDER BY id;
--- 1|Berlin
--- 2|Oslo
-CREATE INDEX idx_city ON profiles(json_extract(data, '$.city'));
-EXPLAIN QUERY PLAN
-SELECT id FROM profiles WHERE json_extract(data, '$.city') = 'Berlin';
--- QUERY PLAN
--- `--SEARCH profiles USING COVERING INDEX idx_city (<expr>=?)
-SELECT data -> '$.city' FROM profiles WHERE id = 1;
--- "Berlin"
+-- 2. scalar path (B-tree expression-served)
+SELECT * FROM docs WHERE body->>'year' = '2026';
+
+-- 3. lexical search inside documents
+SELECT * FROM docs
+WHERE to_tsvector('english', body->>'abstract')
+      @@ websearch_to_tsquery('english', 'index scans');
 ```
 
-**Listing 1.** Verified on SQLite 3.53.1. Path extraction, its indexed (seekable) form, and the `->` operator spelling — JSON search upgraded from per-row parsing to an index probe.
+**Listing 1.** Containment, scalar access, and text search are three different index problems ([[How do you index JSONB in PostgreSQL]], [[What is an expression index in PostgreSQL]], [[How does full-text search work in PostgreSQL]]).
 
 ```d2
-direction: right
-j: "JSON document
-TEXT / jsonb" {width: 170; height: 80}
-p: "path extraction
-$.city -> 'Berlin'" {width: 190; height: 80}
-i: "expression index / GIN
-path value -> rows" {width: 200; height: 80}
-q: "WHERE path = x
--> index seek" {width: 160; height: 70}
-j -> p -> i -> q
+q: "JSON search need" {width: 220; height: 60}
+c: "Has this content?\n@>, ?, path" {width: 280; height: 70}
+s: "Field equals X\n->> accessor" {width: 260; height: 70}
+t: "Text relevance in fields" {width: 280; height: 70}
+gin: "GIN over jsonb" {width: 240; height: 60}
+bt: "B-tree on expression" {width: 260; height: 60}
+fts: "tsvector + GIN" {width: 250; height: 60}
+q -> c -> gin
+q -> s -> bt
+q -> t -> fts
 ```
 
-**Fig. 1.** JSON search efficiency is an indexing decision on the *extracted* value: parse once at index time, seek thereafter — instead of parsing every document on every query.
+**Fig. 1.** The routing table: three needs, three index structures.
 
-> [!warning] Every indexed JSON path is an implicit schema — unowned and drifting
-> Without a registry, five services index five spellings of the same path and the "flexible" document model accretes shadow columns nobody owns. Treat indexed paths as schema objects: named, documented, migration-managed — or promote the field to a real column when it becomes load-bearing ([[What harmful SQL patterns or pitfalls do you know]]).
+## Operator semantics worth naming
+
+- `@>` containment: the left value contains the right as a sub-structure — arrays must contain all listed elements, objects all listed key-value pairs. Direction matters; the mirrored `<@` is "is contained in".
+- `?` family: top-level key existence (`?`), any (`?|`), all (`?&`) — jsonb_ops only.
+- SQL/JSON path (`jsonb_path_query`, the `@@` and `@?` operators) supports exists-predicates with GIN support via jsonb_path_ops-class machinery for `@?`/`@@` queries.
+
+## Design guidance
+
+Store documents as jsonb ([[What is the difference between JSON and JSONB in PostgreSQL]]); extract high-frequency filter fields into real columns when they become relational facts — columns are cheaper than deep paths, and statistics exist for them ([[How do stale statistics hurt a query plan]]). The trap inventory of mixing operators without indexes is the same as the general "index unused" story ([[Why might PostgreSQL choose a sequential scan instead of an index]]).
+
+> [!warning] JSON path syntax is not an index strategy
+> Writing `body->'tags'->'items'->>'name' = 'x'` with a GIN index over body produces a full scan: GIN answers containment, not chained accessors. Either restate as containment (`body @> '{"tags": {"items": [{"name": "x"}]}}'` — mind array semantics) or build a B-tree on the exact accessor. The operator-to-index mismatch is the number-one JSONB performance bug.
 
 > [!tip] Interview answer
-> JSON fields are searched with path extraction — json_extract or the arrow operators — and made efficient by indexing the extracted value: my demo shows an expression index on $.city turning the equality into a covering-index seek, and PostgreSQL offers the same via expression indexes or GIN over jsonb for containment queries. The caveat I add: each indexed path is an implicit, drifting schema — I register them like columns and promote hot ones to real columns, because JSON's flexibility is for the tail of the schema, not its spine.
+> Three families: containment with @>, ? and path-existence operators served by a GIN index over jsonb — jsonb_path_ops when you only need @>; scalar equality on extracted fields served by B-tree expression indexes; and lexical relevance via a tsvector over the field with FTS. Chained accessor paths match none of these indexes — restate as containment or add an expression index.

@@ -2,48 +2,56 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #SRS
+#Databases/SQL #Databases/Indexes #Databases/Relational/PostgreSQL #SRS
+
+# What is the difference between LIKE, ILIKE and full-text search?
 
 > [!abstract] Short answer
-> **LIKE** is the portable pattern operator (case rules per engine: SQLite folds ASCII, PostgreSQL is case-sensitive). **ILIKE** is PostgreSQL's case-insensitive LIKE — same wildcards, folding built in, same index-hostility for leading wildcards. **Full-text search** (PostgreSQL textsearch, SQLite FTS5) is a different *model*: text is tokenized into words (with stemming, stop words, positions), queries select by token (`MATCH`), and results can be ranked. LIKE asks "does this substring occur"; FTS asks "does this document contain these *words*" ([[When should you use full-text search instead of LIKE]]).
+> LIKE is literal pattern matching with wildcards (% any string, _ one char), case-sensitive; ILIKE is the same with case-insensitive matching; both scan strings and only B-tree prefix shapes (LIKE 'abc%') can use an index. Full-text search is linguistic: it stems and normalizes words into lexemes, matches relevance across documents, ranks results, and is served by GIN indexes — a different tool for a different question.
 
-The decision axis is semantics, not speed — though speed follows. Verified on SQLite: `LIKE '%and%'` over a body matches because the *substring* "and" occurs (even inside another word if it did — 'android' would match '%and%'), while FTS5's `MATCH 'indexes'` matches whole tokens only — 'indexes' matches, 'dex' does not. That boundary is the product decision: user-facing "search" almost always means words (token model, ranking, typo tolerance at scale), while substring LIKE remains correct for codes, IDs, and partial-word completion ([[What is the difference between prefix search and contains search]]). The performance corollary: ILIKE/LIKE with leading wildcards scan; FTS5 stores an inverted index (token -> rows), so MATCH is index-supported by construction, and prefix queries inside FTS (`post*`) are supported too — the demo shows 'post*' matching 'PostgreSQL' ([[How does a trigram index help SQL search]]). Case rules complete the trio: SQLite LIKE folds ASCII only, GLOB never folds; PostgreSQL LIKE folds nothing, ILIKE folds everything — portability of case behavior is *not* transitive across engines ([[What harmful SQL patterns or pitfalls do you know]]).
+## The mechanics
+
+| | LIKE / ILIKE | full-text search |
+|---|---|---|
+| Matches | literal substring pattern | stemmed lexemes |
+| Case | literal / insensitive | per dictionary |
+| Operators | %, _ | @@, tsquery syntax |
+| Word forms | none (cats != cat) | stems (cats -> cat) |
+| Ranking | none | ts_rank |
+| Index | B-tree only for 'abc%' prefix; trigram for %x% | GIN over tsvector |
 
 ```sql
-CREATE VIRTUAL TABLE docs USING fts5(title, body);
-INSERT INTO docs VALUES ('SQL Guide', 'PostgreSQL indexes and joins'),
- ('Cookbook', 'recipes for pasta');
-
-SELECT title FROM docs WHERE docs MATCH 'indexes';
--- SQL Guide
-SELECT title FROM docs WHERE docs MATCH 'post*';
--- SQL Guide
--- (FTS: token lookup and prefix tokens via the inverted index)
-SELECT title FROM docs WHERE body LIKE '%and%';
--- SQL Guide
--- (LIKE: raw substring over the original text -- 'android' would match too)
+SELECT * FROM books WHERE title LIKE '%Wolf%';        -- literal, no index use
+SELECT * FROM books WHERE title ILIKE '%wolf%';       -- + case folding
+SELECT * FROM books
+WHERE tsv @@ websearch_to_tsquery('english', 'wolves'); -- finds "Wolf", "wolverine"...
 ```
 
-**Listing 1.** Verified on SQLite 3.53.1 (FTS5). MATCH finds the token 'indexes' and the prefix token 'post*'; LIKE finds the substring 'and' — word semantics versus character semantics on the same data.
+**Listing 1.** The same intent ("about wolves") is three different engines: FTS normalizes word forms, LIKE/ILIKE match characters.
+
+- LIKE with a **leading wildcard** defeats B-tree indexes: the index orders by prefix, and `%x%` has none. Trigram indexes ([[How does a trigram index help SQL search]]) are the fix when substring search is the real requirement.
+- LIKE 'abc%' uses a B-tree when the column's collation pattern matches, otherwise with text_pattern_ops operator classes — a per-column design decision ([[What PostgreSQL index types exist]]).
 
 ```d2
-direction: right
-l: "LIKE / ILIKE
-character substring
-case per engine" {width: 200; height: 90}
-f: "FTS
-inverted token index
-words, prefixes, ranking" {width: 210; height: 90}
-q: "is the requirement
-'substring' or 'word'?" {width: 220; height: 80}
-l -> q
-f -> q
+sub: "Find substring\n'%wolf%'" {width: 250; height: 70}
+pre: "Find prefix\n'wolf%'" {width: 220; height: 70}
+lin: "Find word forms\n'wolves running'" {width: 260; height: 70}
+tr: "pg_trgm GIN" {width: 220; height: 60}
+bt: "B-tree / text_pattern_ops" {width: 280; height: 60}
+fts: "tsvector + GIN + ts_rank" {width: 280; height: 60}
+sub -> tr
+pre -> bt
+lin -> fts
 ```
 
-**Fig. 1.** The trio differs first in meaning — characters versus words — and only then in performance; the question being asked picks the operator.
+**Fig. 1.** The tool routing: substring, prefix, and linguistic queries want different structures.
 
-> [!warning] LIKE '%word%' and FTS MATCH disagree on purpose
-> '%and%' matches 'android'; MATCH 'and' does not. Switching an app from LIKE to FTS silently changes every result set — plurals, stems and compound words all shift. Pilot the semantic change on real queries before migrating the storage ([[What harmful SQL patterns or pitfalls do you know]]).
+## Choosing
+
+Names, codes, autocomplete — substring semantics: ILIKE with a trigram index, or prefix search on a B-tree. Documents, descriptions, anything where "the user typed a word form" — full-text search with a stored tsvector column ([[How does full-text search work in PostgreSQL]] covers the pipeline). Log-style "somewhere in a huge string" searches at analytical scale move out of the OLTP engine entirely ([[How do you search logs in ClickHouse]]).
+
+> [!warning] ILIKE is not "slow LIKE" and FTS is not "smart LIKE"
+> ILIKE can use the same trigram or prefix indexes as LIKE; without an index both scan. And FTS will not find your substring at all: searching tsvector for "manufac" fails without prefix syntax, and it never matches inside a word. Mixing the two up in a design review — substring need served by FTS, or relevance need served by ILIKE — produces the classic "search is useless" complaints ([[What is pg_trgm]] for the middle ground).
 
 > [!tip] Interview answer
-> LIKE is the portable substring operator with engine-dependent case rules — SQLite folds ASCII, PostgreSQL folds nothing; ILIKE is PostgreSQL's case-insensitive LIKE with identical wildcards and identical index hostility to leading wildcards. Full-text search changes the model: text becomes tokens in an inverted index, MATCH queries select words or prefix tokens, and results rank. My demo shows MATCH finding 'indexes' and 'post*' while LIKE '%and%' matches substrings. The choice is semantic: codes and partial strings stay LIKE; anything users call "search" belongs to FTS.
+> LIKE and ILIKE are literal pattern matching — case-sensitive and folded respectively — usable by indexes only for prefix shapes unless you add trigram indexes for contains. Full-text search normalizes words into stemmed lexemes, matches and ranks with @@ and ts_rank over a GIN index. Substring problems take ILIKE plus trigram; word-form relevance takes FTS.

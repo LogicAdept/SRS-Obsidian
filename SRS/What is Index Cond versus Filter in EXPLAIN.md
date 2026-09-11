@@ -2,46 +2,46 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #SRS
+#Databases/SQL #Databases/Indexes #Databases/Relational/PostgreSQL #SRS
+
+# What is Index Cond versus Filter in EXPLAIN?
 
 > [!abstract] Short answer
-> **Index Cond** is the predicate applied *inside* an index seek — the condition that narrowed the B-tree range. **Filter** (PostgreSQL: `Rows Removed by Filter`; SQLite shows a plain FILTER row or just counts) is everything checked *after* fetching the row: conditions the index could not serve. The ratio between them is the selectivity of your index design.
+> `Index Cond` is the part of the WHERE clause the index itself evaluates — it determines which entries are read from the index. `Filter` is a condition evaluated afterwards on each row that came out of the scan. The difference is cost: an index condition prunes work; a filter rejects rows after reading them. `Rows Removed by Filter` quantifies the waste.
 
-SQLite makes the distinction mechanical: `SEARCH ... USING INDEX idx (amount=?)` means the equality drove the B-tree descent; additional predicates on columns not in the index are evaluated per fetched row afterwards. The demo: `WHERE amount = 25 AND customer_id = 3` — the index serves `amount` only; two rows pass the index condition, one survives the post-fetch filter. PostgreSQL's EXPLAIN shows the same boundary as `Index Cond:` versus `Filter:` line items, and with ANALYZE adds `Rows Removed by Filter: N` — the number of rows the index fetched and threw away. That number is the cost of an incomplete index: an index condition matching 2 of 10 rows is a great seek; one matching 2 of 1,000,000 rows is a seek followed by a near-full table read. The design conclusions follow directly: extend the index with the filtered column (composite or INCLUDE), or accept the filter cost when the predicate is rare or too low-cardinality to index ([[What is sargability in SQL]], [[How do you optimize a search query over several columns]]).
+## Reading a plan line
 
 ```sql
-CREATE TABLE orders (id INTEGER PRIMARY KEY, customer_id INTEGER, amount NUMERIC);
-CREATE INDEX idx_amount ON orders(amount);
-INSERT INTO orders VALUES (101,1,120),(102,1,80),(103,2,45.5),(104,3,45.5),
- (105,3,300),(107,4,25),(108,3,25),(109,5,150),(110,5,150);
-
-EXPLAIN QUERY PLAN SELECT * FROM orders WHERE amount = 25 AND customer_id = 3;
--- QUERY PLAN
--- `--SEARCH orders USING INDEX idx_amount (amount=?)
-SELECT COUNT(*) FROM orders WHERE amount = 25;
--- 2
-SELECT COUNT(*) FROM orders WHERE amount = 25 AND customer_id = 3;
--- 1
+EXPLAIN ANALYZE SELECT * FROM orders
+WHERE customer_id = 42 AND total > 100;
+-- Index Scan using orders_cust_idx on orders
+--   Index Cond: (customer_id = 42)
+--   Filter: (total > 100)
+--   Rows Removed by Filter: 18422
 ```
 
-**Listing 1.** Verified on SQLite 3.53.1. The index condition is `amount=?` only; `customer_id = 3` is the post-fetch filter — 2 rows fetched by the index, 1 survives. PostgreSQL would print `Index Cond: (amount = 25)` and `Filter: (customer_id = 3)`.
+**Listing 1.** Only `customer_id` is in the index; every row of customer 42 is read from the heap and 18422 of them fail the total check. A composite or INCLUDE index on (customer_id, total) would move the work into the Index Cond — [[What is the difference between a composite index and an INCLUDE covering index]].
 
 ```d2
-direction: right
-i: "Index Cond
-narrows B-tree range
-amount = 25" {width: 220; height: 80}
-f: "Filter
-checked per fetched row
-customer_id = 3" {width: 230; height: 80}
-r: "2 fetched -> 1 survives" {width: 210; height: 70}
-i -> f -> r
+cond: "Index Cond\nprunes inside the index:\nno pages read for rejects" {width: 330; height: 90}
+filt: "Filter\nreads the row, then rejects\nRows Removed counts it" {width: 320; height: 90}
+recheck: "Index Cond: Recheck\nlossy bitmap candidates verified" {width: 330; height: 80}
 ```
 
-**Fig. 1.** The index condition shrinks the search space; the filter discards fetched rows that other predicates reject — work the index could have avoided with a wider key.
+**Fig. 1.** Three evaluation places: inside the index, on the row after it, and the bitmap recheck variant.
 
-> [!warning] A selective Index Cond followed by a huge Filter means the wrong column leads the index
-> If `Rows Removed by Filter` dwarfs the output, the fix is index design: put the more selective predicate's column first, add the filtered columns as trailing keys or INCLUDEs, or drop the index — a seek that fetches half the table is a scan with extra steps ([[What is Index Cond versus Filter in EXPLAIN]], [[How do you optimize a search query over several columns]]).
+## The nuances
+
+- On a Bitmap Heap Scan the index line shows `Index Cond`, and the heap node may show `Rows Removed by Index Recheck` — that is lossy bitmap behavior when work_mem forced page-granular bitmaps ([[What is a bitmap index scan in SQL plans]]).
+- `Filter` also appears on Seq Scans — there it is the normal place WHERE runs; the pathology is a huge removed count on an index scan that should have pruned.
+- Implicit casts or functions can silently move a condition from Index Cond to Filter ([[How does implicit type conversion hide an index]]).
+
+## Why it matters
+
+The split is the fastest way to see whether an index actually serves a query or just finds rows that another condition then rejects. Where you see persistent `Rows Removed by Filter` in the thousands next to an Index Scan, the fix is usually an index whose key includes the filtering column — or accepting a Seq Scan for low selectivity ([[Why might PostgreSQL choose a sequential scan instead of an index]]).
+
+> [!warning] Index Cond does not include every WHERE term
+> Only columns usable by the index operator class appear there; the rest silently degrades to Filter. Plans chosen on estimates can look fine while 99 percent of rows are filtered post-index — the classic "index exists but the query is slow" trap. Always read the removed-rows counters in ANALYZE output ([[How do you read EXPLAIN ANALYZE in PostgreSQL]]).
 
 > [!tip] Interview answer
-> Index Cond is the predicate the index itself evaluated to pick the range; Filter runs after rows are fetched, for conditions the index could not serve. PostgreSQL names both in EXPLAIN and counts removed rows; SQLite shows SEARCH with the served columns. The number to watch is rows removed by filter — if the index fetches a thousand rows to return one, the index leads with the wrong column and I extend it into a composite key instead of accepting the waste.
+> Index Cond is evaluated inside the index and prunes entries; Filter is checked on each row after retrieval, and Rows Removed by Filter shows how much work was wasted. When a filter removes thousands of rows after an index scan, the filtering column belongs in the index key or INCLUDE list.
