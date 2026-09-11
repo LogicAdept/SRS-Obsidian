@@ -24,7 +24,7 @@ l1 -> l2 -> l3 -> l4
 ## What each rung means concretely
 
 - **Access path**: the WHERE shape decides usable indexes ([[How do you decide which database indexes to create]]); functions over columns need expression indexes ([[What is an expression index in PostgreSQL]]); implicit casts silently disable them ([[How does implicit type conversion hide an index]]); leading-wildcard LIKE needs trigram-class structures ([[How does a trigram index help SQL search]]).
-- **Less data**: `SELECT *` defeats index-only scans ([[What is an index-only scan in PostgreSQL]]); OFFSET pagination re-reads everything ([[How would you explain Pagination offset limit vs cursor-based]]).
+- **Less data**: `SELECT *` defeats index-only scans ([[What is an index-only scan in PostgreSQL]]); OFFSET pagination re-reads everything ([[What is the difference between offset and cursor pagination]]).
 - **Shape**: correlated subqueries rewrite into joins or window functions ([[How do you rewrite a correlated subquery for performance]], [[What is a correlated subquery and why can it be slow]]); OR across columns becomes a bitmap union in PostgreSQL ([[How does OR across columns affect index use]]).
 - **Optimizer honesty**: ANALYZE after bulk changes; extended statistics for correlated columns ([[How do stale statistics hurt a query plan]]).
 - **Engine-side memory and plans** come last: work_mem, joins, plan reading ([[How do you read EXPLAIN ANALYZE in PostgreSQL]]).
