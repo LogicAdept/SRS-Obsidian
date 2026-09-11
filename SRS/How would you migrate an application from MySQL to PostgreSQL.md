@@ -32,7 +32,7 @@ priority: 0
 - **GROUP BY strictness**: PostgreSQL rejects non-aggregated columns that MySQL tolerated.
 - **Types discipline**: implicit conversions that used an index in MySQL can defeat one in PostgreSQL ([[How does implicit type conversion hide an index]]); empty string versus NULL distinctions differ in behavior.
 - **Case of identifiers**: unquoted identifiers fold to lowercase in PostgreSQL.
-- **Upsert and pagination dialects**: [[How does UPSERT work in PostgreSQL]]; LIMIT/OFFSET works in both, but keyset patterns port cleanly ([[How would you explain Pagination offset limit vs cursor-based]]).
+- **Upsert and pagination dialects**: [[How does UPSERT work in PostgreSQL]]; LIMIT/OFFSET works in both, but keyset patterns port cleanly ([[What is the difference between offset and cursor pagination]]).
 
 ## The cutover mechanics
 

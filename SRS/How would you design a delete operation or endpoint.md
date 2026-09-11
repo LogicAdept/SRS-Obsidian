@@ -33,5 +33,34 @@ Soft delete (a `deleted_at` column or status) is the default because deletion is
 > [!warning] A hard DELETE is the one operation you cannot unship
 > Physically deleting rows destroys the audit trail, breaks foreign-key history and makes recovery a restore-from-backup exercise. If you must hard-delete, the retention job — not the user-facing endpoint — should be the only code path that does it.
 
+```d2
+req: DELETE /orders/42 If-Match v7
+auth: resource-level authz {
+  a1: 401/403 -> deny
+}
+pre: precondition check {
+  p1: 412 ETag mismatch
+}
+soft: soft delete {
+  s1: set deleted_at
+  s2: unique keys recomposed
+}
+resp: 204 (repeat -> same 204,
+idempotent terminal)
+bg: async worker {
+  b1: cascade children
+  b2: update counters
+  b3: evict caches
+  b4: purge search index
+}
+ret: retention job -> hard purge
+(after window, only path)
+req -> auth -> pre -> soft -> resp
+soft -> bg: Deleted event (outbox)
+bg -> ret: retention window
+```
+
+**Fig. 1.** The delete flow: authorization and preconditions guard the soft delete; the outbox event drives projections; the retention job is the only hard-delete path.
+
 > [!tip] Interview answer
 > I design delete as idempotent and authorized, usually soft (deleted_at), with ETag preconditions for concurrency, 202-plus-status-resource for big cascades, and explicit cascade semantics — children, counters, caches, search index. Real removal lives in a retention job, not the endpoint, and a Deleted event drives all projections atomically via the outbox.
