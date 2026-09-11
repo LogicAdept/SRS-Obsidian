@@ -2,85 +2,57 @@
 reps: 0
 priority: 0
 -->
-#Databases/Indexes #Databases/SQL #SRS #New
+#Databases/Indexes #Databases/SQL #SRS
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+# How do database indexes work at a high level
 
-**Типы индексов PostgreSQL.**
+> [!abstract] Short answer
+> An index stores its keys in a searchable structure and, for each key, a pointer to the row. The planner decides per query whether that structure is cheaper than a scan. For a B-tree, a lookup walks from root to leaf, picks up the row pointers, and optionally fetches the rows; the same ordering also serves ranges, sorts, and prefixes of compound keys.
 
-B-tree (default) — =, <, >, BETWEEN, ORDER BY, LIKE 'abc%'. Hash — только =. GIN — массивы, JSONB, full-text. GiST — геометрия, диапазоны. BRIN — большие таблицы с порядком (timestamp). Покрывающий индекс (INCLUDE) — добавляет колонки в лист, Index Only Scan.
+## The path from predicate to rows
 
-**Когда индекс НЕ поможет?**
+When a query has `WHERE user_id = 42`, the planner first asks what access paths exist. If a B-tree index exists on `user_id`, the engine can seek into the tree: it compares keys page by page, descending a few levels, then scans the leaf range where `user_id = 42` holds. Each leaf entry carries a locator; PostgreSQL leaves hold heap TIDs, SQL Server nonclustered leaves hold a row locator, and InnoDB secondary leaves hold the primary key that is then looked up in the clustered index. If the predicate does not match the index's opclass or shape, the plan falls back to a scan, which is the boundary described in [[What is sargability in SQL]].
 
-Маленькие таблицы. Низкая selectivity (boolean). Функции (LOWER(email) — нужен expression index). LIKE '%abc' (wildcard в начале). Часто обновляемые колонки (индекс замедляет INSERT/UPDATE/DELETE).
 
-**Зачем нужны индексы?**
+```d2
+direction: down
+root: "B-tree root\nkeys + downlinks" {
+  width: 260
+  height: 80
+  style.fill: "#e3f2fd"
+}
+inner: "Internal pages\none downlink per child range" {
+  width: 280
+  height: 80
+  style.fill: "#e3f2fd"
+}
+leaf: "Leaf pages\nkey + heap pointer (TID)" {
+  width: 280
+  height: 80
+  style.fill: "#fff3e0"
+}
+heap: "Heap table\nrows in arbitrary order" {
+  width: 240
+  height: 80
+  style.fill: "#e8f5e9"
+}
+root -> inner: "descend on key"
+inner -> leaf: "descend on key"
+leaf -> heap: "fetch matching TIDs"
+```
 
-Чтобы ускорить поиск. Без индекса — full scan O(n). С B-tree индексом — O(log n). Платим за это: дополнительная память + замедление INSERT/UPDATE/DELETE.
+**Fig. 1.** A B-tree lookup descends from root to leaf, then follows the leaf pointers into the heap. The tree is shallow, so the walk costs a handful of page reads, not a scan of every row.
 
-**Когда индекс не стоит создавать?**
+## Why ordering is the real superpower
 
-Маленькие таблицы (full scan быстрее). Часто меняющиеся колонки. Колонки с малым количеством уникальных значений (например, boolean) — индекс не даст выигрыша.
+Sorted leaves mean the engine gets ranges, sorting, and MIN/MAX for free. A composite B-tree on `(a, b, c)` is sorted by `a`, then `b`, then `c` within equal `a` values, which is the leftmost prefix property behind [[What is the leftmost prefix rule for composite indexes]]. It also means `ORDER BY` can be answered by scanning the index in order, and `LIMIT 10` can stop after ten rows, an interaction explained in [[How does LIMIT interact with ORDER BY and indexes]].
 
-**Типы индексов в PostgreSQL.**
+## The cost side and the check
 
-B-tree (default — =, <, >, BETWEEN, ORDER BY), Hash (только =), GIN (массивы, JSONB, full-text), GiST (геометрия), BRIN (большие таблицы с порядком), SP-GiST.
+Every write to the table touches each index that contains the changed columns, so insert-heavy workloads feel index count directly. Engines therefore expose tooling to audit indexes: PostgreSQL has `pg_stat_user_indexes.idx_scan` and `EXPLAIN`, MySQL has `EXPLAIN` plus the `sys` schema, and ClickHouse shows granules skipped per index in `EXPLAIN indexes = 1`. The reading path for PostgreSQL plans, including the difference between Index Cond and Filter, is covered in [[How do you read EXPLAIN ANALYZE in PostgreSQL]].
 
-**Когда индекс НЕ стоит создавать?**
+> [!warning] "It has an index" is not "it uses the index"
+> The planner only uses an index when the predicate shape, the operator class, and the cost model agree. Functions on the column, leading wildcards, type mismatches, or a plan that already touches half the table will all produce a scan despite the index existing. Always check the plan, not the DDL.
 
-Маленькие таблицы (full scan быстрее). Колонки с малым числом уникальных значений (boolean, enum с 2–3 значениями). Часто меняющиеся колонки — индекс замедлит INSERT/UPDATE/DELETE.
-
-**Что такое индекс? Зачем он нужен?**
-
-Структура данных (обычно B-tree), позволяющая БД быстро находить строки по значениям колонок. Без индекса — Seq Scan (полный обход таблицы). С индексом — поиск за O(log n).
-
-**Какие виды индексов есть?**
-
-B-tree (по умолчанию, для =, <, >, BETWEEN, LIKE 'abc%'). Hash (только =, в Postgres есть, но используется редко). GIN — для массивов, JSONB, full-text. GiST — геометрия, диапазоны. BRIN — для огромных таблиц с естественной упорядоченностью (временные ряды).
-
-**Почему нельзя на все поля навесить индексы?**
-
-(1) Каждый индекс нужно обновлять при INSERT/UPDATE/DELETE — замедление записи. (2) Индексы занимают место — на больших таблицах могут весить больше самой таблицы. (3) Они требуют обслуживания (VACUUM, REINDEX). Правило: индексы только на колонки, по которым реально часто фильтруют, сортируют, джойнят.
-
-**Типы индексов в PostgreSQL.**
-
-B-tree (default, для =, <, >, BETWEEN), Hash (только =), GIN (массивы, JSONB), GiST (геометрия), BRIN (большие таблицы с порядком), SP-GiST.
-
-**Два одинарных индекса vs один составной — что лучше?**
-
-Зависит от запроса. WHERE a=1 AND b=2: составной (a,b) — один Index Scan. Два одинарных: Bitmap Index Scan + Bitmap AND — медленнее. WHERE a=1 OR b=2: два одинарных — Bitmap OR. Составной (a,b) не поможет для WHERE b=2 (leftmost prefix). Общее правило: составной для AND-запросов, одинарные для OR или независимых WHERE.
-
-**Кейс: «навесили индексов на все поля — запись стала медленнее».**
-
-Каждый INSERT/UPDATE/DELETE обновляет ВСЕ индексы. 10 индексов = 10x overhead на запись. VACUUM тоже замедляется. REINDEX может понадобиться. Решение: индексы только по паттернам запросов (WHERE, JOIN, ORDER BY). Мониторинг: pg_stat_user_indexes → проверить idx_scan (сколько раз использовался).
-
-**Почему Tree индекс в БД, а не Hash?**
-
-Хотя Hash = O(1), Tree (B-tree) поддерживает диапазонные запросы, сортировку, BETWEEN, LIKE 'abc%'. Hash — только точное совпадение.
-
-**Индексы PostgreSQL.**
-
-B-tree (default), Hash, GIN (JSONB, full-text), GiST (геометрия), BRIN (большие таблицы). Покрывающий (INCLUDE).
-
-**Порядок колонок в составном индексе.**
-
-Leftmost prefix rule. INDEX (a, b, c) используется для WHERE a=, WHERE a= AND b=, но НЕ для WHERE b= или WHERE c=.
-
-**Типы индексов PostgreSQL.**
-
-B-tree (default), Hash (=), GIN (JSONB, full-text), GiST (геометрия), BRIN (большие таблицы с порядком). Покрывающий индекс (INCLUDE) — Index Only Scan.
-
-**What is a database index and what is the cost?**
-
-Источник: https://habr.com/ru/articles/968532/
-
-Вспомогательная структура рядом с таблицей, ускоряет поиск. Замедляет INSERT/UPDATE/DELETE, потому что индекс тоже нужно обновлять.
-
-**Postgres cost of indexes?**
-
-Faster reads, slower writes, extra WAL. HOT fails if indexed columns change. Partial indexes cut write cost.
-
-**Index vs heap for optimization?**
-
-B-tree seek + possible heap fetch. Covering avoids heap. Random heap I/O can beat seq scan only when few rows. Search '%x%' does not seek a B-tree.
+> [!tip] Interview answer
+> An index is a sorted key-to-pointer structure. A lookup descends the B-tree to the leaf range, collects row pointers, and fetches rows if needed. Because keys are ordered, the same structure serves equality, ranges, ordered output, and leftmost prefixes of compound keys. The planner uses it only when it is cheaper than a scan, and every write must maintain it, so indexes are a measured trade-off, not a default.
