@@ -2,36 +2,60 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #SRS
 
-# What is index_granularity_bytes in ClickHouse
+# What is index_granularity_bytes in ClickHouse?
 
 > [!abstract] Short answer
-> index_granularity_bytes bounds a granule's size in bytes under adaptive granularity: instead of always 8192 rows, a granule is closed when it reaches this many bytes (default about 10 MB), so tables with wide rows get smaller granules and tables with narrow rows get full 8192-row granules. The goal is keeping the skip-unit small enough that index marks stay selective.
+> `index_granularity_bytes` turns on adaptive index granularity: instead of a fixed 8192 rows per granule, ClickHouse closes a granule once it reaches roughly this many bytes — 10485760 (10 MiB) by default, with a floor of `min_index_granularity_bytes` = 1024. Setting it to 0 disables adaptivity and makes granules exactly `index_granularity` rows.
 
-## Adaptive versus fixed granularity
+## What adaptivity buys you
 
-The MergeTree docs define the two knobs together: index_granularity is the maximum row count of a granule (default 8192), and index_granularity_bytes bounds the byte size, with the number of rows in a granule ranging within [1, index_granularity] depending on row size; a single row larger than the byte setting forms its own granule. Adaptive sizing is the default behavior for modern MergeTree tables, with 0 disabling it. The rationale is read-amplification control: a granule is the atomic read unit, so a table of multi-kilobyte event rows with fixed 8192-row granules would read tens of megabytes even for a single granule touch — adaptive sizing closes granules earlier so that pruning by primary key or skip indexes actually reduces bytes read.
+With adaptive granularity, small-insert parts get small granules — the same granule unit the [[What is a sparse primary index in ClickHouse]] indexes one mark of ([[What is a granule in ClickHouse]]) — a part holding 300 rows has one granule either way, but a part of very wide rows (big `String`/`JSON` payloads) produces far fewer, byte-sized granules than a strict 8192-row slicing would. Queries then skip data in proportion to bytes rather than rows, and background merges produce well-sized granules from mixed input parts. The classic use case is high-cardinality string data where 8192 rows can be hundreds of megabytes; the counter-case — tiny granules, more marks, more per-granule overhead — is why the minimum is bounded and why the docs still default `index_granularity = 8192` as the row cap.
 
 ```sql
-CREATE TABLE wide_events
-(
-    ts    DateTime,
-    payload String,      -- several KB per row
-    user_id UInt64
-) ENGINE = MergeTree
-ORDER BY (user_id, ts)
-SETTINGS index_granularity = 8192, index_granularity_bytes = 10485760;
+SELECT
+    name,
+    engine_full
+FROM system.tables
+WHERE name IN ('t_fixed', 't_adaptive');
+-- t_fixed:    ... SETTINGS index_granularity = 8192
+-- t_adaptive: ... index_granularity = 8192 index_granularity_bytes = 10485760
 ```
 
-**Listing 1.** With 10 MB adaptive sizing, wide rows close granules well before 8192 of them accumulate.
+**Listing 1.** Both settings coexist: adaptive mode closes a granule at whichever limit — rows or bytes — is hit first; `engine_full` shows the effective configuration.
 
-## Why it matters for the whole index stack
+```d2
+rows: "Incoming sorted rows" {
+  width: 240
+  height: 70
+  style.fill: "#e3f2fd"
+}
+bytes: "bytes >= index_granularity_bytes?\n(10 MiB default)" {
+  width: 340
+  height: 90
+  style.fill: "#fff3e0"
+}
+rows8192: "rows >= index_granularity?\n(8192 default)" {
+  width: 340
+  height: 90
+  style.fill: "#fff3e0"
+}
+close: "Close granule\nemit mark" {
+  width: 220
+  height: 70
+  style.fill: "#e8f5e9"
+}
+rows -> bytes
+bytes -> close: yes
+bytes -> rows8192: no
+rows8192 -> close: yes
+```
 
-Every upper structure is expressed in granules: the sparse primary index holds one mark per granule (per [[What is a sparse primary index in ClickHouse]]), skip indexes are declared with GRANULARITY in granules (per [[What data skipping indexes exist in ClickHouse]]), and EXPLAIN reports granules selected versus total, per [[How do you verify a ClickHouse index is used]]. If granules balloon in bytes, each mark covers too much data and every index's exclusion power drops proportionally; if granules shrink too far, mark count and per-granule overhead grow and scans lose batching efficiency. The byte knob is how you keep that balance when row width is extreme or uneven — the same underlying concern as the row-count default in [[What is a granule in ClickHouse]].
+**Fig. 1.** Adaptive granularity closes a granule on whichever threshold — bytes or rows — the sorted stream reaches first.
 
-> [!warning] "Smaller granules are always more selective" ignores overhead
-> Shrinking granules multiplies marks, per-granule metadata, and the number of files reads touch, which can hurt throughput more than the extra precision helps — the docs' granule-range note (up to index_granularity * 2 extra rows per block read) exists because some overshoot is cheaper than tiny granules. The other myth: that this setting alone fixes bad keys. If the WHERE does not match the ORDER BY, no granularity setting saves you.
+> [!warning] Do not shrink it "for faster lookups"
+> Dropping `index_granularity_bytes` to a few kilobytes multiplies the number of marks: the index grows, per-granule bookkeeping inflates, and merges do more work — often the opposite of the intended speedup. Point-lookup weakness comes from the sparse design ([[When should you not use ClickHouse]]), not from granule size, and it is better fixed with projections or a row store.
 
 > [!tip] Interview answer
-> index_granularity_bytes is the adaptive side of granule sizing: a granule closes at about 10 MB by default or 8192 rows, whichever comes first, so wide-row tables get smaller granules and stay prunable. Since granules are the atomic read unit — for the sparse index marks, skip indexes, and EXPLAIN counters — this setting keeps the skip unit small on wide rows. Zero disables adaptivity and restores fixed row-count granules.
+> It is the adaptive-granularity control: a granule closes at ~10 MiB of data by default instead of exactly 8192 rows, with 0 disabling adaptivity. This lets granule size follow real data size — useful for wide rows — at the cost of more marks. It works together with `index_granularity`, which remains the row cap.

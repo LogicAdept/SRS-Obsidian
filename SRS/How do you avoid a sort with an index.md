@@ -2,34 +2,48 @@
 reps: 0
 priority: 0
 -->
-#Databases/Indexes #Databases/SQL #SRS
-
-# How do you avoid a sort with an index
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> Let an index supply the order instead of the Sort node: scan a B-tree whose key matches the ORDER BY, in forward or backward direction. For single-column sorts the direction is free; for mixed ASC/DESC on several columns the index must declare matching sort orders; bitmap scans and hash-based plans throw the order away.
+> A sort disappears when an index already supplies the required order: build (or extend) an index whose key sequence equals the `ORDER BY` sequence — including direction and filter column. `WHERE category = ? ORDER BY price` wants the composite `(category, price)`: the equality pins the prefix, the index returns rows in price order, no sort node. SQLite plans the before/after difference as `USE TEMP B-TREE FOR ORDER BY` present versus absent ([[What is filesort or an external merge in a plan]]).
 
-## Which index shapes preserve order
-
-A B-tree on the sort columns stores keys in order, so the planner can hand rows to the client in order as it walks the leaves — PostgreSQL's ORDER BY docs note an index can be scanned forward or backward and that direction covers either direction of a single-column sort. Composite ordering needs the same left-to-right shape as the ORDER BY, and mixed directions must be written into the DDL: (x ASC, y DESC) is satisfiable no other way. The same logic answers MIN/MAX instantly and feeds [[What is keyset pagination]], where the next-page predicate rides the index order. If the WHERE clause also matches the prefix, the engine can stop early — the LIMIT case in [[How does LIMIT interact with ORDER BY and indexes]].
+The composite design rule generalizes: equality predicates first, then the ORDER BY columns, then range predicates. `WHERE category = 'books' ORDER BY price` with `(category, price)` is a single seek whose output is pre-sorted — the verified demo shows the temp b-tree vanishing when the composite replaces the single-column index. PostgreSQL documents the same mechanism: an index scan can return rows in order, letting the planner drop the Sort node — and adds that the reverse direction works too by scanning the index backwards, so `ORDER BY price DESC` needs no separate descending index. The cases an index *cannot* save: mixed-direction sorts on a plain index (`ORDER BY a ASC, b DESC` needs a matching partial-descending index), expressions not matching the indexed ones, and sorts over computed values ([[Why does a function on a column prevent index use]]). Note the trade: every sort-avoiding index is a write-time cost and an index-maintenance liability — worth it for hot ordered reports, overkill for ad-hoc sorts ([[How would you explain the SQL ORDER BY clause]]).
 
 ```sql
-CREATE INDEX idx_feed ON posts (author_id, created_at DESC);
-SELECT id, title FROM posts
-WHERE author_id = 42
-ORDER BY created_at DESC
-LIMIT 20;
--- Plan: Index Scan using idx_feed, no Sort node
+CREATE TABLE products (id INTEGER PRIMARY KEY, title TEXT, category TEXT, price NUMERIC);
+CREATE INDEX idx_cat2 ON products(category);
+EXPLAIN QUERY PLAN
+SELECT title FROM products WHERE category = 'books' ORDER BY price;
+-- QUERY PLAN
+-- |--SEARCH products USING INDEX idx_cat2 (category=?)
+-- `--USE TEMP B-TREE FOR ORDER BY
+DROP INDEX idx_cat2;
+CREATE INDEX idx_cat_price ON products(category, price);
+EXPLAIN QUERY PLAN
+SELECT title FROM products WHERE category = 'books' ORDER BY price;
+-- QUERY PLAN
+-- `--SEARCH products USING INDEX idx_cat_price (category=?)
 ```
 
-**Listing 1.** Equality on the leading column plus declared DESC on the sort column means rows come out ordered straight from the leaves.
+**Listing 1.** Verified on SQLite 3.53.1. Same query: the single-column index filters but still needs a sort; the composite `(category, price)` returns matching rows already in price order and the sort node is gone.
 
-## How sorts sneak back in
+```d2
+direction: right
+f: "equality filter
+category = ?
+index prefix" {width: 190; height: 90}
+o: "ORDER BY price
+next index key
+rows emerge sorted" {width: 200; height: 90}
+n: "no sort node
+streaming output" {width: 180; height: 80}
+f -> o -> n
+```
 
-Bitmap heap scans visit pages in physical order and therefore require a separate sort, as PostgreSQL's combining-multiple-indexes page explicitly warns. Functions or expressions on the sort column change the ordering unless the index is on the same expression, the functional case in [[Why does a function on a column prevent index use]]. Locale-dependent text order can need a text_pattern_ops-style opclass, and a collation mismatch silently invalidates the ordering guarantee, which is one of the planner traps behind [[How does implicit type conversion hide an index]]. The cheapest audit is the plan: any Sort node above an Index Scan means the index did not deliver the order.
+**Fig. 1.** The composite index encodes the query's shape — filter on the prefix, output in the tail's order — turning two plan stages into one seek.
 
-> [!warning] Backward scan covers reversal, not mixed directions
-> The common mistake is assuming any index serves any ORDER BY because "you can scan it backwards". Reversal flips every column's direction at once: (x, y) backward gives x DESC, y DESC, never x ASC, y DESC. Top-N with mixed directions without a matching index degrades to sort the whole filtered set first, which for large tables is the difference between milliseconds and seconds.
+> [!warning] The index must match the ORDER BY exactly — direction and columns included
+> `(category, price)` does not serve `ORDER BY price` alone, and `ORDER BY price DESC` on an ascending index works only because engines scan backwards; a mixed `ORDER BY a, b DESC` needs the index built with matching per-column direction or it sorts anyway. Check the plan for the vanished sort node, not the presence of "an index" ([[What harmful SQL patterns or pitfalls do you know]]).
 
 > [!tip] Interview answer
-> To avoid a sort, make the index key match the ORDER BY: same columns, same order, declaring ASC/DESC when they differ, and relying on forward or backward scan for single-column reversal. The plan must show an index scan with no Sort node. Bitmap plans and expressions on the sort column lose the order, so they reintroduce it.
+> I avoid sorts by making an index supply the order: equality-filter columns as the index prefix, ORDER BY columns as the tail — WHERE category equals x ORDER BY price wants (category, price). The plan proof is the disappearing sort node: SQLite's temp b-tree for ORDER BY, PostgreSQL's Sort node. DESC works by backward index scans, mixed-direction sorts need matching index directions, and I accept the write cost only for queries that run hot.

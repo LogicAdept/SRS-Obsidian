@@ -2,37 +2,63 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #SRS
 
-# How does a bloom filter skip index work in ClickHouse
+# How does a bloom filter skip index work in ClickHouse?
 
 > [!abstract] Short answer
-> The bloom_filter skip index stores, for each block of granules, a compact bit array summarizing the block's values. At query time the predicate value is hashed against that bit array: a negative answer proves the block cannot contain the value and skips its granules; a positive answer is only maybe, so the granules are read. It targets equality on high-cardinality, sparse values outside the sorting key.
+> The `bloom_filter` skip index builds one Bloom filter per index block (a group of `GRANULARITY` granules) and stores it in the part. For a query predicate like `user_id = 42`, ClickHouse tests each block's filter: "definitely not present" prunes the block's granules, "maybe present" reads them. The catch is Bloom filters can produce false positives — a few useless block reads — but never false negatives, so results stay correct.
 
-## The structure and the parameters
+## The mechanism
 
-A bloom filter is a space-efficient probabilistic set-membership structure: k hash functions set bits in a bit array per inserted value; membership tests may produce false positives but never false negatives. ClickHouse's bloom_filter index takes a single optional parameter, the false-positive rate between 0 and 1, defaulting to 0.025 — smaller rates need more bits per value. The docs position it precisely: because false positives merely cost a few unnecessary block reads, they are harmless here; because a false negative would corrupt results, the structure guarantees none. Bloom filters shine when the number of candidate values is large, which is why they also apply to arrays (every element tested) and maps via mapKeys/mapValues, per [[What data skipping indexes exist in ClickHouse]].
+At part build time (insert or merge), the indexed expression's values are hashed into a bit array per block. With the default false-positive rate of 0.025, about 2.5% of absent values will still be flagged "maybe present"; the parameter `bloom_filter(0.01)` lowers that at the cost of a bigger index. At query time the engine evaluates the predicate's value against every surviving block's filter — cheap hashing against a small bit set — and skips blocks that are certain misses. This is why the index suits high-cardinality equality and IN predicates where a `set` index would be too large and `minmax` is useless — the full type menu is in [[What data skipping indexes exist in ClickHouse]]: user ids, session ids, external correlation ids.
 
 ```sql
-CREATE TABLE events
-(
-    ts      DateTime,
-    user_id UInt64,
-    INDEX uid_bloom user_id TYPE bloom_filter(0.01) GRANULARITY 4
-) ENGINE = MergeTree
-ORDER BY ts;
+ALTER TABLE events ADD INDEX user_ix user_id TYPE bloom_filter(0.01) GRANULARITY 1;
 
-SELECT count() FROM events WHERE user_id = 8675309;
+SELECT count()
+FROM events
+WHERE user_id = 7432;   -- blocks whose filter says "no" are not read
 ```
 
-**Listing 1.** user_id is not in the ORDER BY, so the primary key cannot help; the bloom index skips blocks whose filter excludes the ID.
+**Listing 1.** A bloom_filter index over an id column with a 1% false-positive rate.
 
-## When it pays and when it burns
+```d2
+q: "WHERE user_id = 42" {
+  width: 260
+  height: 70
+  style.fill: "#e3f2fd"
+}
+b1: "Block 1 filter:\n42 not in bit array" {
+  width: 280
+  height: 80
+  style.fill: "#e8f5e9"
+}
+b2: "Block 2 filter:\nmaybe present" {
+  width: 260
+  height: 80
+  style.fill: "#fff3e0"
+}
+skip: "Skip block 1\n(0 granules read)" {
+  width: 240
+  height: 80
+  style.fill: "#e8f5e9"
+}
+read: "Read block 2 granules\nfilter rows normally" {
+  width: 280
+  height: 80
+  style.fill: "#fff3e0"
+}
+q -> b1
+q -> b2
+b1 -> skip: definitely absent
+b2 -> read: possible match
+```
 
-The economics come from sparsity and correlation: the ideal case is a value that is rare in the data and correlated with the sorting key, so most blocks' filters answer no and whole blocks are skipped — the docs' observability example of rare error codes. The failure case is a value common in every block: every filter answers yes, every granule is read, and you pay index evaluation plus the full scan, dissected in [[Why might a ClickHouse skip index not help]]. Like all skip indexes it is declared with GRANULARITY, must be materialized for existing parts, per [[How do you materialize a skip index on existing ClickHouse data]], and its real effect is the granule delta in EXPLAIN indexes = 1, per [[How do you verify a ClickHouse index is used]]. For string tokens specifically, the text index is now the recommended structure, per [[What is a text index in ClickHouse]].
+**Fig. 1.** Filters decide per index block; a "maybe" block is read and its rows filtered as usual.
 
-> [!warning] "Bloom filter = fast lookup" confuses a skip index with a key-value index
-> A bloom filter never returns data and never locates rows; it answers one question per block — "could this value be here?" — and a yes means read everything in the block. It also cannot serve ranges (it is unordered) — that is minmax territory. Treating it as a per-row lookup structure like an InnoDB secondary index misses the entire granule model it lives in.
+> [!warning] Bloom indexes are unordered — they cannot serve ranges
+> A `bloom_filter` answers "is this value possibly in the block?", so `timestamp >= ...` or `BETWEEN` predicates get nothing from it; ranges belong to `minmax`. The other trap: very selective data distribution or predicates the planner cannot match to the index expression make the index dead weight — the checklist in [[Why might a ClickHouse skip index not help]] covers the failure modes.
 
 > [!tip] Interview answer
-> The bloom_filter skip index keeps a bit array per block of granules summarizing the block's values with a tunable false-positive rate, 2.5 percent by default. Queries hash the predicate against it: no means skip the block, yes means read it, since there are no false negatives. It is for equality on high-cardinality sparse columns outside the ORDER BY, works on arrays and map projections, and only pays off when values are rare and correlated with the key.
+> It stores a Bloom filter per group of granules inside each part; queries hash the predicate value and skip blocks whose filter answers "definitely absent". False positives only cost extra reads, never wrong results, and the fpp parameter tunes that trade-off — verify actual pruning with [[How do you verify a ClickHouse index is used]]. Ideal for high-cardinality equality lookups on non-key columns, useless for ranges.

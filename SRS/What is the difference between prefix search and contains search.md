@@ -2,32 +2,44 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/Indexes #SRS
-
-# What is the difference between prefix search and contains search
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> Prefix search matches strings that begin with a term (LIKE 'term%'); contains search matches strings that include the term anywhere (LIKE '%term%'). The difference is structural, not cosmetic: a prefix is a contiguous range in lexicographic order and seeks a B-tree; contains has no contiguous range and needs trigram, token, or full-text structures.
+> **Prefix search** (`LIKE 'abc%'`) pins the left edge of the match, so a B-tree can seek the range `['abc', 'abd')` — the engine plans a SEARCH. **Contains search** (`LIKE '%abc%'`) has no left boundary; every key is a candidate, so the plan is a full scan regardless of indexes. The wildcard's *position* is the whole performance story ([[Why does LIKE with a leading wildcard not use a B-tree index]], [[What is sargability in SQL]]).
 
-## Why one seeks and the other cannot
-
-Sorted order puts all 'term...' strings together, so the engine can compute a lower and upper bound for the prefix and read exactly that range — PostgreSQL documents B-tree support for LIKE 'foo%' with the anchoring caveat and opclass requirement. '%term%' describes a set with no bound: matches can sit anywhere in the string, so the B-tree's order carries no information about where they are. That is why the two query shapes route to different index types, and why the same column can be fast for autocomplete and hopeless for free-text containment on a plain B-tree. The deeper mechanism of the failure is in [[Why does LIKE with a leading wildcard not use a B-tree index]].
+The verified demo shows both plans on the same table and index: with a NOCASE index on `title`, `LIKE 'U%'` plans as `SEARCH ... (title>? AND title<?)` — a genuine bounded range — while `LIKE '%ook%'` plans as a full `SCAN` over the same index (the index at least supplies a narrow covering read, not table access). PostgreSQL's version of the same law: `text_pattern_ops` operator classes make prefix LIKE seek on a B-tree, and contains-search never does. What remains for contains: accept the scan on small tables (fine — the scan *is* the right plan under a few thousand rows), restructure the query so a prefix is available, or change the machinery — trigram indexes invert the problem by indexing *all substrings* so '%abc%' becomes index-lookup work ([[How does a trigram index help SQL search]]), full-text search switches from substring to token semantics ([[When should you use full-text search instead of LIKE]]), and Elasticsearch moves the problem out of SQL entirely ([[When should you use Elasticsearch instead of SQL search]]). The design habit: ask which searches are hot *before* choosing a search strategy — the schema (reverse columns, trigram indexes, FTS tables) follows the query shapes, not vice versa ([[What harmful SQL patterns or pitfalls do you know]]).
 
 ```sql
--- prefix: B-tree range, cheap, index-friendly
-SELECT * FROM products WHERE sku LIKE 'AB-%';
--- contains: needs pg_trgm GIN or FTS, not the B-tree
-SELECT * FROM products WHERE name LIKE '%wrench%';
+CREATE TABLE pr (id INTEGER PRIMARY KEY, price NUMERIC, title TEXT);
+INSERT INTO pr VALUES (1, 5, 'Cable'),(2, 10, 'USB Hub'),(3, 30, 'Book'),(4, 250, 'Monitor');
+CREATE INDEX idx_pr_title_nc ON pr(title COLLATE NOCASE);
+
+EXPLAIN QUERY PLAN SELECT id FROM pr WHERE title LIKE 'U%';
+-- QUERY PLAN
+-- `--SEARCH pr USING COVERING INDEX idx_pr_title_nc (title>? AND title<?)
+EXPLAIN QUERY PLAN SELECT id FROM pr WHERE title LIKE '%ook%';
+-- QUERY PLAN
+-- `--SCAN pr USING COVERING INDEX idx_pr_title_nc
 ```
 
-**Listing 1.** Same operator, different predicate shape, different access path.
+**Listing 1.** Verified on SQLite 3.53.1. Same index, same operator, different plans: the anchored prefix compiles to a bounded seek; the unanchored pattern must visit every key.
 
-## Choosing the structure for contains
+```d2
+direction: right
+t: "sorted keys
+Book Cable Monitor USB Hub" {width: 250; height: 70}
+p: "'U%' -> range seek
+[Usb...) bounded" {width: 190; height: 90}
+c: "'%ook%' -> no left edge
+scan all keys" {width: 180; height: 90}
+t -> p
+t -> c
+```
 
-For '%term%' the PostgreSQL answer set is: pg_trgm GIN/GiST for arbitrary substring and similarity search including ILIKE; tsvector-based full-text search when the unit is a word with stemming and ranking; an external engine when relevance and scale outgrow the database — the comparison in [[When should you use full-text search instead of LIKE]] and the decision menu in [[How do you optimize substring search in SQL]]. Suffix search ('%term') is a prefix search on a reversed copy, per [[How do you search for a suffix efficiently in SQL]]. ClickHouse has no B-tree prefix magic at all and leans on skip/text indexes, described in [[How does ClickHouse accelerate LIKE and substring search]].
+**Fig. 1.** Sorted order serves anchored patterns only: a prefix bounds the interval a seek can navigate; a leading wildcard opens it and the search degrades to a linear pass.
 
-> [!warning] "Just add an index" does not upgrade prefix to contains
-> A B-tree index cannot serve contains no matter how it is configured, because the structure is ordered by whole-string comparison. The other trap: anchoring matters — 'term%' versus '%term%' is a one-character change that switches the access path from a range scan to a full scan. Autocomplete features silently regress when someone "fixes" the query by adding a leading wildcard.
+> [!warning] Prefix-like performance dies quietly at collation changes
+> The seek form requires the index collation to match the comparison — a case-insensitive LIKE needs the NOCASE (or PG text_pattern_ops) index; on a binary-collated index the same 'U%' falls back to a scan. Verify the plan after any collation or engine migration of search paths ([[How do you implement case-insensitive search efficiently]]).
 
 > [!tip] Interview answer
-> Prefix search bounds a range of the lexicographic order, so it seeks a B-tree like 'abc%'. Contains search '%abc%' matches anywhere in the string, so there is no range to seek and the B-tree is useless for it. For contains you change structures: trigram indexes for substring work, full-text search for word-level semantics, or an external search engine at scale.
+> Prefix search anchors the match's left edge, so a B-tree seeks the range from 'abc' to 'abd' — my demo shows SEARCH with title bounds. Contains search has no left anchor, so every key is a candidate and the plan scans, index or not. For small tables the scan is the correct plan; for hot contains-search I change machinery: trigram indexes that index substrings, full-text search for token semantics, or Elasticsearch for fuzzy and analytical needs.

@@ -2,34 +2,50 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/Indexes #SRS
-
-# How do stale statistics hurt a query plan
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> The planner chooses plans from estimates, and estimates come from statistics: row counts, distinct values, most common values, histograms. If those numbers are stale — after bulk loads, mass deletes, or skewed growth — the planner misestimates matching rows and picks structurally wrong plans, like a nested loop over millions of rows where a hash join was right.
+> The planner is only as good as its **statistics**: row counts, distinct-value counts, and value distributions per column. When they are stale (after bulk loads, mass deletes, or skewed updates), the planner estimates wrong row counts, picks the wrong join order or access path, and queries degrade from milliseconds to seconds with *no query change at all*. PostgreSQL: `ANALYZE` (manual or autovacuum) refreshes them; SQLite: `ANALYZE` populates `sqlite_stat1` ([[How do you systematically diagnose a slow SQL query]]).
 
-## Where the numbers live and how they age
-
-PostgreSQL keeps table and index sizes in pg_class (reltuples, relpages) and column distributions in pg_statistic, exposed readably through pg_stats; ANALYZE fills them, autoanalyze triggers on the fraction of changed rows, and the values are deliberately approximate — the docs note reltuples is not updated on the fly and is scaled to the current table size. Per-column detail is bounded by the statistics target (default 100 entries in most_common_vals and the histogram), and correlated columns fool per-column independence assumptions until you add extended statistics (CREATE STATISTICS with dependencies, mcv lists, or ndistinct). MySQL 8 keeps persistent InnoDB statistics (innodb_stats_persistent) and refreshes via ANALYZE TABLE, with automatic recomputation after a fraction of rows change.
+The cost-based planner is an estimation machine: PostgreSQL's documentation describes the planner consulting `pg_class` sizes and per-column statistics (including most-common-values histograms) to estimate selectivity, and those estimates decide join order, join algorithm, and index versus scan. A stale histogram that says "amount > 100 matches 5 rows" when it now matches 5 million flips nested-loop plans into catastrophes. The demo verifies what statistics *are* on SQLite: after `ANALYZE`, `sqlite_stat1` holds `table | index | rows avg-rows-per-key` — literally the inputs the planner reads; SQLite's query-planner documentation states these are exactly what lets it choose join orders and indexes. Diagnosing staleness: compare EXPLAIN-estimated rows to actual rows (EXPLAIN ANALYZE) — divergence by an order of magnitude is the signature ([[What do cost rows and loops mean in EXPLAIN]]). Fixes: refresh statistics (PostgreSQL `ANALYZE tablename`, autovacuum's analyzer; SQLite `ANALYZE`), raise sampling detail (`default_statistics_target`), or pin a good plan (`pg_hint_plan`-style extensions, planner method settings) as a last resort ([[What is a query plan in a relational database]]).
 
 ```sql
-ANALYZE orders;                       -- refresh column stats
-ALTER TABLE orders ALTER COLUMN customer_id SET STATISTICS 500;
-CREATE STATISTICS stts (dependencies) ON city, zip FROM addresses;
-ANALYZE addresses;
-SELECT attname, n_distinct, most_common_vals FROM pg_stats
-WHERE tablename = 'orders' AND attname = 'customer_id';
+CREATE TABLE skew (id INTEGER PRIMARY KEY, v INTEGER, payload TEXT);
+INSERT INTO skew (v, payload) SELECT 1, '0123456789abcdef0123456789abcdef'
+FROM (SELECT 1 UNION ALL SELECT 1) a, (SELECT 1 UNION ALL SELECT 1) b,
+ (SELECT 1 UNION ALL SELECT 1) c, (SELECT 1 UNION ALL SELECT 1) d,
+ (SELECT 1 UNION ALL SELECT 1) e, (SELECT 1 UNION ALL SELECT 1) f,
+ (SELECT 1 UNION ALL SELECT 1) g, (SELECT 1 UNION ALL SELECT 1) h,
+ (SELECT 1 UNION ALL SELECT 1) i, (SELECT 1 UNION ALL SELECT 1) j,
+ (SELECT 1 UNION ALL SELECT 1) k, (SELECT 1 UNION ALL SELECT 1) l,
+ (SELECT 1 UNION ALL SELECT 1) m, (SELECT 1 UNION ALL SELECT 1) n;
+INSERT INTO skew VALUES (99999, 2, 'rare');
+CREATE INDEX idx_v ON skew(v);
+ANALYZE;
+SELECT tbl, idx, stat FROM sqlite_stat1 WHERE tbl = 'skew';
+-- skew|idx_v|16385 8193
+-- (16385 index rows, average 8193 rows per distinct v)
 ```
 
-**Listing 1.** Refresh, raise the target on skewed columns, and teach the planner about correlated columns.
+**Listing 1.** Verified on SQLite 3.53.1. `ANALYZE` wrote the fact the planner needs: the table has 16385 rows and v averages 8193 rows per value — so a lookup on the rare value is cheap, on the common value is a half-table read, and the planner now knows which is which.
 
-## The failure mode and the repair loop
+```d2
+direction: right
+d1: "data changes
+bulk load / skew shift" {width: 200; height: 70}
+s1: "statistics stale
+estimates wrong" {width: 180; height: 70}
+p1: "planner chooses
+wrong plan shape" {width: 190; height: 70}
+q1: "queries degrade
+same SQL, slower" {width: 180; height: 70}
+d1 -> s1 -> p1 -> q1
+```
 
-A misestimate flips join strategy and scan choice: a predicate estimated at 10 rows when it matches 2 million turns into a nested loop with per-row index seeks, the disaster combination described in [[What is the difference between Nested Loop Hash Join and Merge Join]]; the inverse mistake buries a good index under a needless hash build. In an interview, demonstrate the loop rather than the blame: read the plan against actuals with EXPLAIN ANALYZE ([[How do you read EXPLAIN ANALYZE in PostgreSQL]]), compare estimated versus actual rows, then refresh or refine statistics ([[How does the PostgreSQL query planner choose a plan]] walks the decision inputs). Bulk operations deserve a manual ANALYZE precisely because autoanalyze lags on the changed-fraction trigger.
+**Fig. 1.** Staleness propagates silently: data changes first, estimates second, plans third, latency last — by which point nothing in the SQL looks guilty.
 
-> [!warning] "Vacuum full fixes bad plans" — wrong tool
-> VACUUM reclaims dead tuples; ANALYZE refreshes planner statistics. Running VACUUM after a load and expecting estimate-driven plans to change confuses the two; only ANALYZE (or autoanalyze catching up) updates pg_statistic. The second half-myth: fresh statistics do not fix everything — misestimates from correlated columns need extended statistics or query restructuring, not just a newer ANALYZE.
+> [!warning] The plan degrades without any query change — alarms blame the wrong thing
+> Because the SQL text is unchanged, staleness masquerades as "the database got slow" and triggers wasted investigation of application code. The first responder question after a bulk load or mass update is "when did statistics last refresh" — PostgreSQL's pg_stat_user_tables.last_analyze answers it directly ([[How do you identify slow or non-performant SQL queries]]).
 
 > [!tip] Interview answer
-> Plans are costed from estimates, and estimates come from statistics that age with the data. Stale or too-coarse statistics make the planner misjudge selectivity and pick the wrong join or scan — a 10-row estimate against 2 million actuals turns into a nested loop catastrophe. Diagnose with EXPLAIN ANALYZE comparing estimated and actual rows, then ANALYZE, raise the statistics target on skewed columns, and add extended statistics for correlated columns.
+> Statistics are the planner's model of the data — row counts, distinct values, histograms — and staleness means estimates are wrong, so join orders and access paths get chosen against reality: same SQL, sudden seconds. I diagnose by comparing estimated rows in EXPLAIN with actual rows in EXPLAIN ANALYZE; divergence by orders of magnitude points at stats. The fix is ANALYZE — manual after bulk loads, autovacuum or scheduled jobs otherwise — and SQLite shows the same idea through sqlite_stat1 that ANALYZE populates.

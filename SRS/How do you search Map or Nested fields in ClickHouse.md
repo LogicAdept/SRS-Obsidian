@@ -2,37 +2,38 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #SRS
 
-# How do you search Map or Nested fields in ClickHouse
+# How do you search Map or Nested fields in ClickHouse?
 
 > [!abstract] Short answer
-> For Map columns, query by key or value with mapKeys/mapValues and index those expressions with bloom-based or text skip indexes — the docs explicitly support applying bloom filters to maps via mapKeys or mapValues. For Nested columns, either address the arrays directly (array functions, ARRAY JOIN) or explode with ARRAY JOIN and filter; skip indexes on arrays test every element.
+> Map columns store keys and values as separate subcolumns: `mapKeys(m)`/`m.keys` and `mapValues(m)`/`m.values` are queryable arrays, a single-key read `m['key']` is rewritten to a typed key subcolumn, and predicates can use `mapContains`, `has(mapKeys(m), ...)`, or `arrayExists`. Nested structures are parallel `Array(T)` columns read with `ARRAY JOIN` or array functions — and both can carry skipping indexes on their subcolumn expressions.
 
-## Map: read the key, index the projection
+## Searching a Map
 
-ClickHouse Map columns support element access via the map['key'] subscript syntax and via dedicated functions (mapKeys, mapValues, mapContains). Equality on a known key, `map['user_id'] = 42`, is a normal predicate and can be served by the primary key if the expression is part of the ORDER BY (a common denormalization), or by skip indexes on the extracted expression. The skip-index documentation states the important capability directly: bloom filter indexes can be applied to maps by converting keys or values with mapKeys or mapValues, since every value of the array is tested. The token bloom and text index also accept Map, with the same caveat that only granule-level exclusion is provided, per [[What data skipping indexes exist in ClickHouse]].
+Because each key materializes as its own subcolumn (`m.key_<serialized_key>`), filtering on a known key reads only that column — this is the fast path. For unknown keys, you scan `mapKeys(m)` or use `mapContains(m, 'key')`; text predicates over values can be accelerated with `tokenbf_v1`-style indexes created on `mapValues(m)` or on specific key expressions, since indexes require an expression, not a whole map. For key-set-heavy workloads the modern alternative is the `JSON` type, which stores frequent paths as dynamic subcolumns with direct single-path reads — the Map-vs-JSON comparison in the docs turns on whether keys are known in advance ([[How do you index JSONB in PostgreSQL]] is the row-store analogue of the same decision).
 
 ```sql
-CREATE TABLE events
-(
-    ts       DateTime,
-    attrs    Map(String, String),
-    INDEX idx_attr_keys (mapKeys(attrs)) TYPE bloom_filter(0.025) GRANULARITY 4,
-    INDEX idx_attr_vals (mapValues(attrs)) TYPE bloom_filter(0.025) GRANULARITY 4
-) ENGINE = MergeTree ORDER BY ts;
+SELECT count()
+FROM events
+WHERE props['browser'] = 'Chrome';          -- reads the props.browser subcolumn
 
-SELECT count() FROM events WHERE attrs['service'] = 'billing';
+SELECT count()
+FROM events
+WHERE mapContains(props, 'trace_id');       -- key presence, any key
+
+ALTER TABLE events ADD INDEX bv_ix props['browser']
+    TYPE set(100) GRANULARITY 1;            -- index one key's subcolumn
 ```
 
-**Listing 1.** Bloom skip indexes over mapKeys/mapValues let granules without the key or value be skipped.
+**Listing 1.** Known-key reads are subcolumn reads; key presence and rare keys fall back to the keys/values arrays.
 
-## Nested: array predicates and explosion
+## Searching Nested
 
-Nested columns are arrays of parallel columns (nested.Key1, nested.Value1), so search is either element-wise predicates — has(array, value), arrayExists, indexOf — or a lateral explosion with ARRAY JOIN that turns each element into a row before filtering. Bloom skip indexes apply to arrays element-wise, so an INDEX on the nested array column lets granules lacking the value be skipped before the array functions run, per the same skip-index mechanics. For deep JSON-shaped data the parallel PostgreSQL toolset is GIN over jsonb, described in [[How do you search JSON fields efficiently in SQL]], and the granule-exclusion verification is identical to other skip structures — EXPLAIN indexes = 1, per [[How do you verify a ClickHouse index is used]]. The text-flavored variant (token search inside map or nested strings) rides the same machinery as [[What is hasToken in ClickHouse]].
+A `Nested(k String, v UInt64)` is stored as `Array(String) k` and `Array(UInt64) v` — per-row parallel arrays. Search means `ARRAY JOIN` to unnest rows ([[What is ARRAY JOIN in ClickHouse]]), then filter, or predicate directly with `has(arr, x)` / `arrayExists(x -> x > 10, arr)` without unnesting. Column names containing dots and dot-prefixed columns are interpreted as flattened Nested when `flatten_nested = 1` (the default), which the docs flag as a source of surprising insert validation — prefer underscores unless you intend Nested semantics.
 
-> [!warning] "Skip index on the map column" is not a thing by itself
-> Skip indexes are defined on expressions, and a raw Map/Array expression needs the right index type and a functional form that the index supports: minmax will never apply to array or map expressions (the docs say so explicitly), bloom indexes require the mapKeys/mapValues projection, and text/token structures have their own expectations. Declaring an index on the raw column and assuming it fires is exactly the failure that [[Why might a ClickHouse skip index not help]] dissects — verify granule counts, not DDL.
+> [!warning] The whole map is not skipped as one unit
+> Skip indexes attach to expressions — a specific key subcolumn or `mapKeys(m)` — not to "the map" in general; searching an arbitrary absent key reads the keys array for every surviving granule. And querying an unknown key cannot use the typed-subcolumn fast path at all. If most searches target keys you cannot enumerate, that is the documented signal to switch to the JSON type or restructure into a real child table.
 
 > [!tip] Interview answer
-> For maps I filter with the subscript syntax and index the projections: bloom_filter over mapKeys or mapValues, or text indexes for token lookups — the docs call out exactly this application. For Nested I use array predicates or ARRAY JOIN to explode, and bloom indexes test elements so granules without the value are skipped. The rule to remember: skip indexes on structured types work on well-chosen expressions, and minmax never applies to arrays or maps.
+> Maps are stored as keys and values arrays with per-key subcolumns, so known-key filters read one subcolumn, mapContains and mapKeys handle key search, and you can put a set or Bloom index on a specific key expression. Nested is parallel arrays — search with ARRAY JOIN or array functions. For open-ended key sets, the JSON type with dynamic paths is the better fit.

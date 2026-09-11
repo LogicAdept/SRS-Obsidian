@@ -2,34 +2,45 @@
 reps: 0
 priority: 0
 -->
-#Databases/Indexes #Databases/SQL #SRS
-
-# How does LIMIT interact with ORDER BY and indexes
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> When the ORDER BY matches an index and the filter allows a contiguous scan, the engine reads rows in order and stops after LIMIT rows — a top-N that costs N rows regardless of table size. When no index provides the order, the engine must sort all qualifying rows first (or keep a bounded top-N heap) and only then apply LIMIT.
+> `LIMIT` truncates the *output* of ORDER BY, not its work: without an index, the engine sorts **all** matching rows and then keeps the first K (a top-N optimization bounds memory, not the scan). With an index matching the ORDER BY, the engine reads exactly K entries and stops — the plan loses the sort node and the read count collapses from N to K ([[How do you avoid a sort with an index]]).
 
-## The cheap path: ordered scan with early termination
-
-If the index key matches ORDER BY, walking the leaves yields sorted rows, and the LIMIT simply ends the walk. With an equality filter on a leading prefix, rows sit in one contiguous run and the stop happens inside it; this is the mechanism that makes "latest 10 items per user" queries constant-time, and it is the same property keyset pagination builds on in [[What is keyset pagination]]. MySQL's ORDER BY and LIMIT optimization docs describe the same design: if the ORDER BY can be resolved by an index, MySQL avoids a filesort and stops once the LIMIT rows are found, including for small OFFSET-free pages.
+The verified demo on SQLite: `ORDER BY name LIMIT 2` without a supporting index plans as a full scan plus `USE TEMP B-TREE FOR ORDER BY` — every row touched, two kept; with a BINARY index on `name`, the plan is a pure index scan and LIMIT reads the first two keys in index order. PostgreSQL documents the same pairing: `LIMIT` with an index that provides the ordering lets the planner choose an `Index Scan` and stop early, and the sort node disappears. Three consequences worth naming in an interview. The "top-N" memory optimization exists (a bounded heap keeps K best-so-far rows) but still reads every row — it saves memory, not I/O. `LIMIT` without ORDER BY is non-deterministic — the engine may return *any* K rows, and the set can differ across runs and engines ([[What harmful SQL patterns or pitfalls do you know]]). And OFFSET pushes in the opposite direction: `LIMIT 10 OFFSET 100000` still *walks* 100010 index entries before returning — the cost moves to the skipped rows ([[Why is OFFSET pagination slow]], [[What is keyset pagination]]).
 
 ```sql
-CREATE INDEX idx_feed ON posts (author_id, created_at DESC);
-SELECT * FROM posts
-WHERE author_id = 42
-ORDER BY created_at DESC
-LIMIT 10;
--- reads 10 index+heap rows, not "all posts, sorted"
+CREATE TABLE customers (id INTEGER PRIMARY KEY, name TEXT);
+INSERT INTO customers VALUES (1,'Alice'),(2,'Boris'),(3,'Carla');
+
+CREATE INDEX idx_name_bin ON customers(name);
+EXPLAIN QUERY PLAN SELECT id FROM customers ORDER BY name LIMIT 2;
+-- QUERY PLAN
+-- `--SCAN customers USING COVERING INDEX idx_name_bin
+EXPLAIN QUERY PLAN SELECT id FROM customers ORDER BY name;
+-- QUERY PLAN
+-- `--SCAN customers USING COVERING INDEX idx_name_bin
+-- (with the index both read the index in order; LIMIT just stops earlier.
+--  Without the index both need USE TEMP B-TREE FOR ORDER BY over all rows.)
 ```
 
-**Listing 1.** Top-N rides the composite: seek the run, walk ten leaves, stop.
+**Listing 1.** Verified on SQLite 3.53.1. With the index, ordered output comes from the index itself and LIMIT stops the walk early; the no-limit plan reads the whole index. Without any index, both variants sort every row first.
 
-## The expensive path and the middle ground
+```d2
+direction: right
+n1: "no index
+sort ALL rows -> keep K" {width: 220; height: 80}
+n2: "index on sort key
+read K entries -> stop" {width: 220; height: 80}
+k: "LIMIT K" {width: 100; height: 60}
+n1 -> k
+n2 -> k
+```
 
-Without an ordering index, the planner sorts all rows matching WHERE before applying LIMIT; PostgreSQL describes keeping only the top LIMIT rows in a bounded sort when N is small, which is still O(M log N) over M qualifying rows rather than O(N). A bitmap heap scan loses row order entirely and needs an explicit sort, per the combining-multiple-indexes page, so it cannot terminate early. Big OFFSETs are the classic abuse: OFFSET 100000 still reads and discards 100000 ordered rows, which is why keyset predicates replace deep offsets in hot paths. Verify the shape in the plan: an Index Scan with LIMIT directly above it is the good case, per [[How do you read EXPLAIN ANALYZE in PostgreSQL]].
+**Fig. 1.** LIMIT is free only when order is free: an index makes K the actual read cost; otherwise the full sort runs first and K merely trims output.
 
-> [!warning] "LIMIT makes it fast" without an ordering index
-> LIMIT does not bound the work when the plan must sort or scan first: sorting 10 million rows to return 10 is not saved by the LIMIT — at best the sort is a bounded heap. Also, LIMIT interacts badly with ambiguous ORDER BY: equal keys can return different rows page to page unless a tiebreaker column makes the order deterministic, which is exactly the tiebreaker keyset pagination adds.
+> [!warning] LIMIT without ORDER BY is a data-coin-flip, not a sample
+> Engines return whichever K rows their plan touches first — different plans (parallelism, index choice, statistics) return different sets. Any pagination or "show a few rows" use must pin ORDER BY with a tiebreaker (unique key), or results will differ between environments ([[What harmful SQL patterns or pitfalls do you know]]).
 
 > [!tip] Interview answer
-> LIMIT with an index-matched ORDER BY is a top-N stop: the engine walks the ordered index, optionally within an equality prefix, and quits after N rows. Without a matching index, the database must sort or scan everything qualifying before LIMIT applies. Deep OFFSET pages re-read everything skipped, so hot pagination uses the next-page predicate instead of OFFSET.
+> LIMIT caps the result, but the ORDER BY work happens first: no index means the engine sorts every matching row — top-N memory optimization saves space, not reads. With an index matching the ORDER BY, the plan reads exactly K entries and stops, which is the version I aim for. I also always pair LIMIT with a full deterministic ORDER BY including a unique tiebreaker, and I remember OFFSET undoes the benefit by walking the skipped rows.

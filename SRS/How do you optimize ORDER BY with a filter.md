@@ -2,36 +2,44 @@
 reps: 0
 priority: 0
 -->
-#Databases/Indexes #Databases/SQL #SRS
-
-# How do you optimize ORDER BY with a filter
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> Build the composite index in the order the query consumes columns: equality predicates first, then the ORDER BY columns. Equality constraints turn each prefix value into a contiguous run ordered by the next columns, so the sort disappears. A partial index handles the common single-status case, and mixed sort directions must be declared in the index.
+> Combine the filter and the sort into **one composite index**: equality predicates as the leading columns, ORDER BY columns as the trailing ones. `WHERE category = 'books' ORDER BY price` seeks `(category, price)` once — rows arrive already filtered and ordered, no separate filter pass, no sort. Both the WHERE and the ORDER BY are satisfied by a single key layout ([[How do you avoid a sort with an index]]).
 
-## The ordering algebra that removes the sort
-
-If the query is `WHERE status = 'open' ORDER BY created_at DESC`, the index `(created_at)` alone cannot help, but a composite `(status, created_at)` makes all rows for `status = 'open'` adjacent and sorted by `created_at` inside that run: the engine seeks the run and reads it in order. PostgreSQL's ORDER BY docs describe exactly this: an index on (x, y) satisfies ORDER BY x, y scanned forward or x DESC, y DESC scanned backward, but ORDER BY x ASC, y DESC has no scan direction that produces it — you declare the index as (x ASC, y DESC) or (x DESC, y ASC). ASC/DESC options plus NULLS FIRST/NULLS LAST exist precisely for mixed-direction sorts on composite keys.
+The composite does double duty because of how B-tree keys are laid out: within one `category` value, entries are sorted by `price`, so the equality prefix narrows the search to a contiguous run that is already in output order. The verified demo: the single-column `(category)` index forces a post-filter sort (`USE TEMP B-TREE FOR ORDER BY`); the composite `(category, price)` plans as one SEARCH with no sort node. The same principle extends to `LIMIT`: with the composite, `LIMIT 3` reads exactly three index entries — "top-3 cheapest books" becomes a 3-row read instead of "fetch all books, sort, take 3" ([[How does LIMIT interact with ORDER BY and indexes]]). PostgreSQL documents this as the planner dropping both the Filter and Sort nodes when the index provides the constraint and ordering. Design limits to state: equality columns must genuinely be equalities (a range prefix pins the index and the ORDER BY beyond a range column cannot use the index order); DESC ordering rides backward scans; and every composite added for one query is a write-amplification decision — measure the query's frequency first ([[How do you optimize ORDER BY with a filter]], [[What is the difference between Nested Loop Hash Join and Merge Join]]).
 
 ```sql
--- queue pattern: hot subset + newest first
-CREATE INDEX idx_tasks_open
-    ON tasks (created_at DESC)
-    WHERE status = 'open';
+CREATE TABLE products (id INTEGER PRIMARY KEY, title TEXT, category TEXT, price NUMERIC);
+CREATE INDEX idx_cat_price ON products(category, price);
 
--- generic composite: equality then sort
-CREATE INDEX idx_orders_cust_created
-    ON orders (customer_id, created_at DESC);
+EXPLAIN QUERY PLAN
+SELECT title FROM products WHERE category = 'books' ORDER BY price;
+-- QUERY PLAN
+-- `--SEARCH products USING INDEX idx_cat_price (category=?)
+EXPLAIN QUERY PLAN
+SELECT title FROM products WHERE category = 'books' ORDER BY price DESC LIMIT 3;
+-- QUERY PLAN
+-- `--SEARCH products USING INDEX idx_cat_price (category=?)
 ```
 
-**Listing 1.** The partial index skips closed tasks entirely, so the hot subset stays small; the composite serves per-customer history.
+**Listing 1.** Verified on SQLite 3.53.1. Ascending and descending top-N variants both plan as a single index seek — the equality pins the prefix, the order rides the tail, and LIMIT reads only the first (or last, backward) entries.
 
-## When it stops working
+```d2
+direction: right
+k: "index key (category, price)
+books|5, books|30, books|35 ..." {width: 280; height: 70}
+w: "WHERE pins category
+one contiguous run" {width: 190; height: 80}
+s: "run is price-sorted
+LIMIT reads its edge" {width: 200; height: 80}
+k -> w -> s
+```
 
-A range predicate on an earlier column disables deeper seeking: `WHERE customer_id > 10 ORDER BY created_at` cannot use (customer_id, created_at) for the sort, because within the range the second column is not globally ordered; the planner will scan and sort or pick another strategy. Predicates that are not equality on all leading columns are the boundary — MySQL's ORDER BY optimization docs and PostgreSQL's both describe the same shape. With LIMIT the economics sharpen: an index-matching order lets the engine stop after N rows, while a mismatched one pays a full sort first, the interaction detailed in [[How does LIMIT interact with ORDER BY and indexes]]. Verify the plan shows no Sort node, following [[How do you read EXPLAIN ANALYZE in PostgreSQL]].
+**Fig. 1.** The composite key's layout is the query's shape: filter and order are two readings of the same sorted run, and LIMIT is just where you stop walking it.
 
-> [!warning] "I added an index with the ORDER BY column" is not the fix
-> A single-column index on the sort column only helps when the whole scan is ordered by it. With a filter present, what matters is the run of rows selected by the equality prefix. And a range predicate before the sort column breaks the property — the index silently stops ordering, which is the same trap family as the prefix rule in [[What is the leftmost prefix rule for composite indexes]].
+> [!warning] A range predicate before the ORDER BY column breaks the trick
+> `WHERE price > 10 ORDER BY price` works (same column), but `WHERE price > 10 ORDER BY title` on `(price, title)` cannot use the index order — the range makes titles unordered within the matched set. Equality columns first, range last, ORDER BY in between only when equalities pin them ([[What is sargability in SQL]]).
 
 > [!tip] Interview answer
-> Order the composite index as the query consumes it: equality columns first, ORDER BY columns after, declaring ASC/DESC and NULLS placement when mixed. A partial index is the sharper tool when the filter is a stable hot status. If the plan still shows a Sort, check for a range predicate ahead of the sort column — it breaks the contiguity the sort removal depends on.
+> Filtering and ordering merge into one composite index: equality conditions as leading columns, ORDER BY columns as trailing ones — the equality pins a contiguous run that is already in the required order, so the plan is a single seek with no filter pass and no sort. With LIMIT it reads only the first entries of that run, backward for DESC. The caveat I name: a range predicate before the sort column breaks the ordering, and every such index is a write cost I justify by query frequency.

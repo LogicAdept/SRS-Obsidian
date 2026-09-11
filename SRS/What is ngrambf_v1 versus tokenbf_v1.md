@@ -2,30 +2,34 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #SRS
 
-# What is ngrambf_v1 versus tokenbf_v1
+# What is ngrambf_v1 versus tokenbf_v1?
 
 > [!abstract] Short answer
-> Both are deprecated ClickHouse bloom-filter data-skipping indexes for text. tokenbf_v1 splits values into tokens separated by non-alphanumeric characters and serves word-level predicates (hasToken, LIKE on words); ngrambf_v1 indexes overlapping n-character substrings and serves substring-style patterns, useful for languages without word breaks. Both only exclude granules, and the docs now point to the text index as the recommended replacement.
+> Both are Bloom-filter-based [[What data skipping indexes exist in ClickHouse]] string indexes: `tokenbf_v1` splits the column into word tokens on non-alphanumeric characters and indexes whole tokens, while `ngrambf_v1` splits into fixed-length character n-grams (size `n` given first) and indexes those — which is what lets it serve substring and LIKE predicates. In current docs both are deprecated in favor of the dedicated `text` index for full-text workloads.
 
-## The mechanical difference
+## Token versus n-gram splitting
 
-tokenbf_v1 takes three bloom parameters — filter size in bytes, number of hash functions, and seed — and feeds it the tokens of each value: 'This is a candidate for a "full text" search' becomes the tokens This, is, a, candidate, for, full, text, search. It works with String, FixedString, and Map, and supports equality, IN, LIKE, and hasToken-style word lookups. ngrambf_v1 takes one extra first parameter, the n-gram size: with n=4, 'A short string' is indexed as 'A sh', ' sho', 'shor', 'hort', ... — overlapping windows of characters, which lets it answer substring predicates but also makes the filter larger and denser. Both are attached with GRANULARITY and evaluated per block of granules; both are probabilistic, so false positives only cost extra granule reads, per the skip-index mechanics in [[What data skipping indexes exist in ClickHouse]].
+`tokenbf_v1(size_of_bloom_filter_in_bytes, number_of_hash_functions, random_seed)` indexes the tokens of "This is a candidate for a full text search" — so `hasToken`, word `LIKE '%word%'`, `IN`, and equality checks can prune blocks. `ngrambf_v1(n, size_of_bloom_filter_in_bytes, number_of_hash_functions, random_seed)` with `n = 4` breaks the same string into overlapping 4-character pieces, so a needle like `'text sea'` matches its n-grams against the block's filter — substring search without tokens. The n-gram approach also powers its classic secondary use: filtering `arrayJoin`-style searches over values that contain no token structure at all.
+
+Sizing is not guesswork: the MergeTree reference ships helper functions — `bfEstimateBmSize(elements, false_positive)` for filter bytes and `bfEstimateFunctions(elements, bytes)` for hash-function count — so a 4300-ngram granule at a 0.0001 false-positive target computes its filter size in SQL instead of folklore. As a rule from [[How does ClickHouse accelerate LIKE and substring search]]: token indexes serve whole-word needles cheaply; n-gram indexes buy substring reach with proportionally bigger filters.
 
 ```sql
-ALTER TABLE logs ADD INDEX msg_tok   message TYPE tokenbf_v1(65536, 4, 1237) GRANULARITY 4;
-ALTER TABLE logs ADD INDEX msg_ngram message TYPE ngrambf_v1(3, 65536, 4, 0)  GRANULARITY 4;
+-- word-oriented search over log lines
+ALTER TABLE logs ADD INDEX tok_ix msg TYPE tokenbf_v1(1024, 3, 0) GRANULARITY 1;
+
+-- substring-oriented search
+ALTER TABLE logs ADD INDEX ngr_ix msg TYPE ngrambf_v1(3, 1024, 3, 0) GRANULARITY 1;
+
+SELECT count() FROM logs WHERE hasToken(msg, 'timeout');
+SELECT count() FROM logs WHERE msg LIKE '%tion of the%';   -- ngram territory
 ```
 
-**Listing 1.** Token bloom for word lookups; n-gram bloom for substring patterns — both historical, both superseded by the text index.
+**Listing 1.** Tokens serve whole-word predicates; n-grams serve partial matches.
 
-## Deprecation and the modern path
-
-The current documentation marks both types deprecated and directs full-text workloads to the dedicated text index — a true inverted index with deterministic token indexing, better performance, and support for hasAnyTokens/hasAllTokens/hasPhrase semantics, per [[What is a text index in ClickHouse]]. The deprecation logic follows the skip-index economics: bloom filters over very common tokens rarely exclude granules, and tuning bytes/hashes/seed is a black art, while the inverted index resolves tokens exactly. For the function side of the migration, hasToken remains the word-lookup primitive but the docs recommend the hasAnyTokens/hasAllTokens family, per [[What is hasToken in ClickHouse]]; the overall LIKE-acceleration picture is in [[How does ClickHouse accelerate LIKE and substring search]] and the verification method in [[How do you verify a ClickHouse index is used]].
-
-> [!warning] "Bloom filter index = inverted index" is the conflation to avoid
-> A bloom filter answers "maybe present" per granule and never locates rows or tokens; an inverted index maps tokens to locations. Saying ngrambf is "an inverted index for substrings" fails the follow-up: n-gram bloom filters grow with alphabet diversity and cannot prune as precisely, which is exactly why the text index replaced them. Also both bloom types are irrelevant when the filtered value is common in every granule — correlation governs usefulness, per [[Why might a ClickHouse skip index not help]].
+> [!warning] Deprecated — the text index replaced them
+> Current documentation marks both types "(Deprecated)" and recommends the [[What is a text index in ClickHouse]] for full-text workloads: a true inverted index with deterministic token indexing, better performance, and support for `hasAnyTokens`/`hasAllTokens`. Also remember n-gram indexes multiply with string length — a short `n` over long strings bloats the filter, while a long `n` misses short needles; both failure modes disappear only by choosing the right splitting model, not by tuning one parameter.
 
 > [!tip] Interview answer
-> tokenbf_v1 indexes whole tokens split on non-alphanumerics and suits word-level lookups; ngrambf_v1 indexes overlapping n-character windows and suits substring patterns, including languages without spaces. Both are bloom-filter skip indexes that exclude granules probabilistically, and both are now deprecated in favor of ClickHouse's text (inverted) index, which resolves tokens deterministically and supports the hasAnyTokens/hasAllTokens function family.
+> Same Bloom-filter machinery, different splitting: tokenbf indexes whole words split on non-alphanumerics — good for hasToken and word LIKE — while ngrambf indexes fixed-length character n-grams, enabling substring matching at the cost of bigger filters and an extra size parameter. Both are legacy now; new designs use the text index, but understanding token versus n-gram explains what each can and cannot match.

@@ -2,40 +2,46 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #SystemDesign/Performance #SRS
 
-# How do you search logs in ClickHouse
+# How do you search logs in ClickHouse?
 
 > [!abstract] Short answer
-> Shape the table around the filters: ORDER BY starting with a coarse time bucket or service and ending with the timestamp, partition by month at most, keep text in a column with a text index for token search, and verify granule pruning with EXPLAIN indexes = 1. That design makes "errors for service X in the last hour" a granule-range question instead of a full scan.
+> The observability stack pattern: one MergeTree table (or per-service tables) keyed by time and service, logs stored as typed columns plus a message string, a `text` index or Bloom-based string index on the message for token search, partitioning by day/month for retention, and aggregation of hot metrics into summary tables. Search is then a granule-pruned scan, not a full-table text crawl.
 
-## The table design that does the work
+## The data layout
 
-The docs' log-search guidance converges on one shape: the sorting key should match the dominant filters — (service, ts) when searches are per-service, or (toDate(ts), service, ts) when dashboards jump to a day and then filter by service — with time as the final column so data inside granules stays time-correlated. Partitioning belongs at month granularity at most: the MergeTree docs explicitly warn that partitioning does not speed up queries in contrast to the ORDER BY expression and should never be too granular, and never by client identifiers. Low-cardinality attributes like service or level fit LowCardinality(String). This is the key-design logic of [[How do you choose ORDER BY in ClickHouse]] applied to the log workload.
+Logs want the same discipline as any analytics table: narrow types for the structured fields (severity, service, trace_id), and the message as a `String` column — optionally with structured extraction (`extract`/JSON parsing at insert) so most predicates never touch the text at all. `ORDER BY (service, timestamp)` gives the primary pruning path; `PARTITION BY toYYYYMM(timestamp)` handles retention via instant partition drops ([[What is PARTITION BY in ClickHouse]], [[How do you drop old data quickly in ClickHouse]]). ClickHouse ships a complete observability use-case guide around this schema, including OpenTelemetry ingestion pipelines.
 
 ```sql
 CREATE TABLE logs
 (
-    ts      DateTime,
-    service LowCardinality(String),
-    level   LowCardinality(String),
-    message String
-) ENGINE = MergeTree
-PARTITION BY toYYYYMM(ts)
-ORDER BY (toDate(ts), service, ts);
+    timestamp DateTime,
+    service   LowCardinality(String),
+    severity  LowCardinality(String),
+    trace_id  String,
+    msg       String,
+    INDEX msg_ix lower(msg) TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1,
+    INDEX sev_ix severity TYPE set(100) GRANULARITY 1
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(timestamp)
+ORDER BY (service, timestamp);
 
-ALTER TABLE logs ADD INDEX msg_text message TYPE text(tokenizer splitByNonAlpha) GRANULARITY 4;
-ALTER TABLE logs MATERIALIZE INDEX msg_text;
+SELECT timestamp, msg FROM logs
+WHERE service = 'payments' AND timestamp >= now() - 3600
+  AND hasToken(lower(msg), 'timeout')
+ORDER BY timestamp DESC LIMIT 100;
 ```
 
-**Listing 1.** Monthly partitions, service-first sorting with time last, and a tokenized text index on message.
+**Listing 1.** A production-shaped log table: structured columns carry most filters, the text index prunes message search.
 
-## Searching the text and verifying the plan
+## Search mechanics and tuning
 
-Word-level predicates go through the text index functions — hasAnyTokens, hasAllTokens, hasPhrase — which the docs recommend over the deprecated tokenbf_v1/ngrambf_v1 bloom filters, per [[What is a text index in ClickHouse]] and [[What is ngrambf_v1 versus tokenbf_v1]]; arbitrary substring LIKE remains a scan outside token shapes, per [[How does ClickHouse accelerate LIKE and substring search]]. Every layer is then verified the same way: EXPLAIN indexes = 1 shows Partition, PrimaryKey, and Skip stages with granules before/after, per [[How do you verify a ClickHouse index is used]], and granule-level usefulness still depends on correlation — a message token present in every granule defeats the index, per [[Why might a ClickHouse skip index not help]]. When the workload grows into ranked document search or needs ES-class query features, that is the boundary decision in [[When should you use a ClickHouse text index instead of Elasticsearch]].
+The query above prunes by service and time first ([[What is a sparse primary index in ClickHouse]]), then the severity `set` index and message `text` index skip remaining blocks ([[What data skipping indexes exist in ClickHouse]]), and only surviving granules are scanned with SIMD string matching. Error hunting across everything ("where did 'timeout' appear last night?") is the case that justifies the text index; grep-like ad-hoc needles beyond token structure need n-gram Bloom filters ([[How does ClickHouse accelerate LIKE and substring search]]). For click-ops on trace ids, equality on `trace_id` prunes via a `bloom_filter` index; aggregations over logs (error rates per service) belong in materialized views ([[How do materialized views work in ClickHouse]]) so dashboards never rescan raw text.
 
-> [!warning] "Partition by hour for faster search" is the classic ClickHouse footgun
-> Over-partitioning floods the system with small parts, degrading merges, ingestion, and query performance — the docs warn directly against granular partitioning and against partitioning by client IDs, recommending month-level at most. The actual filter speed comes from the ORDER BY key and indexes, not from partition count. The sibling mistake: putting the timestamp first in ORDER BY, which prunes nothing for per-service queries.
+> [!warning] Logs are not a heap you can just dump in
+> The failure pattern is a single `String message` column with no key discipline: every search becomes a full scan, TTL deletes fight with tiny parts, and [[What causes Too many parts in ClickHouse]] fires from agent-style row-at-a-time inserts. Batching inserts (or [[What are async inserts in ClickHouse]]), typed columns for hot fields, and indexes only for the predicates you actually run are what keeps search fast a month later.
 
 > [!tip] Interview answer
-> I design logs around the dashboard: partition by month, ORDER BY (toDate(ts), service, ts) so service-and-time filters prune granule ranges, LowCardinality for service and level, and a tokenized text index on message for word search via hasAnyTokens. I verify with EXPLAIN indexes = 1 granule counts. Full scans only remain for arbitrary substring patterns, and at that point the fix is usually query shape, not more partitions.
+> Treat logs as a data-modeling problem: time-and-service sorted MergeTree with typed columns, monthly partitions for retention, a text index on the message for token search, Bloom indexes for trace ids, and MVs for hot aggregations. Search then prunes granules by key first and index second — full-text scans over petabyte log tables are a schema mistake, not a hardware one.

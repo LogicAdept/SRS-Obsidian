@@ -2,44 +2,50 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/NoSQL/Elasticsearch #SRS
-
-# When should you use Elasticsearch instead of SQL search
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> Stay in SQL (PostgreSQL FTS, trigram, GIN indexes) when the corpus is modest, consistency with transactional data matters, ranking needs are simple, and operating one system beats operating two. Move to Elasticsearch when you need relevance tuning, facets and aggregations, near-real-time ingestion at high volume, distributed horizontal scale, or fuzzy language features that the database would serve poorly.
+> Reach for Elasticsearch (or similar search engines) when the requirements leave SQL's search model: *relevance-ranked* results, *fuzzy* matching (typos, edit distance), *analytical aggregations* over text (facets, histograms), horizontal scaling of search-specific load, and rich text analysis (stemming, synonyms, custom analyzers). Stay in SQL when the query is exact, structured, transactional, or small — B-tree seeks, FTS, and trigram indexes cover a vast middle ground natively ([[How does a trigram index help SQL search]], [[When should you use full-text search instead of LIKE]]).
 
-## What the database gives you, and when it stops being enough
+The verified demo shows SQL's search *ceiling* — the point where SQL says "this is what I have": FTS5's bm25 ranking is real relevance ordering over an inverted index, and the same query supports boolean composition — but everything beyond (edit-distance tolerance, per-field boosts tuned by hand, synonym dictionaries, aggregation pipelines over search results) is outside SQL's contract. The cost side is why "always Elasticsearch" is an anti-answer: a second datastore with its own storage, memory, and failure modes; an indexing pipeline whose lag and consistency must be designed (document freshness, sync failures, reindex strategies); and a second query language where joins and transactions do not exist — the source of truth remains the relational database, and every answer Elasticsearch gives is as good as its last sync ([[What harmful SQL patterns or pitfalls do you know]]). The senior formulation: SQL keeps truth and serves exact/structured access; the search engine serves fuzzy/relevance/aggregation-heavy access; the boundary is a product decision, not a performance fashion — and the same BM25 machinery inside the database (FTS) often delays the boundary crossing by years ([[How do you optimize COUNT star on a large table]]).
 
-PostgreSQL full-text search gives stemming, ranking, boolean and phrase operators over a GIN-indexed tsvector transactionally consistent with your tables, per the mechanics in [[How does full-text search work in PostgreSQL]]; pg_trgm covers fuzzy substring work per [[How does a trigram index help SQL search]]. For a product with tens of millions of rows, a few text columns, and a search box, that stack removes an entire subsystem from your architecture — no synchronization pipeline, no second consistency model, no cluster to run. The costs are real, though: GIN index maintenance on hot write paths, ranking limited to ts_rank-style scoring, and an analyzer ecosystem far smaller than Lucene's.
+```sql
+CREATE VIRTUAL TABLE articles USING fts5(title, body);
+INSERT INTO articles VALUES ('SQL', 'sql sql sql basics'),
+ ('Java', 'java and sql integration'),
+ ('Cookbook', 'pasta and sauces');
 
-## What Elasticsearch adds, concretely
+SELECT title, bm25(articles) AS score FROM articles
+WHERE articles MATCH 'sql' ORDER BY score;
+-- SQL|-1.6716417910447762e-06
+-- Java|-9.71608832807571e-07
+-- (SQL's ceiling: inverted-index token search WITH relevance ranking.
+--  Beyond this -- fuzzy typo matching, synonym-aware scoring, search-side
+--  aggregations at horizontal scale -- is the search engine's territory.)
+```
 
-Elasticsearch is a distributed, inverted-index-first engine: analyzers per field with tokenizers and filters, BM25 relevance scoring with per-field tuning, aggregations for facets and analytics, suggesters and fuzzy matching, and horizontal sharding with near-real-time refresh — a feature surface the database deliberately does not chase. The price is architectural: your data now lives in two places, so you must design the sync (CDC, outbox, or double-write with its consistency caveats), reconcile deletions and updates, and run and monitor a cluster. The trade is worth it when search is the product — catalogs, logs, content platforms — and unjustified when search is a widget on one table, where [[When should you use full-text search instead of LIKE]] already answered the need.
+**Listing 1.** Verified on SQLite 3.53.1 (FTS5). Ranked token search inside SQL — everything above this line (fuzzy, synonyms, search-analytics at scale) is what a dedicated engine buys, at the price of a second system to keep in sync.
 
 ```d2
 direction: right
-oltp: "OLTP database\nsource of truth" {
-  width: 230
-  height: 90
-  style.fill: "#e3f2fd"
-}
-sync: "Sync pipeline\nCDC / outbox" {
-  width: 200
-  height: 80
-  style.fill: "#fff3e0"
-}
-es: "Elasticsearch\nsearch-optimized copy" {
-  width: 240
-  height: 90
-  style.fill: "#e8f5e9"
-}
-oltp -> sync -> es```
+s: "structured / exact /
+transactional queries" {width: 220; height: 90}
+d: "relevance, fuzzy,
+facets, text analytics" {width: 210; height: 90}
+sq: "SQL
+B-tree, FTS, trigram
+source of truth" {width: 200; height: 90}
+es: "search engine
+index pipeline,
+no joins/transactions" {width: 210; height: 90}
+s -> sq
+d -> es
+```
 
-**Fig. 1.** Adopting Elasticsearch introduces a second store and the sync between them; that pipeline is the true cost of the feature surface.
+**Fig. 1.** The workload splits by query nature: exact and transactional stay where truth lives; fuzzy and analytical search cross to the engine — along with a sync pipeline.
 
-> [!warning] "Search is slow, add Elasticsearch" skips the diagnosis
-> The common failure is adopting a second engine to hide an unindexed database query: a '%term%' scan becomes fast with a trigram or FTS index at a fraction of the operational cost, per [[How do you optimize substring search in SQL]]. Conversely, PostgreSQL FTS at genuine scale (hundreds of millions of documents, heavy concurrent search) hits planner and maintenance walls that Elasticsearch's architecture exists for. Decide from measured query profiles and data volume, not from fashion.
+> [!warning] The search engine's answers are only as fresh as its index — and it cannot join
+> "Deleted the product but search still shows it" is an indexing-lag story; "cannot filter by user permission" is a no-joins story. Design the sync (events, dual writes, periodic reindex) and resolve permissions against the relational store before promising features ([[What harmful SQL patterns or pitfalls do you know]]).
 
 > [!tip] Interview answer
-> I keep search in SQL when the corpus fits, consistency with the transactional data matters, and ranking needs are modest — GIN-indexed tsvector plus trigram covers a lot. I move to Elasticsearch when search is a core product surface: BM25 relevance tuning, facets, fuzzy and suggester features, and horizontal scale with high ingest. The deciding cost is the sync pipeline and second store, so I need the feature surface to justify it.
+> I move to Elasticsearch when the requirements leave SQL's model: relevance ranking users tune, fuzzy matching over typos, synonym handling, search-side aggregations like facets, and horizontal scaling of search load. I stay in SQL for exact, structured, transactional queries — B-trees, FTS and trigram indexes cover a lot; my demo shows ranked BM25 search inside SQL, which is the ceiling before the engine earns its keep. The costs I always name: a second datastore, an indexing pipeline with lag, no joins or transactions — so the relational store stays the source of truth and permissions resolver.

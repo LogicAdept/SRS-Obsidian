@@ -2,37 +2,33 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #SRS
 
-# How does ClickHouse accelerate LIKE and substring search
+# How does ClickHouse accelerate LIKE and substring search?
 
 > [!abstract] Short answer
-> Without help, LIKE over a column scans that column across all selected granules — there is no B-tree prefix seek in ClickHouse. Acceleration comes from the primary key (restrict granules first), then data-skipping indexes: minmax/set for structured values, and for text either the text (inverted) index or the deprecated token-based bloom filters. Correlation between the filter column and the ORDER BY is what makes any skip index pay.
+> Three layers, cheapest first: tokenized predicates (`hasToken`, `equals`, `IN`) served by a `text` index; whole-word `LIKE '%word%'` patterns served by `tokenbf_v1`; and true substring search via `ngrambf_v1` — the only classic option for needles without token boundaries. Beyond skipping, scalar substring functions use SIMD, and column-level codecs keep string data compact.
 
-## The default is a column scan, by design
+## The decision path
 
-ClickHouse reads data in granules and is built for full-scan-style analytics with very high throughput, so an unindexed `LIKE '%error%'` over a log column streams the whole column of every selected granule and applies the match — often still fast in rows per second, but linear. The first acceleration layer is therefore the same as anywhere: make the WHERE match the ORDER BY so the primary index prunes granules, the design approach in [[How do you choose ORDER BY in ClickHouse]]. For columns outside the key, data-skipping indexes decide whether whole granules can be skipped before reading, which is the mechanism behind [[What data skipping indexes exist in ClickHouse]].
+Start by asking whether the needle has token structure. If yes — error ids, class names, event keywords — index the column with a [[What is a text index in ClickHouse]] and query with `hasToken`/`hasAllTokens`, which gives exact pruning. If the pattern must match inside words (`'%tion of the%'`), tokens cannot help; an n-gram Bloom filter splits both column and needle into overlapping n-grams so `LIKE` and `startsWith` predicates prune blocks — with false positives and bigger filters as the price ([[What is ngrambf_v1 versus tokenbf_v1]]). Leading-wildcard `LIKE` on a plain indexed column prunes nothing — the same limitation as B-tree leading wildcards in row stores ([[Why does LIKE with a leading wildcard not use a B-tree index]]).
 
 ```sql
--- classic log table shape
-CREATE TABLE logs
-(
-    ts DateTime,
-    service LowCardinality(String),
-    message String,
-    INDEX msg_ngram message TYPE ngrambf_v1(3, 65536, 4, 0) GRANULARITY 4
-) ENGINE = MergeTree
-ORDER BY (service, ts);
+-- token search: exact index pruning
+SELECT count() FROM logs WHERE hasToken(msg, 'timeout');
+-- substring search: n-gram Bloom filter pruning
+ALTER TABLE logs ADD INDEX ngr msg TYPE ngrambf_v1(3, 1024, 3, 0) GRANULARITY 1;
+SELECT count() FROM logs WHERE msg LIKE '%segmentation fault%';
 ```
 
-**Listing 1.** The ORDER BY prunes by service and time; the skip index on message then lets granules whose n-gram bloom excludes the pattern be skipped.
+**Listing 1.** Token predicate on a text index versus substring predicate on an n-gram index.
 
-## The text-search structures and their current guidance
+## Below the index layer
 
-For token-level search the modern answer is the text index — a real inverted index documented as the recommended choice for full-text search, with deterministic token indexing and functions like hasAnyTokens and hasAllTokens, per [[What is a text index in ClickHouse]]. The older bloom-filter skip indexes ngrambf_v1 and tokenbf_v1 still appear in the wild — n-grams for substring-style patterns, tokens for word equality via hasToken — but ClickHouse's docs now mark both deprecated in favor of the text index, per [[What is ngrambf_v1 versus tokenbf_v1]]. Whatever the structure, the economics are unforgiving: if a value occurs even once in a granule, that granule is read in full, so usefulness depends on data correlation and granularity, as [[Why might a ClickHouse skip index not help]] explains, and verification is via EXPLAIN indexes = 1 per [[How do you verify a ClickHouse index is used]].
+Even without an index, ClickHouse's substring and matching functions (`like`, `position`, `match`) are SIMD-vectorized over granule-sized batches, so raw scans are fast in absolute terms; and for repeated analysis of the same text, materialized lowercase copies or projections reduce read volume. For large-scale log search the whole toolkit composes with the data model — see [[How do you search logs in ClickHouse]] — and with the version caveats of the text index ([[What is hasToken in ClickHouse]] documents the custom-tokenizer edge).
 
-> [!warning] "Add a bloom filter and LIKE becomes indexed" is the wrong mental model
-> A skip index never returns rows; it only excludes granules, and any false positive costs a full granule read. With a message column whose values are spread across every granule, the bloom filter excludes nothing and you pay both index evaluation and the full scan. The design fix is ordering and correlation first, structure second — the inverse of the B-tree instinct from [[Why does LIKE with a leading wildcard not use a B-tree index]].
+> [!warning] n-gram parameters are a false-positive dial, not a switch
+> Small `n` (2-3) matches short needles but explodes the Bloom filter over long columns; large `n` keeps filters small but misses needles shorter than `n` — a search for `'err'` cannot be pruned by an n=5 index. Sizing `n`, filter bytes, and hash functions against real data is a measurement exercise, and the docs now steer new full-text workloads to the text index instead of tuning these knobs.
 
 > [!tip] Interview answer
-> ClickHouse has no B-tree seek for LIKE, so an unaided substring match scans the column of every selected granule. You accelerate it in layers: match the primary key so granules are pruned, then add skipping structures — minmax or set for structured columns, and for text the modern text (inverted) index; ngrambf_v1 and tokenbf_v1 exist but are deprecated. Because a skip index only excludes granules, usefulness depends entirely on correlation and granularity, verified with EXPLAIN indexes = 1.
+> ClickHouse accelerates text search by predicate shape: token predicates get exact pruning from the inverted text index; word-level LIKE patterns get token Bloom filters; genuine substrings need n-gram Bloom filters or scan with SIMD. The key interview point is that leading-wildcard LIKE is not index-free magic here either — you pick the structure that matches the needle.

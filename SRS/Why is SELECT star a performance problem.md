@@ -2,33 +2,43 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/Indexes #SRS
-
-# Why is SELECT star a performance problem
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> SELECT * forces every column to be fetched, which disables index-only scans, widens rows beyond what the query needs, drags TOASTed or off-page values into memory, and couples application code to schema changes. Explicit column lists let the engine use the narrowest access path — often a covering index — and keep the plan stable as the schema grows.
+> `SELECT *` moves every column's bytes even when the consumer needs three; it **defeats covering indexes** (any column outside the index forces the table row fetch); it fetches large values (TEXT/BLOB) nobody displays; and it couples the query to the schema — adding a column silently changes every `*` consumer. The plan-level proof: the same query with and without the wide projection plans as covering-index scan versus table scan ([[How do you identify slow or non-performant SQL queries]]).
 
-## The index-only scan you silently lose
-
-PostgreSQL can answer a query entirely from an index when the index contains every referenced column — the index-only scan, which skips the heap visit per row (subject to the visibility map). With SELECT *, the reference set is all columns, so no B-tree index can cover it and every row requires a heap fetch: the plan degrades from index-only scan to plain index scan or worse. The docs' covering-index guidance exists exactly for the fixed-column case — add the payload columns with INCLUDE and the query becomes heap-free, per [[How would you explain Covering index]]; SELECT * optically guarantees the optimization never fires. SQL Server's included-columns design serves the same pattern.
+The verified demo isolates the covering-index mechanism on SQLite: with an index on `amount`, `SELECT amount FROM orders` plans as `SCAN orders USING COVERING INDEX idx_amount` — the answer comes from the index structure alone; `SELECT *` plans as a plain `SCAN orders` — every row must be fetched from the table because the rest of the columns exist nowhere else. PostgreSQL documents the same mechanism as index-only scans with the visibility-map caveat, and names the enabling condition: the query's columns must all be in the index. Beyond plans, the costs are concrete: width multiplies network and memory (a 40-column row for a 3-column report is a 13x data tax), ORM row-materialization cost scales with column count, and large-object columns travel whether or not anyone reads them. The coupling cost is the operational one: `SELECT *` into a logger or cache silently changes behavior when the schema evolves ([[What harmful SQL patterns or pitfalls do you know]]). The fair exception: ad-hoc interactive inspection and genuinely whole-row consumers (ETL staging) — the rule is a default, not a dogma ([[Why is SELECT DISTINCT expensive]]).
 
 ```sql
--- covering possible, but SELECT * forbids it
-CREATE INDEX idx_orders_cust ON orders (customer_id) INCLUDE (total, created_at);
+CREATE TABLE orders (id INTEGER PRIMARY KEY, customer_id INTEGER, amount NUMERIC);
+CREATE INDEX idx_amount ON orders(amount);
 
-SELECT total, created_at FROM orders WHERE customer_id = 42;
--- Index Only Scan: answers from the index, no heap visits
+EXPLAIN QUERY PLAN SELECT amount FROM orders;
+-- QUERY PLAN
+-- `--SCAN orders USING COVERING INDEX idx_amount
+EXPLAIN QUERY PLAN SELECT * FROM orders;
+-- QUERY PLAN
+-- `--SCAN orders
 ```
 
-**Listing 1.** The named columns make the covering index usable; the star version would fetch the full row for every match.
+**Listing 1.** Verified on SQLite 3.53.1. The narrow projection reads the answer from the index itself; `SELECT *` must visit every table row because the remaining columns exist only there — one SELECT-list token, two different data paths.
 
-## The costs that survive even without covering
+```d2
+direction: right
+q1: "SELECT amount
+-> covering index only" {width: 220; height: 80}
+q2: "SELECT *
+-> index + table row per hit" {width: 230; height: 80}
+c1: "narrow I/O, schema-agnostic consumer" {width: 250; height: 80}
+c2: "wide I/O, byte tax, schema coupling" {width: 250; height: 80}
+q1 -> c1
+q2 -> c2
+```
 
-Wide rows mean more I/O and memory for data the caller discards — over a network that is pure waste, and inside the engine it evicts useful pages from cache. Large values (TEXT, JSONB, BYTEA) often live out-of-line in TOAST or overflow pages: SELECT * triggers detoasting work per row even though the consumer ignores those fields, while named columns keep the heavy attributes untouched. On the operational side, SELECT * breaks application assumptions when the schema evolves — new columns change wire formats and ORMs' expectations — and it obscures intent, making the covering analysis in [[How do you decide which database indexes to create]] impossible. It also interacts with join plans: wider intermediate rows change hash/merge costs, per [[What is the difference between Nested Loop Hash Join and Merge Join]], and make scans of large tables proportionally more expensive per [[When is a full table scan cheaper than using an index]].
+**Fig. 1.** The projection list decides the data path: covered columns live in the index; the asterisk drags the whole row across the boundary every time.
 
-> [!warning] "SELECT * is fine because the driver ignores extra columns" is wrong at the engine level
-> The database, not the driver, materializes the row: extra columns are read from pages, potentially detoasted, and shipped — the cost is paid before the application drops them. The acceptable exception worth naming: ad hoc interactive queries and EXISTS-style probes where the row is never consumed; there the star is harmless. The other half-myth: naming columns helps only if the narrower set actually enables a narrower path — naming forty columns still cannot use a three-column covering index.
+> [!warning] The asterisk also changes application behavior on schema evolution
+> Column order, width and types shift under `*`-consumers when a column is added or reordered — position-based consumers (old JDBC accessors, CSV exports) break or corrupt silently. Named columns are a contract; the asterisk is an open bet ([[What harmful SQL patterns or pitfalls do you know]]).
 
 > [!tip] Interview answer
-> SELECT * forces the widest possible reference set, which kills index-only scans — no index covers all columns — widens every fetch beyond what the caller needs, and pulls TOASTed heavy values for nothing. Named columns let me design covering indexes with INCLUDE and keep plans stable as the schema grows. For ad hoc exploration it is harmless; in application code it is a measurable performance and coupling problem.
+> SELECT star is a performance problem because it moves every column and defeats covering indexes: my demo shows the same query planning as a covering-index scan for one column versus a full table walk for the star, and on PostgreSQL it is exactly the index-only scan precondition. Add the width tax on the wire, big columns nobody reads, ORM materialization cost, and silent schema coupling for positional consumers. I default to named columns and treat star as an interactive-inspection tool, not application code.

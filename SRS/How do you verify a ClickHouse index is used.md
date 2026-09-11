@@ -2,37 +2,40 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #SRS
 
-# How do you verify a ClickHouse index is used
+# How do you verify a ClickHouse index is used?
 
 > [!abstract] Short answer
-> Run the query with EXPLAIN indexes = 1: the ReadFromMergeTree node gains an Indexes array showing every applied index — Partition, Partition Min-Max, PrimaryKey, Skip — each with Parts and Granules before and after. If granules selected equal granules total, the index did nothing; trace logs show the same per-index drop counts.
+> Run the query with `EXPLAIN indexes = 1`: the ReadFromMergeTree step reports the primary-key analysis — parts and granules selected of total — and lists every applied data-skipping index with its filtered granule count. In recent versions (v25.9+) a clean reading also needs `SETTINGS use_skip_indexes_on_data_read = 0, use_query_condition_cache = 0`.
 
-## EXPLAIN indexes = 1
+## Reading the plan
 
-The EXPLAIN statement's indexes = 1 mode attaches per-index JSON: Type (Partition Min-Max, Partition, Statistics, PrimaryKey, or Skip), Keys, Condition, and the decisive Parts and Granules counters in selected/total form, plus the search algorithm for the primary key (for example generic exclusion search). Reading it is a comparison: PrimaryKey selecting 6 of 10 granules means the ORDER BY prefix pruned 40%; a Skip index selecting 2 of 6 means the bloom or minmax structure dropped the rest. If every stage shows no reduction, the WHERE does not match the key shape — the diagnosis continues in [[Why might a ClickHouse skip index not help]].
+The primary index line shows `"Granules": 11/12` — eleven of twelve granules survive after the key analysis; a good sort key on a selective predicate leaves a small fraction. Below it, each skipping index reports how many granules it filtered at its stage, so an index that prunes zero granules across your hot queries is a candidate for removal ([[Why might a ClickHouse skip index not help]]). `EXPLAIN ESTIMATE` gives a cheap parts/rows/granules estimate without executing, and the same numbers appear post-execution in `system.query_log` profiles ([[How do you debug a slow ClickHouse query]]).
 
 ```sql
 EXPLAIN indexes = 1
-SELECT count() FROM events
-WHERE user_id = 42 AND event_date >= '2026-01-01';
--- "Indexes": [
---   {"Type": "Partition", "Parts": "3/10", "Granules": "40/120"},
---   {"Type": "PrimaryKey", "Keys": ["user_id", "event_date"],
---    "Granules": "2/40", "Search Algorithm": "generic exclusion search"},
---   {"Type": "Skip", "Name": "idx_url", "Granules": "1/2"}
--- ]
+SELECT count()
+FROM logs
+WHERE user_id = 7432 AND ts >= '2026-09-01';
+
+-- ReadFromMergeTree
+--   Indexes:
+--     PrimaryKey
+--       Keys: user_id
+--       Granules: 3/120          <- sparse primary index pruning
+--     Skip
+--       Name: user_ix, Description: Bloom, Granules: 3/3 -> 2/3
 ```
 
-**Listing 1.** Each index reports how many parts and granules it eliminated; the plan is the source of truth, not the DDL.
+**Listing 1.** Annotated EXPLAIN shape: primary key granules selected, then each skip index's before/after granule counts.
 
-## The trace log and the sanity checks
+## What "used" does and doesn't mean
 
-Setting send_logs_level = 'trace' in clickhouse-client emits per-index lines like `Index vix has dropped 6102/6104 granules` during execution — the same information without the plan JSON, useful for quick checks. Two cheap sanity checks accompany it: query system.parts to confirm how many parts and granules exist (a freshly added skip index may simply not be materialized on old parts yet, per [[How do you materialize a skip index on existing ClickHouse data]]), and compare rows processed before and after (the skip-index guide's example drops a query from 100 million rows to about 33 thousand). The distinction between index types and their counters maps to [[What is a sparse primary index in ClickHouse]] for the primary key and to [[What data skipping indexes exist in ClickHouse]] for the skip family.
+An index appearing in the plan proves application, not usefulness — compare the granule counts and the actual timing (`EXPLAIN ANALYZE`) to see whether it moved the needle. Conversely, absence of a skip index from the plan means the predicate didn't match the index expression or the setting disabled it, not that the data was fine. For sort-key sanity the two granule numbers are the whole story: if `selected/total` stays near 1.0 for your key filters, the [[What is a sparse primary index in ClickHouse]] layout is wrong and [[How do you choose ORDER BY in ClickHouse]] needs revisiting — or the access pattern belongs in [[What are projections in ClickHouse]].
 
-> [!warning] "The index exists in SHOW CREATE TABLE, so it works" is false in two ways
-> First, skip indexes added via ALTER affect only newly written parts until MATERIALIZE INDEX runs, so old data never gets filtered. Second, a skip index can be applied and still be useless — one matching value in a granule forces reading the whole granule, so selected/total near 1.0 is the real failure signature. Also, PARTITION BY pruning shows up as its own stage; do not credit the primary key for partition elimination.
+> [!warning] Version-dependent flags around v25.9
+> From v25.9, plain `EXPLAIN indexes = 1` can overstate skip-index effects because of the skip-indexes-on-read and query-condition-cache features; the documentation pins the reproducible form to `SETTINGS use_query_condition_cache = 0, use_skip_indexes_on_data_read = 0`. If numbers look implausible between versions, check these settings before rewriting your schema.
 
 > [!tip] Interview answer
-> I use EXPLAIN indexes = 1 and read the Indexes array on ReadFromMergeTree: each Partition, PrimaryKey, or Skip entry reports Parts and Granules selected versus total, so I can see exactly what each index eliminated. The trace log shows the same as per-index drop counts. If granules selected equal total, the index is either not materialized or the predicate does not match the key, and I fix the key or the query.
+> EXPLAIN indexes = 1 prints per-index pruning: the primary key shows granules selected out of total, and every skip index shows its before/after granule counts. I compare those numbers across hot queries — an index filtering nothing is removed, a key filtering almost nothing is redesigned — and EXPLAIN ANALYZE adds the timing to prove real impact.

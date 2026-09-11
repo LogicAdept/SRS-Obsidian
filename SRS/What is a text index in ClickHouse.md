@@ -2,37 +2,34 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #SRS
 
-# What is a text index in ClickHouse
+# What is a text index in ClickHouse?
 
 > [!abstract] Short answer
-> The text index is ClickHouse's inverted index for full-text search: it tokenizes string values and maps each token to the granules containing it, so word and phrase predicates resolve through the index instead of scanning columns. It is the recommended structure for text search workloads, replacing the deprecated tokenbf_v1 and ngrambf_v1 bloom-filter skip indexes.
+> A `text` index (also called an inverted index) is a MergeTree skip index that maps each token of a text column to the granules containing it. Unlike the deprecated `tokenbf_v1`/`ngrambf_v1` Bloom filters, it is a true inverted index: deterministic token indexing, no false positives, and it accelerates `hasToken`, `hasAllTokens`, `hasAnyTokens`, `hasPhrase`, `LIKE`, `IN`, `equals`, and `startsWith`-style predicates.
 
-## What it is and how it is declared
+## Definition and structure
 
-A text index is defined on a column with a tokenizer and optional preprocessor/postprocessor expressions, created like other indexes (ALTER TABLE ... ADD INDEX ... TYPE text(...) ) and materialized on data. Unlike bloom-filter skip indexes, which only say "this granule might contain a match", the inverted index maps tokens deterministically to the granules containing them, which the docs cite as the reason it gives better search performance and more predictable behavior for tokenized lookups. It integrates with the search functions: hasAnyTokens, hasAllTokens, and hasPhrase express word-set and phrase semantics directly, and common text search functions can be optimized through it.
+Declared like any skip index — `INDEX name col TYPE text(tokenizer = ...) GRANULARITY 1` — it tokenizes the column with the chosen tokenizer (`splitByNonAlpha` by default, `splitByString`, `splitByRegexp`, plus CJK options like `chinese` and `japanese`), and stores per-block token lists instead of probabilistic bit arrays. A `preprocessor` expression (for example `caseFoldUTF8`, `lower`, or `removeDiacriticsUTF8(normalizeUTF8NFKC(col))`) normalizes values before tokenization — and then queries must run the same functions over the search terms, because matching happens against preprocessed tokens. ClickHouse docs recommend versions >= 26.2 for production text-index use.
 
 ```sql
-CREATE TABLE logs
+CREATE TABLE docs
 (
-    ts DateTime,
-    message String,
-    INDEX idx_msg message TYPE text(tokenizer splitByNonAlpha) GRANULARITY 4
-) ENGINE = MergeTree
-ORDER BY (ts);
+    id UInt64,
+    body String,
+    INDEX body_idx lower(body) TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1
+)
+ENGINE = MergeTree ORDER BY id;
 
-SELECT count() FROM logs WHERE hasAnyTokens(message, ['timeout', 'refused']);
+SELECT id FROM docs WHERE hasToken(body, 'clickhouse');
+SELECT id FROM docs WHERE hasAllTokens(lower(body), ['clickhouse', 'test']);
 ```
 
-**Listing 1.** A tokenized text index on message; the query resolves tokens through the inverted index rather than scanning the column.
+**Listing 1.** A case-folded text index and token queries; the query must mirror the preprocessor ([[Why might a ClickHouse skip index not help]]).
 
-## Where it sits in the toolbox
-
-It belongs to the skipping-index family conceptually — its job is granule elimination, not row location, and it still depends on correlation and granularity like every skip structure, per [[Why might a ClickHouse skip index not help]]. Its predecessors illustrate the difference: tokenbf_v1 indexed whole tokens in a bloom filter and ngrambf_v1 indexed overlapping n-grams for substring-style patterns, but both answer probabilistically and are now deprecated in the docs, per [[What is ngrambf_v1 versus tokenbf_v1]]; hasToken pairs with them or with the text index, per [[What is hasToken in ClickHouse]]. For analytics over free text at web scale with relevance ranking, the comparison against a dedicated engine is in [[When should you use a ClickHouse text index instead of Elasticsearch]], and verification of actual granule elimination is via EXPLAIN indexes = 1 per [[How do you verify a ClickHouse index is used]].
-
-> [!warning] "Inverted index means document-store semantics"
-> The trap is expecting scoring, stemming bundles, or tf-idf ranking from the text index: it is a granule-skip structure integrated with search functions, not a Lucene replacement. Tokenizer choice matters too — a non-default tokenizer or preprocessor changes which functions can use the index efficiently, which is why the docs steer hasToken users toward hasAnyTokens/hasAllTokens for non-splitByNonAlpha setups.
+> [!warning] It is still a skip index, not a search engine
+> The text index prunes granules; matching rows are then read and filtered like any scan, so it is not a scoring/relevance engine and does not replace Elasticsearch for ranked search ([[When should you use a ClickHouse text index instead of Elasticsearch]]). Tokenizer choice is the sharp edge: `hasToken` splits needles on ASCII separators only, so CJK columns need the matching tokenizer and `hasAnyTokens`/`hasAllTokens` instead ([[What is hasToken in ClickHouse]]), and unlike Bloom filters the index must be [[How do you materialize a skip index on existing ClickHouse data]] for old parts.
 
 > [!tip] Interview answer
-> The text index is ClickHouse's inverted index: it tokenizes the column and maps tokens to granules, so hasAnyTokens, hasAllTokens, and phrase-style predicates skip straight to relevant granules. It is the docs' recommended full-text structure and supersedes the deprecated tokenbf and ngrambf bloom filters. It still only skips granules — correlation and granularity decide whether it pays, and EXPLAIN indexes = 1 shows the elimination.
+> The text index is ClickHouse's inverted index for full-text predicates: per-block token lists built with a pluggable tokenizer and optional preprocessor like lower(). It gives exact, false-positive-free pruning for hasToken/hasAllTokens/hasPhrase and LIKE, replacing the deprecated token and n-gram Bloom filters. Same skip-index rules apply — matching expressions, GRANULARITY 1, and materialization for existing parts.

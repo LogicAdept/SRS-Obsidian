@@ -2,34 +2,35 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #Databases/NoSQL/Elasticsearch #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #Databases/NoSQL/Elasticsearch #SRS
 
-# When should you use a ClickHouse text index instead of Elasticsearch
+# When should you use a ClickHouse text index instead of Elasticsearch?
 
 > [!abstract] Short answer
-> Use the ClickHouse text index when your data already lives in ClickHouse and the search is token-level filtering inside analytics — logs and events where you filter by tokens, then aggregate at billions of rows. Choose Elasticsearch when you need a dedicated search product's surface: BM25 relevance ranking, complex query DSL, fuzzy matching and suggesters, and horizontal scale for search-first workloads.
+> Choose the ClickHouse text index when text search is one predicate among many over analytical data you already keep in ClickHouse — filter, aggregate, and time-window the same table without moving data. Choose Elasticsearch when you need a search product: relevance ranking, analyzers per language, distributed scoring, or free-text as the primary access path. The systems increasingly overlap on full text, but they optimize different workloads.
 
-## The case for staying in ClickHouse
+## Where the text index wins
 
-The text index is a real inverted index integrated into the MergeTree storage model: tokenized lookups resolve through the index while the rest of the query — aggregations, GROUP BY over user_id, time-windowed analytics — runs in the same engine at columnar speed, per [[What is a text index in ClickHouse]]. For observability and log platforms this is decisive: the query pattern is "which services logged 'connection refused' in the last hour, grouped by customer" — a filter-plus-aggregation, not a ranked document search. Keeping it in ClickHouse removes a sync pipeline and a second cluster, and the docs' own guidance for log search design (ORDER BY shaping plus skip/text indexes) lives in [[How do you search logs in ClickHouse]]. The deprecated bloom-based predecessors and the migration story are in [[What is ngrambf_v1 versus tokenbf_v1]].
+ClickHouse compresses log/analytical columns far better than a document store and evaluates the rest of the query (aggregations, joins, window functions, time buckets) natively; the inverted text index ([[What is a text index in ClickHouse]]) prunes granules for token predicates with no false positives, and the surrounding machinery — sparse primary index, MinMax pruning, projections — handles everything else in the same scan. When the workload is "find error bursts last Tuesday, then aggregate by service", duplicating the corpus into a second system doubles storage and forces a two-hop join at query time; keeping it in ClickHouse with a text index avoids that entirely ([[How do you search logs in ClickHouse]]).
 
 ```sql
--- filter by tokens, aggregate at scale: one engine, one copy of the data
-SELECT service, count()
+-- one query, one system: token search + aggregation + time bucket
+SELECT toStartOfHour(timestamp) AS hour, service, count()
 FROM logs
-WHERE hasAnyTokens(message, ['timeout', 'refused'])
-  AND ts >= now() - INTERVAL 1 HOUR
-GROUP BY service;
+WHERE hasToken(lower(msg), 'timeout')
+  AND timestamp >= now() - INTERVAL 7 DAY
+GROUP BY hour, service
+ORDER BY hour;
 ```
 
-**Listing 1.** The typical win: token filtering feeding aggregation, with no second system in the path.
+**Listing 1.** The shape of query that favors staying in ClickHouse: search is a filter, the aggregation is the point.
 
-## The boundary where Elasticsearch earns its cluster
+## Where Elasticsearch stays the right answer
 
-Elasticsearch exists for search-first workloads: relevance-ranked results over documents (BM25 with per-field tuning), rich analyzers per language, fuzzy and phrase-suggest features, pagination through large result sets, and sharding tuned for query concurrency rather than aggregation throughput. If the product is "users search the corpus and get ranked documents", building it on a granule-skipping index is a category error, the same boundary as the SQL-versus-ES decision in [[When should you use Elasticsearch instead of SQL search]]. The honest middle answer names the operational asymmetry: ClickHouse's text index adds one index definition to a system you already run; Elasticsearch adds a cluster, a sync path, and a consistency model — justified by search being the product, not by substring speed.
+Elasticsearch is built around inverted indexes per shard with analyzers, scoring (BM25), fuzzy matching, synonyms, and rich per-language tokenization; relevance-ordered results and search-product features (completion suggesters, highlight, kNN) are not things the ClickHouse text index aims to provide. Elasticsearch's own docs describe it as an analytical search store with columnar doc-value modes — but for pure OLAP aggregation at compression ratios ClickHouse typically wins, so the "which is faster" framing is workload-shaped, not absolute. A pragmatic split: Elasticsearch for user-facing search, ClickHouse for analytics over the same events via streaming ingestion ([[How do you ingest Kafka into ClickHouse]]).
 
-> [!warning] "ClickHouse has a text index now, so drop Elasticsearch" over-corrects
-> The text index skips granules and feeds aggregations; it does not provide relevance scoring, pagination over ranked documents, or the analyzer ecosystem. Conversely, keeping Elasticsearch only because "someone said FTS is slow" while queries are aggregations over logs wastes an entire subsystem, per [[When should you use full-text search instead of LIKE]]. The decision is workload-shaped: ranked document retrieval versus token-filtered analytics.
+> [!warning] "Elasticsearch is only for search, ClickHouse only for analytics" is out of date
+> Each system has been eating the other's edges: Elasticsearch added columnar analytic modes, ClickHouse added a real inverted index. The decision criteria that remain stable are: who owns the data of record, whether relevance ranking is required, and whether the text predicate feeds aggregations or returns documents. Migrating because "we need search" without checking which side of that line the workload sits on is the costly mistake.
 
 > [!tip] Interview answer
-> I stay in ClickHouse when search is a filter inside analytics over data already there — log lines, events, token predicates feeding aggregations — because the text index does that in one system at columnar speed. I choose Elasticsearch when search itself is the product: BM25 ranking, fuzzy matching, suggesters, and horizontal search scale. Adding ES means a sync pipeline and a second cluster, so the feature surface has to justify it.
+> If text search is a filter over data I already analyze in ClickHouse, its text index gives inverted-index pruning with zero data movement and full SQL on top — that's the logging-observability sweet spot. If I need relevance scoring, language analyzers, fuzzy, or a search-first product, that's Elasticsearch. Overlap is real; the decision is workload shape, not fashion.

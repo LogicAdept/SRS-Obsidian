@@ -2,33 +2,31 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #Databases/SQL #SRS
 
-# What is hasToken in ClickHouse
+# What is hasToken in ClickHouse?
 
 > [!abstract] Short answer
-> hasToken(haystack, token) checks whether a whole token — the longest run of characters [0-9A-Za-z_] — appears in the string, using splitByNonAlpha as the tokenizer. It exists so word-equality predicates can use token-based text indexes or tokenbf_v1 skip indexes; a plain LIKE '%token%' cannot use those structures.
+> `hasToken(haystack, token)` reports whether a string contains the given token — a substring split from surrounding non-alphanumeric characters. It exists specifically to partner with token-based string indexes (`text`, `tokenbf_v1`): `hasToken` is one of the few partial-match functions such indexes can evaluate, unlike a generic `LIKE`.
 
-## Semantics and the tokenizer contract
+## Semantics and the index contract
 
-The function returns 1 if the token is present as a complete token and 0 otherwise, with tokens bounded by anything that is not a letter, digit, or underscore. So hasToken('clickhouse test', 'test') returns 1, while searching 'tes' does not match the token 'test' — the boundary matters and is the whole point: unlike contains-style matching, token matching is deterministic and indexable. Case matters; the case-insensitive variant is hasTokenCaseInsensitive. The docs add an operational caveat for index users: hasToken has pitfalls with text indexes using non-default tokenizers or preprocessor/postprocessor expressions, and they recommend the hasAnyTokens / hasAllTokens (and hasPhrase) family for those setups, since those functions express the semantics the index can serve directly.
+`hasToken('clickhouse test', 'test')` returns 1: tokens are maximal runs separated by non-alphanumeric characters, so `'test'` matches but `'te'` does not — there is no partial-word matching. The case-sensitive pair is `hasTokenCaseInsensitive`; the family extends to `hasAnyTokens`, `hasAllTokens`, and ordered `hasPhrase` (which additionally requires tokens to appear in the same order). With a `text` or `tokenbf` index on the column, the engine uses the index to prune granules whose token sets exclude the needle; without an index it degrades to scanning — the raw scalar functions are SIMD-vectorized, but they read every granule ([[How do you search logs in ClickHouse]] shows the indexed setup). The documented pitfall: with custom tokenizers or pre/postprocessor expressions, `hasToken` may not match index tokens — the docs recommend `hasAnyTokens`/`hasAllTokens` there, since they tokenize the needle with the same tokenizer the index used.
 
 ```sql
-SELECT hasToken('clickhouse test', 'test');   -- 1
-SELECT hasToken('clickhouse test', 'tes');    -- 0 (not a full token)
+SELECT hasToken('clickhouse test', 'test');      -- 1
+SELECT hasToken('clickhouse test', 'tes');       -- 0: no substring match
+SELECT hasTokenCaseInsensitive('ClickHouse', 'clickhouse');  -- 1
 
-SELECT count() FROM logs
-WHERE hasToken(message, 'Timeout');           -- pairs with token text indexes
+-- indexed usage
+ALTER TABLE logs ADD INDEX msg_ix msg TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1;
+SELECT count() FROM logs WHERE hasToken(msg, 'timeout');
 ```
 
-**Listing 1.** Token boundaries make the predicate exact — 'tes' does not match — which is what lets the index participate.
+**Listing 1.** Token-boundary semantics first, then the indexed pattern over [[What is a text index in ClickHouse]].
 
-## Relationship to indexes and to LIKE
-
-On a table with a tokenbf_v1 skip index, hasToken predicates can exclude granules that cannot contain the token; with the modern text (inverted) index, token lookups resolve through the inverted structure, and hasAnyTokens/hasAllTokens generalize to sets of tokens, per [[What is a text index in ClickHouse]]. A LIKE '%timeout%' predicate has no token boundary and therefore cannot use those structures — it degrades to the column-scan or n-gram path described in [[How does ClickHouse accelerate LIKE and substring search]]. The vocabulary matters in interviews too: hasToken is word-equality inside text, not substring matching, and not the boolean hasTokenFs variants of file functions; its granule-exclusion effect is verified with EXPLAIN indexes = 1, per [[How do you verify a ClickHouse index is used]].
-
-> [!warning] "hasToken is an indexed LIKE" — it is not
-> hasToken matches whole tokens under a fixed tokenizer; it will not find substrings inside tokens ('Error' inside 'Error500' does not match token 'Error'... actually 'Error500' is one token, so 'Error' is not a token of it). And an index only helps when the tokenizer of the index matches the tokenizer the function implies; mismatched tokenizer or preprocessors silently drop the benefit. The docs' recommendation to prefer hasAnyTokens/hasAllTokens exists precisely because of these pitfalls.
+> [!warning] hasToken is not LIKE and not substring search
+> Three different questions: `hasToken(msg, 'err')` needs token boundaries; `msg LIKE '%err%'` needs substrings — served by n-gram indexes or accelerated with [[How does ClickHouse accelerate LIKE and substring search]]; and `position(haystack, needle)` is raw substring with no index support at all. Answering a "find the error id" interview question with hasToken, or vice versa, signals you have never debugged why the index was not used.
 
 > [!tip] Interview answer
-> hasToken checks for a complete word bounded by non-alphanumeric characters, with splitByNonAlpha semantics and case-sensitive matching (plus a case-insensitive variant). Its job is to pair with token-based indexes — the modern text index or the older tokenbf_v1 — because whole-token predicates are the ones those structures can prune. For substring semantics you need LIKE with trigram-style structures; for sets of words the hasAnyTokens/hasAllTokens family is the documented path.
+> hasToken checks for a whole token — substring boundaries enforced by non-alphanumeric separators — and it is the function that token-based string indexes can actually evaluate, pruning granules before row filtering. Case-insensitive work goes through hasTokenCaseInsensitive or a lower() preprocessor, and hasAnyTokens/hasAllTokens handle multi-term and custom-tokenizer cases.

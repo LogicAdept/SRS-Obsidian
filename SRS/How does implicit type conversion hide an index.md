@@ -2,34 +2,47 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/Indexes #SRS
-
-# How does implicit type conversion hide an index
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> When column and literal types differ, the engine casts one side to the other. If the cast lands on the column, the predicate stops being seekable: the comparison runs against transformed per-row values, not the stored sorted keys, so the plan degrades to a scan even though an index exists.
+> When a predicate compares values of different types, the engine **converts one side** — and *which* side it converts decides whether the index survives. If the column side is converted (SQL Server's classic `varchar_col = N'literals'` or `varchar_col = 12345`), the seek becomes a scan: every row's column is cast before comparing. Engines that convert the *literal* side (SQLite's type affinity) keep the index usable ([[What is sargability in SQL]]).
 
-## The casting rules that matter
-
-MySQL's rule is explicit and surprising: in comparisons between a string column and a number, MySQL converts the string column to a number, so `WHERE varchar_id = 123` cannot use an index on varchar_id — the manual states this verbatim in its type-conversion section, and it is the canonical example of a numeric literal on a string key column silently disabling the index. PostgreSQL generally casts the literal to the column's type, which keeps the index usable for common cases, but cross-type families still bite: comparing a uuid column to text, a varchar to an int in contexts where the cast applies per-row, or timestamp against a date literal in predicates where the planner cannot bound the range. The general principle: the cast must land on the constant side for the index to seek, the same bare-column principle as [[What is sargability in SQL]].
+SQL Server's data-type precedence rules — documented in its reference: the lower-precedence type converts to the higher — produce the production-classic: comparing a `varchar` column to an integer literal (int outranks varchar) converts the *column*, and `CONVERT_IMPLICIT` appears in the plan where an `Index Seek` should be. SQLite takes the opposite, safer-for-indexes route, verified in the demo: a TEXT-affinity column compared to the numeric literal `10` has its affinity applied to the *literal* (number to text), the comparison still matches index keys, and the plan stays `SEARCH ... USING COVERING INDEX`; `typeof(v)` returns `text`, proving the stored column was never converted ([[What is the difference between SQL char and varchar types]]). PostgreSQL's behavior is again literal-side: a `numeric_col = '42'` casts the constant, not the column. The interview checklist: quote the rule "the side that gets converted is the side that can't use the index", name one engine per behavior, and the preventive habit — compare like types deliberately, never rely on conversion semantics in hot predicates ([[What harmful SQL patterns or pitfalls do you know]]).
 
 ```sql
--- MySQL: string column vs numeric literal -> column cast to DOUBLE, index lost
-SELECT * FROM orders WHERE external_ref = 123456;      -- external_ref VARCHAR
-SELECT * FROM orders WHERE external_ref = '123456';    -- index used
+CREATE TABLE tt (v TEXT);
+INSERT INTO tt VALUES ('10'),('20');
+CREATE INDEX idx_tt ON tt(v);
 
--- PostgreSQL: uuid column vs text parameter in a driver that sends text
-SELECT * FROM users WHERE id = $1::uuid;               -- explicit cast on the literal
+EXPLAIN QUERY PLAN SELECT * FROM tt WHERE v = '10';
+-- QUERY PLAN
+-- `--SEARCH tt USING COVERING INDEX idx_tt (v=?)
+EXPLAIN QUERY PLAN SELECT * FROM tt WHERE v = 10;
+-- QUERY PLAN
+-- `--SEARCH tt USING COVERING INDEX idx_tt (v=?)
+SELECT v, typeof(v) FROM tt WHERE v = 10;
+-- 10|text
 ```
 
-**Listing 1.** Put the cast on the literal side, and the column's stored order stays matchable.
+**Listing 1.** Verified on SQLite 3.53.1. The numeric literal was converted to text (affinity applied to the right-hand side), the column's stored values were untouched, and both plans seek the index — the literal-side conversion that keeps sargability.
 
-## How it shows up and how to catch it
+```d2
+direction: right
+q: "text_col = 12345" {width: 180; height: 70}
+a: "literal converted
+(SQLite affinity, PG cast)
+index seek survives" {width: 250; height: 90}
+b: "column converted
+(SQL Server precedence)
+convert per row, scan" {width: 250; height: 90}
+q -> a
+q -> b
+```
 
-The symptom is a plan that scans despite a matching index, often only in one environment: an ORM or driver binds parameters with the wrong type (strings for numbers, text for uuids, timestamps as strings), staging works against literals while production goes through prepared statements, and the difference is invisible in SQL review. The audit is mechanical — read the plan and look for the index you expected, following [[How do you read EXPLAIN ANALYZE in PostgreSQL]], and check the predicate's actual operator shape, which [[What is Index Cond versus Filter in EXPLAIN]] teaches you to distinguish. The fix is boring and effective: declare matching types, bind typed parameters, and cast constants explicitly rather than letting the engine guess, the same discipline behind keeping predicates sargable in [[Why does a function on a column prevent index use]].
+**Fig. 1.** One predicate, two possible plans: the engine's conversion side-effect decides whether the B-tree can answer it or every row must be cast and tested.
 
-> [!warning] "The index exists, so the type of the literal doesn't matter"
-> This is the myth to kill. The index is on the column's stored form; a comparison against a differently-typed literal is a different predicate unless the cast is applied to the literal. There is also a subtle sibling: comparisons across collations or charset conversions in MySQL can similarly prevent index use on text columns. Both failures are environment-dependent, which is why they survive code review and explode in production.
+> [!warning] The conversion is invisible in the query text and explicit only in the plan
+> Nothing in `WHERE v = 10` hints at a conversion; only EXPLAIN reveals `CONVERT_IMPLICIT` on the column or a silent scan. Code review cannot catch it reliably — the type discipline lives in the schema (use matching parameter types in drivers and ORMs) and in plan checks for hot queries ([[What harmful SQL patterns or pitfalls do you know]]).
 
 > [!tip] Interview answer
-> The index can only seek the column's stored, sorted form. If a type mismatch makes the engine cast the column side — MySQL casting a string column to a number against a numeric literal, or a text parameter compared to a uuid — the predicate no longer matches the stored keys and the plan scans. Fix by matching types and casting the literal, and verify with the plan, not by reading the DDL.
+> Type mismatch triggers an implicit conversion, and which side gets converted decides index use: if the column is converted — SQL Server converting varchar to int because int has higher precedence — the seek becomes a per-row cast and scan. Engines like SQLite convert the literal side via type affinity, and PostgreSQL casts constants, so the index survives; my demo shows SQLite still searching the index with a numeric literal against a text column. The habit: match types deliberately between column, literal, and driver parameter.

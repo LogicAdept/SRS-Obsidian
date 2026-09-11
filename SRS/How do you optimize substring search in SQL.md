@@ -2,32 +2,45 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/Indexes #SRS
-
-# How do you optimize substring search in SQL
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> Pick the structure that indexes substrings or tokens: pg_trgm with a GIN/GiST index for '%like%' and similarity queries, PostgreSQL full-text search with a tsvector GIN index for word-level matching with stemming and ranking, or an external search engine when relevance, scale, or ranking outgrow the database. A plain B-tree cannot help '%term%' at all.
+> Substring search in SQL is `LIKE '%str%'`, and the string functions around it — `SUBSTR`/`SUBSTRING`, `INSTR`/`POSITION`/`STRPOS`, `LOCATE` — locate or extract pieces. Performance law: no B-tree index can serve an unanchored substring, so it is a full scan by construction; the upgrades are trigram indexes (index every 3-char window), full-text search (token semantics), or external engines ([[How does a trigram index help SQL search]], [[What is the difference between prefix search and contains search]]).
 
-## pg_trgm: trigrams over arbitrary substrings
-
-pg_trgm splits strings into three-character groups (padding each word with spaces, ignoring non-alphanumerics) and indexes them with GIN or GiST, which makes LIKE, ILIKE, and similarity operators seekable for contains-style patterns. The module's docs define the trigram model and its index support explicitly: GIN for read-heavy (faster lookups), GiST for write-heavy (faster updates), with `gin_trgm_ops`/`gist_trgm_ops` in the DDL. Thresholds are settable (pg_trgm.similarity_threshold drives the % operator). This is the standard fix when a dashboard filter became '%term%' and the plan went to a seq scan.
+The verified demo shows the functional layer: `instr(title, 'oo')` returns the 1-based position of the first occurrence (2 in "Book", 0 when absent — the portable emptiness test), `substr(title, 2, 2)` slices by position, and `LIKE '%oo%'` finds the row the functions would locate. These functions compose into search features — normalized comparisons, token splitting — but every *unanchored* form keeps the same plan shape: a linear pass with per-row evaluation. The index-based answers, in escalating machinery: trigram (PostgreSQL's pg_trgm GIN index serves `LIKE '%abc%'` by intersecting trigram lookups — the documented approach for substring search at scale); FTS5/textsearch when "contains the *word*" is the real requirement (word-boundary semantics, stemming, ranking); reverse-string indexes when it is suffix-shaped ([[How do you search for a suffix efficiently in SQL]]). The honest sizing note: substring scans are not automatically wrong — a weekly admin query scanning 100k rows is fine; the *hot* search path with unbounded growth is where the machinery upgrade pays ([[What is sargability in SQL]], [[When should you use Elasticsearch instead of SQL search]]).
 
 ```sql
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
-CREATE INDEX idx_products_name_trgm
-    ON products USING gin (name gin_trgm_ops);
-SELECT * FROM products WHERE name ILIKE '%wrench%';
+CREATE TABLE pr (id INTEGER PRIMARY KEY, price NUMERIC, title TEXT);
+INSERT INTO pr VALUES (3, 30, 'Book'),(4, 250, 'Monitor');
+
+SELECT instr(title, 'oo') AS pos, substr(title, 2, 2) AS sub
+FROM pr WHERE id = 3;
+-- 2|oo
+-- (instr: first occurrence at position 2; substr: slice from position 2)
+SELECT title FROM pr WHERE title LIKE '%oo%';
+-- Book
+-- (unanchored pattern: full scan by construction, whatever the indexes)
 ```
 
-**Listing 1.** After the trigram GIN index, ILIKE '%wrench%' reads candidate rows via the index instead of scanning the table.
+**Listing 1.** Verified on SQLite 3.53.1. Position lookup, positional slice, and the pattern form of the same search — the functional toolkit whose unanchored uses are all plan-level scans.
 
-## Full-text search and the external-engine boundary
+```d2
+direction: right
+s1: "LIKE '%str%'
+scan, per-row eval" {width: 190; height: 80}
+s2: "trigram index
+substring windows indexed" {width: 210; height: 80}
+s3: "full-text search
+word tokens + rank" {width: 190; height: 80}
+s4: "external engine
+fuzzy, analytics, scale" {width: 200; height: 80}
+s1 -> s2 -> s3 -> s4
+```
 
-When the search unit is a word or phrase — documents, descriptions, logs with terms — tsvector plus tsquery with a GIN index gives stemming per language configuration, ranking with ts_rank, and boolean composition; the mechanics are in [[How does full-text search work in PostgreSQL]], and the LIKE-versus-FTS decision factors in [[When should you use full-text search instead of LIKE]]. ClickHouse solves the same problem with its text (inverted) index and hasToken-style functions rather than trigrams, as in [[How does ClickHouse accelerate LIKE and substring search]]. The upgrade path to Elasticsearch is a workload decision, not a default, per [[When should you use Elasticsearch instead of SQL search]]. And if the columns are JSON rather than text, the same GIN machinery applies with jsonb_ops, covered in [[How do you search JSON fields efficiently in SQL]].
+**Fig. 1.** The substring-search ladder: from the always-correct scan through indexing every substring window to token and external-engine semantics — each step buys speed by narrowing what "match" means.
 
-> [!warning] Trigram indexes are not free and are not FTS
-> A trigram GIN index is sizable (every three-character group per row) and slows writes; on very short patterns (one or two characters) it degrades because there are few trigrams to discriminate. It also does not understand language: no stemming, no ranking, no stopwords. Choosing trigram when the requirement is relevance-ranked document search misses the point the same way choosing FTS for exact-code lookup overkill.
+> [!warning] Functions that *locate* are not functions that *search at scale*
+> instr/strpos in a predicate (`WHERE instr(col, 'x') > 0`) is the same scan as LIKE '%x%' wearing a costume — the plan never changes. Reach for the machinery when the query is hot; do not micro-optimize the function choice inside an O(N) pass ([[Why does a function on a column prevent index use]]).
 
 > [!tip] Interview answer
-> For '%term%' I stop expecting the B-tree and match the structure to the need: pg_trgm GIN or GiST for substring and similarity including ILIKE, full-text search with tsvector and GIN for word-level language queries, and Elasticsearch when ranking or scale demand it. Suffix search gets the reversed-string trick. Cost side matters too: trigram indexes are large and add write overhead, so measure before sprinkling them everywhere.
+> Substring search is LIKE with both wildcards, supported by SUBSTR for slicing and INSTR or STRPOS for locating — my demo shows instr returning the position and the LIKE form finding the same row. The plan law: an unanchored substring cannot use a B-tree, so it scans by construction. For hot searches I escalate: trigram indexes that index 3-character windows serve contains-search, full-text search when word tokens are the real requirement, reverse indexes for suffixes, or an external engine when fuzzy matching and analytics enter.

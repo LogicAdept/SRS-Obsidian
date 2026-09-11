@@ -2,36 +2,50 @@
 reps: 0
 priority: 0
 -->
-#Databases/Indexes #Databases/SQL #SRS
-
-# What is a bitmap index scan in SQL plans
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> A bitmap index scan builds an in-memory bitmap of table pages (or rows) that match an index condition, then reads the heap in physical order once. Its purpose is to cut random I/O and to combine several indexes with AND/OR of bitmaps before touching the table at all.
+> A **bitmap index scan** (PostgreSQL) combines the cheap seeking of indexes with the sequential read pattern of a table scan: each qualifying index produces a **bitmap of row locations**, bitmaps are ANDed/ORed for combined predicates, then the heap is visited **in physical order**, one row at a time with a recheck of the condition. EXPLAIN shows it as `Bitmap Index Scan` feeding a `Bitmap Heap Scan`.
 
-## The mechanism in PostgreSQL
-
-PostgreSQL's plan shows Bitmap Index Scan, producing the bitmap, followed by Bitmap Heap Scan, visiting pages in ascending physical order. The docs' motivating case is that a single index scan can only use clauses joined with AND on its own columns; conditions like `WHERE a = 5 OR b = 6` cannot directly use one B-tree, but the system can scan one index per condition, OR (or AND) the per-index bitmaps together, and then visit the surviving table pages in physical order, which converts random row fetches into sequential-ish page reads. Because the bitmap discards row order from the indexes, any `ORDER BY` requirement needs an explicit sort step, and at high match rates the planner will instead pick a plain sequential scan, with the middle ground governed by selectivity as in [[What is selectivity and cardinality for indexes]].
+PostgreSQL's documentation describes the mechanism exactly: the system scans each needed index, "prepares a bitmap in memory giving the locations of table rows" matching each index's conditions, ANDs and ORs the bitmaps, then visits rows in physical order. Two payoffs: combined predicates (`WHERE a = 1 OR b = 2`) each use their own index and merge cheaply, and heap access becomes sequential rather than random, which matters enormously on spinning disks and still wins on SSDs by prefetch locality. Two costs: the bitmap loses index ordering (an explicit sort replaces it), and on huge match sets the bitmap degrades from exact to **lossy** (one bit per page plus a recheck of every row on the page — visible in EXPLAIN as `Heap Blocks: exact=... lossy=...`). The anti-pattern it prevents: a plain index scan on a million matching rows does a million random heap hops; the bitmap visits pages in order. SQLite has no bitmap heap scan; its optimizer solves the same OR problem with `MULTI-INDEX OR` — it runs each index, deduplicates rowids, and merges (verified in the demo) ([[How does OR across columns affect index use]]).
 
 ```sql
-EXPLAIN
-SELECT * FROM events
-WHERE user_id = 42 OR source = 'mobile';
--- Bitmap Heap Scan on events
---   Recheck Cond: ((user_id = 42) OR ((source)::text = 'mobile'::text))
---   ->  BitmapOr
---         ->  Bitmap Index Scan on events_user_id_idx
---         ->  Bitmap Index Scan on events_source_idx
+CREATE TABLE customers (id INTEGER PRIMARY KEY, name TEXT, city TEXT);
+CREATE INDEX idx_city ON customers(city);
+CREATE INDEX idx_name ON customers(name);
+
+EXPLAIN QUERY PLAN
+SELECT * FROM customers WHERE city = 'Berlin' OR name = 'Alice';
+-- QUERY PLAN
+-- |--MULTI-INDEX OR
+-- |  |--INDEX 1
+-- |  |  `--SEARCH customers USING INDEX idx_city (city=?)
+-- |  `--INDEX 2
+-- |     `--SEARCH customers USING INDEX idx_name (name=?)
+-- (PostgreSQL plans this as Bitmap Index Scan x2 -> BitmapOr -> Bitmap Heap Scan)
 ```
 
-**Listing 1.** `BitmapOr` runs two index scans, ORs their page bitmaps, and the heap scan then reads each qualifying page once.
+**Listing 1.** Verified on SQLite 3.53.1: the MULTI-INDEX OR plan — each predicate drives its own index, results merged. PostgreSQL's bitmap machinery is the documented equivalent: per-index bitmaps combined with BitmapOr, then heap rows visited in physical order with a recheck.
 
-## Related but distinct things
+```d2
+direction: right
+i1: "index on city
+row locations" {width: 180; height: 70}
+i2: "index on name
+row locations" {width: 180; height: 70}
+bm: "bitmaps AND / OR
+one bit per row or page" {width: 230; height: 80}
+h: "heap visited in
+physical order + recheck" {width: 240; height: 80}
+i1 -> bm
+i2 -> bm
+bm -> h
+```
 
-The bitmap here is a plan technique over ordinary B-tree indexes; it is not Oracle's bitmap index storage type, where each key value stores a bitmap over rows and is aimed at low-cardinality analytical columns. The loss of row order also matters for pagination: an ordered retrieval cannot come from a Bitmap Heap Scan, so top-N work relies on a plain ordered index scan as in [[How does LIMIT interact with ORDER BY and indexes]]. Planner statistics decide between plain index scan, bitmap scan, and seq scan, and skewed estimates push the planner to the wrong one, the failure mode in [[How do stale statistics hurt a query plan]].
+**Fig. 1.** Bitmap scanning converts index output from "rows" to "a map of where rows live", letting several maps merge before any table access happens.
 
-> [!warning] "Bitmap scan = bitmap index" is the classic conflation
-> In an interview, saying "bitmap index scan means bitmap indexes exist in PostgreSQL" is wrong: PostgreSQL has no stored bitmap index type; the bitmap is built at runtime from B-tree (or GiST/GIN/BRIN) scans. Oracle and SQL Server are where stored bitmap structures live, and they solve a different problem: indexing low-cardinality columns rather than combining existing index scans.
+> [!warning] Bitmaps buy locality at the price of order and precision
+> The heap pass is physical, so an ORDER BY needs a separate sort, and large match sets turn lossy — every page's rows rechecked. If the query filters down to a handful of rows, a plain index scan is cheaper; bitmaps shine when *many* rows match but must be fetched in heap order ([[What is Index Cond versus Filter in EXPLAIN]]).
 
 > [!tip] Interview answer
-> A bitmap index scan converts each index's matching rows into a page bitmap; the planner ANDs or ORs bitmaps from several indexes, then a Bitmap Heap Scan reads surviving pages in physical order, cutting random I/O. It is PostgreSQL's way to use multiple indexes for AND/OR predicates, but it loses row ordering and stops paying off when the bitmap covers too much of the table, where a sequential scan wins.
+> A bitmap scan is PostgreSQL combining index cheapness with sequential heap access: each index builds a bitmap of matching row locations, bitmaps get ANDed or ORed, then the heap is read in physical order with a recheck. It wins for broad matches or multi-index OR conditions, avoids a million random heap hops — but loses index ordering, forcing a sort, and can degrade to lossy pages on very large sets. SQLite solves the same OR case with MULTI-INDEX OR plans; the trade-offs are the same.

@@ -2,35 +2,54 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/Indexes #SRS
-
-# How do you optimize a search query over several columns
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> The shape decides the tool. Fixed columns with AND: one composite in equality-then-sort order. OR across columns: expect bitmap combination at best and prefer rewriting as UNION ALL of per-column indexed seeks. One search term across many columns: one expression — a concatenated or generated searchable field — indexed with FTS or trigram, so a single index serves the term.
+> Searching over several columns has three index strategies: a **composite index** when the query pins several columns together (`WHERE city = ? AND name LIKE 'A%'` — equality columns first, prefix tail: one seek); **multiple single-column indexes** when conditions come independently or as OR — the engine combines them (SQLite MULTI-INDEX OR, PostgreSQL bitmap OR); and **FTS/trigram machinery** when "search" means text relevance. The plan decides which happened — read it ([[What is Index Cond versus Filter in EXPLAIN]], [[What is a bitmap index scan in SQL plans]]).
 
-## The three shapes and their fixes
-
-AND-shaped predicates with fixed columns are the composite case: (a, b, c) in workload order, per [[What is the leftmost prefix rule for composite indexes]]. OR across different columns is where naive designs die: `WHERE name = ? OR email = ? OR phone = ?` cannot use any single B-tree, and PostgreSQL's combination machinery answers it only through BitmapOr of per-column indexes, per [[How does OR across columns affect index use]] — workable, but the planner may still prefer a scan. The rewrite that restores seeks is UNION ALL of three sargable queries (one per column, each with its own index), deduplicated as needed, because each branch becomes a cheap index range scan. A single term searched across name, email, and phone is better served by materializing one searchable value — a generated column concatenating normalized fields, indexed with tsvector or trigram — so the API's one box maps to one index, per [[How do you optimize substring search in SQL]].
+The verified demo walks all three shapes on one table. The OR form (`city = 'Berlin' OR name = 'Alpha'`) with two single-column indexes plans as MULTI-INDEX OR — two index probes merged and deduplicated. The AND form plans with the composite `(city, name)` as one SEARCH serving `city=? AND name=?` — both conditions inside the key ([[How do you avoid a sort with an index]]). The equality-plus-prefix form (`city = 'Berlin' AND name LIKE 'A%'`) still plans on the composite: the equality pins the prefix, the LIKE filters within the pinned run (shown as `city=?` in the plan — the LIKE is applied on the index-delivered rows, which is already the win: no table scan). The design rule that follows: composite order is decided by the *most selective equality* first; prefix-searchable columns go last so they filter the already-narrowed run; and columns searched independently of each other get their own indexes — a composite cannot serve a query that omits its leading column ([[What is sargability in SQL]]). When the "several columns" are *text* columns that users search freely, single-column B-trees stop mattering and FTS (one inverted index over the combined document) or trigram indexes become the answer ([[When should you use full-text search instead of LIKE]]).
 
 ```sql
--- one search box over three columns: one indexed expression
-ALTER TABLE contacts ADD COLUMN search_text text
-    GENERATED ALWAYS AS (name || ' ' || email || ' ' || coalesce(phone,'')) STORED;
-CREATE INDEX idx_contacts_fts ON contacts USING gin (to_tsvector('simple', search_text));
+CREATE TABLE shops (id INTEGER PRIMARY KEY, city TEXT, name TEXT);
+INSERT INTO shops VALUES (1,'Berlin','Alpha'),(2,'Oslo','Beta'),(3,'Berlin','Gamma');
+CREATE INDEX idx_shop_city ON shops(city);
+CREATE INDEX idx_shop_name ON shops(name);
 
-SELECT * FROM contacts
-WHERE to_tsvector('simple', search_text) @@ to_tsquery('simple', 'smith');
+EXPLAIN QUERY PLAN
+SELECT id FROM shops WHERE city = 'Berlin' OR name = 'Alpha';
+-- QUERY PLAN
+-- |--MULTI-INDEX OR
+-- |  |--INDEX 1
+-- |  |  `--SEARCH shops USING INDEX idx_shop_city (city=?)
+-- |  `--INDEX 2
+-- |     `--SEARCH shops USING INDEX idx_shop_name (name=?)
+CREATE INDEX idx_shop_city_name ON shops(city, name);
+EXPLAIN QUERY PLAN
+SELECT id FROM shops WHERE city = 'Berlin' AND name = 'Alpha';
+-- QUERY PLAN
+-- `--SEARCH shops USING COVERING INDEX idx_shop_city_name (city=? AND name=?)
 ```
 
-**Listing 1.** Materializing the searchable union converts multi-column search into a single indexed lookup.
+**Listing 1.** Verified on SQLite 3.53.1. OR across columns costs two index probes plus a merge; AND across the same columns rides one composite key serving both predicates — the shapes every engine produces under different names.
 
-## What the planner does when you do nothing
+```d2
+direction: right
+c1: "AND, stable conditions
+-> composite (city, name)" {width: 220; height: 90}
+c2: "OR / independent conditions
+-> per-column indexes, merged" {width: 230; height: 90}
+c3: "free-text over columns
+-> FTS / trigram" {width: 190; height: 90}
+q: "multi-column search" {width: 170; height: 70}
+c1 -> q
+c2 -> q
+c3 -> q
+```
 
-Without help, the multi-column OR becomes a bitmap OR of index scans — if all columns are indexed — or a sequential scan with a filter; MySQL's Index Merge union covers the same shape with its own limits, per [[How do you combine several indexes in one query]]. The UNION ALL rewrite trades plan elegance for guaranteed seeks but changes pagination and total-row semantics (duplicates across branches need DISTINCT or dedup logic), which interacts with [[How does LIMIT interact with ORDER BY and indexes]]. The scale escape — an external search engine over denormalized documents — is the boundary decision in [[When should you use Elasticsearch instead of SQL search]], and the per-endpoint design discipline is in [[How do you design indexes for a search API]].
+**Fig. 1.** Three access strategies for one problem class, chosen by how the conditions combine — jointly, independently, or as free text.
 
-> [!warning] "OR always kills the index" is outdated, but so is trusting it blindly
-> Modern planners do combine indexes for OR — that is exactly what BitmapOr and Index Merge exist for. The caveat stands: combination is costed, loses row order, and degrades to scans when one OR branch is non-sargable (a function on a column or a leading wildcard poisons its branch, per [[What is sargability in SQL]]). The structural fixes — UNION ALL branches or a materialized search field — are how you make the fast path deterministic.
+> [!warning] The composite serves the query only down to its first missing column
+> `(city, name)` accelerates `WHERE city = ?` but is useless for `WHERE name = ?` alone — the leading-column rule. Index duplication (city and (city, name)) is often justified, but each extra index taxes writes; verify with the plan which of the candidate indexes the planner actually chooses ([[What harmful SQL patterns or pitfalls do you know]]).
 
 > [!tip] Interview answer
-> I classify the query first. AND over fixed columns: one composite, equality first, sort last. OR over different columns: per-column indexes with bitmap combination at best, but I usually rewrite as UNION ALL of indexed seeks for deterministic speed. One term over many columns: materialize a concatenated or generated searchable field and index it with FTS or trigram, so the API's single box maps to one index.
+> For multi-column search I match the strategy to the predicate shape: conditions that appear together become a composite index with the most selective equality first and prefix-searchable columns last — one seek serves both; conditions that appear independently or as OR get per-column indexes that the engine merges — SQLite MULTI-INDEX OR, PostgreSQL bitmap OR; and genuinely free-text search across columns moves to FTS or trigrams. I verify each design in the plan — my demo shows both the merged-OR and the composite-serving-AND shapes — and remember the leading-column rule caps what a composite can serve.

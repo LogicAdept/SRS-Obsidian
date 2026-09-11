@@ -2,31 +2,34 @@
 reps: 0
 priority: 0
 -->
-#Databases/OLAP/ClickHouse #SRS
+#Databases/OLAP/ClickHouse #Databases/Indexes #SRS
 
-# How do you materialize a skip index on existing ClickHouse data
+# How do you materialize a skip index on existing ClickHouse data?
 
 > [!abstract] Short answer
-> ALTER TABLE ... ADD INDEX only defines the index and applies it to parts written afterwards. To build it over already existing data, run ALTER TABLE ... MATERIALIZE INDEX name [IN PARTITION ...], which recomputes the index on old parts as a mutation. Without materialization, queries over historical data see no skipping at all.
+> `ALTER TABLE ... ADD INDEX` only changes metadata — existing parts stay unindexed, and queries over old data get no benefit. To build the index retroactively you run a materialize mutation: `ALTER TABLE t MATERIALIZE INDEX ix_name` (optionally `IN PARTITION p`), which asynchronously rewrites each part and populates its index files.
 
-## The two statements and what each touches
+## Step by step
 
-The skip-index guide demonstrates the sequence on its 100-million-row table: add the index with ALTER TABLE ... ADD INDEX vix my_value TYPE set(100) GRANULARITY 2, then note that skip indexes are normally applied only to newly inserted data, and run ALTER TABLE skip_table MATERIALIZE INDEX vix to index existing parts. After materialization the demo query drops from processing 100 million rows to about 33 thousand — four granules. The mutation form optionally takes IN PARTITION to scope the rebuild. The same flow applies to the text index and other skip structures, and the docs note the materialization runs like any mutation: background, resource-consuming, and trackable in system.mutations.
+The mutation rewrites every active part — reading, recomputing the index, writing a replacement part — so it behaves like any other mutation: asynchronous by default, tracked in `system.mutations` with an `is_done` flag, and controlled by `mutations_sync` if you need blocking semantics. One statement can combine the metadata change and materialization (`ADD INDEX ... , MATERIALIZE INDEX ...`) for ordinary databases; the ALTER reference notes this packed form mixes alter and mutation segments and is rejected on DatabaseReplicated databases, where you keep them as separate statements. Materialization of a *projection* over existing data follows the same pattern with `MATERIALIZE PROJECTION` / `POPULATE PROJECTION` ([[What are projections in ClickHouse]]).
+
+Two operational details matter. First, on a [[What is ReplicatedMergeTree]] table the materialize mutation runs independently on every replica through the replication queue, so check `system.mutations` per node rather than trusting one server's view. Second, scoping by partition (`MATERIALIZE INDEX ... IN PARTITION '202609'`) turns a single full-table job into a controlled sequence — the standard way to warm up indexes for the hot retention window first ([[What data skipping indexes exist in ClickHouse]]) while cold months materialize overnight.
 
 ```sql
-ALTER TABLE logs ADD INDEX msg_text message TYPE text(tokenizer splitByNonAlpha) GRANULARITY 4;
-ALTER TABLE logs MATERIALIZE INDEX msg_text;                 -- rebuild on existing parts
-ALTER TABLE logs MATERIALIZE INDEX msg_text IN PARTITION '202608';  -- scoped variant
+ALTER TABLE events ADD INDEX user_ix user_id TYPE bloom_filter(0.01) GRANULARITY 1;
+
+ALTER TABLE events MATERIALIZE INDEX user_ix;               -- all partitions
+ALTER TABLE events MATERIALIZE INDEX user_ix IN PARTITION '202609';
+
+SELECT command, is_done
+FROM system.mutations
+WHERE table = 'events' AND NOT is_done;
 ```
 
-**Listing 1.** Define, then materialize; scope by partition when a full-table mutation is too heavy.
+**Listing 1.** Add the index, materialize it (whole table or one partition), and watch the mutation in `system.mutations`.
 
-## Cost model and operational practice
-
-Materialization rewrites per-part index files, so plan disk, I/O, and merge pressure accordingly — the guide's own framing is that you should plan for the disk and CPU cost of building the index, and the mutation executes per part like UPDATE/DELETE mutations do. The verification loop after materialization matters as much as the command: before it, EXPLAIN shows no skip on old parts (the classic false negative, part of [[Why might a ClickHouse skip index not help]]); after it, EXPLAIN indexes = 1 should show the Skip index eliminating granules, per [[How do you verify a ClickHouse index is used]]. If the materialized index still skips nothing, the problem is correlation or predicate shape, not the command — the fix paths run through [[How do you choose ORDER BY in ClickHouse]] or the index-type menu in [[What data skipping indexes exist in ClickHouse]].
-
-> [!warning] "ADD INDEX is enough" is the trap the docs call out verbatim
-> The guide states plainly that just adding the index won't affect the earlier query until materialization runs. The reverse trap is firing MATERIALIZE INDEX on a huge table during peak load without scoping by partition — it is a mutation, competing with merges and ingest. Also, dropping and re-adding an index definition does not rebuild anything by itself; materialization is always an explicit step.
+> [!warning] Materialization rewrites parts — it is a full-table job
+> Like [[What are mutations in ClickHouse]], it re-reads and re-writes every column of every part, consuming I/O and merge capacity; on a busy table run it partition by partition off-peak, or rely on natural rewrites: data reinserted via TTL moves and merges will pick the index up anyway. Skipping materialization is also a valid strategy when old data rarely gets filtered — the index silently serves only new parts.
 
 > [!tip] Interview answer
-> ADD INDEX defines the structure and covers only future parts; MATERIALIZE INDEX builds it over existing data as a mutation, optionally scoped with IN PARTITION. Until materialization runs, historical queries get zero benefit — the guide's example goes from 100 million rows processed to 33 thousand after it. I schedule the mutation off-peak, then confirm granule elimination with EXPLAIN indexes = 1.
+> ADD INDEX is metadata-only; existing parts remain index-less until you issue MATERIALIZE INDEX, which is an asynchronous mutation that rebuilds each part with the index populated, per partition if you scope it. You monitor it in system.mutations, and like any mutation it's a heavy rewrite job — plan it off-peak or let new parts pick it up naturally.

@@ -2,37 +2,46 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/Indexes #SRS
-
-# When should you use full-text search instead of LIKE
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> Use full-text search when the query is about words: natural-language documents, stemming (running matches run and ran), ranking by relevance, language-aware tokenization, boolean combinations, and phrase or prefix operators over a GIN-indexed tsvector. Use LIKE for exact or prefix patterns on codes, emails, and identifiers — deterministic substrings with no language in them.
+> Prefer **full-text search** over LIKE when the requirement is word-shaped: find documents *containing words* (any of / all of / phrase), rank by relevance, handle morphology (stemming), scale beyond a few thousand rows. Keep **LIKE** for exact substring semantics: codes, IDs, partial words, completion-as-you-type on anchored prefixes. The signal is the query language itself — FTS exposes boolean operators and ranking; LIKE exposes wildcards ([[What is the difference between LIKE ILIKE and full-text search]]).
 
-## What LIKE cannot give you
-
-LIKE and ILIKE answer "does this string contain this literal substring". They have no concept of word boundaries, word forms, or importance: '%run%' matches 'runs', 'runtime', and 'brunch' indiscriminately, every match weighs the same, and there is no way to ask for "documents about database performance". PostgreSQL's text search model was built for exactly the opposite requirements: it parses documents into lexemes with a language configuration, removes stopwords, matches queries against normalized lexemes, and ranks results with ts_rank, with the whole pipeline documented in its text search chapters. The index that powers it is GIN over the tsvector column (or an expression index), which stays small relative to trigram indexes on the same text and is maintained on writes.
+The verified demo is the ranking half — the thing LIKE structurally cannot do. Three articles, one with 'sql' three times, one once: FTS5's `bm25()` orders them by relevance (the triple-hit document first, its score lower = better in SQLite's sign convention) — with LIKE, both rows are just "matches", and the application would hand-craft relevance from scratch. The rest of FTS's side: an inverted index (token -> rows) makes word queries index-supported at any scale, while LIKE '%..%' scans ([[How do you optimize substring search in SQL]]); stemming groups 'index', 'indexes', 'indexed' (engine-configured); boolean composition (`a OR b`, `a AND NOT c`, phrase "exact words") is part of MATCH syntax. LIKE's side needs no advocacy: it is exact, transactional, indexable when anchored, and zero-machinery — the right answer whenever the pattern is a *string fragment*, not a word concept ([[What is the difference between prefix search and contains search]]). The migration judgment: teams usually start with LIKE, feel the pain as data grows (scans) or as users demand ranking — at that point the semantic shift (substring to token) must be piloted on real queries, not just deployed ([[What harmful SQL patterns or pitfalls do you know]]).
 
 ```sql
-ALTER TABLE articles ADD COLUMN tsv tsvector
-    GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED;
-CREATE INDEX idx_articles_tsv ON articles USING gin (tsv);
+CREATE VIRTUAL TABLE articles USING fts5(title, body);
+INSERT INTO articles VALUES ('SQL', 'sql sql sql basics'),
+ ('Java', 'java and sql integration'),
+ ('Cookbook', 'pasta and sauces');
 
-SELECT title, ts_rank(tsv, query) AS rank
-FROM articles, to_tsquery('english', 'database & performance') query
-WHERE tsv @@ query
-ORDER BY rank DESC
-LIMIT 10;
+SELECT title, bm25(articles) AS score FROM articles
+WHERE articles MATCH 'sql' ORDER BY score;
+-- SQL|-1.6716417910447762e-06
+-- Java|-9.71608832807571e-07
+-- (bm25: lower = better; the document with 3 hits ranks above the 1-hit one)
 ```
 
-**Listing 1.** A generated tsvector column plus GIN index: stemmed, ranked, boolean-capable search inside PostgreSQL.
+**Listing 1.** Verified on SQLite 3.53.1 (FTS5). Two documents both "contain sql", yet relevance orders them — ranking by term frequency is FTS-native and impossible to express in LIKE at all.
 
-## The decision boundary in both directions
+```d2
+direction: right
+a: "requirement:
+substring / code / prefix" {width: 230; height: 80}
+b: "requirement:
+words, relevance, morphology" {width: 240; height: 80}
+l: "LIKE
+(+ prefix-index when anchored)" {width: 210; height: 80}
+f: "FTS: inverted index
+MATCH + bm25 rank" {width: 200; height: 80}
+a -> l
+b -> f
+```
 
-Switch to FTS when matches should respect words, forms, and relevance — search boxes, knowledge bases, log message word lookups. Stay with LIKE when the pattern is an identifier fragment: SKU prefixes, domain suffixes, email domains; there the exact-substring semantics are the requirement and trigram (for contains) or the plain B-tree (for prefixes) is cheaper and simpler, per [[What is the difference between prefix search and contains search]] and [[How do you optimize substring search in SQL]]. pg_trgm remains the bridge for typo-tolerant LIKE-style search on short strings. The external-engine boundary — relevance tuning, facets, scale beyond a database node — is its own decision in [[When should you use Elasticsearch instead of SQL search]].
+**Fig. 1.** Two requirement families, two tools: string-fragment questions stay with LIKE; word-and-relevance questions need FTS's token index and ranking.
 
-> [!warning] "FTS replaces LIKE" and "FTS is only for big documents"
-> FTS does not do literal substring matching — to_tsquery normalizes both sides, so searching for a code fragment like 'ERR_42' can behave surprisingly; that job belongs to LIKE with an appropriate index. In the other direction, FTS pays off on short fields too (titles, tags) whenever stemming or ranking matter, not just on long documents. The real criterion is whether the query is linguistic or literal.
+> [!warning] FTS is an additional index to feed — plan its writes
+> An FTS table (or tsvector column with GIN) must be kept in sync with the source text; sync failures surface as "search finds nothing" rather than errors. Decide the update mechanism at design time (triggers, generated tsvector, FTS5 external-content tables), not after the first desync incident ([[What harmful SQL patterns or pitfalls do you know]]).
 
 > [!tip] Interview answer
-> I use full-text search when matching is linguistic: stemmed words, relevance ranking, boolean queries, language configs — a tsvector with a GIN index inside PostgreSQL. I use LIKE when the match is literal: codes, emails, prefixes, suffixes, with a B-tree or trigram index as appropriate. The tell is whether 'run' should match 'running' — if yes, FTS; if the string must contain exactly 'run', LIKE.
+> I choose by requirement shape: substring needs — codes, IDs, anchored prefixes — stay with LIKE, which is exact and indexable when anchored. The moment the requirement is words — any-of, phrases, stemming, relevance ordering — full-text search wins: its inverted index makes word queries scale, and bm25 ranking is native; my demo shows a 3-hit document ranking above a 1-hit one, which LIKE cannot express. The cost I name is operational: FTS is another index that must stay in sync, so the update mechanism is a design decision, not an afterthought.

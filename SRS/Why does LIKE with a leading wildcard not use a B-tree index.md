@@ -2,31 +2,45 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/Indexes #SRS
-
-# Why does LIKE with a leading wildcard not use a B-tree index
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> A B-tree stores strings in lexicographic order, and a seek needs the start of the range. LIKE 'abc%' bounds the range below and above, but '%abc' or '%abc%' can match anywhere inside the string, so no contiguous range of the index satisfies the predicate and the engine must check every row.
+> A B-tree finds values by **range navigation**: `LIKE 'abc%'` is equivalent to `col >= 'abc' AND col < 'abd'` — a seekable range. `LIKE '%abc'` specifies *no leading boundary*: every key in the tree is a potential match start, so no range exists to seek and the plan must scan. The wildcard's position, not LIKE itself, decides index usability.
 
-## The ordering argument
-
-Think of a dictionary: you can jump to all words starting with "smi" because they are physically adjacent in the sort order. Words containing "smith" anywhere are not adjacent — they are scattered across the whole dictionary — so the only way to answer contains-style patterns from the dictionary itself is to read it all. PostgreSQL's B-tree page states the boundary precisely: the planner considers LIKE and regex indexes only when the pattern is a constant anchored to the beginning of the string, col LIKE 'foo%' or col ~ '^foo', but not col LIKE '%bar'. It adds the locale caveat: outside the C locale you need a special operator class (text_pattern_ops) for pattern queries, because default collations order text differently than byte-wise pattern matching requires.
+The boundary is the whole mechanism: a prefix fixes the left edge of the matching interval in sorted order; a leading wildcard leaves the interval unbounded, so B-tree navigation has nothing to descend to. The verified demo shows all three outcomes on SQLite: with a NOCASE index, `LIKE 'a%'` plans as `SEARCH ... (name>? AND name<?)` — a genuine range seek; `LIKE '%a'` plans as a full `SCAN` even though the same index exists. PostgreSQL's variant is worth naming: B-tree seeks for LIKE work only when the index collation is binary-compatible — the documented solution is `text_pattern_ops` / `varchar_pattern_ops` operator classes for non-C locales, or a `COLLATE "C"` index ([[How do you optimize substring search in SQL]]). And when the requirement truly is "contains", the honest answers are trigram indexes (pg_trgm), full-text search, or a reverse-string index for suffix search — each a real index answer to a wildcard problem ([[How does a trigram index help SQL search]], [[How do you search for a suffix efficiently in SQL]]).
 
 ```sql
-CREATE INDEX idx_users_email ON users (email text_pattern_ops);
-SELECT * FROM users WHERE email LIKE 'larr%';   -- index range scan
-SELECT * FROM users WHERE email LIKE '%larr%';  -- seq scan (no range)
+CREATE TABLE customers (id INTEGER PRIMARY KEY, name TEXT);
+CREATE INDEX idx_name_nc ON customers(name COLLATE NOCASE);
+
+EXPLAIN QUERY PLAN SELECT name FROM customers WHERE name LIKE 'a%';
+-- QUERY PLAN
+-- `--SEARCH customers USING COVERING INDEX idx_name_nc (name>? AND name<?)
+EXPLAIN QUERY PLAN SELECT name FROM customers WHERE name LIKE '%a';
+-- QUERY PLAN
+-- `--SCAN customers USING COVERING INDEX idx_name
 ```
 
-**Listing 1.** An anchored prefix seeks; a leading wildcard cannot, regardless of the index.
+**Listing 1.** Verified on SQLite 3.53.1. The prefix pattern compiles to a bounded range on the index; the leading wildcard turns the same index into a mere scan vehicle — no range to seek, so every key must be examined.
 
-## What to do for contains and suffix patterns
+```d2
+direction: right
+t: "sorted keys
+ab bot botte box by" {width: 240; height: 70}
+p: "LIKE 'bo%'
+range [bo, bp)
+seek" {width: 170; height: 90}
+c: "LIKE '%te'
+no left boundary
+scan all keys" {width: 170; height: 90}
+t -> p
+t -> c
+```
 
-Contains search moves to structures that index substrings or tokens rather than the whole string: pg_trgm builds trigrams and a GIN/GiST index over them, supporting LIKE, ILIKE, and similarity for '%abc%' workloads — the mechanism is in [[How does a trigram index help SQL search]] and the decision menu in [[How do you optimize substring search in SQL]]. Suffix search has the classic reverse-string trick, described in [[How do you search for a suffix efficiently in SQL]]. Natural-language word search belongs to full-text search with tsvector and GIN, per [[How does full-text search work in PostgreSQL]]. The prefix-versus-contains vocabulary this question tests is pinned down in [[What is the difference between prefix search and contains search]], and the general eligibility rule behind all of it is [[What is sargability in SQL]].
+**Fig. 1.** A prefix pins the interval's left edge and the seek navigates; a leading wildcard leaves the edge open, collapsing the search into a linear pass.
 
-> [!warning] "LIKE never uses an index" is as wrong as "LIKE always scans"
-> Anchored prefixes on B-trees are the standard fast path, subject to the operator-class/collation precondition. Conversely ILIKE with an anchored prefix still scans a plain B-tree because case folding breaks the stored order — trigram or an indexed lower() expression are the fixes. The precise rule is about the pattern shape and the index's opclass, not about LIKE as an operator.
+> [!warning] "Works on my prefix search" breaks silently on locale and case
+> A binary-collation index serves case-sensitive prefix seeks only; a case-insensitive `LIKE 'Al%'` on it falls back to a scan (SQLite: use a NOCASE index; PostgreSQL: text_pattern_ops). The plan, not the syntax, is the contract — verify after every collation or engine change ([[How do you implement case-insensitive search efficiently]]).
 
 > [!tip] Interview answer
-> B-tree seeks need a contiguous range of the stored sort order. LIKE 'abc%' is a bounded range, so it seeks; '%abc' matches anywhere in the string, so matching rows are scattered and the engine must scan. The fixes are structural: trigram indexes for contains, reversed strings or trigrams for suffixes, and full-text search for word-level queries.
+> LIKE with a leading wildcard cannot use a B-tree because a B-tree seeks ranges and '%abc' has no left boundary — every key could start a match, so the plan scans. 'abc%' is fine: it is a range seek, equivalent to col >= 'abc' AND col < 'abd', with the caveat that the index collation must match the case behavior — SQLite needs a NOCASE index, PostgreSQL text_pattern_ops. For true contains-search I switch tools: trigram indexes, full-text search, or a reversed-string index for suffixes.

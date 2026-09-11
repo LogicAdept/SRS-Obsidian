@@ -2,39 +2,47 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #Databases/Indexes #SRS
-
-# How would you design a 100 million row table with fast lookup by int32
+#Databases/SQL #SRS
 
 > [!abstract] Short answer
-> Make the int32 key the clustered primary key so point lookups are one B-tree descent into the row (InnoDB), keep the key compact and monotonic if inserts are append-heavy, add covering for the payload columns the hot query needs, and paginate by keyset predicates instead of OFFSET. Verify with plans at full volume, not with a dev subset.
+> For "100M rows, instant lookup by int32 id": make the id the **clustered primary key** — `INTEGER PRIMARY KEY` in SQLite (a rowid alias: the table *is* the B-tree keyed by id), the PK of an index-organized/clusters table elsewhere, `WITHOUT ROWID` in SQLite when a non-integer key must lead. Lookup is one B-tree descent (`SEARCH ... USING INTEGER PRIMARY KEY`); the anti-pattern is a heap table with the id in a secondary index (extra hop) or, worse, unindexed ([[What is a query plan in a relational database]]).
 
-## Storage and key decisions
-
-InnoDB makes the primary key the table itself — the clustered index — so `WHERE id = ?` on an int32 PK is a single tree descent to the row; the manual's own guidance for such tables is to define the PK for the most time-critical queries, keep it short because every secondary index duplicates it, and insert in PK order for bulk loads because sequential keys leave pages about 15/16 full while random keys fragment, per [[How many clustered indexes can a table have and what is a clustered index physically]]. A monotonic int (identity, or snowflake-style if distributed generation is needed) beats random UUIDs for insert locality — the reasoning detailed in [[Should you use UUID as a primary key in PostgreSQL]]. In PostgreSQL the same lookup is a unique B-tree plus a heap hop, which makes covering design more valuable there: the payload columns of the hot query go into INCLUDE so the answer comes from the index alone, per [[How would you explain Covering index]].
+The verified demo is the whole argument in one plan pair: `SELECT v FROM big WHERE id = 42` with `id INTEGER PRIMARY KEY` plans as `SEARCH big USING INTEGER PRIMARY KEY (rowid=?)` — the storage itself is ordered by id, so the lookup descends one B-tree and lands on the row; the unindexed lookup on the same-sized table plans as `SCAN big2`. Scale arithmetic: a B-tree of 100M narrow keys is 3-4 levels deep — the seek is a handful of page reads regardless of N; the scan is 100M row evaluations. Design decisions that complete the answer: key type (int32 spans ±2.1 billion — enough for ids that never recycle; int64 for safety), UUID v7/ULID alternatives that are time-ordered (B-tree friendly, unlike v4's random keys), and the secondary-index tax: in rowid tables secondary indexes store rowids (compact); in clustered engines they store the PK (wider keys) ([[How does implicit type conversion hide an index]]). Partitioning composes when the table must also serve range scans ([[How does partition pruning speed up a query]]).
 
 ```sql
--- InnoDB-oriented shape
-CREATE TABLE events_100m
-(
-    id    INT UNSIGNED NOT NULL,
-    kind  TINYINT NOT NULL,
-    payload VARBINARY(256) NOT NULL,
-    PRIMARY KEY (id)
-) ENGINE=InnoDB;
+CREATE TABLE big (id INTEGER PRIMARY KEY, v TEXT);
+CREATE TABLE big2 (v TEXT);
+INSERT INTO big VALUES (42,'x');
+INSERT INTO big2 VALUES ('x');
 
--- hot lookup served without a second hop (PostgreSQL flavor)
-CREATE INDEX idx_events_id_covering ON events_100m (id) INCLUDE (kind);
+EXPLAIN QUERY PLAN SELECT v FROM big WHERE id = 42;
+-- QUERY PLAN
+-- `--SEARCH big USING INTEGER PRIMARY KEY (rowid=?)
+EXPLAIN QUERY PLAN SELECT v FROM big2 WHERE v = 'x';
+-- QUERY PLAN
+-- `--SCAN big2
 ```
 
-**Listing 1.** Compact monotonic key as the cluster; covering for the hot projection.
+**Listing 1.** Verified on SQLite 3.53.1. The integer primary key *is* the table's ordering: one descent finds id 42 at any table size; the keyless table pays a full scan for the same answer.
 
-## Access patterns that keep it fast at 10^8
+```d2
+direction: right
+k1: "INTEGER PRIMARY KEY
+table = B-tree on id" {width: 220; height: 80}
+k2: "lookup id = 42
+descent: 3-4 page reads" {width: 210; height: 80}
+h1: "heap + secondary index
+index probe -> row fetch" {width: 230; height: 80}
+h2: "no key
+full scan of 100M" {width: 160; height: 80}
+k1 -> k2
+h1 -> h2
+```
 
-Point lookups by the key are trivial; the design work is in everything else. Secondary access paths get purpose-built composites, not one index per column, per [[How do you decide which database indexes to create]]; each added index multiplies write amplification at 100M-row scale, the budget in [[When are database indexes a bad idea]]. Range scans and pagination must ride the key order: keyset predicates (id > last ORDER BY id LIMIT n) stay O(page) while OFFSET 9999990 reads a million rows to discard them, per [[What is keyset pagination]]. Aggregations over the whole table are a different workload — that is OLAP territory, per [[When should you use OLTP versus OLAP]]-style reasoning, and columnar storage rather than more B-trees. Finally, verify at production volume with EXPLAIN ANALYZE, because cardinality-driven plan flips only show up at scale, per [[How do you read EXPLAIN ANALYZE in PostgreSQL]].
+**Fig. 1.** Three storage shapes, three lookup costs: the clustered integer key lands on the row directly; the heap adds a hop; the keyless table reads everything.
 
-> [!warning] "Just add an index on the int column" answers the wrong question
-> At 10^8 rows the interesting risks are: random keys fragmenting the clustered layout, secondary indexes duplicating a wide PK everywhere, OFFSET pagination quietly degrading with page depth, and statistics that no longer represent the data, per [[How do stale statistics hurt a query plan]]. A single extra index solves none of these; key design, covering, and access-pattern discipline do.
+> [!warning] Random UUIDv4 keys shred insert locality on a 100M-row B-tree
+> Inserts land on random pages, filling buffer pools with cold leaves and fragmenting the tree — the classic "UUID made inserts slow" incident. If UUIDs are mandated, use time-ordered variants (v7/ULID) or keep a monotonically assigned numeric surrogate as the leading key ([[How would you design a 100 million row table with fast lookup by int32]]).
 
 > [!tip] Interview answer
-> I make the int32 the clustered primary key — one B-tree descent per lookup in InnoDB — keep it monotonic for insert locality and short because secondary indexes duplicate it, and cover the hot query's payload with INCLUDE where the engine supports it. Secondary paths get few purpose-built composites, pagination rides keyset predicates, and I verify plans at full volume. Aggregation-heavy needs would push me to a columnar store instead of more B-trees.
+> I make the int32 id the clustered primary key — in SQLite INTEGER PRIMARY KEY is a rowid alias so the table itself is a B-tree on the id, and the plan shows a single primary-key search instead of a scan. Three to four levels of tree mean any of the 100 million rows is a few page reads. I would note the int32 range decision, that random UUIDv4 keys damage insert locality while v7-style ordered keys do not, and that secondary indexes on clustered tables pay a wider-key tax.
