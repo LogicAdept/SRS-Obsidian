@@ -22,6 +22,57 @@ mudball:  high Ca AND high Ce                    -> decompose
 instability I = Ce / (Ca + Ce)  (0 = maximally stable, 1 = maximally unstable)
 ```
 
+```d2
+direction: right
+core: "Domain core\nCa = 4, Ce = 0\nstability hub" {
+  width: 240
+  height: 80
+  style.fill: "#e8f5e9"
+}
+c1: "API layer" {
+  width: 130
+  height: 45
+}
+c2: "Batch jobs" {
+  width: 140
+  height: 45
+}
+c3: "Web app" {
+  width: 120
+  height: 45
+}
+c4: "CLI tools" {
+  width: 120
+  height: 45
+}
+c1 -> core: "depends on"
+c2 -> core: "depends on"
+c3 -> core: "depends on"
+c4 -> core: "depends on"
+wrap: "Vendor wrapper\nCa = 0, Ce = 3\nchurn absorber" {
+  width: 240
+  height: 80
+  style.fill: "#fff3e0"
+}
+v1: "Vendor SDK" {
+  width: 140
+  height: 45
+}
+v2: "Vendor API" {
+  width: 140
+  height: 45
+}
+v3: "Legacy SOAP" {
+  width: 150
+  height: 45
+}
+wrap -> v1: "calls"
+wrap -> v2: "calls"
+wrap -> v3: "calls"
+```
+
+**Fig. 1.** The two healthy profiles: many-in/none-out (stable hub) and none-in/many-out (integration wrapper). A module with both counts high is the decomposition target.
+
 **Listing 1.** The pair, its meanings, and the derived instability metric.
 
 ## Using them in design
