@@ -4,7 +4,7 @@ priority: 0
 -->
 #Java/Annotations #Java/Versions/8 #SRS
 
-# How do you
+# How do you create a repeatable annotation in Java
 
 > [!abstract] Short answer
 > **You declare two annotation types.** The repeatable one is meta-annotated `@Repeatable(Container.class)`. The container is another `@interface` whose `value()` returns `T[]`; any other container elements must have defaults. Java 8 (`@Repeatable` is `@since 1.8`). Repeating `@T` at one site is then legal; the compiler stores one container.

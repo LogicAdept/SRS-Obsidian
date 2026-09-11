@@ -17,7 +17,7 @@ Oracle’s Java SE 8 language-enhancements list is the catalog. **Lambdas** pack
 
 **Improved type inference:** Java 8 uses the **target type** in more places, including inferring generic method **arguments**. `stringList.addAll(Arrays.asList())` can infer `String`; Java 7 needed a type witness `Arrays.<String>asList()`.
 
-**Annotations on types** (JSR 308): an annotation may appear anywhere a type is used, for pluggable checkers. **Repeating annotations:** the same annotation type may appear more than once on one declaration or type use (`@Repeatable` plus a container) ([[How do you]]).
+**Annotations on types** (JSR 308): an annotation may appear anywhere a type is used, for pluggable checkers. **Repeating annotations:** the same annotation type may appear more than once on one declaration or type use (`@Repeatable` plus a container) ([[How do you create a repeatable annotation in Java]]).
 
 **Parameter names:** `.class` files omit them unless you compile with `-parameters`; then `Executable.getParameters` can read them. That is compiler + reflection, not a new keyword.
 

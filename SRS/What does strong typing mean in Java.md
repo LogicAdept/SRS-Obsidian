@@ -56,7 +56,7 @@ class Demo {
 
 **Listing 1.** Types pick both legality and meaning. `+` with `String` is not integer add. A subtype assignment is still strongly typed.
 
-Strong typing does **not** mean “the run-time never sees a type error.” A cast can throw `ClassCastException`. An `Object[]` alias of a `String[]` can throw `ArrayStoreException` on store. Unchecked generic operations can pollute a heap `List`. Those are still typed operations that failed a **run-time** check. `var` only infers a compile-time type; it does not loosen the limits ([[What does keyword word var]]). `instanceof` is the explicit type test ([[What is the instanceof operator for in Java]]).
+Strong typing does **not** mean “the run-time never sees a type error.” A cast can throw `ClassCastException`. An `Object[]` alias of a `String[]` can throw `ArrayStoreException` on store. Unchecked generic operations can pollute a heap `List`. Those are still typed operations that failed a **run-time** check. `var` only infers a compile-time type; it does not loosen the limits ([[What is the var keyword in Java]]). `instanceof` is the explicit type test ([[What is the instanceof operator for in Java]]).
 
 > [!warning] Strong is not the same as static, and not “no polymorphism”
 > Static = the compiler **knows** the type. Strong = the type **constrains** values and operators. `Shape x = new Circle()` is both: `x` is a `Shape` at compile time, and you may only call `Shape` members on it, while the object’s class may still be `Circle`. Do not answer “strong typing” with only “types are checked at compile time” — that sentence is **static** typing.

@@ -2,9 +2,9 @@
 reps: 0
 priority: 0
 -->
-#Java/Language #SRS
+#Java/Language #Java/Versions/10 #SRS
 
-# What does keyword word var?
+# What is the var keyword in Java
 
 > [!abstract] Short answer
 > `var` is **local-variable type inference** from **Java 10**: the compiler takes the type from a **standalone** initializer. `int i = 0` and `var i = 0` both give `i` type `int`. It is a **reserved type name**, not a keyword — existing `var` fields, methods, and packages stay legal; a class named `var` does not. Fields, method parameters, and return types still need a written type. Lambda parameters may use `var` from **Java 11**, and then **every** parameter of that lambda must.

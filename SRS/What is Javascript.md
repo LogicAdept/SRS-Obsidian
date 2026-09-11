@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Networking/Web #SRS #New
+#ProgrammingLanguages/JavaScript #SRS #New
 
 > [!warning] Черновик без доверия
 > Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.

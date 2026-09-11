@@ -4,7 +4,7 @@ priority: 0
 -->
 #Java/Collections/Map/HashMap #Java/HashCodeEquals #Java/Versions/8 #SRS
 
-# How many steps does `HashMap.get` take when the key is present?
+# How many comparisons does a HashMap lookup make
 
 > [!abstract] Short answer
 > **There is no fixed “1 or 4 hops.”** `get` hashes, picks a bucket, then walks that bin until a matching node. If the key is the **first** node, that is one comparison and you return. Collisions add `next` hops; a tree bin is logarithmic. Expected time is constant if hashes spread. `getForNullKey()` is a **Java 7** helper, not today’s `get`.

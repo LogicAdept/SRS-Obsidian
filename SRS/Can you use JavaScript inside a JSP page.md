@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JSP #Networking/Web/HTML #SRS
+#Java/JSP #DataFormats/Documents/HTML #SRS
 
 # Can you use JavaScript inside a JSP page?
 
