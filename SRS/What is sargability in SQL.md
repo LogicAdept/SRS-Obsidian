@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is sargability in SQL?
+
 > [!abstract] Short answer
 > A predicate is **sargable** (Search ARGument-able) when the engine can apply it directly to an index search: comparisons of a bare indexed column against a constant or parameter (`col = ?`, `col > ?`, `col LIKE 'abc%'`). Wrapping the column in a function or expression (`UPPER(col) = ?`, `col + 1 = ?`) makes it non-sargable — the index is unusable and the plan degrades to a full scan ([[Why does a function on a column prevent index use]]).
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# Can the same primary key value appear in two rows of one table?
+
 > [!abstract] Short answer
 > **No.** The primary key is the table's identity: by definition its value is unique across all rows at every moment, and the engine enforces it — a duplicate PK insert fails with a unique-violation error. Every index-backed implementation (B-tree on the PK) makes the check exact and immediate ([[What is the difference between PRIMARY KEY and UNIQUE]]).
 

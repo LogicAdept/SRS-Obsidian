@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between SQL char and varchar types?
+
 > [!abstract] Short answer
 > **CHAR(n)** is fixed-length: values are space-padded to n on storage (PostgreSQL `bpchar`) and the padding is ignored in most comparisons. **VARCHAR(n)** is variable-length with an optional maximum; the industry default for text. SQLite implements both as the same TEXT storage class — no padding, no truncation — making the distinction purely a *declared* behavior elsewhere ([[What does NULL mean in SQL]]).
 

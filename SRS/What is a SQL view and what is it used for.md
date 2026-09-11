@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is a SQL view and what is it used for?
+
 > [!abstract] Short answer
 > A **view** is a stored named query: `CREATE VIEW cheap AS SELECT ...` — no data is stored, and every reference executes the defining query against *current* data. Uses: security (expose a column subset), convenience (name a complex join once), encapsulation (change physical schema behind a stable interface), and compatibility shims during migrations ([[How would you explain VIEW vs MATERIALIZED VIEW]]).
 

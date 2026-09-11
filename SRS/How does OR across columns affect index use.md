@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How does OR across columns affect index use?
+
 > [!abstract] Short answer
 > `WHERE a = 1 OR b = 2` cannot be served by *one* B-tree — each disjunct needs its own access path. Three resolutions exist: the engine combines **multiple indexes** (SQLite: `MULTI-INDEX OR`; PostgreSQL: bitmap OR over two `Bitmap Index Scans`), it rewrites same-column OR to `IN`, or — when no indexes apply — it scans. OR across columns is not a sargability killer; it is a plan-complexity tax ([[What is a bitmap index scan in SQL plans]]).
 

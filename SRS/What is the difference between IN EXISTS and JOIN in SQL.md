@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between IN EXISTS and JOIN in SQL?
+
 > [!abstract] Short answer
 > All three answer "which left rows relate to some (or no) right rows" but differ in mechanics: `IN` is a set-membership test against a materialized list; `EXISTS` is a correlated existence check that stops at the first match; `JOIN` produces one row per match and needs `DISTINCT` to recover left multiplicity. For positive membership they are usually interchangeable; for negation only `NOT EXISTS` is NULL-safe ([[Why is NOT IN dangerous with NULL]]).
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between GROUP BY and DISTINCT?
+
 > [!abstract] Short answer
 > Both `GROUP BY` and `DISTINCT` collapse duplicate rows, and on the same column list they return the same set of rows. The difference is purpose: **DISTINCT only dedups**; **GROUP BY partitions** and therefore enables per-group aggregates. `GROUP BY x` plus a bare `SELECT x` is a verbose DISTINCT; `SELECT DISTINCT x, COUNT(*)` is a syntax error.
 

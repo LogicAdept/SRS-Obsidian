@@ -82,9 +82,3 @@ For a **variable-length `IN` list**, add one placeholder **per** element (or a v
 > [!tip] Interview answer
 > Use a prepared statement and bind every value — never concatenate. JDBC itself is positional `?` with 1-based setters, which gets messy with many parameters. Prefer named parameters: Spring `:name` with `NamedParameterJdbcTemplate` or `JdbcClient`, JPA/Hibernate `:name` with `setParameter`, and named setters on `CallableStatement` for procedures. For optional filters, compose the query in code and still bind.
 
-## See also
-
-- [[How does PreparedStatement mitigate SQL injection compared to Statement]]
-- [[What is NamedParameterJdbcTemplate]]
-- [[How do you use NamedParameterJdbcTemplate with SqlParameterSource]]
-- [[What is the JPA Criteria API]]

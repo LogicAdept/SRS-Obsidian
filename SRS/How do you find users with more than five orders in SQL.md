@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you find users with more than five orders in SQL?
+
 > [!abstract] Short answer
 > The canonical shape: `SELECT key, COUNT(*) FROM orders GROUP BY key HAVING COUNT(*) > 5`. GROUP BY collapses orders per customer; HAVING keeps only groups whose row count exceeds five. Add `WHERE customer_id IS NOT NULL` (exclude orphans), a JOIN for names, and ORDER BY for a ranked report — the task is a one-paragraph tour of the whole aggregate pipeline ([[What is the difference between SQL WHERE and HAVING clauses]]).
 

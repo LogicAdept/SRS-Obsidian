@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain the SQL UNION operator?
+
 > [!abstract] Short answer
 > `UNION` combines the result sets of two queries into one: `query1 UNION query2` returns every row that appears in **at least one** operand, with duplicates removed. `UNION ALL` keeps duplicates. Both operands must produce the **same number of columns with compatible types**; column names come from the first query.
 

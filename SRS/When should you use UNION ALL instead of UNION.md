@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# When should you use UNION ALL instead of UNION?
+
 > [!abstract] Short answer
 > Prefer `UNION ALL` whenever duplicate removal is **not required** (or duplicates are impossible): it skips the sort-or-hash dedup stage that `UNION` runs over the whole combined result. Use plain `UNION` only when the answer's correctness depends on distinctness — counting distinct values, merging overlapping sources, or de-duplicating rows that legitimately collide. PostgreSQL's reference says it directly: "UNION ALL is usually significantly quicker than UNION; use ALL when you can."
 

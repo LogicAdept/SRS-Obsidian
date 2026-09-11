@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the N plus 1 problem in SQL?
+
 > [!abstract] Short answer
 > The **N+1 problem** is an application-side pattern: one query fetches a list of N entities, then the code issues one additional query *per entity* to load its related data — N+1 round trips where one joined or batched query would do. It is the client-side twin of a correlated subquery: correct results, cost proportional to N.
 

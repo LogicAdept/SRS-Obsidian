@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What kinds of SQL JOIN exist?
+
 > [!abstract] Short answer
 > SQL defines five join kinds: **INNER** (matching pairs only), **LEFT/RIGHT/FULL OUTER** (additionally keep unmatched rows of the named side padded with NULLs), and **CROSS** (cartesian product, no condition). `JOIN` alone means `INNER JOIN`. Comma-joins (`FROM a, b WHERE ...`) predate the `JOIN` keyword and are equivalent to an inner join with the condition in `WHERE`.
 

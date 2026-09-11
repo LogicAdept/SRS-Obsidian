@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you systematically diagnose a slow SQL query?
+
 > [!abstract] Short answer
 > The systematic loop: (1) **reproduce with numbers** — identify the statement and its frequency (top-by-time, not one-off latency); (2) **read the plan** — EXPLAIN for the shape, ANALYZE for actual rows/loops; (3) **name the dominant node** — the one doing the most work; (4) **test the hypothesis** — index, rewrite, or statistics fix; (5) **verify by plan and by measurement**, then re-check after data growth. The discipline is evidence-first: no change before the plan names the cause ([[How do you identify slow or non-performant SQL queries]]).
 

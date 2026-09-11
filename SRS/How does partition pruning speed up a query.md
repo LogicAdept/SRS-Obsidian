@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How does partition pruning speed up a query?
+
 > [!abstract] Short answer
 > **Partition pruning** lets the engine skip entire partitions of a partitioned table when the query's predicates prove they cannot contain matching rows: `WHERE created_at BETWEEN '2024-01-01' AND '2024-01-31'` on a monthly-partitioned table touches one partition instead of all of them. PostgreSQL documents it as a core feature of declarative partitioning, enabled by `enable_partition_pruning` (on by default).
 

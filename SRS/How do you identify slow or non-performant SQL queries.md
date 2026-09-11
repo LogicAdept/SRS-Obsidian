@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you identify slow or non-performant SQL queries?
+
 > [!abstract] Short answer
 > A layering of signals, from cheap to deep: (1) **symptoms** — latency metrics, top-N by time (pg_stat_statements, slow query log); (2) **plans** — EXPLAIN for the shape, EXPLAIN ANALYZE for actual rows and loops; (3) **counts** — row counts fetched versus returned, sort nodes, scans; (4) **runtime** — I/O, waits, lock contention. The query that "is slow" is the one whose dominant plan node does work no one asked for ([[What is a query plan in a relational database]]).
 

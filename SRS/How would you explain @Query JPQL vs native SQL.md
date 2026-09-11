@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain @Query JPQL vs native SQL?
+
 > [!abstract] Short answer
 > Spring Data JPA's `@Query` accepts two dialects: **JPQL** (default) — a database-independent object-query language over *entities and their fields*, translated by Hibernate into SQL at startup; and **native SQL** (`nativeQuery = true`) — literal SQL sent to the database as written. JPQL buys portability, entity-graph awareness and rename safety; native buys engine features (window functions, hints, CTEs, dialect-specific types) at the price of portability and mapping control ([[What is the difference between Nested Loop Hash Join and Merge Join]]).
 

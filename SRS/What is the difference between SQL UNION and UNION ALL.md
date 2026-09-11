@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between SQL UNION and UNION ALL?
+
 > [!abstract] Short answer
 > `UNION` combines the rows of two queries and **removes duplicates**; `UNION ALL` keeps everything. Same column count and compatible types are required for both, names come from the first query, and `ORDER BY` applies to the combined result only after the last operand. When duplicates are impossible or unwanted, `UNION ALL` is strictly cheaper — no dedup pass.
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# Can a column referenced by a foreign key be NULL?
+
 > [!abstract] Short answer
 > **Yes** — a foreign key column can be NULL in every mainstream engine. A NULL FK means "no related row" (the relationship is optional), not "invalid reference": the FK constraint only checks *non-NULL* values against the referenced table. `ON DELETE SET NULL` even produces NULL FKs deliberately when the referenced row is deleted ([[What integrity constraints exist in SQL]]).
 

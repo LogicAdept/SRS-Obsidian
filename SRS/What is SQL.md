@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is SQL?
+
 > [!abstract] Short answer
 > SQL (Structured Query Language) is the standard language for defining, querying, and manipulating data in a relational database. It is **declarative**: you state *what* rows you want, and the database engine decides *how* to produce them. Statements fall into named groups — DDL (schema: `CREATE`, `ALTER`, `DROP`), DML (data: `SELECT`, `INSERT`, `UPDATE`, `DELETE`), DCL (rights: `GRANT`, `REVOKE`), and TCL (transactions: `COMMIT`, `ROLLBACK`, `SAVEPOINT`).
 

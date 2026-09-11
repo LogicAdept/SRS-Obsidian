@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain limitations of the SQL UNION operator?
+
 > [!abstract] Short answer
 > `UNION`'s limitations follow from its definition: both operands must have the **same number of columns** with **compatible types** (matched by position, not by name); result column names come from the **first** operand; `ORDER BY`/`LIMIT` are legal only **after the last operand** — individual operands cannot sort or page their own output; dedup is a full **sort-or-hash over the combined set**, so a plain `UNION` is expensive at scale; and row-locking clauses (`FOR UPDATE`) cannot be attached to a compound result.
 

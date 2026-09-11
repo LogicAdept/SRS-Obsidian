@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you GROUP BY value NULL?
+
 > [!abstract] Short answer
 > The standard toolkit for a NULL grouping key: **surface it explicitly** with `COALESCE`/`ISNULL` labels (`COALESCE(city, 'unknown')`), **exclude it** with `WHERE key IS NOT NULL` when the NULL bucket is not a business category, or **keep it NULL** when the report must distinguish "no value" from any real value. `NVL`/`IFNULL` are engine aliases of the same idea.
 

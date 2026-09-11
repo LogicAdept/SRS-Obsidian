@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What SQL clauses usually accompany aggregate queries?
+
 > [!abstract] Short answer
 > Aggregate queries are assembled from a standard clause set: `WHERE` (row filter, before grouping), `GROUP BY` (the keys), `HAVING` (group filter on aggregates), aggregate functions in the SELECT list, `ORDER BY` (may sort by aggregates), plus optional refinements — `DISTINCT` inside aggregates, `FILTER (WHERE ...)` for conditional aggregation, and grouping sets/`ROLLUP` where supported ([[What is the logical order of SQL SELECT execution]]).
 

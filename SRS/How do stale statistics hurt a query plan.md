@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do stale statistics hurt a query plan?
+
 > [!abstract] Short answer
 > The planner is only as good as its **statistics**: row counts, distinct-value counts, and value distributions per column. When they are stale (after bulk loads, mass deletes, or skewed updates), the planner estimates wrong row counts, picks the wrong join order or access path, and queries degrade from milliseconds to seconds with *no query change at all*. PostgreSQL: `ANALYZE` (manual or autovacuum) refreshes them; SQLite: `ANALYZE` populates `sqlite_stat1` ([[How do you systematically diagnose a slow SQL query]]).
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain the SQL ORDER BY clause?
+
 > [!abstract] Short answer
 > `ORDER BY` sorts the result rows by one or more keys, each ASC (default) or DESC, and accepts expressions and collations. Two mechanics matter beyond syntax: **NULL placement** is engine-defined (SQLite: NULLs first ascending; PostgreSQL: NULLs last ascending, overridable with NULLS FIRST/LAST), and the sort is a *plan node* that disappears when an index already supplies the key order ([[What is filesort or an external merge in a plan]], [[How do you avoid a sort with an index]]).
 

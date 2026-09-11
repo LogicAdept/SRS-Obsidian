@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How do you alter a table in a relational database?
+
 > [!abstract] Short answer
 > `ALTER TABLE` redefines a live table: add/drop/rename columns, change types and defaults, add or drop constraints. SQLite supports `RENAME COLUMN` (3.25+), `ADD COLUMN` (restricted: with DEFAULT, or CHECK; no primary-key additions), `DROP COLUMN` (3.35+), and `RENAME TO`; anything deeper follows its documented 12-step rebuild recipe. PostgreSQL ALTER handles all of the above plus type changes with `USING` conversion expressions ([[How do you add constraints to a database]]).
 

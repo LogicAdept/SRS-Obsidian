@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# How would you explain PIVOT and UNPIVOT in Transact-SQL?
+
 > [!abstract] Short answer
 > **PIVOT** rotates rows into columns: distinct values of a pivot column (months) become column headers, with an aggregate per cell (`SUM(amt)`). **UNPIVOT** is the inverse — columns back into (key, value) rows. T-SQL has the keywords `PIVOT`/`UNPIVOT`; everywhere else the operations are spelled with conditional aggregation (`SUM(CASE WHEN ... END)`) and `UNION ALL` — which is also the standard comparison point, since CASE-pivoting is portable to every engine ([[What are the main SQL aggregate functions]]).
 

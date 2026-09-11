@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is a bitmap index scan in SQL plans?
+
 > [!abstract] Short answer
 > A **bitmap index scan** (PostgreSQL) combines the cheap seeking of indexes with the sequential read pattern of a table scan: each qualifying index produces a **bitmap of row locations**, bitmaps are ANDed/ORed for combined predicates, then the heap is visited **in physical order**, one row at a time with a recheck of the condition. EXPLAIN shows it as `Bitmap Index Scan` feeding a `Bitmap Heap Scan`.
 

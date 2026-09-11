@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What do INTERSECT and EXCEPT do in Transact-SQL?
+
 > [!abstract] Short answer
 > `INTERSECT` and `EXCEPT` are the other two set operators next to `UNION`: `query1 INTERSECT query2` returns rows output by **both** queries; `query1 EXCEPT query2` returns rows from the **left** query that the right query does not output. Both return **distinct** rows (`INTERSECT ALL`/`EXCEPT ALL` exist in some engines for keeping duplicates), both require the same column count with compatible types, and both take `ORDER BY` only after the last operand.
 

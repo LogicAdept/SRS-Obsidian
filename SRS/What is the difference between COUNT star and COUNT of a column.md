@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What is the difference between COUNT star and COUNT of a column?
+
 > [!abstract] Short answer
 > `COUNT(*)` counts **rows**; `COUNT(col)` counts rows where `col` is **not NULL**; `COUNT(DISTINCT col)` counts distinct non-NULL values. Semantically they answer different questions ("how many orders" versus "how many orders have a city"); performance-wise COUNT(*) is the cheapest row-count and the one engines optimize specially ([[What are the main SQL aggregate functions]]).
 

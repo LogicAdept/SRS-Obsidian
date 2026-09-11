@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# When should you use Elasticsearch instead of SQL search?
+
 > [!abstract] Short answer
 > Reach for Elasticsearch (or similar search engines) when the requirements leave SQL's search model: *relevance-ranked* results, *fuzzy* matching (typos, edit distance), *analytical aggregations* over text (facets, histograms), horizontal scaling of search-specific load, and rich text analysis (stemming, synonyms, custom analyzers). Stay in SQL when the query is exact, structured, transactional, or small — B-tree seeks, FTS, and trigram indexes cover a vast middle ground natively ([[How does a trigram index help SQL search]], [[When should you use full-text search instead of LIKE]]).
 

@@ -4,6 +4,8 @@ priority: 0
 -->
 #Databases/SQL #SRS
 
+# What integrity constraints exist in SQL?
+
 > [!abstract] Short answer
 > SQL's integrity constraints: **NOT NULL** (value required), **UNIQUE** (no duplicate non-NULL values), **PRIMARY KEY** (UNIQUE + NOT NULL, one per table — the row's identity), **FOREIGN KEY** (value must exist in the referenced table), **CHECK** (arbitrary boolean per row), **DEFAULT** (value when none supplied). Constraints live in the schema and the engine enforces them on every write — the database rejects bad data even when every application forgot to validate ([[What is the difference between PRIMARY KEY and UNIQUE]], [[Can a column referenced by a foreign key be NULL]]).
 
