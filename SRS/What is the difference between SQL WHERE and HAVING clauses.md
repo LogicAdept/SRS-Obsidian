@@ -18,3 +18,8 @@ WHERE фильтрует строки ДО группировки. HAVING — п
 **WHERE vs HAVING performance?**
 
 WHERE before group — uses indexes, drops rows early. HAVING after aggregate. Don't put non-aggregate filters in HAVING. SELECT alias: WHERE no, ORDER BY yes.
+
+**В чем различие между операторами `HAVING` и `WHERE`?**
+`HAVING` используется как `WHERE`, но в другой части SQL-выражения и, соответственно, на другой стадии формирования ответа.
+
+WHERE — до группировки, работает с индексами. HAVING — после GROUP BY, для агрегатов. Пример: HAVING COUNT(*) > 5. Ошибка: ставить в HAVING то, что можно в WHERE — медленнее.

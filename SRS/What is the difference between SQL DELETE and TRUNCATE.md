@@ -22,3 +22,6 @@ DELETE — построчное удаление с триггерами и WAL,
 **DELETE vs TRUNCATE in Postgres?**
 
 DELETE: row WAL, triggers, WHERE, MVCC dead tuples. TRUNCATE: DDL, exclusive, resets identity, FK CASCADE needed. DROP removes the table.
+
+`DELETE` - оператор DML, удаляет записи из таблицы, которые удовлетворяют критерию `WHERE` при этом задействуются триггеры, ограничения и т.д.
+`TRUNCATE` - DDL оператор (удаляет таблицу и создает ее заново. Причем если на эту таблицу есть ссылки `FOREGIN KEY` или таблица используется в репликации, то пересоздать такую таблицу не получится).

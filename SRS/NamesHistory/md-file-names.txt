@@ -84,7 +84,6 @@
 - [x] Can the main thread be turned into a daemon thread.md
 - [x] Can the same primary key value appear in two rows of one table.md
 - [x] Can thread priority reliably control execution order in Java.md
-- [x] Can value in on which FOREIGN KEY NULL.md
 - [x] Can you catch and handle java.lang.Error like normal exceptions.md
 - [x] Can you catch Throwable.md
 - [x] Can you create a custom exception that extends RuntimeException.md
@@ -287,7 +286,7 @@
 - [x] How do you establish a database connection in Java.md
 - [x] How do you evaluate an LLM.md
 - [x] How do you exclude fields from Java serialization.md
-- [x] How do you EXPLAIN ANALYZE.md
+- [x] How do you use EXPLAIN ANALYZE in SQL.md
 - [x] How do you explain legacy code to a non-technical stakeholder.md
 - [x] How do you expose Spring Boot Actuator endpoints safely.md
 - [x] How do you find bugs in a program and avoid mistakes.md
@@ -726,7 +725,6 @@
 - [x] How would you explain Executors.md
 - [x] How would you explain Executors.newCachedThreadPool().md
 - [x] How would you explain exists problems race condition.md
-- [x] How would you explain EXPLAIN ANALYZE.md
 - [x] How would you explain extends Queue extends Deque or Deque extends Queue.md
 - [x] How would you explain fetch and add FAA in concurrent programming.md
 - [x] How would you explain first normal form in relational databases.md
@@ -738,10 +736,7 @@
 - [x] How would you explain for what intended head.md
 - [x] How would you explain for what intended ol ul li.md
 - [x] How would you explain for what intended tr th td.md
-- [x] How would you explain for what keyword word UNION.md
 - [x] How would you explain for what needed functional interface SupplierT BooleanSupplier DoubleSupplier IntSupplie.md
-- [x] How would you explain for what used operators IN BETWEEN LIKE.md
-- [x] How would you explain for which number types use operation.md
 - [x] How would you explain foreign keys in relational databases.md
 - [x] How would you explain Frames.md
 - [x] How would you explain from which log4j.md
@@ -842,7 +837,6 @@
 - [x] How would you explain Liquibase vs Flyway.md
 - [x] How would you explain list levels in log4j name order their.md
 - [x] How would you explain list main class and interface JDBC.md
-- [x] How would you explain list main function.md
 - [x] How would you explain list main kinds selector.md
 - [x] How would you explain list principles you should you in much programming.md
 - [x] How would you explain literal syntax for values in Java.md
@@ -961,7 +955,6 @@
 - [x] How would you explain Spring Web modules for HTTP services.md
 - [x] How would you explain SQL IN BETWEEN and LIKE predicates.md
 - [x] How would you explain SQL injection attacks and defenses.md
-- [x] How would you explain SQL.md
 - [x] How would you explain Stack how why.md
 - [x] How would you explain StackOverflowError in Java.md
 - [x] How would you explain StackOverflowError OutOfMemoryError.md
@@ -1111,7 +1104,6 @@
 - [x] How would you explain try-catch-finally.md
 - [x] How would you explain tuning garbage collector settings on the JVM.md
 - [x] How would you explain type erasure for Java generics.md
-- [x] How would you explain types data DATETIME and TIMESTAMP.md
 - [x] How would you explain types design patterns.md
 - [x] How would you explain types of test doubles such as mocks and stubs.md
 - [x] How would you explain UI frames in desktop Java or legacy web framesets.md
@@ -1126,7 +1118,7 @@
 - [x] How would you explain Virtual Threads.md
 - [x] How would you explain VO.md
 - [x] How would you explain VRRP.md
-- [x] How would you explain vs JOIN vs CTE.md
+- [x] When should you use a subquery JOIN or CTE in SQL.md
 - [x] How would you explain vs.md
 - [x] How would you explain wait, sleep.md
 - [x] How would you explain what a database management system provides.md
@@ -1136,8 +1128,6 @@
 - [x] How would you explain what allows do PriorityQueue.md
 - [x] How would you explain what an inversion of control container is.md
 - [x] How would you explain what counts as garbage from the JVM perspective.md
-- [x] How would you explain what does operator EXISTS.md
-- [x] How would you explain what does operator MERGE.md
 - [x] How would you explain what happens if in block initialization occurs exceptional situation.md
 - [x] How would you explain what happens when in thread is thrown exception.md
 - [x] How would you explain what has-a higher higher level - class abstract class or interface.md
@@ -1150,7 +1140,6 @@
 - [x] How would you explain what you do you know about function main.md
 - [x] How would you explain what you do you know about servlet filter.md
 - [x] How would you explain when thenReturn vs doReturn when.md
-- [x] How would you explain WHERE vs HAVING.md
 - [x] How would you explain which count in HashMap.md
 - [x] How would you explain which design pattern ideas appear in StringBuilder and StringBuffer.md
 - [x] How would you explain which fields should be included when implementing hashCode in Java.md
@@ -1166,7 +1155,7 @@
 - [x] How would you explain write minimum non-blocking stack two method — push and pop.md
 - [x] How would you explain write much with using ReentrantLock.md
 - [x] How would you explain write much with using synchronized.md
-- [x] How would you explain write query.md
+- [x] How do you write SQL queries for classic practice tasks.md
 - [x] How would you explain write thread class with non-blocking method BigInteger next which elements sequence 1 2.md
 - [x] How would you explain XML DTD.md
 - [x] How would you explain XML namespaces and qualified names.md
@@ -1396,7 +1385,6 @@
 - [x] What does keyword word throws.md
 - [x] What does keyword word var.md
 - [x] What does Maven provide during a typical Java build.md
-- [x] What does NULL in SQL.md
 - [x] What does NULL mean in SQL.md
 - [x] What does pass by value mean for Java parameters.md
 - [x] What does RESTful mean compared with REST.md
@@ -1705,7 +1693,6 @@
 - [x] What is FINAL in ClickHouse.md
 - [x] What is finalize why it needed.md
 - [x] What is Fleury's algorithm.md
-- [x] What is for what used.md
 - [x] What is foreign key cascading in a relational database.md
 - [x] What is foreign key foreign key.md
 - [x] What is Fork Join.md
@@ -1770,7 +1757,6 @@
 - [x] What is JDBC.md
 - [x] What is jjs.md
 - [x] What is JOIN FETCH and EntityGraph in Spring Data JPA.md
-- [x] What is JOIN.md
 - [x] What is JSON.md
 - [x] What is just-in-time compilation on the JVM.md
 - [x] What is JVM.md
@@ -1836,10 +1822,6 @@
 - [x] What is one-hot encoding versus embeddings.md
 - [x] What is OOP.md
 - [x] What is Open Session In View in Spring.md
-- [x] What is operator GROUP BY.md
-- [x] What is operator HAVING.md
-- [x] What is operator ORDER BY.md
-- [x] What is operator SELECT.md
 - [x] What is Optional.md
 - [x] What is order call constructor and blocks initialization with considering hierarchy classes.md
 - [x] What is ordering as-if-serial semantics sequential consistency visibility atomicity happens-before mutual excl.md
@@ -2093,7 +2075,7 @@
 - [x] What is the difference between HTTP GET and POST.md
 - [x] What is the difference between HTTP request methods.md
 - [x] What is the difference between IDisposable and a finalizer.md
-- [x] What is the difference between IN EXISTS and JOIN for membership.md
+- [x] What is the difference between IN EXISTS and JOIN in SQL.md
 - [x] What is the difference between inheritance and polymorphism.md
 - [x] What is the difference between interrupted and isInterrupted in Java.md
 - [x] What is the difference between inversion of control and a service locator.md
@@ -2132,9 +2114,6 @@
 - [x] What is the difference between Nested Loop Hash Join and Merge Join.md
 - [x] What is the difference between notify and notifyAll.md
 - [x] What is the difference between object oriented and functional programming styles.md
-- [x] What is the difference between operator DELETE and TRUNCATE.md
-- [x] What is the difference between operator GROUP BY and DISTINCT.md
-- [x] What is the difference between operator HAVING and WHERE.md
 - [x] What is the difference between optimistic and pessimistic locking in Hibernate.md
 - [x] What is the difference between optimistic and pessimistic locking in JPA.md
 - [x] What is the difference between pattern matching and a switch statement.md
@@ -2408,7 +2387,6 @@
 - [x] What is transaction propagation in Spring Data.md
 - [x] What is transaction.md
 - [x] What is transfer learning.md
-- [x] What is trigger.md
 - [x] What is try-with-resources.md
 - [x] What is TTL in ClickHouse.md
 - [x] What is ubiquitous language and why does it matter.md
@@ -2422,7 +2400,6 @@
 - [x] What is untitled placeholder note (1).md
 - [x] What is untitled placeholder note.md
 - [x] What is URL encoding and how do you perform it in Java.md
-- [x] What is view view and for what.md
 - [x] What is virtual memory.md
 - [x] What is W3C.md
 - [x] What is WeakHashMap used for.md
@@ -2639,7 +2616,7 @@
 - [x] Which dependency injection styles do you know.md
 - [x] Which devices will I be provided to work with.md
 - [x] Which difference between String StringBuffer StringBuilder.md
-- [x] Which differences between PRIMARY and UNIQUE.md
+- [x] What is the difference between PRIMARY KEY and UNIQUE.md
 - [x] Which differences between synchronized and ReentrantLock.md
 - [x] Which embedded containers are supported by Spring Boot.md
 - [x] Which exception is thrown when static class initialization fails.md
@@ -2694,7 +2671,7 @@
 - [x] Which methods XML describe and method.md
 - [x] Which modifiers.md
 - [x] Which new Map methods were added in Java 8.md
-- [x] Which on data exist in SQL.md
+- [x] What integrity constraints exist in SQL.md
 - [x] Which OOP principle does method overriding illustrate.md
 - [x] Which operator allows throw exception.md
 - [x] Which parts of a system would you move into aspects.md
@@ -2735,7 +2712,6 @@
 - [x] Which types exist in XSD.md
 - [x] Which types in data give examples.md
 - [x] Which types index exist.md
-- [x] Which types JOIN.md
 - [x] Which types.md
 - [x] Which university did you attend.md
 - [x] Which variables can a Java lambda expression capture.md

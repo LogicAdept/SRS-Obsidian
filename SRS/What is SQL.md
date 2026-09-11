@@ -10,3 +10,8 @@ priority: 0
 **Что такое _«SQL»_?**
 
 SQL, Structured query language («язык структурированных запросов») — формальный непроцедурный язык программирования, применяемый для создания, модификации и управления данными в произвольной реляционной базе данных, управляемой соответствующей системой управления базами данных (СУБД).
+
+**Какие группы команд SQL ты знаешь?**
+DML (Data Manipulation Language) — работа с данными: SELECT, INSERT, UPDATE, DELETE. DDL (Data Definition Language) — структура: CREATE, ALTER, DROP. DCL (Data Control Language) — права: GRANT, REVOKE. TCL (Transaction Control Language) — управление транзакциями: COMMIT, ROLLBACK, SAVEPOINT.
+**SQL on Postgres specifically?**
+Declarative; planner picks scans/joins. Postgres extras: DISTINCT ON, RETURNING, JSONB, arrays, LISTEN, extensions. Cost of MVCC still applies.
