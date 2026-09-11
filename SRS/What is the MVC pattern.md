@@ -2,173 +2,50 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/UI #SRS #New
+#Patterns/Architecture/UI #SRS
 
 # What is the MVC pattern
 
-**MVC (Model–View–Controller)** is a design pattern that splits an app into three parts: **Model**, **View**, and **Controller**. That gives **separation of concerns**: business logic and data are separate from presentation and from the code that ties user input to state changes. That makes maintenance, parallel work, and testing easier; other patterns build on MVC — [[What is the MVP pattern]], [[What is the MVVM pattern]], [[What is the MVW pattern]].
+> [!abstract] Short answer
+> MVC — Model-View-Controller — is the original GUI architecture from Smalltalk: the Model holds state and business logic and notifies observers of changes; the View renders the model and forwards user input; the Controller interprets input and updates the model. Its enduring value is the separation of concerns it imposes; its many modern descendants (MVP, MVVM, web MVC) differ mainly in who updates the view and how input reaches the model.
 
-## The three parts
+## The roles and the information flow
 
-| Part           | Role                                                                                                                                                                                                                                         |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Model**      | App data and business logic: rules, validation, persistence. In the classic story it **does not depend on the UI**. When state changes, the model often **notifies** the view (and sometimes the controller) so the UI can refresh.       |
-| **View**       | **Layout and presentation**: how data is shown to the user. It gets data to render (from the model or via the controller). In many stacks the view is **passive**: it does not talk to the model directly; it forwards input to the controller. |
-| **Controller** | **Mediator** between model and view: handles input (clicks, forms), updates the model when needed, **routes** commands to the model and view. May hold input validation and data shaping.                                                  |
-
-## Diagram: roles and links
+Model: domain state plus the rules that govern it, deliberately UI-agnostic; in the classic Smalltalk form it is an observable — views subscribe to change notifications and re-read state on update. View: the presentation; it renders model state and captures user events. Controller: the input interpreter — it receives events from the view, translates them into model operations, and decides whether the view re-reads the model or the model's notification drives the refresh. Fowler's GUI-architectures analysis is precise on the dividing line: MVC splits **display from domain** (view never contains business rules) and splits input handling from both — the exact responsibilities that rot fastest when mixed.
 
 ```d2
 direction: right
-
-user: "User" {
-  width: 240
-  height: 130
-  style.fill: "#eceff1"
-}
-
-view: "View" {
-  width: 240
-  height: 130
-  style.fill: "#e3f2fd"
-}
-
-controller: "Controller" {
-  width: 240
-  height: 130
-  style.fill: "#fff3e0"
-}
-
-model: "Model" {
-  width: 240
-  height: 130
-  style.fill: "#e8f5e9"
-}
-
-user -> view
-view -> controller: input
-controller -> model: data
-controller -> view: refresh
-model -> view: notify
+user: "User input" {style.fill: "#eceff1"}
+v: "View
+renders, captures input" {style.fill: "#e3f2fd"}
+c: "Controller
+interprets input" {style.fill: "#fff3e0"}
+m: "Model
+state + rules, notifies" {style.fill: "#e8f5e9"}
+user -> v
+v -> c: events
+c -> m: update
+m -> v: change notification
 ```
 
-**Fig. 1.** Roles and main flows: input through View and Controller to Model; View updates from the controller and from model notifications.
+**Fig. 1.** Input flows view-to-controller-to-model; state changes flow back as model notifications that views observe.
 
-The exact “who calls whom” layout depends on the framework: sometimes the view is updated **only** through the controller; sometimes the model is **observed** by the view.
-
-## Diagram: typical interaction loop
-
-Typical flow: the user acts through the View, the Controller interprets input and changes the Model, then the UI is brought in line with the new state.
-
-```d2
-direction:down
-
-u: "1. User" {
-  shape: person
-  width: 160
-  height: 200
-  style.font-size: 24
-}
-
-v: "2. View\ncaptures input" {
-  width: 280
-  height: 100
-  style.font-size: 24
-  style.fill: "#e3f2fd"
-}
-
-c: "3. Controller\nhandles input" {
-  width: 280
-  height: 100
-  style.font-size: 24
-  style.fill: "#fff3e0"
-}
-
-m: "4. Model\nupdates" {
-  width: 280
-  height: 100
-  style.font-size: 24
-  style.fill: "#e8f5e9"
-}
-
-u -> v
-v -> c
-c -> m
-
-refresh: "5. Controller refreshes View\nor Model notifies View" {
-  width: 360
-  height: 110
-  style.font-size: 22
-  style.fill: "#f3e5f5"
-}
-
-m -> refresh: state changed
-c -> refresh: request redraw
+```java
+// MVC wiring: the view observes the model; the controller only mutates it
+CounterModel m1 = new CounterModel();
+new MvcView(m1);                 // view subscribes: on notify, re-reads value
+new MvcController(m1);           // controller: model.increment()
+// console: [MVC view] pulled value = 1
 ```
 
-**Fig. 2.** Chain from user action to Model update and View redraw.
+**Listing 1.** Verified on JDK 21 (G14_UiPatternsWiring in empirics): the controller's single `increment()` call produces the view's own `[MVC view] pulled value = 1` — the view reacted to the model notification by pulling state, and the controller never touched the view (out/G14_UiPatternsWiring.txt).
 
-## Domain examples
+## The family tree: where modern variants diverge
 
-**Web:** the model often lives in a **DB** (MySQL, etc.) or client storage (IndexedDB); control in **HTML/JavaScript**; UI in **HTML/CSS**. MVC used to be mostly **server-side** (forms, links → new HTML); now logic and data are partly on the **client**, with partial page updates via Fetch and SPA-style flows.
+The classic form has known strains: views observing models tightly couples both; complex input logic bloats controllers; testable presentation logic hides inside views. Each descendant relocates a responsibility. Web MVC (Spring MVC, Rails) reinterpreted the roles for stateless HTTP: the controller receives a request, calls domain services (the "model" broadened to application layer), and picks a view template — the observer wiring became a render step ([[What is the Front Controller pattern in Spring MVC]] is the dispatch half of that reinterpretation; [[What is the MVC pattern]]'s web form differs from Smalltalk's in exactly this). MVP moves view updates into a presenter that pushes state into a passive view interface — testability without observers ([[What is the MVP pattern]]). MVVM introduces a bindable view model so the view synchronizes by data binding ([[What is the MVVM pattern]]). MVW is the marketing shrug that its framework supports whichever you call it ([[What is the MVW pattern]]). The interview-relevant skill is not reciting the family but naming the moved responsibility per variant.
 
-**E-commerce:** Model — backend and data (products, cart, orders); View — catalog and cart pages; Controller — add to cart, checkout, payment while updating model and view.
+> [!warning] The word "MVC" is false friends between worlds
+> Smalltalk MVC, server-side web MVC and client-side component "MVC/MVVM" share vocabulary, not mechanics — a candidate who argues that a Spring controller "must not talk to the view" is importing Smalltalk rules into a stateless template world. Always qualify which MVC you mean; the pattern is a family of related contracts, not one contract.
 
-**Everyday analogy:** Model — “kitchen,” recipes, stock; View — menu and plated dish; Controller — waiter between dining room and kitchen.
-
-```d2
-direction: down
-
-customer: Customer {
-  shape: person
-  width: 160
-  height: 200
-  style.font-size: 26
-}
-
-kitchen: Model\nkitchen, recipes, stock {
-  width: 300
-  height: 130
-  style.font-size: 26
-  style.fill: "#e8f5e9"
-}
-
-plate: View\nmenu & presentation {
-  width: 300
-  height: 130
-  style.font-size: 26
-  style.fill: "#e3f2fd"
-}
-
-waiter: Controller\nwaiter {
-  width: 300
-  height: 130
-  style.font-size: 26
-  style.fill: "#fff3e0"
-}
-
-customer -> plate: reads menu
-customer -> waiter: order
-waiter -> kitchen: pass order
-kitchen -> waiter: dish ready
-waiter -> plate: serve
-```
-
-**Fig. 3.** Analogy: dining room and plating (View), waiter (Controller), kitchen (Model).
-
-## Pros and cons
-
-**Pros:** clear split of responsibilities; **parallel** work on UI vs logic; easier **unit tests** for logic without UI; scaling and reuse.
-
-**Cons:** for tiny apps — **extra complexity**; you need upfront architecture thinking; higher bar than a single monolithic script.
-
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
-
-**Что такое шаблон MVC?**
-
-__Model-View-Controller (MVC, «Модель-Представление-Контроллер», «Модель-Вид-Контроллер»)__— схема разделения данных приложения, пользовательского интерфейса и управляющей логики на три отдельных компонента: модель, представление и контроллер — таким образом, что модификация каждого компонента может осуществляться независимо.
-
-+ __Модель (Model)__ - предоставляет данные и реагирует на команды контроллера, изменяя своё состояние.
-+ __Представление (View)__ - отвечает за отображение данных модели пользователю, реагируя на изменения модели.
-+ __Контроллер (Controller)__ - интерпретирует действия пользователя, оповещая модель о необходимости изменений.
+> [!tip] Interview answer
+> MVC splits a GUI into model — state and rules, UI-agnostic and notifying observers — view, which renders and captures input, and controller, which interprets input into model updates. Its value is the display/domain separation; its descendants differ in where view updates happen: web MVC renders templates from controllers, MVP pushes into a passive view, MVVM binds through a view model. I always clarify which variant is meant — the word covers several different contracts.

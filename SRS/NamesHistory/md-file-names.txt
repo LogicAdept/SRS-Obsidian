@@ -719,7 +719,6 @@
 - [x] How would you explain errors that surface at the JVM level.md
 - [x] How would you explain Escape analysis.md
 - [x] How would you explain Euler diagrams compared with Venn diagrams.md
-- [x] How would you explain Event Sourcing.md
 - [x] How would you explain Event-driven Architecture.md
 - [x] How would you explain exception.md
 - [x] How would you explain Executors.md

@@ -17,6 +17,28 @@ Two obvious designs are both broken. Publish-then-commit: the service publishes 
 
 Write both in one transaction: `UPDATE aggregate ...; INSERT INTO outbox(event_type, payload, ...) COMMIT;` — atomic because both are rows in the same database. The relay then publishes asynchronously. Two relay styles: polling publisher — a scheduled job queries unpublished outbox rows, publishes each to the broker, marks them published (simple; adds polling latency; needs ordering care); log-based CDC — a tailer reads the database commit log (Debezium-style) and publishes each inserted outbox row as it appears (lower latency, exactly the commit order, no extra queries; more infrastructure). Guarantees and obligations: delivery to the broker is at-least-once (the relay may crash after publishing but before marking), so consumers must be idempotent or deduplicate ([[What is idempotency in HTTP and in messaging]] — usually by event id); the outbox table needs its own housekeeping (retention, cleanup) and index design; read-your-writes spans database and downstream consumers only after the relay's lag elapses ([[What is eventual consistency]]). The aggregate's own persistence stays a plain ACID transaction — [[What is the difference between atomicity and consistency]] names what the local transaction still guarantees.
 
+```d2
+direction: right
+agg: "Aggregate
+UPDATE state" {style.fill: "#e8f5e9"}
+out: "outbox row
+event_type, payload" {shape: cylinder; style.fill: "#fff3e0"}
+tx: "one local ACID transaction" {style.fill: "#fff3e0"}
+relay: "Relay
+polling publisher / CDC" {style.fill: "#e3f2fd"}
+br: "Message broker" {shape: cloud; style.fill: "#f3e5f5"}
+cons: "Consumers
+idempotent" {style.fill: "#eceff1"}
+agg -> out: same commit
+agg -> tx
+out -> tx
+tx -> relay: after commit
+relay -> br: at-least-once
+br -> cons
+```
+
+**Fig. 1.** State change and event insert share one commit; the relay bridges to the broker afterwards, which is why consumers must deduplicate.
+
 ```sql
 BEGIN;
 UPDATE orders   SET status = 'PAID'      WHERE id = 42;
