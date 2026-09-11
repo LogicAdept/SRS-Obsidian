@@ -87,7 +87,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **Servlet in the tree:** **`#Java/Servlet`** is the Jakarta Servlet API (what a servlet is, `HttpServlet` vs `GenericServlet`, request/response, URL mapping, spec versions). **Filters** is the filter chain (`Filter` / `FilterChain` / wrappers, vs MVC interceptors). **Listeners** is servlet lifecycle and attribute listeners (`ServletContextListener`, session/request listeners) — not JMS, Kafka, or Spring `@EventListener`. **Lifecycle** is `init` / `service` / `destroy`, constructor vs `init`, load-on-startup. **Container** is the servlet engine (responsibilities, vs a full Java EE / Jakarta EE server). **Sessions** is `HttpSession` and URL rewriting (`encodeURL` / `encodeRedirectURL`). **Context** is `ServletContext` / `ServletConfig` and scoped attributes. Dual-tag **`#Java/JSP`** (or a more specific **`#Java/JSP/...`** child), **`#Java/CGI`**, **`#Java/JavaEE`**, **`#Java/Security`** as they apply. There is **no `#Java/Listeners`**. Do not put **`#Java/Servlet`** next to a more specific **`#Java/Servlet/...`** child on the same card.
 
-**JSP in the tree:** **`#Java/JSP`** is Jakarta Pages (what a JSP is, translation to a servlet, vs CGI, JSP–servlet–JSP, `jsp-config` / `<jsp-file>`, error pages, `session="false"`, `JspWriter` vs `PrintWriter`, HTML/JS on a page, author guidelines, catalogs of element kinds). **EL** is the JSP Expression Language (`${}` / `#{}`, operators, `isELIgnored` / `el-ignored`, EL implicit maps vs servlet objects). **ImplicitObjects** is scripting implicits (`request`, `out`, `exception` / `isErrorPage`) and `PageContext` / the four JSP scopes. **JSTL** is the JSP Standard Tag Library (the five libraries, `c:set` vs `useBean`, `c:import` vs include, `c:catch`). **Scripting** is scriptlets / declarations / expressions and `scripting-invalid`. **Tags** is standard `jsp:` actions, custom tags, tag files, TLDs, and `taglib` — not JSTL as a library. Dual-tag **`#Java/Servlet`** / **`#Java/Servlet/Lifecycle`** / **`#Java/Servlet/Sessions`**, **`#Java/Language/NestedClasses`**, **`#Networking/Web/HTML`**, **`#Security/AppSec`** as they apply. JSTL vs `jsp:` comparison cards carry **JSTL** and **Tags**. Do not put **`#Java/JSP`** next to a more specific **`#Java/JSP/...`** child on the same card.
+**JSP in the tree:** **`#Java/JSP`** is Jakarta Pages (what a JSP is, translation to a servlet, vs CGI, JSP–servlet–JSP, `jsp-config` / `<jsp-file>`, error pages, `session="false"`, `JspWriter` vs `PrintWriter`, HTML/JS on a page, author guidelines, catalogs of element kinds). **EL** is the JSP Expression Language (`${}` / `#{}`, operators, `isELIgnored` / `el-ignored`, EL implicit maps vs servlet objects). **ImplicitObjects** is scripting implicits (`request`, `out`, `exception` / `isErrorPage`) and `PageContext` / the four JSP scopes. **JSTL** is the JSP Standard Tag Library (the five libraries, `c:set` vs `useBean`, `c:import` vs include, `c:catch`). **Scripting** is scriptlets / declarations / expressions and `scripting-invalid`. **Tags** is standard `jsp:` actions, custom tags, tag files, TLDs, and `taglib` — not JSTL as a library. Dual-tag **`#Java/Servlet`** / **`#Java/Servlet/Lifecycle`** / **`#Java/Servlet/Sessions`**, **`#Java/Language/NestedClasses`**, **`#DataFormats/Documents/HTML`**, **`#Security/AppSec`** as they apply. JSTL vs `jsp:` comparison cards carry **JSTL** and **Tags**. Do not put **`#Java/JSP`** next to a more specific **`#Java/JSP/...`** child on the same card.
 
 ---
 
@@ -409,6 +409,11 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#DataFormats/Protobuf`
 * `#DataFormats/CloudEvents`
 * `#DataFormats/Iceberg`
+* `#DataFormats/Documents`
+* `#DataFormats/Documents/HTML`
+* `#DataFormats/Documents/CSS`
+
+**Documents in the tree:** `#DataFormats/Documents/...` holds document markup and styling technologies: `#DataFormats/Documents/HTML` (document structure, the SGML application lineage — sibling of XML) and `#DataFormats/Documents/CSS` (document presentation, the style-sheet lineage of DSSSL/FOSI). Machine-oriented interchange formats stay as direct leaves (XML, JSON, Protobuf). The behavior third of the web trinity, JavaScript, is a programming language and lives in `#ProgrammingLanguages/JavaScript`.
 
 ### Security
 * `#Security`
@@ -577,8 +582,6 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Networking/DNS`
 * `#Networking/Modbus`
 * `#Networking/Web`
-* `#Networking/Web/HTML`
-* `#Networking/Web/CSS`
 * `#Networking/Web/MIME`
 * `#Networking/Web/Protocols`
 * `#Networking/Web/Protocols/HTTP`
@@ -795,6 +798,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#ProgrammingLanguages/CSharp`
 * `#ProgrammingLanguages/Python`
 * `#ProgrammingLanguages/Go`
+* `#ProgrammingLanguages/JavaScript`
 * `#ProgrammingLanguages/Compilation`
 * `#ProgrammingLanguages/Interpretation`
 * `#ProgrammingLanguages/ExecutionModel`
