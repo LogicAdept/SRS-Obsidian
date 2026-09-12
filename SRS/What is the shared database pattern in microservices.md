@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices #Databases #SRS
+#Patterns/Architecture/Microservices/ServiceCollaboration #Databases #SRS
 
 # What is the shared database pattern in microservices
 

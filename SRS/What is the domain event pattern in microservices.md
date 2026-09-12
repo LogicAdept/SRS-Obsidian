@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices/Data #Patterns/Enterprise/Integration/Messages/EventMessage #SRS
+#Patterns/Architecture/Microservices/ServiceCollaboration #Patterns/Enterprise/Integration/Messages/EventMessage #SRS
 
 # What is the domain event pattern in microservices
 

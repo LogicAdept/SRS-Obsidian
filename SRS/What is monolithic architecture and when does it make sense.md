@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Monolith #SRS
+#Patterns/Architecture/Monolith #Patterns/Architecture/Microservices/ArchitecturalStyle #SRS
 
 # What is monolithic architecture and when does it make sense
 

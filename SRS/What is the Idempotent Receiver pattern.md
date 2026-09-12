@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Messaging #Patterns/Enterprise/Integration #API/Idempotency #SRS
+#Messaging #Patterns/Enterprise/Integration #API/Idempotency #Patterns/Architecture/Microservices/CommunicationStyles #SRS
 
 # What is the Idempotent Receiver pattern?
 

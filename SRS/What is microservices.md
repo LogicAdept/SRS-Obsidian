@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices #SRS
+#Patterns/Architecture/Microservices/ArchitecturalStyle #SRS
 
 # What is microservices
 

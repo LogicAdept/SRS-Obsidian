@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/UI #SRS
+#Patterns/Architecture/UI #Patterns/Architecture/Microservices/UIComposition #SRS
 
 # How would you explain server side page fragment composition
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices #Patterns/Architecture/Monolith #SRS
+#Patterns/Architecture/Microservices/RefactoringToServices #Patterns/Architecture/Monolith #SRS
 
 # What is the strangler fig pattern and when do you use it
 

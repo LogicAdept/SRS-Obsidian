@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Messaging #Patterns/Enterprise/Integration #Databases/Transactions #SRS
+#Messaging #Patterns/Enterprise/Integration #Databases/Transactions #Patterns/Architecture/Microservices/TransactionalMessaging #SRS
 
 # How would you explain the transactional outbox pattern?
 

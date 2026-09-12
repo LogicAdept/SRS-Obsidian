@@ -658,14 +658,22 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Patterns/Architecture/SOA`
 * `#Patterns/Architecture/EventDriven`
 * `#Patterns/Architecture/Microservices`
+* `#Patterns/Architecture/Microservices/ArchitecturalStyle`
 * `#Patterns/Architecture/Microservices/ServiceBoundaries`
-* `#Patterns/Architecture/Microservices/CrossCuttingConcerns`
+* `#Patterns/Architecture/Microservices/ServiceCollaboration`
+* `#Patterns/Architecture/Microservices/TransactionalMessaging`
 * `#Patterns/Architecture/Microservices/CommunicationStyles`
 * `#Patterns/Architecture/Microservices/ExternalAPI`
 * `#Patterns/Architecture/Microservices/ServiceDiscovery`
-* `#Patterns/Architecture/Microservices/Deployment`
-* `#Patterns/Architecture/Microservices/Sidecar`
+* `#Patterns/Architecture/Microservices/Reliability`
+* `#Patterns/Architecture/Microservices/Security`
 * `#Patterns/Architecture/Microservices/Observability`
+* `#Patterns/Architecture/Microservices/Testing`
+* `#Patterns/Architecture/Microservices/Deployment`
+* `#Patterns/Architecture/Microservices/CrossCuttingConcerns`
+* `#Patterns/Architecture/Microservices/RefactoringToServices`
+* `#Patterns/Architecture/Microservices/UIComposition`
+* `#Patterns/Architecture/Microservices/Sidecar`
 
 ### Methodologies
 * `#Methodologies/DDD`

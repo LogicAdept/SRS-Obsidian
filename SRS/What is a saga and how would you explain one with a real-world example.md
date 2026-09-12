@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Methodologies/DDD #SRS
+#Methodologies/DDD #Patterns/Architecture/Microservices/ServiceCollaboration #SRS
 
 # What is a saga, and how would you explain one with a real-world example?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/UI/MicroFrontends #SRS
+#Patterns/Architecture/UI/MicroFrontends #Patterns/Architecture/Microservices/UIComposition #SRS
 
 # How would you explain client side UI composition for micro frontends
 

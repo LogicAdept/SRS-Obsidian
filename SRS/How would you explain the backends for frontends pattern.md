@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices #Patterns/Architecture/UI #SRS
+#Patterns/Architecture/Microservices/ExternalAPI #Patterns/Architecture/UI #SRS
 
 # How would you explain the backends for frontends pattern
 

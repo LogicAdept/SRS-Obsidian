@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices #Patterns/DistributedSystems #SRS
+#Patterns/Architecture/Microservices/ServiceCollaboration #Patterns/DistributedSystems #SRS
 
 # How would you explain the event sourcing pattern
 

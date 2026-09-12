@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices/Data #Databases/Transactions #SRS
+#Patterns/Architecture/Microservices/ServiceCollaboration #Databases/Transactions #SRS
 
 # Why is two-phase commit a poor fit for microservices
 

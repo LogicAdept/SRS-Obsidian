@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Spring/Cloud/CircuitBreaker #Patterns/DistributedSystems #SRS
+#Java/Spring/Cloud/CircuitBreaker #Patterns/DistributedSystems #Patterns/Architecture/Microservices/Reliability #SRS
 
 # How would you explain Circuit Breaker?
 

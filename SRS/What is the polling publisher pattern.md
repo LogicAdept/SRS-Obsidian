@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices/Data #Messaging #Databases/Transactions #SRS
+#Patterns/Architecture/Microservices/TransactionalMessaging #Messaging #Databases/Transactions #SRS
 
 # What is the polling publisher pattern
 

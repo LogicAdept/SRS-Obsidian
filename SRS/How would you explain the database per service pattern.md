@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices/ServiceBoundaries #Databases #SRS
+#Patterns/Architecture/Microservices/ServiceCollaboration #Databases #SRS
 
 # How would you explain the database per service pattern
 

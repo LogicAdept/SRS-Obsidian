@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices/Data #Methodologies/DDD #SRS
+#Patterns/Architecture/Microservices/ServiceCollaboration #Methodologies/DDD #SRS
 
 # How do aggregates shape data ownership between services
 

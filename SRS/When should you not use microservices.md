@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices #Patterns/Architecture/Monolith #SRS
+#Patterns/Architecture/Microservices/ArchitecturalStyle #Patterns/Architecture/Monolith #SRS
 
 # When should you not use microservices
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/CQRS #SRS
+#Patterns/Architecture/CQRS #Patterns/Architecture/Microservices/ServiceCollaboration #SRS
 
 # What is CQRS
 
