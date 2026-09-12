@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Databases/SQL #SRS
+#Databases/SQL #Security/AppSec/Injection #SRS
 
 # How would you explain SQL injection attacks and defenses?
 

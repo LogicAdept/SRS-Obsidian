@@ -46,6 +46,10 @@ GET /api/orders/42
 
 **Listing 1.** The per-request gate: authentication, function-level authorization, object-level authorization, then projection (conceptual).
 
+## The concepts behind the gates
+
+Each gate maps to a dedicated card: the three-property frame for classifying what each control protects is [[What is the CIA triad]]; the who-may-do-what split is [[What is the difference between authentication and authorization]]; the catalogue that ranks the failure classes is [[What is the OWASP Top 10]]. Token lifecycle details live in [[How do you revoke a JWT]] and [[Where should you store a JWT in a browser]]; the permissions philosophy behind both authz checks is [[What is the principle of least privilege]]; and the layered-controls logic - edge filtering, detection, response - is [[What is defense in depth]].
+
 > [!warning] Function-level authorization is not object-level authorization
 > GET /api/orders/42 guarded by "must be a logged-in user" still hands out order 42 to any user. Every object-bearing endpoint needs the ownership-or-scope check on the specific object, and penetration testers find the missing ones in minutes.
 
