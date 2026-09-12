@@ -30,7 +30,7 @@ public record Person(int id, String name) {}
 
 ## Map: `@Entity` is object/relational metadata
 
-Jakarta Persistence is an **O/R mapping** facility. An **entity** is a lightweight persistence domain object: **typically a table**, each instance **a row**. The programming artifact is the **entity class**, annotated `jakarta.persistence.Entity` ([[What is entity]], [[What is JDBC, an implementation or a specification]]).
+Jakarta Persistence is an **O/R mapping** facility. An **entity** is a lightweight persistence domain object: **typically a table**, each instance **a row**. The programming artifact is the **entity class**, annotated `jakarta.persistence.Entity` ([[How would you explain DTO Entity]], [[What is JDBC, an implementation or a specification]]).
 
 Jakarta Persistence 4.0 `@Entity` requires the class to:
 
