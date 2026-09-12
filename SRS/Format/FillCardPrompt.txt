@@ -255,8 +255,21 @@ Security
 #Security/Authorization
 #Security/Cryptography
 #Security/JWT
+#Security/OAuth2
+#Security/OIDC
+#Security/SAML
+#Security/Keycloak
+#Security/ActiveDirectory
 #Security/AppSec
 #Security/AppSec/Injection
+#Security/AppSec/OWASP
+#Security/Compliance
+#Security/NetworkSecurity
+#Security/Pentest
+#Security/RedTeam
+#Security/BlueTeam
+#Security/ThreatIntelligence
+#Security/CICD
 
 Problems
 #Problems

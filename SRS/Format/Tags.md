@@ -428,6 +428,16 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Security/ActiveDirectory`
 * `#Security/AppSec`
 * `#Security/AppSec/Injection`
+* `#Security/AppSec/OWASP`
+* `#Security/Compliance`
+* `#Security/NetworkSecurity`
+* `#Security/Pentest`
+* `#Security/RedTeam`
+* `#Security/BlueTeam`
+* `#Security/ThreatIntelligence`
+* `#Security/CICD`
+
+**Security in the tree:** `#Security` is information security as a discipline (governance models such as the CIA triad, career-survey cards). **Authentication** is verifying identity (MFA, credentials); **Authorization** is access decisions (least privilege, RBAC/ABAC). **Cryptography** is primitives and password storage (AES, RSA, HMAC, hashes, DH, password handling). **JWT** is the token format and its lifecycle (parts, claims, signing, storage, revocation). OAuth2/OIDC/SAML/Keycloak/ActiveDirectory stay product- and protocol-specific leaves. **AppSec** is application vulnerability classes and their prevention (XSS, IDOR, SSRF); **Injection** is injection-specific (SQLi), **OWASP** is the OWASP Top 10 catalogue and its risk classes. **Compliance** is regulatory frameworks and regulated data handling (PCI DSS, PII). **NetworkSecurity** is network architecture controls and perimeters (DMZ, segmentation, WAF, zero trust, IDS/IPS). **Pentest** is offensive testing methodology, **RedTeam** is adversarial emulation, **BlueTeam** is defensive operations (defense in depth, SOC blue team, SIEM, incident response). **ThreatIntelligence** is threat knowledge bases and vulnerability tracking (threat info sharing, MITRE ATT&CK, CVE/CVSS). **CICD** is security of the build/ship pipeline itself (DevSecOps, SAST/DAST, SBOM, pipeline secrets) — the CI/CD *practice* itself stays `#DevOps/CICD`, security-specific pipeline cards carry `#Security/CICD` (dual-tag `#DevOps/CICD` when the cue is pipeline mechanics). Do not put `#Security` next to a more specific `#Security/...` child on the same card.
 
 ### Problems
 * `#Problems`
