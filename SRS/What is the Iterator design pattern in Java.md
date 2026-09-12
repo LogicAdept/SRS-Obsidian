@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Iteration #SRS
+#Patterns/GoF/Behavioral #Java/Collections/Iteration #SRS
 
 # What is the Iterator design pattern in Java?
 
@@ -29,6 +29,8 @@ Java 5 added `Iterable` so enhanced `for` is the language sugar for this pattern
 `ListIterator` is a **richer** iterator for `List` only (bidirectional, `add` / `set`). There is no `Iterator.add` because `Iterator` does not promise encounter order [[Compare Iterator and ListIterator capabilities]], [[Why is there no add method on Iterator]]. `Enumeration` is the 1.0 precursor. `Map` is not an aggregate for this pattern; walk `keySet()` / `values()` / `entrySet()`. Arrays are for-each targets without `Iterable`. `Spliterator` is a later, splittable cursor for streams — not the classic single-thread Iterator pattern [[What types of iterators or cursors exist in Java]], [[What is Spliterator]].
 
 Fail-fast `modCount` checks, snapshot iterators, and weakly consistent concurrent iterators are **Java policies** on concrete iterators, not the pattern itself.
+
+As a GoF behavioral pattern it composes with [[What is the Composite pattern]] for tree traversal, gets its cursor types from collection subclasses through [[What is the Factory Method pattern]], and pairs with [[What is the Memento pattern]] when iteration state must roll back.
 
 ```d2
 direction: down
