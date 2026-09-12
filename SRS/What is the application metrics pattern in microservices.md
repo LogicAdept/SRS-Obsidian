@@ -7,7 +7,7 @@ priority: 0
 # What is the application metrics pattern in microservices
 
 > [!abstract] Short answer
-> The application metrics pattern instruments every service to publish counters, gauges and timers about what it is doing — request rates, error rates, latencies (ideally as percentiles), resource usage, business counts — and exposes them in a scrapeable or pushable format for a central metrics system. Richardson lists it among the observability patterns; it answers "how is the system behaving right now and over time", which logs alone cannot.
+> The application metrics pattern instruments every service to publish counters, gauges and timers about what it is doing — request rates, error rates, latencies (ideally as percentiles), resource usage, business counts — and exposes them in a scrapeable or pushable format for a central metrics system. It is one of the observability patterns; it answers "how is the system behaving right now and over time", which logs alone cannot.
 
 ## The mechanics: instrument, aggregate, expose
 

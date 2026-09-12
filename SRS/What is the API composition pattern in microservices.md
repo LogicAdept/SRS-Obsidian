@@ -2,12 +2,12 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices #Patterns/DistributedSystems #SRS
+#Patterns/Architecture/Microservices/ServiceCollaboration #Patterns/DistributedSystems #SRS
 
 # What is the API composition pattern in microservices
 
 > [!abstract] Short answer
-> API composition is Richardson's query-side pattern for microservices: to answer a query spanning several services, a composer (often the API gateway or a BFF) calls each owning service and performs an in-memory join of the results. It is the simplest answer to "how do I query data scattered across services" — no query store of its own, just orchestration of existing APIs.
+> API composition is the query-side pattern for microservices: to answer a query spanning several services, a composer (often the API gateway or a BFF) calls each owning service and performs an in-memory join of the results. It is the simplest answer to "how do I query data scattered across services" — no query store of its own, just orchestration of existing APIs.
 
 ## The mechanism: fan out, join in memory, return
 
@@ -47,7 +47,7 @@ OrderDetails compose(int orderId) {
 
 ## Limits that force the heavier alternative
 
-Latency: the client pays the composer's fan-out — parallel calls bound it by the slowest service, but every hop adds queueing and jitter; caching hot compositions softens this. In-memory joins: the pattern joins result sets, not databases — a query like "top 100 customers by open-order value" means pulling large intermediate datasets into one process and joining there; Richardson names exactly this as the disqualifier, pushing to CQRS-style query stores for such cases. Availability: the composition is as available as its weakest dependency — resilience policy per call ([[How would you explain Circuit Breaker]]) and a decided fallback shape (partial answer with a degraded flag vs. hard failure) are part of the design. Composition and read models are complementary, not rival: per-entity views compose fine; cross-entity analytics belongs in event-fed read models ([[What is a projection in CQRS and event sourcing]]).
+Latency: the client pays the composer's fan-out — parallel calls bound it by the slowest service, but every hop adds queueing and jitter; caching hot compositions softens this. In-memory joins: the pattern joins result sets, not databases — a query like "top 100 customers by open-order value" means pulling large intermediate datasets into one process and joining there; Exactly this is the disqualifier that pushes to CQRS-style query stores for such cases. Availability: the composition is as available as its weakest dependency — resilience policy per call ([[How would you explain Circuit Breaker]]) and a decided fallback shape (partial answer with a degraded flag vs. hard failure) are part of the design. Composition and read models are complementary, not rival: per-entity views compose fine; cross-entity analytics belongs in event-fed read models ([[What is a projection in CQRS and event sourcing]]).
 
 > [!warning] Sequential composition multiplies failure probability
 > If the composer calls three services in sequence with 99.5% availability each, the composition succeeds only ~98.5% of the time — the weakest link multiplied. Parallelize independent calls, set budgets, and decide per call whether failure degrades the answer (skip recommendations) or invalidates it (no order, no answer). A composer without per-call timeouts turns one slow service into a broken endpoint.

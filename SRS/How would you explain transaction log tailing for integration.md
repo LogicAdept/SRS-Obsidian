@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Enterprise/Integration #Databases/Transactions #Messaging/Tools/Kafka #Patterns/Architecture/Microservices/CommunicationStyles #SRS
+#Patterns/Enterprise/Integration #Databases/Transactions #Messaging/Tools/Kafka #Patterns/Architecture/Microservices/TransactionalMessaging #SRS
 
 # How would you explain transaction log tailing for integration?
 

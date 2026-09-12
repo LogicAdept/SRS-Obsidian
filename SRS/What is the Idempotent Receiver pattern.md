@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Messaging #Patterns/Enterprise/Integration #API/Idempotency #SRS
+#Messaging #Patterns/Enterprise/Integration #API/Idempotency #Patterns/Architecture/Microservices/CommunicationStyles #SRS
 
 # What is the Idempotent Receiver pattern?
 
@@ -50,10 +50,7 @@ UPDATE accounts SET balance = balance - 100 WHERE id = 'A-1';
 COMMIT;  -- duplicate delivery: INSERT conflicts, nothing else happens
 ```
 
-**Listing 1.** The unique key on `message_id` turns the second delivery into a no-op atomically — the insert conflict is the dedup decision.
-
-> [!warning] A dedup table is not a magic set
-> Ids must be stable across redeliveries (broker message ids change on some bridges and republishes — use business or producer ids), the store grows forever without pruning, and "insert-then-process" only works inside one transaction — checking one connection and updating another voids the guarantee. Kafka's idempotent producer does not exempt consumers: it stops broker-side retry duplicates, not consumer-side replays or republished duplicates.
+**Listing 1.** The unique key on `message_id` turns the second delivery into a no-op atomically — the insert conflict is the dedup decision. The same receiver-side discipline reappears in the microservices vocabulary as the idempotent consumer of [[What is the messaging communication style between microservices]].
 
 > [!tip] Interview answer
 > An Idempotent Receiver survives duplicate deliveries either by explicit dedup — a processed-id table written in the same transaction as the business work — or by designing the effect so repeats are harmless, like absolute status updates or upserts. At-least-once delivery makes this mandatory, not optional; and Kafka's idempotent producer is a different mechanism that only dedups producer retries inside the broker.

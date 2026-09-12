@@ -2,12 +2,12 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices/ServiceBoundaries #Databases #SRS
+#Patterns/Architecture/Microservices/ServiceCollaboration #Databases #SRS
 
 # How would you explain the database per service pattern
 
 > [!abstract] Short answer
-> Database-per-service means each microservice's data is private: no other service connects to its database — not even reads. Every access goes through the service's API or its events. Richardson's core data pattern for microservices; it is what makes independent schema evolution, per-service storage choice and independent scaling possible, and what forces the integration patterns (API composition, sagas, outbox) that replace free JOINs and shared transactions.
+> Database-per-service means each microservice's data is private: no other service connects to its database — not even reads. Every access goes through the service's API or its events. It is a core data pattern for microservices; it is what makes independent schema evolution, per-service storage choice and independent scaling possible, and what forces the integration patterns (API composition, sagas, outbox) that replace free JOINs and shared transactions.
 
 ## The mechanism: ownership as an architectural invariant
 
@@ -30,10 +30,7 @@ note: "No cross-connections: o cannot query cd directly" {style.fill: "#ffebee"}
 
 ## The costs it imposes — the integration patterns it summons
 
-Queries spanning services lose the JOIN: answer them with API composition, event-fed read models, or data replication into query-friendly stores ([[What is the API composition pattern in microservices]]; [[What is a projection in CQRS and event sourcing]]). Transactions spanning services lose 2PC: they become sagas, and "state change plus event published" needs the outbox to stay atomic ([[How would you explain the transactional outbox pattern]]; [[What is BASE as a consistency model]] names the consistency model that results). Reporting across the whole system needs a pipeline (CDC, transaction log tailing or events) into an analytics store ([[How would you explain transaction log tailing for integration]]). These are not incidental costs — they are the actual price of the ownership boundary, and they must be designed, not discovered. One legitimate relaxation exists inside a single deployable: if two "services" are always deployed and versioned together, Richardson's guidance is that they may share a database — they are, in truth, one service not yet split.
-
-> [!warning] "Private database" is violated most often by reporting tools
-> The pattern breaks from the side door: a BI tool or a colleague's script connects straight to the schema "just for reads". The read still couples the writer — schema changes now break the analyst's queries and pressure the owner to freeze the model. Analytics is a consumer like any other: feed it a replica, a CDC stream or a warehouse — not a direct connection to the owner's store.
+Queries spanning services lose the JOIN: answer them with API composition, event-fed read models, or data replication into query-friendly stores ([[What is the API composition pattern in microservices]]; [[What is a projection in CQRS and event sourcing]]). Transactions spanning services lose 2PC: they become sagas, and "state change plus event published" needs the outbox to stay atomic ([[How would you explain the transactional outbox pattern]]; [[What is BASE as a consistency model]] names the consistency model that results). Reporting across the whole system needs a pipeline (CDC, transaction log tailing or events) into an analytics store ([[How would you explain transaction log tailing for integration]]). These are not incidental costs — they are the actual price of the ownership boundary, and they must be designed, not discovered. One legitimate relaxation exists inside a single deployable: if two "services" are always deployed and versioned together, they may share a database — they are, in truth, one service not yet split. The ownership unit that makes the split workable is the aggregate ([[How do aggregates shape data ownership between services]]), and the transactional consequence - why 2PC leaves the building - is [[Why is two-phase commit a poor fit for microservices]].
 
 > [!tip] Interview answer
 > Database-per-service makes data private: only the owning service touches its store, everyone else goes through its API or consumes its events. I get free schema evolution, per-service storage choice and scaling, and honest ownership. The price is real: cross-service queries need composition or read models, cross-service consistency becomes sagas with an outbox, and reporting needs a CDC pipeline. I treat direct external connections — including BI reads — as violations of the boundary.

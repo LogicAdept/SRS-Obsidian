@@ -2,12 +2,12 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/CQRS #SRS
+#Patterns/Architecture/CQRS #Patterns/Architecture/Microservices/ServiceCollaboration #SRS
 
 # What is CQRS
 
 > [!abstract] Short answer
-> CQRS — Command Query Responsibility Segregation — splits a component's interface into two models: commands that change state and return nothing, and queries that return data and change nothing. Richardson's microservices.io and Fowler both present it as an architectural pattern: write side keeps the transactional domain model, read side keeps flat, query-optimized models, and the two are connected by events whenever they use separate databases.
+> CQRS — Command Query Responsibility Segregation — splits a component's interface into two models: commands that change state and return nothing, and queries that return data and change nothing. It is an architectural pattern: the write side keeps the transactional domain model, read side keeps flat, query-optimized models, and the two are connected by events whenever they use separate databases.
 
 ## The core contract: separate verbs, separate models
 
@@ -37,7 +37,7 @@ qry -> read
 
 ## Levels of adoption
 
-CQRS is a spectrum, not a binary. Level 1: same database, different objects — command services and query services share one store but use different code paths and DTOs; this already removes accidental coupling. Level 2: separate schemas or databases — write DB optimized for transactions, read DB optimized for queries, synchronized by events; now the read side can use any storage (search index, document store, cache) and can scale independently. Level 3: full event sourcing on the write side, projections rebuildable from history. Richardson stresses that separate databases is where the real benefits (independent scaling, polyglot storage, query-specific views) and the real costs (eventual consistency, duplicate logic) appear.
+CQRS is a spectrum, not a binary. Level 1: same database, different objects — command services and query services share one store but use different code paths and DTOs; this already removes accidental coupling. Level 2: separate schemas or databases — write DB optimized for transactions, read DB optimized for queries, synchronized by events; now the read side can use any storage (search index, document store, cache) and can scale independently. Level 3: full event sourcing on the write side, projections rebuildable from history. Separate databases is where the real benefits (independent scaling, polyglot storage, query-specific views) and the real costs (eventual consistency, duplicate logic) appear.
 
 > [!warning] CQRS is not event sourcing and not a default
 > You can do CQRS without event sourcing and event sourcing without CQRS; they compose but are separate decisions ([[Which kinds of projects benefit most from CQRS]] lists where the payoff is real). Once the read model is event-fed, its data is eventually consistent — the UI must tolerate read-your-writes gaps ([[What is eventual consistency]]), and every event consumer needs idempotent handling ([[What is idempotency in HTTP and in messaging]]). Teams that adopt full CQRS for CRUD-heavy domains pay double the model count for zero benefit.

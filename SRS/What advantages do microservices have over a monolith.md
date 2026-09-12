@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Patterns/Architecture/Microservices #Patterns/Architecture/Monolith #SRS
+#Patterns/Architecture/Microservices/ArchitecturalStyle #Patterns/Architecture/Monolith #SRS
 
 # What advantages do microservices have over a monolith
 
@@ -11,7 +11,7 @@ priority: 0
 
 ## Where the advantages actually come from
 
-Each advantage follows from one structural fact: services are owned and shipped separately. Independent deployments: a team releases its service without coordinating a shared release train — the monolith's biggest practical pain, merge queues and all-hands regression. Independent scaling: the hot service gets instances; the monolith forces scaling everything together (and its hottest component caps the fleet's density). Independent technology and data fit: a service can pick the storage its access pattern needs and upgrade its stack alone. Fault isolation: a crash or memory leak in one service degrades one capability instead of the whole application. Comprehensibility: a service small enough to fit in one head onboards fast — Fowler and Lewis's "product not project" framing follows from the same ownership split ([[What is the domain-specific boundary pattern in microservice design]] is how boundaries get chosen; [[How do you decompose a monolith into microservices]] is the migration path).
+Each advantage follows from one structural fact: services are owned and shipped separately. Independent deployments: a team releases its service without coordinating a shared release train — the monolith's biggest practical pain, merge queues and all-hands regression. Independent scaling: the hot service gets instances; the monolith forces scaling everything together (and its hottest component caps the fleet's density). Independent technology and data fit: a service can pick the storage its access pattern needs and upgrade its stack alone. Fault isolation: a crash or memory leak in one service degrades one capability instead of the whole application. Comprehensibility: a service small enough to fit in one head onboards fast — the "product not project" framing follows from the same ownership split ([[What is the domain-specific boundary pattern in microservice design]] is how boundaries get chosen; [[How do you decompose a monolith into microservices]] is the migration path).
 
 ```d2
 direction: right
@@ -36,10 +36,7 @@ ms -> s3
 
 ## The costs that balance the ledger
 
-Every remote call is a network operation that can fail, time out or return a partial answer — resilience patterns ([[How would you explain Circuit Breaker]]) and consistency planning ([[What is BASE as a consistency model]]) become everyday work instead of exotic edge cases. Data consistency across services loses the single ACID umbrella: sagas and outboxes replace local transactions ([[What is a saga and how would you explain one with a real-world example]], [[How would you explain the transactional outbox pattern]]). Operations gain a fleet: service discovery, configuration, observability and deployment pipelines per service — the chassis and observability patterns exist precisely to contain this ([[What is the microservice chassis pattern]], [[What is the application metrics pattern in microservices]]). Distributed debugging replaces stack traces with trace assembly. The honest interview position: microservices are an organizational optimization first — they pay where team autonomy and independent release velocity matter more than they cost; a small team shipping a modest product usually pays more than it gains.
-
-> [!warning] Advantage is conditional, not absolute
-> "Fault isolation" is only true if the dependency graph and resilience design support it — one overloaded downstream can still cascade through a fleet of unsynchronized retries. "Independent scaling" stops being an advantage when data coupling forces lock-step schema changes. A monolith with modular boundaries can ship faster than a badly decomposed microservice fleet every time.
+Every remote call is a network operation that can fail, time out or return a partial answer — resilience patterns ([[How would you explain Circuit Breaker]]) and consistency planning ([[What is BASE as a consistency model]]) become everyday work instead of exotic edge cases. Data consistency across services loses the single ACID umbrella: sagas and outboxes replace local transactions ([[What is a saga and how would you explain one with a real-world example]], [[How would you explain the transactional outbox pattern]]). Operations gain a fleet: service discovery, configuration, observability and deployment pipelines per service — the chassis and observability patterns exist precisely to contain this ([[What is the microservice chassis pattern]], [[What is the application metrics pattern in microservices]]). Distributed debugging replaces stack traces with trace assembly. The honest interview position: microservices are an organizational optimization first — they pay where team autonomy and independent release velocity matter more than they cost; a small team shipping a modest product usually pays more than it gains. The counterweight - when this trade does not pay - is cataloged in [[When should you not use microservices]], and the first cut of the boundaries themselves comes from [[How do you decompose an application by business capability]].
 
 > [!tip] Interview answer
 > Microservices win on team autonomy and operational flexibility: independent releases per service, per-service scaling and technology fit, fault isolation, and small comprehensible codebases. The price is distributed systems for real: network failure modes, eventual consistency, sagas instead of ACID transactions, and a fleet to observe and operate. I treat it as an organizational optimization — worth it with enough teams and release pressure, premature for a small product.
