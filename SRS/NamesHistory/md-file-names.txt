@@ -653,7 +653,6 @@
 - [x] How would you explain Classloader.md
 - [x] How would you explain client side service discovery.md
 - [x] How would you explain client side UI composition for micro frontends.md
-- [x] How would you explain CMD vs ENTRYPOINT.md
 - [x] How would you explain collection using methods Collection addAll removeAll retainAll.md
 - [x] How would you explain common guidelines for using inheritance in OOP.md
 - [x] How would you explain common HTTP request methods.md
@@ -2030,7 +2029,7 @@
 - [x] What is the difference between ClickHouse Druid and Pinot.md
 - [x] What is the difference between clustered and non clustered database indexes.md
 - [x] What is the difference between clustering federation and shovel in RabbitMQ.md
-- [x] What is the difference between CMD ENTRYPOINT.md
+- [x] What is the difference between CMD and ENTRYPOINT in a Dockerfile.md
 - [x] What is the difference between collaborative filtering and content-based recommendations.md
 - [x] What is the difference between Collection and Stream in Java.md
 - [x] What is the difference between compareAndSet and weakCompareAndSet.md
