@@ -21,6 +21,8 @@ priority: 0
 * **Indirection** - insert an intermediate object to mediate between two elements so they do not couple directly; MVC mediates model and view this way.
 * **Pure Fabrication** - invent a class that does not represent a domain concept, purely to keep coupling low and cohesion high; domain-driven design calls such classes Services.
 
+Each principle has a dedicated card: [[What is the Information Expert principle in GRASP]], [[What is the Creator principle in GRASP]], [[What is the Controller principle in GRASP]], [[What is the Low Coupling principle in GRASP]], [[What is the High Cohesion principle in GRASP]], [[What is the Polymorphism principle in GRASP]], [[What is the Protected Variations principle in GRASP]], [[What is the Indirection principle in GRASP]], and [[What is the Pure Fabrication principle in GRASP]].
+
 ```d2
 direction: right
 assign: "Who owns the work" {
@@ -81,10 +83,10 @@ class Order {
 
 Low Coupling and High Cohesion are measurable, not vibes: [[What are coupling and cohesion and how do they affect maintainability]] shows the maintainability effect, and [[What are afferent coupling and efferent coupling]] gives the direction of dependency you are minimizing. When the variation is behavioral, Polymorphism in GRASP is exactly the ground the GoF pair in [[What is the difference between the Strategy and State design patterns]] stands on. Frameworks lean on the same principles: [[What design patterns does the Spring Framework use]] shows a front controller and handlers that are GRASP Controller applied.
 
-Larman stresses that these are a mental toolset, not new ways of working: they document and standardize tried-and-tested object-oriented design practice. Low Coupling and High Cohesion are explicitly evaluative - you use them to judge candidate designs made with the other seven.
+Larman stresses that these are a mental toolset, not new ways of working: they document and standardize tried-and-tested object-oriented design practice. Low Coupling and High Cohesion are explicitly evaluative - you use them to judge candidate designs made with the other seven. GRASP also complements rather than competes with other principle sets: the mapping to SOLID is worked out in [[What is the difference between GRASP and SOLID]].
 
 > [!warning] Two common interview traps
-> First, GRASP is not GoF: there is no factory, observer, or strategy here - those catalogue collaboration structures, while GRASP assigns responsibilities. Second, a "controller" in GRASP must delegate; a class that receives a system event and then executes domain logic itself is a fat controller, which violates the principle it is named after.
+> First, GRASP is not GoF: there is no factory, observer, or strategy here - those catalogue collaboration structures, while GRASP assigns responsibilities; the exact split is drawn in [[What is the difference between GRASP and GoF design patterns]]. Second, a "controller" in GRASP must delegate; a class that receives a system event and then executes domain logic itself is a fat controller, which violates the principle it is named after.
 
 > [!tip] Interview answer
 > GRASP is Larman's set of nine responsibility-assignment principles: Information Expert, Creator, Controller, Low Coupling, High Cohesion, Polymorphism, Protected Variations, Indirection, and Pure Fabrication. I use Expert, Creator, and Controller to decide which object owns a responsibility, Low Coupling and High Cohesion to evaluate the design, and the rest to handle variation safely. It differs from GoF in that it assigns responsibilities rather than cataloguing object structures, which is why I reach for it at design time before any GoF pattern.
