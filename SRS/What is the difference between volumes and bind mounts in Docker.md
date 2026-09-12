@@ -11,7 +11,7 @@ priority: 0
 
 ## Who owns the data
 
-Volumes are the documented preference for persisting container data: they survive the container, are safe to share, can be pre-populated from an image, and are driver-pluggable (NFS, cloud block storage). Bind mounts are the raw escape hatch: whatever is at that host path simply appears inside the container, writable both ways.
+Volumes are the documented preference for persisting container data: they survive the container, are safe to share, can be pre-populated from an image, and are driver-pluggable (NFS, cloud block storage). Sharing one volume between several containers — the interview question behind "how do containers exchange files" — is a named volume mounted into both; the legacy `--volumes-from` flag did the same by copying another container's mounts and is kept only for old setups. Bind mounts are the raw escape hatch: whatever is at that host path simply appears inside the container, writable both ways.
 
 ```bash
 docker volume create pgdata
