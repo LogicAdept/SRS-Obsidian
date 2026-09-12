@@ -90,13 +90,7 @@ rs -> as: "JWK / iss"
 
 Service-to-service calls use **OAuth2 Client** (`OAuth2AuthorizedClientManager` + Bearer on **`RestClient`/`WebClient`**), not a copied `SecurityContext` across processes. JWT REST APIs typically drop CSRF ([[Why do you disable CSRF for a JWT REST API]]).
 
-**`@EnableResourceServer`** / **`ResourceServerConfigurerAdapter`** belong to **Spring Security OAuth** (`spring-security-oauth`). That stack is **deprecated**; the migration guide maps them to **`oauth2ResourceServer`**. **`WebSecurityConfigurerAdapter`** is gone too — use a **`SecurityFilterChain` `@Bean`**.
-
-> [!warning] `@EnableResourceServer` is the old library
-> Interview Security 6 answers use **`http.oauth2ResourceServer((rs) -> rs.jwt(Customizer.withDefaults()))`**. A dump that extends **`ResourceServerConfigurerAdapter`** and **`authorizeRequests()`** is Spring Security OAuth 2.x, not current Spring Security.
-
-> [!warning] TokenRelay does not authenticate the microservice
-> Forwarding **`Authorization: Bearer`** only helps if each service still runs **`JwtDecoder`**. A gateway that is authenticated while downstream is **`permitAll`** is not a resource-server architecture. In-memory **`ReactiveOAuth2AuthorizedClientService`** on the gateway does not survive replicas.
+**`@EnableResourceServer`** / **`ResourceServerConfigurerAdapter`** belong to **Spring Security OAuth** (`spring-security-oauth`). That stack is **deprecated**; the migration guide maps them to **`oauth2ResourceServer`**. **`WebSecurityConfigurerAdapter`** is gone too — use a **`SecurityFilterChain` `@Bean`**. The architecture-level pattern behind the JwtDecoder wiring is [[What is the access token pattern in microservices]].
 
 > [!tip] Interview answer
 > Secure microservices as OAuth2 resource servers: each API validates the JWT (issuer-uri / JWK), while a client or Spring Cloud Gateway TokenRelay obtains and forwards the access token. That is oauth2ResourceServer().jwt() on SecurityFilterChain, not @EnableResourceServer. The authorization server is separate; Spring Security does not share HttpSession across services.

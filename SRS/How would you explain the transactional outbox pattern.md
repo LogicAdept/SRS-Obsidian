@@ -51,10 +51,7 @@ VALUES (42, 'OrderApproved', '{"orderId":42}', false);
 COMMIT;  -- both rows or neither: no dual-write gap
 ```
 
-**Listing 1.** The event is just another row in the same transaction — atomic by construction, publishable later.
-
-> [!warning] The outbox is at-least-once, and the publisher is a real component
-> "Sent" marking and sending are not atomic — a crash between them redelivers the event, so consumers dedup by message or event id. The publisher also needs ordering discipline (monotonic id scan, no parallel out-of-order publishes per aggregate) and its own lag monitoring: a stalled publisher silently freezes downstream reaction while every dashboard stays green.
+**Listing 1.** The event is just another row in the same transaction — atomic by construction, publishable later. The two relays that move those rows to the broker are [[What is the polling publisher pattern]] and transaction log tailing, and the events themselves are born inside [[What is the domain event pattern in microservices]].
 
 > [!tip] Interview answer
 > The Transactional Outbox fixes the dual-write problem by writing the event into an outbox table within the same local database transaction as the business change — atomically, without 2PC across database and broker. A separate publisher then ships unsent outbox rows to the broker, via polling or log tailing. Delivery is at-least-once, so consumers must dedup, and publisher lag is the metric to watch.
