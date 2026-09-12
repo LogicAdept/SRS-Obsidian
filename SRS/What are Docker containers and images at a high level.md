@@ -47,7 +47,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 **Listing 1.** A Dockerfile whose image contains a pinned JRE plus one application JAR; `docker build -t app:1.0 .` produces the image, `docker run app:1.0` starts a container from it.
 
-The image is the unit you version and promote: the same bytes (`app:1.0`) run identically in dev, CI, and production, which is why the deployment side of microservices builds on it ([[What is the service per container pattern]] pins one image per service). Building and running are decoupled by the registry, the same way CI separates build and deploy artifacts ([[How would you explain CI CD pipeline]]).
+The image is the unit you version and promote: the same bytes (`app:1.0`) run identically in dev, CI, and production, which is why the deployment side of microservices builds on it ([[What is the service per container pattern]] pins one image per service). Building and running are decoupled by the registry, the same way CI separates build and deploy artifacts ([[What is a CI CD pipeline]]).
 
 ## What the container adds at runtime
 

@@ -45,7 +45,7 @@ t1 -> d: "same content"
 **Fig. 1.** The tag moved; the digest did not. That is the entire reproducibility argument for pinning digests in Dockerfiles and deployment manifests.
 
 > [!warning] Tags move under you — and :latest moves fastest
-> A rebuilt base image under the same tag changes every derived build silently: layers re-download, scans flip red, and "it worked yesterday" has no bytes-level explanation. But digest pinning has a maintenance cost — digests do not receive CVE fixes until someone updates the pin, so pin-and-forget is also wrong; the workable pattern is digest pinned by tooling with automated update PRs ([[How would you explain CI CD pipeline]] is where that automation lives).
+> A rebuilt base image under the same tag changes every derived build silently: layers re-download, scans flip red, and "it worked yesterday" has no bytes-level explanation. But digest pinning has a maintenance cost — digests do not receive CVE fixes until someone updates the pin, so pin-and-forget is also wrong; the workable pattern is digest pinned by tooling with automated update PRs ([[What is a CI CD pipeline]] is where that automation lives).
 
 > [!tip] Interview answer
 > **A tag is a mutable name for a manifest; a digest is the manifest's content hash and is immutable. Pulling by tag is convenient but non-reproducible — :latest is a default name, not a version promise. Production builds record and pull by digest, accepting the duty to bump pins deliberately for security fixes.**
