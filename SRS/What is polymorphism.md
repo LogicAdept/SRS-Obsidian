@@ -7,7 +7,7 @@ priority: 0
 # What is polymorphism?
 
 > [!abstract] Short answer
-> **Polymorphism** means using a value through a **common type** without knowing the **run-time class**. In Java interviews that is **subtype polymorphism**: `Shape s = new Square(3); s.area();` runs `Square.area` ([[How would you explain dynamic runtime polymorphism in Java]]). The **compiler** picks a **signature**; the **JVM** picks the **body** ([[How would you explain Overload vs Override]]). Override: [[How would you explain method overriding in Java]]. Principles: [[What are the main oop principles]].
+> **Polymorphism** means using a value through a **common type** without knowing the **run-time class**. In Java interviews that is **subtype polymorphism**: `Shape s = new Square(3); s.area();` runs `Square.area` ([[How would you explain dynamic runtime polymorphism in Java]]). The **compiler** picks a **signature**; the **JVM** picks the **body** ([[How would you explain Overload vs Override]]). Override: [[How would you explain method overriding in Java]]. vs inheritance: [[What is the difference between inheritance and polymorphism]]. vs abstraction: [[What is the difference between abstraction and polymorphism]]. Principles: [[What are the main oop principles]].
 
 ## Same type, different bodies
 

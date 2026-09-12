@@ -7,7 +7,7 @@ priority: 0
 # What is inheritance?
 
 > [!abstract] Short answer
-> **Inheritance** is declaring a class (or interface) **from existing types** so it **gains members** of those types. In Java a class has **one** superclass (`extends`; `Object` if omitted) and any number of superinterfaces (`implements`). The subclass **is-a** the parent ([[What do in OOP expressions is-a and has-a]]). **Constructors and `{ }` / `static { }` are not inherited** ([[What does a Java class consist of]]). Tradeoffs: [[How would you explain class inheritance in Java and tradeoffs]]. Multiple class inheritance: [[Does Java support multiple inheritance for classes]]. `Object`: [[Do Java classes inherit from Object explicitly or implicitly]].
+> **Inheritance** is declaring a class (or interface) **from existing types** so it **gains members** of those types. In Java a class has **one** superclass (`extends`; `Object` if omitted) and any number of superinterfaces (`implements`). The subclass **is-a** the parent ([[What do in OOP expressions is-a and has-a]]). **Constructors and `{ }` / `static { }` are not inherited** ([[What does a Java class consist of]]). Tradeoffs: [[How would you explain class inheritance in Java and tradeoffs]]. Types: [[What types of inheritance do you know and which does Java support]]. vs polymorphism: [[What is the difference between inheritance and polymorphism]]. Multiple class inheritance: [[Does Java support multiple inheritance for classes]]. `Object`: [[Do Java classes inherit from Object explicitly or implicitly]].
 
 ## Subclass reuses members, not constructors
 

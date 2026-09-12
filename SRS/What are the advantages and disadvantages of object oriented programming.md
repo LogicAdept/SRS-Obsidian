@@ -7,7 +7,7 @@ priority: 0
 # What are the advantages and disadvantages of object oriented programming?
 
 > [!abstract] Short answer
-> In Java, OOP pays off when you **hide state**, **share contracts** (`implements`), and **dispatch on the run-time class**. It costs you when **`extends` couples** subclasses to a parent’s fields and constructors, when **public mutable fields** leak representation, and when **virtual calls during construction** see half-built objects. Java definition: [[What does it mean that Java is object oriented]]. Trio: [[What are the three core principles of object oriented programming]]. Inheritance cost: [[How would you explain class inheritance in Java and tradeoffs]].
+> In Java, OOP pays off when you **hide state**, **share contracts** (`implements`), and **dispatch on the run-time class**. It costs you when **`extends` couples** subclasses to a parent’s fields and constructors, when **public mutable fields** leak representation, and when **virtual calls during construction** see half-built objects. Java definition: [[What does it mean that Java is object oriented]]. Trio: [[What are the main oop principles]]. Inheritance cost: [[How would you explain class inheritance in Java and tradeoffs]]. vs procedural and functional: [[What are the pros and cons of OOP versus procedural and functional programming]].
 
 ## What the language actually gives you
 

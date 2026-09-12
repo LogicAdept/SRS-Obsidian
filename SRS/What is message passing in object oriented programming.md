@@ -7,7 +7,7 @@ priority: 0
 # What is message passing in object oriented programming?
 
 > [!abstract] Short answer
-> In OOP textbooks, **message passing** means: ask an **object** to **do something**, with **arguments**; the object’s **method** of that name runs. In **Java** that is a **method invocation** (`ball.bounce()`), not a separate language feature. For **instance** methods the JVM still **looks up** the body on the **run-time class** ([[What is polymorphism]]; [[How would you explain dynamic runtime polymorphism in Java]]). The compiler already chose the **signature** ([[How would you explain Overload vs Override]]). Java OO: [[What does it mean that Java is object oriented]]. Principles: [[What are the main oop principles]].
+> In OOP textbooks, **message passing** means: ask an **object** to **do something**, with **arguments**; the object’s **method** of that name runs. In **Java** that is a **method invocation** (`ball.bounce()`), not a separate language feature. For **instance** methods the JVM still **looks up** the body on the **run-time class** ([[What is polymorphism]]; [[How would you explain dynamic runtime polymorphism in Java]]). The compiler already chose the **signature** ([[How would you explain Overload vs Override]]). Java OO: [[What does it mean that Java is object oriented]]. History: [[Why was object oriented programming favored by the industry for so long]]. Principles: [[What are the main oop principles]].
 
 ## Smalltalk word, Java method call
 

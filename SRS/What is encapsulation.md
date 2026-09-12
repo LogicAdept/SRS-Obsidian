@@ -7,7 +7,7 @@ priority: 0
 # What is encapsulation?
 
 > [!abstract] Short answer
-> **Encapsulation** is putting **state and the methods that maintain it in one class** and **publishing only a chosen API**. Callers depend on `call()`, not on fields or helper methods. That lets you change the implementation without changing clients. Java does it with **access modifiers**, not a keyword `encapsulate`. Design: [[How would you explain encapsulation in object oriented design]]. vs abstraction: [[What is abstraction]]. Private vs other classes: [[Can one object access another class private fields in Java]]. Principles: [[What are the main oop principles]].
+> **Encapsulation** is putting **state and the methods that maintain it in one class** and **publishing only a chosen API**. Callers depend on `call()`, not on fields or helper methods. That lets you change the implementation without changing clients. Java does it with **access modifiers**, not a keyword `encapsulate`. Design: [[How would you explain encapsulation in object oriented design]]. vs abstraction: [[What is abstraction]]; detail: [[What is the difference between abstraction and encapsulation]]. Private vs other classes: [[Can one object access another class private fields in Java]]. Principles: [[What are the main oop principles]].
 
 ## Combine, then hide
 

@@ -7,7 +7,7 @@ priority: 0
 # What are the main paradigms programming?
 
 > [!abstract] Short answer
-> Common interview families: **imperative** (how: statements, assignment, loops), **declarative** / **functional** (what: expressions, transformations), and sometimes **reactive** (values over time). **Java** is specified as a **general-purpose, concurrent, class-based, object-oriented** language: objects + `this`, one superclass, interfaces, static typing ([[What does it mean that Java is object oriented]]; [[How would you explain static typing in Java]]). You still write **imperative** statements. Lambdas and `Stream` are a **functional style** on that VM ([[Which programming paradigm does the Streams API follow]]; [[How would you explain the functional programming paradigm]]). OOP principles: [[What are the main oop principles]].
+> Common interview families: **imperative** (how: statements, assignment, loops), **declarative** / **functional** (what: expressions, transformations), and sometimes **reactive** (values over time). **Java** is specified as a **general-purpose, concurrent, class-based, object-oriented** language: objects + `this`, one superclass, interfaces, static typing ([[What does it mean that Java is object oriented]]; [[How would you explain static typing in Java]]). You still write **imperative** statements. Lambdas and `Stream` are a **functional style** on that VM ([[Which programming paradigm does the Streams API follow]]; [[How would you explain the functional programming paradigm]]). OOP principles: [[What are the main oop principles]]. OOP vs procedural vs functional: [[What are the pros and cons of OOP versus procedural and functional programming]].
 
 ## Families, then where Java sits
 

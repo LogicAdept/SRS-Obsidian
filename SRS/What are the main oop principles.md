@@ -7,7 +7,7 @@ priority: 0
 # What are the main oop principles?
 
 > [!abstract] Short answer
-> In Java interviews the **main** principles are **encapsulation**, **inheritance**, and **polymorphism**; many lists add **abstraction**. They are **design words** for mechanisms the language actually has: access control, `extends`/`implements`, virtual dispatch, `abstract`/interface types. Java: [[What does it mean that Java is object oriented]]. The usual three: [[What are the three core principles of object oriented programming]]. Encapsulation: [[How would you explain encapsulation in object oriented design]]. Inheritance: [[How would you explain class inheritance in Java and tradeoffs]]. Polymorphism: [[What is polymorphism]]. Abstraction: [[Which has the highest abstraction level among class abstract class and interface]].
+> In Java interviews the **main** principles are **encapsulation**, **inheritance**, and **polymorphism**; many lists add **abstraction**. They are **design words** for mechanisms the language actually has: access control, `extends`/`implements`, virtual dispatch, `abstract`/interface types. Java: [[What does it mean that Java is object oriented]]. Paradigm compare: [[What are the pros and cons of OOP versus procedural and functional programming]]. History: [[Why was object oriented programming favored by the industry for so long]]. Encapsulation: [[How would you explain encapsulation in object oriented design]]. Inheritance: [[How would you explain class inheritance in Java and tradeoffs]]. Polymorphism: [[What is polymorphism]]. Abstraction: [[Which has the highest abstraction level among class abstract class and interface]].
 
 ## Four names, four Java mechanisms
 
