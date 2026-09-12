@@ -11,7 +11,7 @@ priority: 0
 
 ## Strategic design vs tactical design
 
-DDD splits into two halves, and interviewers care whether you know both. Strategic design decides where the boundaries are: you analyze the domain, split it into subdomains (core, supporting, generic), assign a bounded context to each, and keep a distinct model and language inside every context. Tactical design is the implementation layer inside one context: entities with identity, immutable value objects, aggregates as consistency boundaries, domain services for operations that do not belong to one entity, repositories for persistence, and domain events for what happened. Microsoft's Azure Architecture Center describes exactly this split: strategic DDD "ensures that your architecture remains focused on business capabilities", while tactical DDD "provides design patterns that you can use to create the domain model".
+DDD splits into two halves, and interviewers care whether you know both. Strategic design decides where the boundaries are: you analyze the domain, split it into subdomains - core, supporting, generic ([[What are the types of subdomains in DDD]]) - assign a bounded context to each, and keep a distinct model and language inside every context. Tactical design is the implementation layer inside one context: entities with identity, immutable value objects, aggregates as consistency boundaries, domain services for operations that do not belong to one entity, repositories for persistence, and domain events for what happened. The strategic half keeps the architecture focused on business capabilities; the tactical half supplies the patterns that build each context's model. How the finished contexts relate to each other is its own discipline - [[What is context mapping in DDD]].
 
 ```d2
 direction: right
@@ -38,7 +38,7 @@ sol -> code: "model each context with"
 
 ## When DDD pays for itself
 
-DDD has real modeling cost, so it is aimed at complex domains with many business rules and evolving vocabulary. The Microsoft guidance is blunt that DDD approaches "should be applied only if you are implementing complex microservices with significant business rules" and that simpler responsibilities like a CRUD service "can be managed with simpler approaches". A CRUD admin panel does not need aggregates; a freight-pricing or claims-processing engine does. Saying when NOT to use DDD is a stronger interview answer than reciting its patterns.
+DDD has real modeling cost, so it is aimed at complex domains with many business rules and evolving vocabulary; simpler responsibilities, like a CRUD service, are managed with simpler approaches. A CRUD admin panel does not need aggregates; a freight-pricing or claims-processing engine does. Saying when NOT to use DDD is a stronger interview answer than reciting its patterns - the graduated verdict is in [[When should you not use domain driven design]].
 
 ## What DDD is not
 

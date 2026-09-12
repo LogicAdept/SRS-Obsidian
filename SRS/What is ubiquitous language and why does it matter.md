@@ -11,7 +11,7 @@ priority: 0
 
 ## Mechanism: one vocabulary, three artifacts
 
-The Microsoft DDD guidance calls ubiquitous language "central in DDD": a shared vocabulary that developers and domain experts create within each bounded context and use "consistently in conversations, documentation, and code", so that "the same terms mean the same thing across all these areas". The payoff is that misunderstandings surface early - in a planning conversation, not in production - because the expert and the engineer literally cannot mishear each other's nouns. It also changes how the model reads: method names become business operations (`waivePenalty`) rather than data plumbing (`updateStatus`).
+The language is central to the whole discipline: one vocabulary that developers and domain experts create within each bounded context and use consistently in conversations, documentation, and code, so the same terms mean the same thing everywhere. The payoff is that misunderstandings surface early - in a planning conversation, not in production - because the expert and the engineer literally cannot mishear each other's nouns. It also changes how the model reads: method names become business operations (`waivePenalty`) rather than data plumbing (`updateStatus`).
 
 ```java
 // Code that speaks the business language of one context
@@ -28,7 +28,7 @@ public final class UnderwritingDecision {
 
 ## Scope: the language is per context
 
-A ubiquitous language is valid inside one bounded context and deliberately not beyond it. "Policy" means the insurance contract in Underwriting and the cached pricing record in Billing; forcing one definition company-wide re-creates the tangle that bounded contexts exist to cut ([[What is a bounded context and how do you identify one]]). Between contexts you translate explicitly - integration models, anti-corruption layers, published event schemas - instead of pretending one vocabulary covers everything. The language is also living: when experts refine a term, the code renames with it, or the two drift apart and the model starts lying.
+A ubiquitous language is valid inside one bounded context and deliberately not beyond it. "Policy" means the insurance contract in Underwriting and the cached pricing record in Billing; forcing one definition company-wide re-creates the tangle that bounded contexts exist to cut ([[What is a bounded context and how do you identify one]]). Between contexts you translate explicitly - integration models, anti-corruption layers, published event schemas - instead of pretending one vocabulary covers everything. The language is also living: when experts refine a term, the code renames with it, or the two drift apart and the model starts lying. The collaborative loop that builds and refreshes this language is [[What is knowledge crunching in DDD]].
 
 > [!warning] "The glossary document is our ubiquitous language"
 > A PDF nobody updates is not a language; the language lives in the code and the conversation. The tell is whether a new term flows end to end: expert says it, the ticket says it, the class is named it, the column is named it. If naming authority belongs only to developers (or only to analysts), the model detaches from the business and you drift toward [[What is an anemic domain model and is it useful|an anemic model]] managed by translation layers.

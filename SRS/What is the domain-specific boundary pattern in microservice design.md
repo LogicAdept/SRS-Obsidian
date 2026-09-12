@@ -7,11 +7,11 @@ priority: 0
 # What is the domain-specific boundary pattern in microservice design?
 
 > [!abstract] Short answer
-> It is the practice of drawing microservice boundaries along domain boundaries - one service per bounded context, each owning its model, its data, and its own ubiquitous language - instead of along technical layers. Microsoft's DDD guidance compresses it to a slogan: "DDD is about boundaries and so are microservices." The service boundary is where a model stops, so data and behavior for one business capability live together, and everything outside is reached through contracts and translation.
+> It is the practice of drawing microservice boundaries along domain boundaries - one service per bounded context, each owning its model, its data, and its own ubiquitous language - instead of along technical layers. DDD is about boundaries, and so are microservices. The service boundary is where a model stops, so data and behavior for one business capability live together, and everything outside is reached through contracts and translation.
 
 ## How it works
 
-Strategic DDD first splits the business into bounded contexts ([[What is a bounded context and how do you identify one]]); the pattern then deploys each context - or a deliberate group of contexts - as a service. Inside, the service keeps the full vertical slice: its API, its domain model, its database. No shared enterprise schema, no common `Customer` table across services: other services hold local, slim copies or IDs and translate at the edge. Microsoft's guidance adds the sizing rule - keep boundaries "relatively small", around things that need cohesion, and stop splitting when communication between contexts starts to grow chatty - and the autonomy test: a service that must call another to answer any request "is not truly autonomous".
+Strategic DDD first splits the business into bounded contexts ([[What is a bounded context and how do you identify one]]); the pattern then deploys each context - or a deliberate group of contexts - as a service. Inside, the service keeps the full vertical slice: its API, its domain model, its database. No shared enterprise schema, no common `Customer` table across services: other services hold local, slim copies or IDs and translate at the edge. The sizing rule: keep boundaries relatively small, around things that need cohesion, and stop splitting when communication between contexts starts to grow chatty - and the autonomy test: a service that must call another to answer any request is not truly autonomous. How each pair of deployed contexts relates - negotiated, conforming, or translated - is recorded on the context map ([[What is context mapping in DDD]]).
 
 ```d2
 direction: right

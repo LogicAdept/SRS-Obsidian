@@ -7,7 +7,7 @@ priority: 0
 # What is a bounded context and how do you identify one?
 
 > [!abstract] Short answer
-> A bounded context is the explicit edge inside which one domain model and its vocabulary are consistent. Inside the boundary, every term has one meaning and every invariant is enforced by one model; across the boundary, the same word can mean something different. You identify bounded contexts during domain analysis: cluster the domain into subdomains by business capability and language, look for places where terms shift meaning, and check team and integration seams. Microsoft's guidance maps each bounded context to the model of a specific subdomain and, in a microservice system, commonly to one service.
+> A bounded context is the explicit edge inside which one domain model and its vocabulary are consistent. Inside the boundary, every term has one meaning and every invariant is enforced by one model; across the boundary, the same word can mean something different. You identify bounded contexts during domain analysis: cluster the domain into subdomains by business capability and language, look for places where terms shift meaning, and check team and integration seams. Each bounded context maps to the model of a specific subdomain and, in a microservice system, commonly to one service.
 
 ## The mechanism: one model per boundary
 
@@ -47,7 +47,7 @@ ship -> s2
 bill -> s3
 ```
 
-**Fig. 1.** Same word, three models. Each context defines its own Customer; integration happens between contexts, not in a shared class.
+**Fig. 1.** Same word, three models. Each context defines its own Customer; integration happens between contexts, not in a shared class - and the named relationship patterns for that integration live on the context map ([[What is context mapping in DDD]]).
 
 ## How you actually find them
 

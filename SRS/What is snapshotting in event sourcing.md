@@ -11,7 +11,7 @@ priority: 0
 
 ## Mechanism
 
-Rehydration without snapshots is O(stream length): an aggregate with thousands of events replays all of them on every load, and both time and memory grow with history. With snapshots the flow becomes: append events; every N events (or on a size/time threshold) write a snapshot tagged with the stream position it covers; on load, fetch the newest snapshot, deserialize it, then replay the events after that position. Microsoft's guidance gives the canonical wording - "create snapshots at specific intervals, such as every N events", balancing "the storage cost of snapshots against the time saved during rehydration" - and stresses that "snapshots are an optimization, not a replacement for the eventstream".
+Rehydration without snapshots is O(stream length): an aggregate with thousands of events replays all of them on every load, and both time and memory grow with history. With snapshots the flow becomes: append events; every N events (or on a size/time threshold) write a snapshot tagged with the stream position it covers; on load, fetch the newest snapshot, deserialize it, then replay the events after that position. The rule of thumb: snapshot at intervals - every N events, or on a size or time threshold - balancing the storage cost of snapshots against the time saved during rehydration. Snapshots are an optimization, not a replacement for the event stream: the stream stays the source of truth, and a corrupt snapshot is simply rebuilt from it.
 
 ```d2
 direction: down
