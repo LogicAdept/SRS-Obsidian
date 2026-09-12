@@ -7,7 +7,7 @@ priority: 0
 # What is a god object and how do you refactor it?
 
 > [!abstract] Short answer
-> The **god object** anti-pattern: one class accumulates knowledge and responsibilities from most of the system — every field, every use case, every dependency. It **maximizes coupling** (everything depends on it and it depends on everything) while **destroying cohesion** (its methods operate on disjoint subsets of its state) ([[What are coupling and cohesion and how do they affect maintainability]]). The refactor is incremental: pin behavior with tests, extract cohesive clusters of data plus behavior along **domain concepts**, define interfaces at the seams ([[What is antipattern which antipattern you do you know]]).
+> The **god object** anti-pattern: one class accumulates knowledge and responsibilities from most of the system — every field, every use case, every dependency. It **maximizes coupling** (everything depends on it and it depends on everything) while **destroying cohesion** (its methods operate on disjoint subsets of its state) ([[What are coupling and cohesion and how do they affect maintainability]]). The refactor is incremental: pin behavior with tests, extract cohesive clusters of data plus behavior along **domain concepts**, define interfaces at the seams ([[What is an antipattern]]).
 
 ## The symptoms
 
@@ -73,7 +73,7 @@ class OrderService {
 **Listing 1.** Conceptual. Same operations, but each extracted class now has one reason to change and testable seams.
 
 > [!warning] "Split by Service/Repository layers and the god is gone" is false
-> Technical layering re-creates one vertical god per layer, each still entangled with every domain concept. The unit of extraction is the **domain concept with its data** — not the architectural role. A slim `OrderService` that still owns pricing, notification, audit, and reporting is the same god after a diet ([[What is antipattern which antipattern you do you know]]).
+> Technical layering re-creates one vertical god per layer, each still entangled with every domain concept. The unit of extraction is the **domain concept with its data** — not the architectural role. A slim `OrderService` that still owns pricing, notification, audit, and reporting is the same god after a diet ([[What is an antipattern]]).
 
 > [!tip] Interview answer
 > A god object is where every feature's state and logic meet — maximal coupling, no cohesion, one file every change must visit. I refactor incrementally: characterization tests first, then a method-to-field usage map, then extract by domain concept — data travels with its behavior — interfaces at the seams, and the god shrinks into a temporary facade I retire call by call.
