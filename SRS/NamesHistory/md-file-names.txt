@@ -670,7 +670,7 @@
 - [x] How would you explain composition in object oriented design.md
 - [x] How would you explain concurrency in software systems.md
 - [x] How would you explain ConcurrentHashMap Java 8.md
-- [x] How would you explain ConfigMap vs Secret.md
+- [x] What is the difference between a ConfigMap and a Secret in Kubernetes.md
 - [x] How would you explain configuration styles for Spring applications.md
 - [x] How would you explain Connection draining.md
 - [x] How would you explain consistency in distributed systems and data stores.md
@@ -823,7 +823,6 @@
 - [x] How would you explain key methods declared on java.lang.Object.md
 - [x] How would you explain kinds of loops in Java.md
 - [x] How would you explain kinds of variables in Java such as local and instance.md
-- [x] How would you explain Kubernetes Pod, Deployment, Service.md
 - [x] How would you explain L3 vs L4 vs L7.md
 - [x] How would you explain lambda expressions in Java.md
 - [x] How would you explain limitations of the SQL UNION operator.md
@@ -837,8 +836,6 @@
 - [x] How would you explain list principles you should you in much programming.md
 - [x] How would you explain literal syntax for values in Java.md
 - [x] How would you explain livelock in concurrent programs.md
-- [x] How would you explain Liveness vs Readiness probe.md
-- [x] How would you explain Liveness vs Readiness vs Startup probe.md
 - [x] How would you explain local classes in Java and their scoping rules.md
 - [x] How would you explain localization l10n versus internationalization i18n.md
 - [x] How would you explain log4j layout formatters.md
@@ -934,7 +931,7 @@
 - [x] How would you explain semaphores for limiting concurrent access.md
 - [x] How would you explain server side page fragment composition.md
 - [x] How would you explain server side service discovery.md
-- [x] How would you explain Service K8s.md
+- [x] What are the Kubernetes Service types and when do you use each.md
 - [x] How would you explain Service-oriented Architecture SOA.md
 - [x] How would you explain servlet filters and request interception.md
 - [x] How would you explain ServletConfig in the servlet API.md
@@ -1432,7 +1429,7 @@
 - [x] What happens when this code runs line by line.md
 - [x] What happens when you insert elements into a TreeSet in ascending order.md
 - [x] What happens when you request the same singleton bean twice from ApplicationContext.md
-- [x] What happens when you run kubectl run with an image and replica count.md
+- [x] What happens when you run kubectl run in Kubernetes.md
 - [x] What happens when you type a URL into a browser and press Enter.md
 - [x] What harmful SQL patterns or pitfalls do you know.md
 - [x] What have you learned or read recently that you would recommend.md

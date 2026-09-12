@@ -58,7 +58,7 @@ CMD ["--spring.profiles.active=dev"]
 
 **Listing 1.** `docker run app:1.0` starts the app with the dev profile; `docker run app:1.0 --spring.profiles.active=prod` replaces the CMD argument — no image rebuild for a flag flip.
 
-This split is what makes an image behave like a command-line tool: the image **is** the program (ENTRYPOINT), the run arguments are its flags (CMD). It is the same pattern behind images like `postgres`, where `docker run postgres:18` and extra args configure the executable — and behind Kubernetes pod commands that override them ([[What happens when you run kubectl run with an image and replica count]]).
+This split is what makes an image behave like a command-line tool: the image **is** the program (ENTRYPOINT), the run arguments are its flags (CMD). It is the same pattern behind images like `postgres`, where `docker run postgres:18` and extra args configure the executable — and behind Kubernetes pod commands that override them ([[What happens when you run kubectl run in Kubernetes]]).
 
 > [!warning] Shell-form ENTRYPOINT silently ignores CMD
 > With `ENTRYPOINT java -jar app.jar` (shell form), the actual PID 1 is `/bin/sh -c "java -jar app.jar"`: any CMD or `docker run` arguments are thrown away, and — worse — SIGTERM from `docker stop` goes to `sh`, not to your process ([[What is the difference between shell form and exec form in a Dockerfile]]). Mixing an exec-form ENTRYPOINT with a shell-form CMD is the quieter cousin: the shell invocation itself becomes the argument string.
