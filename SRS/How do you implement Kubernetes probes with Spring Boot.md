@@ -26,7 +26,7 @@ readinessProbe:
     port: 8080
 ```
 
-**Listing 1.** kubelet wiring from the Actuator guide. Use the **management** port if you set `management.server.port`. **`startupProbe`** is optional: readiness already refuses traffic until runners finish; use a startup probe on the **liveness** path if the process is so slow that kubelet would **kill** it for failing liveness during boot ([[How would you explain Liveness vs Readiness vs Startup probe]]).
+**Listing 1.** kubelet wiring from the Actuator guide. Use the **management** port if you set `management.server.port`. **`startupProbe`** is optional: readiness already refuses traffic until runners finish; use a startup probe on the **liveness** path if the process is so slow that kubelet would **kill** it for failing liveness during boot ([[What is the difference between liveness readiness and startup probes in Kubernetes]]).
 
 By default **neither group includes `db` or other indicators**. Add checks only to **readiness**, and only for dependencies that should take the instance **out of the Service**:
 
