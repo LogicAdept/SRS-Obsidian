@@ -77,7 +77,7 @@ class Use {
 > A class inherits abstract/default methods from interfaces too. That is still is-a, not has-a. You cannot `extends` two classes.
 
 > [!warning] Less source is not automatically better
-> The dump’s `Smartphone extends CellPhone extends …` is the fragile-base-class shape. If you only needed `install`, a field (has-a) plus forwarding is often cheaper. Inherit for **substitutability**, not for two methods.
+> The dump’s `Smartphone extends CellPhone extends …` is the fragile-base-class shape. If you only needed `install`, a field (has-a) plus forwarding is often cheaper. Inherit for **substitutability**, not for two methods. Why extending can rot: [[What is the fragile base class problem]]; the type edge vs the code edge: [[What is the difference between subtyping and inheritance]].
 
 > [!tip] Interview answer
 > Inheritance means a new class is declared as a subclass (or an interface as a subinterface) and receives accessible members of the parent types. In Java that is one `extends` and many `implements`. Constructors are not inherited. Use it for is-a relationships and polymorphism, not as a way to steal a couple of methods.

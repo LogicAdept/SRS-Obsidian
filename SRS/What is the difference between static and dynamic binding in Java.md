@@ -22,7 +22,7 @@ priority: 0
 - **`super.m()`:** the superclass body, not virtual ([[How do you call an overridden superclass method in Java]]).
 - **Constructors:** not methods; `new` is not dynamic dispatch.
 
-**`final`.** A `final` instance method **cannot be overridden**, so the body is unique and the JVM may inline it. Private methods “behave as final” for overriding. The dump’s “all Java methods are late-bound unless `final`” **skips `static`, overloads, `private`, and `super`**. Message passing: [[What is message passing in object oriented programming]].
+**`final`.** A `final` instance method **cannot be overridden**, so the body is unique and the JVM may inline it. Private methods “behave as final” for overriding. The dump’s “all Java methods are late-bound unless `final`” **skips `static`, overloads, `private`, and `super`**. Message passing: [[What is message passing in object oriented programming]]. Selecting behavior by the argument's run-time type takes two hops: [[What is double dispatch and how do you implement it in Java]].
 
 ```d2
 direction: down

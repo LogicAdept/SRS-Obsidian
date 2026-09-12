@@ -11,7 +11,7 @@ priority: 0
 
 ## Combine, then hide
 
-The dump’s two parts are both required: **bundle** (fields live with the methods that use them) and **hide** (those fields are not the API). A class of public fields is a bundle without hiding ([[How would you explain problems with public mutable fields in Java]]).
+The dump’s two parts are both required: **bundle** (fields live with the methods that use them) and **hide** (those fields are not the API). A class of public fields is a bundle without hiding ([[How would you explain problems with public mutable fields in Java]]). The classical payoff of hiding: the rep invariant plus abstraction function — [[What is a representation invariant and abstraction function]].
 
 **Access.** `private` is the usual field default: usable in the **nest** (the top-level class and its nested types), not from another top-level class. `public` methods are the steering wheel. Package-private is a team boundary ([[How does package private visibility relate to encapsulation]]). `protected` is for subclasses—still a published contract.
 

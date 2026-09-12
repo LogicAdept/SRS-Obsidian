@@ -11,7 +11,7 @@ priority: 0
 
 ## Why inheritance is limiting
 
-Inheritance is static: you cannot change the behavior of an existing object at runtime, you can only replace the whole object with one from another subclass. It also gives a single parent in most languages, so you cannot inherit behavior from two classes at once. Both limits bite exactly when you need flexible, runtime-configurable behavior — the situation the classic GoF notification example describes, where adding SMS, Slack, and Facebook sending by subclassing explodes into a combinatorial set of subclasses.
+Inheritance is static: you cannot change the behavior of an existing object at runtime, you can only replace the whole object with one from another subclass. It also gives a single parent in most languages, so you cannot inherit behavior from two classes at once. Both limits bite exactly when you need flexible, runtime-configurable behavior — the situation the classic GoF notification example describes, where adding SMS, Slack, and Facebook sending by subclassing explodes into a combinatorial set of subclasses. The deeper cost of inheriting anyway: [[What is the fragile base class problem]].
 
 ## How composition and delegation replace it
 

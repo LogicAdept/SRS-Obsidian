@@ -11,7 +11,7 @@ priority: 0
 
 ## Same type, different bodies
 
-The dump’s useful sentence: work through one **interface** (type) without the internals. `callAnotherUser(int, AbstractPhone phone)` then `phone.call(n)` is that: the parameter is the abstract type; each model **overrides** `call`. `@Override` only checks the signature ([[How does the Override annotation work]]). Inheritance supplies the subtype ([[What is inheritance]]). Abstraction is the type you publish ([[What is abstraction]]). Java OO: [[What does it mean that Java is object oriented]].
+The dump’s useful sentence: work through one **interface** (type) without the internals. `callAnotherUser(int, AbstractPhone phone)` then `phone.call(n)` is that: the parameter is the abstract type; each model **overrides** `call`. `@Override` only checks the signature ([[How does the Override annotation work]]). Inheritance supplies the subtype ([[What is inheritance]]). Abstraction is the type you publish ([[What is abstraction]]). Java OO: [[What does it mean that Java is object oriented]]. The full taxonomy of kinds: [[What kinds of polymorphism do you know]].
 
 **The dump contradicts itself.** First it says the **compiler** chooses the action; later the phone example correctly says **dynamic** choice at **run time**. For **overriding**, believe the second. The compiler proves `call` exists on `AbstractPhone`. It does **not** pick `VideoPhone.call`. That is overload resolution vs virtual dispatch ([[How would you explain method overloading in Java]]). A cast of the reference does **not** change which override runs. `super.m()` and `static` / `private` calls do **not** use this lookup. Mechanisms: [[What mechanisms implement polymorphism in Java]].
 

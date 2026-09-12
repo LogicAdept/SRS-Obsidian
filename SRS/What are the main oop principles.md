@@ -11,7 +11,7 @@ priority: 0
 
 ## Four names, four Java mechanisms
 
-**Encapsulation.** Fields and helper methods stay behind access modifiers. Callers use a published API. Not “all fields `private`” as a slogan—`public` mutable fields break it.
+**Encapsulation.** Fields and helper methods stay behind access modifiers. Callers use a published API. Not “all fields `private`” as a slogan—`public` mutable fields break it. The invariants hiding protects: [[What is a representation invariant and abstraction function]].
 
 **Inheritance.** A class has **one** superclass (`extends`) and any number of superinterfaces (`implements`) ([[Does Java support multiple inheritance for classes]]). Subclasses reuse and specialize. It is coupling, not a free lunch.
 

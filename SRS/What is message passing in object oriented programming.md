@@ -11,7 +11,7 @@ priority: 0
 
 ## Smalltalk word, Java method call
 
-**Dump (the bounce story).** Procedural code: `bounce(id, …)` and a table of ball data. OO: each ball is an object that **contains** its state **and** `bounce()`. You send **that object** the bounce **message** instead of passing a ball number into a global procedure.
+**Dump (the bounce story).** Procedural code: `bounce(id, …)` and a table of ball data. OO: each ball is an object that **contains** its state **and** `bounce()`. You send **that object** the bounce **message** instead of passing a ball number into a global procedure. The design consequence: [[What is tell don't ask in object oriented design]].
 
 **Java.** `b.bounce()` is a method invocation expression. Compile time: name, argument types, accessibility → one **signature**. Run time (virtual/interface instance call): start from the **class of the target object**, find the method that **overrides** that signature ([[How would you explain method overriding in Java]]). `null` → `NullPointerException`. `static` calls (`Type.m()` or even `obj.m()` when `m` is static) do **not** look up on the object; they are not message passing in the Kay sense.
 
