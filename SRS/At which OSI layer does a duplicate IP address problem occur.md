@@ -9,7 +9,7 @@ priority: 0
 > [!abstract] Short answer
 > **Layer 3 (Network).** A duplicate IP address is a clash of **network-layer logical addresses** on the same link. Detection often uses ARP or Neighbor Discovery frames, but those are symptoms and probes — the broken contract is still the IP identity at Layer 3.
 
-IP is the usual Internet mapping of OSI Network-layer addressing and routing. See [[Which OSI layer handles logical addressing and routing]] and [[What is the job of the Network layer under the OSI model]].
+IP is the usual Internet mapping of OSI Network-layer addressing and routing. See [[At which OSI layer does a router primarily operate]] and [[What is the job of the Network layer under the OSI model]].
 
 ## Why it is Layer 3
 
@@ -41,7 +41,7 @@ hosts -> l2: "conflict visible in\nARP/ND traffic"
 
 **Fig. 1.** The misconfiguration is shared Layer 3 identity; link-layer traffic is how neighbors notice it.
 
-A duplicate **MAC** on the same segment is a different problem and belongs with [[Which OSI layer handles MAC addressing and local frame forwarding]]. Unique MACs do not prevent an IP conflict.
+A duplicate **MAC** on the same segment is a different problem and belongs with [[At which OSI layer does a switch primarily operate]]. Unique MACs do not prevent an IP conflict.
 
 ## How the conflict is usually discovered
 

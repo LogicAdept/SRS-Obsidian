@@ -42,7 +42,7 @@ The document skeleton is fixed: a `<!DOCTYPE html>` preamble, one root `<html>` 
 "Hypertext" refers to the links that connect documents - the `<a>` element is the founding feature of the Web. The browser does not render the markup text directly: the parser tokenizes tags, builds the **DOM** tree, and the rendering engine lays out that tree. This is why malformed markup still renders - the HTML parser has a defined error-recovery algorithm, unlike an XML parser that aborts on the first well-formedness error.
 
 > [!warning] HTML is not a programming language
-> HTML has no control flow, variables, or computation - it declares structure and semantics. Cards like [[What is the difference between methods GET and POST]] describe transport semantics that HTML links merely trigger; the logic lives in JavaScript on top of the DOM.
+> HTML has no control flow, variables, or computation - it declares structure and semantics. Cards like [[What is the difference between GET and POST]] describe transport semantics that HTML links merely trigger; the logic lives in JavaScript on top of the DOM.
 
 ## Where HTML sits
 

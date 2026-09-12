@@ -7,7 +7,7 @@ priority: 0
 # Is a session object always created on a JSP page and can it be disabled?
 
 > [!abstract] Short answer
-> **No.** The **`page` directive `session` defaults to `true`**, so the generated servlet **joins or creates** an **`HttpSession`** (`request.getSession()`, i.e. **`getSession(true)`**) and exposes it as the implicit **`session`**. Set **`<%@ page session="false" %>`** and that page **does not participate**: the implicit **`session` is gone**, and **any use of it is a fatal translation error**. An HTTP session created by **another** servlet or JSP can still exist. Servlet sessions: [[How would you explain HTTP sessions in servlet based applications]]. JSP as a servlet: [[What is Java Server Pages JSP]]. Tracking without cookies: [[How would you explain URL rewriting for session tracking]].
+> **No.** The **`page` directive `session` defaults to `true`**, so the generated servlet **joins or creates** an **`HttpSession`** (`request.getSession()`, i.e. **`getSession(true)`**) and exposes it as the implicit **`session`**. Set **`<%@ page session="false" %>`** and that page **does not participate**: the implicit **`session` is gone**, and **any use of it is a fatal translation error**. An HTTP session created by **another** servlet or JSP can still exist. Servlet sessions: [[How would you explain HTTP sessions in servlet based applications]]. JSP as a servlet: [[What is Java Server Pages JSP]]. Tracking without cookies: [[What is URL rewriting for session tracking]].
 
 ## Default `true`, opt out with `session="false"`
 

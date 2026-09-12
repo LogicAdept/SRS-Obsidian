@@ -47,7 +47,7 @@ Host A ──► Hub ──► Host B
 
 ## Collision domain (why hubs vanished)
 
-Because the hub only repeats signals, simultaneous transmitters collide electrically. All ports of a classic hub sit in **one collision domain**; attached hosts share bandwidth with CSMA/CD on half-duplex Ethernet. A Layer 2 switch breaks that into per-port collision domains by buffering and forwarding frames. See [[Which OSI layer handles MAC addressing and local frame forwarding]] and [[What is the importance of the OSI Physical layer]].
+Because the hub only repeats signals, simultaneous transmitters collide electrically. All ports of a classic hub sit in **one collision domain**; attached hosts share bandwidth with CSMA/CD on half-duplex Ethernet. A Layer 2 switch breaks that into per-port collision domains by buffering and forwarding frames. See [[At which OSI layer does a switch primarily operate]] and [[What is the importance of the OSI Physical layer]].
 
 > [!warning] “Smart hub” / dual-speed marketing
 > Some products labeled “hub” internally bridge between speed domains. The **exam default** for a plain Ethernet hub remains Layer 1 multiport repeater — no MAC learning. If a device learns MACs or routes IP, it is not operating as a simple hub.
