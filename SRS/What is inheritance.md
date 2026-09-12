@@ -7,7 +7,7 @@ priority: 0
 # What is inheritance?
 
 > [!abstract] Short answer
-> **Inheritance** is declaring a class (or interface) **from existing types** so it **gains members** of those types. In Java a class has **one** superclass (`extends`; `Object` if omitted) and any number of superinterfaces (`implements`). The subclass **is-a** the parent ([[What do in OOP expressions is-a and has-a]]). **Constructors and `{ }` / `static { }` are not inherited** ([[What does a Java class consist of]]). Tradeoffs: [[How would you explain class inheritance in Java and tradeoffs]]. Multiple class inheritance: [[Does Java support multiple inheritance for classes]]. `Object`: [[Do Java classes inherit from Object explicitly or implicitly]].
+> **Inheritance** is declaring a class (or interface) **from existing types** so it **gains members** of those types. In Java a class has **one** superclass (`extends`; `Object` if omitted) and any number of superinterfaces (`implements`). The subclass **is-a** the parent ([[What do in OOP expressions is-a and has-a]]). **Constructors and `{ }` / `static { }` are not inherited** ([[What does a Java class consist of]]). Tradeoffs: [[How would you explain class inheritance in Java and tradeoffs]]. Types: [[What types of inheritance do you know and which does Java support]]. vs polymorphism: [[What is the difference between inheritance and polymorphism]]. Multiple class inheritance: [[Does Java support multiple inheritance for classes]]. `Object`: [[Do Java classes inherit from Object explicitly or implicitly]].
 
 ## Subclass reuses members, not constructors
 
@@ -77,7 +77,7 @@ class Use {
 > A class inherits abstract/default methods from interfaces too. That is still is-a, not has-a. You cannot `extends` two classes.
 
 > [!warning] Less source is not automatically better
-> The dump’s `Smartphone extends CellPhone extends …` is the fragile-base-class shape. If you only needed `install`, a field (has-a) plus forwarding is often cheaper. Inherit for **substitutability**, not for two methods.
+> The dump’s `Smartphone extends CellPhone extends …` is the fragile-base-class shape. If you only needed `install`, a field (has-a) plus forwarding is often cheaper. Inherit for **substitutability**, not for two methods. Why extending can rot: [[What is the fragile base class problem]]; the type edge vs the code edge: [[What is the difference between subtyping and inheritance]].
 
 > [!tip] Interview answer
 > Inheritance means a new class is declared as a subclass (or an interface as a subinterface) and receives accessible members of the parent types. In Java that is one `extends` and many `implements`. Constructors are not inherited. Use it for is-a relationships and polymorphism, not as a way to steal a couple of methods.

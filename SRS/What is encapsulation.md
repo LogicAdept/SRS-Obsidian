@@ -7,11 +7,11 @@ priority: 0
 # What is encapsulation?
 
 > [!abstract] Short answer
-> **Encapsulation** is putting **state and the methods that maintain it in one class** and **publishing only a chosen API**. Callers depend on `call()`, not on fields or helper methods. That lets you change the implementation without changing clients. Java does it with **access modifiers**, not a keyword `encapsulate`. Design: [[How would you explain encapsulation in object oriented design]]. vs abstraction: [[What is abstraction]]. Private vs other classes: [[Can one object access another class private fields in Java]]. Principles: [[What are the main oop principles]].
+> **Encapsulation** is putting **state and the methods that maintain it in one class** and **publishing only a chosen API**. Callers depend on `call()`, not on fields or helper methods. That lets you change the implementation without changing clients. Java does it with **access modifiers**, not a keyword `encapsulate`. Design: [[How would you explain encapsulation in object oriented design]]. vs abstraction: [[What is abstraction]]; detail: [[What is the difference between abstraction and encapsulation]]. Private vs other classes: [[Can one object access another class private fields in Java]]. Principles: [[What are the main oop principles]].
 
 ## Combine, then hide
 
-The dump’s two parts are both required: **bundle** (fields live with the methods that use them) and **hide** (those fields are not the API). A class of public fields is a bundle without hiding ([[How would you explain problems with public mutable fields in Java]]).
+The dump’s two parts are both required: **bundle** (fields live with the methods that use them) and **hide** (those fields are not the API). A class of public fields is a bundle without hiding ([[How would you explain problems with public mutable fields in Java]]). The classical payoff of hiding: the rep invariant plus abstraction function — [[What is a representation invariant and abstraction function]].
 
 **Access.** `private` is the usual field default: usable in the **nest** (the top-level class and its nested types), not from another top-level class. `public` methods are the steering wheel. Package-private is a team boundary ([[How does package private visibility relate to encapsulation]]). `protected` is for subclasses—still a published contract.
 

@@ -7,7 +7,7 @@ priority: 0
 # What is OOP?
 
 > [!abstract] Short answer
-> **Object-oriented programming** organizes a program as **objects**—**instances of classes**—that **collaborate**. Classes form a **type hierarchy** (`extends` / `implements`). Java is specified as **class-based, object-oriented**: instance methods run with **`this`** ([[What does it mean that Java is object oriented]]). Usual principles: encapsulation, inheritance, polymorphism, often abstraction ([[What are the main oop principles]]; [[What are the three core principles of object oriented programming]]). Class / object / interface: [[How would you explain main concepts OOP class object interface]]. Paradigms: [[What are the main paradigms programming]].
+> **Object-oriented programming** organizes a program as **objects**—**instances of classes**—that **collaborate**. Classes form a **type hierarchy** (`extends` / `implements`). Java is specified as **class-based, object-oriented**: instance methods run with **`this`** ([[What does it mean that Java is object oriented]]). Usual principles: encapsulation, inheritance, polymorphism, often abstraction ([[What are the main oop principles]]). Class / object / interface: [[How would you explain main concepts OOP class object interface]]. Paradigms: [[What are the main paradigms programming]].
 
 ## Objects, classes, hierarchy
 

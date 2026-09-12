@@ -17,7 +17,7 @@ priority: 0
 
 **3. Dynamic method lookup.** After the compiler has fixed the **signature** (overloads are **not** this mechanism—[[How would you explain method overloading in Java]]; [[How would you explain Overload vs Override]]), a `virtual` or `interface` invocation searches from the target object’s class ([[What is polymorphism]]).
 
-**Not the OOP mechanism.** Overloading (compile-time). Generics (parametric, erased). Casts/`instanceof` (tests). `final` methods can be invoked virtually but cannot supply a second body.
+**Not the OOP mechanism.** Overloading (compile-time). Generics (parametric, erased). Casts/`instanceof` (tests). `final` methods can be invoked virtually but cannot supply a second body. The full taxonomy: [[What kinds of polymorphism do you know]]; selecting behavior by an argument's run-time type: [[What is double dispatch and how do you implement it in Java]].
 
 ```d2
 direction: down

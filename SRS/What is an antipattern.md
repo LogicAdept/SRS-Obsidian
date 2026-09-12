@@ -72,7 +72,7 @@ Koenig introduced the term in 1995, inspired by the GoF book that catalogued rel
 
 Well-known examples on the software side include:
 
-* **God object** - one class concentrates control and knowledge of the whole program.
+* **God object** - one class concentrates control and knowledge of the whole program. The deep dive with the refactoring path: [[What is a god object and how do you refactor it]].
 * **Magic number** - an important literal whose meaning is unexplained in the code.
 * **Poltergeist** - ephemeral controller classes that exist only to invoke methods on other classes.
 * **Big Ball of Mud** - a system with no perceivable architecture.
