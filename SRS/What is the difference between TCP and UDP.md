@@ -2,24 +2,48 @@
 reps: 0
 priority: 0
 -->
-#Networking/TCP #Networking/UDP #SRS #New
+#Networking/TCP #Networking/UDP #SRS
+# What is the difference between TCP and UDP
 
-> [!warning] Черновик без доверия
-> Текст скопирован из внешнего дампа вопросов. Не сверен с официальной документацией. Не считать ответом для ревью.
+> [!abstract] Short answer
+> TCP is a connection-oriented, reliable, ordered byte stream with flow and congestion control; UDP is a connectionless, best-effort datagram service with only ports and a checksum. TCP costs a handshake, per-connection state and head-of-line blocking; UDP costs nothing and guarantees nothing. Choose TCP when every byte must arrive (web, APIs, file transfer) and UDP when loss is acceptable or when you build your own reliability (DNS, media, QUIC).
 
-**Чем отличаются _TCP_ и _UDP_?**
+## The comparison table
 
-__TCP__ — ориентированный на соединение протокол, что означает необходимость «рукопожатия» для установки соединения между двумя хостами. Как только соединение установлено, пользователи могут отправлять данные в обоих направлениях.
+| Aspect | TCP (RFC 9293) | UDP (RFC 768) |
+|---|---|---|
+| Connection | yes — 3-way handshake, FIN/RST teardown | none — fire and forget |
+| Delivery | reliable: ACKs, retransmission | best-effort: silent loss |
+| Ordering | strict byte-stream order | none |
+| Duplicates | filtered by sequence numbers | possible, app must dedup |
+| Flow control | receive window | none |
+| Congestion control | required (slow start, AIMD) | none (app's job — see QUIC) |
+| Data unit | segment, stream (no message borders) | datagram (message = unit) |
+| Header | 20+ bytes with options | 8 bytes |
+| Typical users | HTTP/1.1·2, SSH, SMTP, DB drivers | DNS, DHCP, QUIC/HTTP-3, VoIP, games |
 
-+ _Надёжность_ — TCP управляет подтверждением, повторной передачей и тайм-аутом сообщений. Производятся многочисленные попытки доставить сообщение. Если оно потеряется на пути, сервер вновь запросит потерянную часть. В TCP нет ни пропавших данных, ни (в случае многочисленных тайм-аутов) разорванных соединений.
-+ _Упорядоченность_ — если два сообщения последовательно отправлены, первое сообщение достигнет приложения-получателя первым. Если участки данных приходят в неверном порядке, TCP отправляет неупорядоченные данные в буфер до тех пор, пока все данные не могут быть упорядочены и переданы приложению.
-+ _Тяжеловесность_ — TCP необходимо три пакета для установки соединения перед тем, как отправить данные. TCP следит за надёжностью и перегрузками.
-+ _Потоковая передача_ — данные читаются как поток байтов, не передается никаких особых обозначений для границ сообщения или сегментов.
+```d2
+direction: right
+tcp: "TCP\nconnect -> stream -> ACK/retransmit\n-> close" { width: 320; height: 100; style.fill: "#e3f2fd" }
+udp: "UDP\nsend datagram(s). done." { width: 260; height: 100; style.fill: "#fff3e0" }
+q: "Does every byte matter?\nyes -> TCP | own-reliability or loss-OK -> UDP" { width: 380; height: 100; style.fill: "#e8f5e9" }
+q -> tcp
+q -> udp
+```
 
-__UDP__ — более простой, основанный на сообщениях протокол без установления соединения. Протоколы такого типа не устанавливают выделенного соединения между двумя хостами. Связь достигается путём передачи информации в одном направлении от источника к получателю без проверки готовности или состояния получателя.
+**Fig. 1.** The decision hinge: guarantees are bought with state, latency and head-of-line blocking.
 
-+ _Ненадёжность_ — когда сообщение посылается, неизвестно, достигнет ли оно своего назначения — оно может потеряться по пути. Нет таких понятий как подтверждение, повторная передача, тайм-аут.
-+ _Неупорядоченность_ — если два сообщения отправлены одному получателю, то порядок их достижения цели не может быть предугадан.
-+ _Легковесность_ — никакого упорядочивания сообщений, никакого отслеживания соединений и т. д. Это лишь транспортный уровень.
-+ _Датаграммы_ — пакеты посылаются по отдельности и проверяются на целостность только если они прибыли. Пакеты имеют определенные границы, которые соблюдаются после получения, то есть операция чтения на получателе выдаст сообщение таким, каким оно было изначально послано.
-+ _Отсутствие контроля перегрузок_ — для приложений с большой пропускной способностью существует шанс вызвать коллапс перегрузок, если только они не реализуют меры контроля на прикладном уровне.
+## How the tradeoff plays out
+
+- **Web/API:** TCP (HTTP/1.1, HTTP/2) — correctness first; browsers tolerate latency better than corruption. With HTTP/3 the browser world shifted to QUIC over UDP to remove TCP head-of-line blocking and make TLS 1.3 part of the handshake ([[What is HTTP 3 and why does it use QUIC]]).
+- **DNS:** UDP by default — one round trip; resolvers fall back to TCP for large answers (DNSSEC, zone transfers).
+- **Streaming/voice:** UDP — a retransmitted video frame arrives too late to be shown; skip and encode the next one.
+- **Dedup asymmetry:** TCP filters duplicates inside a connection; UDP leaves dedup to the app ([[How do you prevent duplicate message or packet delivery]]).
+
+> [!warning] Three lies interviews tell about this pair
+> (1) "UDP has no checksum" — it has one, mandatory in IPv6, optional (zero) in IPv4. (2) "UDP is always faster" — for bulk reliable transfer, TCP's congestion control beats a naive UDP sender that floods and loses. (3) "TCP guarantees the app processed the data" — it guarantees delivery to the receive buffer only; a crashed receiver loses ACKed-but-unprocessed bytes. [[What is TCP]] and [[What is UDP]] expand each side.
+
+Transport-layer context: [[Which OSI layer provides end-to-end delivery flow control and error recovery]], [[What is a segment at the Transport layer]], [[What is the TCP IP protocol suite]].
+
+> [!tip] Interview answer
+> TCP: connection, ordered reliable stream, flow and congestion control — 20+ byte header, costs a handshake and head-of-line blocking. UDP: connectionless 8-byte-header datagrams, best-effort only. My selection rule: correctness-critical request/response goes TCP; one-shot queries, real-time media, or custom-built reliability go UDP — QUIC being the proof that "custom reliability over UDP" is now a mainstream choice.

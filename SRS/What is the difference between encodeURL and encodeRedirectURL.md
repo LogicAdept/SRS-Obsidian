@@ -7,7 +7,7 @@ priority: 0
 # What is the difference between encodeURL and encodeRedirectURL?
 
 > [!abstract] Short answer
-> Both are **`HttpServletResponse`** methods that may append **`;jsessionid=…`** when the container must **rewrite URLs** because **cookies are not usable**. **`encodeURL`** is for **every URL you emit in the page** (links, form `action`, images). **`encodeRedirectURL`** is **only** for the string you pass to **`sendRedirect`**. They are **separate** because **whether to encode can differ** for a **normal link** vs a **redirect `Location`**. Neither is **`URLEncoder`** (percent-encoding). Rewriting: [[How would you explain URL rewriting for session tracking]]. Sessions: [[How would you explain HTTP sessions in servlet based applications]]. Response API: [[How would you explain the ServletResponse interface]].
+> Both are **`HttpServletResponse`** methods that may append **`;jsessionid=…`** when the container must **rewrite URLs** because **cookies are not usable**. **`encodeURL`** is for **every URL you emit in the page** (links, form `action`, images). **`encodeRedirectURL`** is **only** for the string you pass to **`sendRedirect`**. They are **separate** because **whether to encode can differ** for a **normal link** vs a **redirect `Location`**. Neither is **`URLEncoder`** (percent-encoding). Rewriting: [[What is URL rewriting for session tracking]]. Sessions: [[How would you explain HTTP sessions in servlet based applications]]. Response API: [[How would you explain the ServletResponse interface]].
 
 ## Two encode methods, two call sites
 
