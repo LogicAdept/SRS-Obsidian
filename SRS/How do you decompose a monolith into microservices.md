@@ -7,7 +7,7 @@ priority: 0
 # How do you decompose a monolith into microservices
 
 > [!abstract] Short answer
-> Decomposing a monolith into microservices is the discipline of carving the deployable along business seams so each extracted service can be developed, deployed and scaled independently: pick boundaries by business capability or subdomain (DDD), extract data ownership first, strangle the routes incrementally, and keep every step reversible. Richardson's two decomposition patterns — by business capability, by subdomain — are the scoping tools; the strangler fig is the execution vehicle.
+> Decomposing a monolith into microservices is the discipline of carving the deployable along business seams so each extracted service can be developed, deployed and scaled independently: pick boundaries by business capability or subdomain (DDD), extract data ownership first, strangle the routes incrementally, and keep every step reversible. The two decomposition patterns — by business capability, by subdomain — are the scoping tools; the strangler fig is the execution vehicle.
 
 ## Step 1: find the seams before cutting
 

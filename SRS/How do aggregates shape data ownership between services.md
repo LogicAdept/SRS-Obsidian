@@ -7,7 +7,7 @@ priority: 0
 # How do aggregates shape data ownership between services
 
 > [!abstract] Short answer
-> In Richardson's data patterns, the DDD aggregate is the unit of service ownership: a service owns its aggregates, other services reference them by identity - never by holding a shared copy or joining its tables - and one transaction updates one aggregate. Aggregates turn "whose data is this" from a convention into a rule, which is what makes database-per-service enforceable.
+> In the data patterns for microservices, the DDD aggregate is the unit of service ownership: a service owns its aggregates, other services reference them by identity - never by holding a shared copy or joining its tables - and one transaction updates one aggregate. Aggregates turn "whose data is this" from a convention into a rule, which is what makes database-per-service enforceable.
 
 ## The three rules that carry across service boundaries
 
@@ -31,7 +31,7 @@ o -> c: customerId only
 
 **Fig. 1.** Order Service holds the customer's identity, not the customer's data; anything else crosses as an API call or an event.
 
-The definitions - aggregate root, entities, value objects, why the root guards invariants - live in [[What are aggregate aggregate root entity and value object in DDD]]; this card is the architecture-side consequence. Richardson's aggregate pattern page makes the ownership framing explicit: design the business logic as aggregates so that services can be cut along the same seams and events can be attached to state changes - which is why the aggregate, the domain event and the outbox form one toolkit ([[How does an aggregate persist and publish events without a distributed transaction]] shows the persistence-plus-publication flow end to end).
+The definitions - aggregate root, entities, value objects, why the root guards invariants - live in [[What are aggregate aggregate root entity and value object in DDD]]; this card is the architecture-side consequence. The aggregate pattern makes the ownership framing explicit: design the business logic as aggregates so that services can be cut along the same seams and events can be attached to state changes - which is why the aggregate, the domain event and the outbox form one toolkit ([[How does an aggregate persist and publish events without a distributed transaction]] shows the persistence-plus-publication flow end to end).
 
 ## Consequences you will be asked about
 

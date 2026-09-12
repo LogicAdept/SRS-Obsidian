@@ -7,7 +7,7 @@ priority: 0
 # How would you explain server side page fragment composition
 
 > [!abstract] Short answer
-> Server-side page fragment composition builds pages that span microservices on the server: each team owns a service that renders the HTML fragment for its region of the page (header, product panel, recommendations), and a template layer aggregates the fragments into the final page before it is sent to the browser. Richardson's UI-side counterpart of client-side composition; the browser sees one server-rendered page.
+> Server-side page fragment composition builds pages that span microservices on the server: each team owns a service that renders the HTML fragment for its region of the page (header, product panel, recommendations), and a template layer aggregates the fragments into the final page before it is sent to the browser. It is the UI-side counterpart of client-side composition; the browser sees one server-rendered page.
 
 ## The mechanics: template plus per-team fragments
 

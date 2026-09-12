@@ -7,7 +7,7 @@ priority: 0
 # What is the command-side replica pattern
 
 > [!abstract] Short answer
-> The command-side replica pattern — from the Service collaboration group of the microservices.io catalogue — tells a service that handles commands to keep a local, queryable replica of the data owned by another service, maintained by subscribing to that owner's domain events. Writes still go to the owner; the replica only serves reads and validations performed while handling a command. It removes synchronous calls from the command path at the price of eventual consistency and duplicated storage.
+> The command-side replica pattern tells a service that handles commands to keep a local, queryable replica of the data owned by another service, maintained by subscribing to that owner's domain events. Writes still go to the owner; the replica only serves reads and validations performed while handling a command. It removes synchronous calls from the command path at the price of eventual consistency and duplicated storage.
 
 ## Problem: the command path needs someone else's data
 
@@ -15,7 +15,7 @@ Handling a command rarely touches only one service's tables. An Order Service mu
 
 ## Solution: replicate for reads, delegate the writes
 
-The command service subscribes to the owner's change stream — domain events published via [[What is the domain event pattern in microservices]], typically produced with [[How would you explain the transactional outbox pattern]] or [[How would you explain the event sourcing pattern]] — and materializes a private replica of just the fields it needs: open menu items, credit limits, active promotions. Command handling reads the local replica; any real mutation is sent to the owning service, which remains the single source of truth. Richardson frames this inside the same family as [[What is CQRS]]: a command-side replica is CQRS applied locally, keeping the queryable view inside the service that commands, while [[What is the API composition pattern in microservices]] instead joins other services' data at query time.
+The command service subscribes to the owner's change stream — domain events published via [[What is the domain event pattern in microservices]], typically produced with [[How would you explain the transactional outbox pattern]] or [[How would you explain the event sourcing pattern]] — and materializes a private replica of just the fields it needs: open menu items, credit limits, active promotions. Command handling reads the local replica; any real mutation is sent to the owning service, which remains the single source of truth. It sits in the same family as [[What is CQRS]]: a command-side replica is CQRS applied locally, keeping the queryable view inside the service that commands, while [[What is the API composition pattern in microservices]] instead joins other services' data at query time.
 
 ```d2
 direction: right

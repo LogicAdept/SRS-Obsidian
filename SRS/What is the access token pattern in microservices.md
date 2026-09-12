@@ -7,7 +7,7 @@ priority: 0
 # What is the access token pattern in microservices
 
 > [!abstract] Short answer
-> Access token pattern: the edge authenticates the caller once and passes a tamper-proof token - typically a JWT carrying identity and scopes - with every downstream request, so each service can verify who the requestor is and what they may do without re-authenticating. Richardson's security pattern: authentication happens at the perimeter (API gateway), authorization data travels with the request.
+> Access token pattern: the edge authenticates the caller once and passes a tamper-proof token - typically a JWT carrying identity and scopes - with every downstream request, so each service can verify who the requestor is and what they may do without re-authenticating. The security shape: authentication happens at the perimeter (API gateway), authorization data travels with the request.
 
 ## Mechanism: authenticate at the edge, verify everywhere
 
@@ -37,7 +37,7 @@ String pl  = new String(Base64.getUrlDecoder().decode(parts[1]), UTF_8);
 **Listing 1.** Verified on JDK 21 (MS04_JwtDecode in empirics): any service reads the claims with no keys — `{"sub":"user-42","scope":"orders.read","iss":"auth-service","aud":"orders","exp":1789000000}` — while the signature bytes arrive as-is and prove nothing until verified against the issuer's public key.
 
 
-The trade Richardson's page encodes in the JWT reference: self-contained tokens verify offline - fast, stateless - but are valid until expiry and hard to revoke; opaque tokens are trivially revocable via an introspection call but add a round trip per check. The gateway's role is exactly [[What is the API gateway pattern in microservices]] applied to security: concentrate authentication at the perimeter and hand internal services a uniform token contract.
+The trade encoded in the JWT reference: self-contained tokens verify offline - fast, stateless - but are valid until expiry and hard to revoke; opaque tokens are trivially revocable via an introspection call but add a round trip per check. The gateway's role is exactly [[What is the API gateway pattern in microservices]] applied to security: concentrate authentication at the perimeter and hand internal services a uniform token contract.
 
 ## What interviewers probe
 

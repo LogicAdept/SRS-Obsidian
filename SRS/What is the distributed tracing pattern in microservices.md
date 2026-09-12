@@ -7,7 +7,7 @@ priority: 0
 # What is the distributed tracing pattern in microservices
 
 > [!abstract] Short answer
-> The distributed tracing pattern records the path and timing of one request as it travels through multiple services: each external request gets a unique trace id, propagated through every hop; each service records spans — its operations' start, end and outcome — into a centralized tracing backend that reassembles them per trace id. Richardson's observability pattern; it answers "where did this request spend its time and where did it fail", which per-service logs cannot.
+> The distributed tracing pattern records the path and timing of one request as it travels through multiple services: each external request gets a unique trace id, propagated through every hop; each service records spans — its operations' start, end and outcome — into a centralized tracing backend that reassembles them per trace id. An observability pattern; it answers "where did this request spend its time and where did it fail", which per-service logs cannot.
 
 ## The mechanics: context propagation plus span recording
 

@@ -7,7 +7,7 @@ priority: 0
 # How do you decompose an application by subdomain
 
 > [!abstract] Short answer
-> Decompose by subdomain: apply Domain-Driven Design, split the business problem into subdomains - core (the differentiating part), supporting and generic - and define one service per subdomain. Richardson lists it as the sibling of [[How do you decompose an application by business capability]]; both aim at cohesive, loosely coupled services, but subdomains come from modeling the problem space, capabilities from business-architecture analysis.
+> Decompose by subdomain: apply Domain-Driven Design, split the business problem into subdomains - core (the differentiating part), supporting and generic - and define one service per subdomain. It is the sibling of [[How do you decompose an application by business capability]]; both aim at cohesive, loosely coupled services, but subdomains come from modeling the problem space, capabilities from business-architecture analysis.
 
 ## Mechanism: subdomain analysis to service cut
 
@@ -40,7 +40,7 @@ sup -> svc2: one service
 
 ## Why the classification pays off
 
-The classification is an effort-allocation map, not just naming. Services for core subdomains get architectural investment: their own data model, room for rich invariants, fast release cadence. Services for generic subdomains should be as thin as possible around an off-the-shelf product, because maintaining a homegrown identity provider is a tax with no differentiation payoff. This directly answers the interview follow-up "how do you decide what deserves to be a service and what does not": anything core or supporting that needs model integrity of its own becomes a service; generic concerns become products or shared platforms, which is also how Richardson's chassis idea relates ([[What is the microservice chassis pattern]] covers the shared runtime plumbing).
+The classification is an effort-allocation map, not just naming. Services for core subdomains get architectural investment: their own data model, room for rich invariants, fast release cadence. Services for generic subdomains should be as thin as possible around an off-the-shelf product, because maintaining a homegrown identity provider is a tax with no differentiation payoff. This directly answers the interview follow-up "how do you decide what deserves to be a service and what does not": anything core or supporting that needs model integrity of its own becomes a service; generic concerns become products or shared platforms, which is also how the chassis idea relates ([[What is the microservice chassis pattern]] covers the shared runtime plumbing).
 
 In legacy systems subdomains are implicit, tangled inside one model. The decomposition exercise starts by teasing the languages apart - what the sales team calls a customer is not what billing calls a customer - and the boundaries between languages are the future service seams. That is also the bridge to refactoring work: seams found this way are where [[What is the strangler fig pattern and when do you use it]] gradually extracts services.
 

@@ -7,7 +7,7 @@ priority: 0
 # What is the domain event pattern in microservices
 
 > [!abstract] Short answer
-> A domain event is something that happened inside a service's business domain, published so other services can react: OrderCreated, OrderCancelled, CreditReserved. Richardson's pattern: structure business logic as DDD aggregates that record these events as their methods run, and have the service publish them reliably after committing - the backbone of choreography and of event-fed read models.
+> A domain event is something that happened inside a service's business domain, published so other services can react: OrderCreated, OrderCancelled, CreditReserved. The pattern: structure business logic as DDD aggregates that record these events as their methods run, and have the service publish them reliably after committing - the backbone of choreography and of event-fed read models.
 
 ## Mechanism: the aggregate records, the service publishes
 

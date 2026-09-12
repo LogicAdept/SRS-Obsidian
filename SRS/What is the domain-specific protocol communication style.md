@@ -7,7 +7,7 @@ priority: 0
 # What is the domain-specific protocol communication style
 
 > [!abstract] Short answer
-> Domain-specific protocol: when services need to speak a protocol purpose-built for the domain - email via SMTP/IMAP, media streaming via RTMP, HLS - let them use it directly instead of flattening everything onto generic HTTP RPC or messaging. Richardson's third communication-style option, sitting beside RPI and messaging; niche, but the correct answer whenever the domain has a standardized protocol with semantics that generic transports would lose.
+> Domain-specific protocol: when services need to speak a protocol purpose-built for the domain - email via SMTP/IMAP, media streaming via RTMP, HLS - let them use it directly instead of flattening everything onto generic HTTP RPC or messaging. The third communication-style option, sitting beside RPI and messaging; niche, but the correct answer whenever the domain has a standardized protocol with semantics that generic transports would lose.
 
 ## Mechanism: pick the protocol the domain already standardized
 
@@ -39,4 +39,4 @@ Honest framing for an interview: this is the rarest of the three styles, and its
 > Exposing a domain protocol inside the estate couples consumers to its wire format and failure modes: no HTTP status conventions, no JSON tooling, monitoring stacks that need custom probes, and a harder time when the protocol version must move. Contain it: prefer the pattern at the edge - where your service meets the outside ecosystem - and keep internal service-to-service traffic on generic styles unless the domain demand is real. Second trap: assuming the protocol's security story - SMTP or RTMP do not bring OAuth-style authorization; identity decisions still belong in your gateway and services.
 
 > [!tip] Interview answer
-> Richardson names three communication styles: RPI, messaging, and domain-specific protocol - using the protocol the domain standardized, like SMTP for mail or HLS/RTMP for streaming, instead of flattening everything onto HTTP or a broker. I reach for it at the edge where those semantics genuinely matter, because it costs custom infrastructure, monitoring and security work. Internal service-to-service traffic usually stays on generic styles - this is the special case, not the default.
+> There are three communication styles: RPI, messaging, and domain-specific protocol - using the protocol the domain standardized, like SMTP for mail or HLS/RTMP for streaming, instead of flattening everything onto HTTP or a broker. I reach for it at the edge where those semantics genuinely matter, because it costs custom infrastructure, monitoring and security work. Internal service-to-service traffic usually stays on generic styles - this is the special case, not the default.

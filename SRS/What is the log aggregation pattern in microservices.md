@@ -7,7 +7,7 @@ priority: 0
 # What is the log aggregation pattern in microservices
 
 > [!abstract] Short answer
-> The log aggregation pattern collects the logs of every service instance into one central store with a unified format and queryable index: instead of SSH-ing into N hosts to grep N files, operators and developers query one system across the whole fleet, filtered by service, time, level and correlation id. Richardson's observability pattern; ELK-class stacks are the canonical implementation.
+> The log aggregation pattern collects the logs of every service instance into one central store with a unified format and queryable index: instead of SSH-ing into N hosts to grep N files, operators and developers query one system across the whole fleet, filtered by service, time, level and correlation id. An observability pattern; ELK-class stacks are the canonical implementation.
 
 ## The mechanics: emit, collect, index, query
 

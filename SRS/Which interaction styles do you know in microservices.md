@@ -7,7 +7,7 @@ priority: 0
 # Which interaction styles do you know in microservices
 
 > [!abstract] Short answer
-> Microservice interaction styles differ on two axes: synchronism (does the caller block for the result?) and the number of parties per exchange (one-to-one or one-to-many). Richardson's catalog: one-to-one — request/response (sync RPI) and asynchronous request/response or notification (one-way); one-to-many — publish/subscribe and publish/async-responses. Choosing a style per use case is an architecture decision, not a framework accident.
+> Microservice interaction styles differ on two axes: synchronism (does the caller block for the result?) and the number of parties per exchange (one-to-one or one-to-many). The catalogue: one-to-one — request/response (sync RPI) and asynchronous request/response or notification (one-way); one-to-many — publish/subscribe and publish/async-responses. Choosing a style per use case is an architecture decision, not a framework accident.
 
 ## The styles, mapped to consequences
 

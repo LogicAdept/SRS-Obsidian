@@ -7,11 +7,11 @@ priority: 0
 # What is the strangler fig pattern and when do you use it
 
 > [!abstract] Short answer
-> The strangler fig pattern — Fowler's name, after the vine that gradually grows around and replaces its host tree — migrates a system by building the new application around the legacy one and shifting functionality incrementally, route by route or feature by feature, until the old system is gone. Richardson's microservices.io applies it as the standard answer to "how do you migrate a monolith to microservices" without a big-bang rewrite.
+> The strangler fig pattern — named after the vine that gradually grows around and replaces its host tree — migrates a system by building the new application around the legacy one and shifting functionality incrementally, route by route or feature by feature, until the old system is gone. It is the standard answer to "how do you migrate a monolith to microservices" without a big-bang rewrite.
 
 ## The mechanism: a facade decides where each request goes
 
-Three components make the migration safe. A interception facade (load balancer, gateway or proxy) sits in front of the legacy system and routes each request either to the legacy application or to the new services ([[What is the API gateway pattern in microservices]] is a natural host for this routing table). New functionality grows as separate services behind the facade — including genuinely new features, which demonstrate value early without touching the monolith. Migration is incremental and reversible: move one route, watch it in production, move the next; a rollback is a routing change, not a deployment. The result context Richardson describes: eventually the monolith serves nothing and can be retired ("decommissioned"), or the migration stops deliberately when remaining strangling costs more than it returns.
+Three components make the migration safe. A interception facade (load balancer, gateway or proxy) sits in front of the legacy system and routes each request either to the legacy application or to the new services ([[What is the API gateway pattern in microservices]] is a natural host for this routing table). New functionality grows as separate services behind the facade — including genuinely new features, which demonstrate value early without touching the monolith. Migration is incremental and reversible: move one route, watch it in production, move the next; a rollback is a routing change, not a deployment. The end state: eventually the monolith serves nothing and can be retired ("decommissioned"), or the migration stops deliberately when remaining strangling costs more than it returns.
 
 ```d2
 direction: down

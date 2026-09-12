@@ -11,7 +11,7 @@ priority: 0
 
 ## Why the naive approaches fail
 
-Two obvious designs are both broken. Publish-then-commit: the service publishes the event to the broker, then commits the aggregate — if the commit fails afterwards, consumers already processed an event for a change that never happened (a phantom event). Commit-then-publish: commit first, then publish — if the process dies between the two, the event is lost forever, and consumers miss a change that happened. Both attempt to atomically update two systems (database, broker) — exactly what a distributed transaction (2PC) exists for, and exactly what Fowler's article argues to avoid in modern systems (2PC-level cost: coordination, blocking, brittleness across availability boundaries). The microservices.io transactional-outbox pattern names the goal precisely: atomically update the database AND send messages, using only the database's own transaction.
+Two obvious designs are both broken. Publish-then-commit: the service publishes the event to the broker, then commits the aggregate — if the commit fails afterwards, consumers already processed an event for a change that never happened (a phantom event). Commit-then-publish: commit first, then publish — if the process dies between the two, the event is lost forever, and consumers miss a change that happened. Both attempt to atomically update two systems (database, broker) — exactly what a distributed transaction (2PC) exists for, and exactly what Fowler's article argues to avoid in modern systems (2PC-level cost: coordination, blocking, brittleness across availability boundaries). The transactional outbox pattern names the goal precisely: atomically update the database AND send messages, using only the database's own transaction.
 
 ## The outbox mechanics
 

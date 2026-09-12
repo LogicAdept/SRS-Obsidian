@@ -7,7 +7,7 @@ priority: 0
 # What is the audit logging pattern in microservices
 
 > [!abstract] Short answer
-> The audit logging pattern records every user action that changes business state — who did what to which object, when, from where — in a persistent, tamper-resistant log used for compliance, forensics and dispute resolution. Richardson separates it from application logging: the audit log answers "what did users do", not "what did the code do"; its consumers are auditors and investigators, not developers.
+> The audit logging pattern records every user action that changes business state — who did what to which object, when, from where — in a persistent, tamper-resistant log used for compliance, forensics and dispute resolution. It is distinct from application logging: the audit log answers "what did users do", not "what did the code do"; its consumers are auditors and investigators, not developers.
 
 ## The mechanics: what belongs in an audit record
 

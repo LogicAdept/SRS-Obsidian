@@ -4,10 +4,10 @@ priority: 0
 -->
 #Patterns/Architecture/Microservices #SRS
 
-# How is the microservices.io pattern catalogue organized
+# How is the microservices pattern catalogue organized
 
 > [!abstract] Short answer
-> The microservices.io catalogue — Chris Richardson's pattern language — organizes roughly fifty patterns into fifteen categories, each answering one recurring architecture question: how to decompose, how to keep data consistent, how to communicate, deploy, test, observe. This deck mirrors the taxonomy one-to-one: every card carries its category as a leaf tag under #Patterns/Architecture/Microservices.
+> The pattern catalogue for microservices organizes roughly fifty patterns into fifteen categories, each answering one recurring architecture question: how to decompose, how to keep data consistent, how to communicate, deploy, test, observe. This deck mirrors the taxonomy one-to-one: every card carries its category as a leaf tag under #Patterns/Architecture/Microservices.
 
 ## The fifteen categories and their questions
 
@@ -52,4 +52,4 @@ lang -> refactor: "Refactoring / UI design"
 > The categories overlap by design: transaction log tailing and polling publisher surface in both data-consistency and messaging discussions, the idempotent consumer sits under communication styles, deployment constrains observability. Reciting the tree as a rigid hierarchy is the wrong target — learn, per category, the question and the forces, then place a pattern by the force that dominates.
 
 > [!tip] Interview answer
-> The microservices.io catalogue groups the microservices vocabulary into fifteen categories: pick the style, split the system (service boundaries), keep data consistent and queries fast (service collaboration, transactional messaging), choose the wire protocol (communication styles), expose and locate services (external API, service discovery), stay reliable, secure and observable, verify without end-to-end grids (testing), run the things (deployment), share boilerplate once (cross-cutting), migrate the monolith (refactoring to services), compose the UI — the order in which interviews usually drill.
+> The microservices pattern catalogue groups the vocabulary into fifteen categories: pick the style, split the system (service boundaries), keep data consistent and queries fast (service collaboration, transactional messaging), choose the wire protocol (communication styles), expose and locate services (external API, service discovery), stay reliable, secure and observable, verify without end-to-end grids (testing), run the things (deployment), share boilerplate once (cross-cutting), migrate the monolith (refactoring to services), compose the UI — the order in which interviews usually drill.

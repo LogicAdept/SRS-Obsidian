@@ -7,7 +7,7 @@ priority: 0
 # What is the deployment and change logging pattern in microservices
 
 > [!abstract] Short answer
-> The deployment and change logging pattern records every change to the running system — deploys, configuration changes, infrastructure moves, feature-flag flips — into a central, machine-readable log, so the operational history answers "what changed, when, by whom" in one queryable place. Richardson's observability pattern; its core use is correlation: a metric anomaly or error spike is almost always explained by a change visible in this log.
+> The deployment and change logging pattern records every change to the running system — deploys, configuration changes, infrastructure moves, feature-flag flips — into a central, machine-readable log, so the operational history answers "what changed, when, by whom" in one queryable place. An observability pattern; its core use is correlation: a metric anomaly or error spike is almost always explained by a change visible in this log.
 
 ## The mechanics: every change is an event
 

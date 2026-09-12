@@ -7,7 +7,7 @@ priority: 0
 # How would you orchestrate communication between multiple services
 
 > [!abstract] Short answer
-> When one use case spans several services, there are two coordination styles: orchestration — a central orchestrator invokes the participating services in order and reacts to failures by running compensations; choreography — there is no coordinator, each service performs its step and publishes events, and the next services react to those events. Richardson treats both as the coordination half of the saga pattern; messaging style underlies choreography, request/reply underlies orchestration.
+> When one use case spans several services, there are two coordination styles: orchestration — a central orchestrator invokes the participating services in order and reacts to failures by running compensations; choreography — there is no coordinator, each service performs its step and publishes events, and the next services react to those events. Both are the coordination half of the saga pattern; messaging style underlies choreography, request/reply underlies orchestration.
 
 ## Orchestration: explicit flow, one place to read
 

@@ -7,7 +7,7 @@ priority: 0
 # What is the anti-corruption layer pattern
 
 > [!abstract] Short answer
-> An anti-corruption layer (ACL) is a translation boundary between two domain models: your new service's clean model on one side, a legacy monolith's or foreign system's model on the other, with the ACL converting between them so the legacy vocabulary never leaks in. From Evans's DDD, used in Richardson's refactoring-to-microservices work to keep a strangler-extracted service from inheriting the monolith's concepts.
+> An anti-corruption layer (ACL) is a translation boundary between two domain models: your new service's clean model on one side, a legacy monolith's or foreign system's model on the other, with the ACL converting between them so the legacy vocabulary never leaks in. The idea comes from DDD; it keeps a strangler-extracted service from inheriting the monolith's concepts.
 
 ## Mechanism: isolate, translate, own your language
 
@@ -30,7 +30,7 @@ acl -> new: your model's types
 
 **Fig. 1.** The ACL is the only place where the two vocabularies meet; both sides keep speaking their own language.
 
-In Richardson's refactoring story the ACL is the companion of [[What is the strangler fig pattern and when do you use it]]: strangling moves traffic from monolith to new services incrementally, and the ACL keeps each extracted service clean while it still calls back into the monolith for the not-yet-migrated capabilities ([[How do you decompose a monolith into microservices]] is the overall playbook). The same pattern applies beyond modernization: any foreign system with a model you do not control - a partner's SOAP API, a purchased CRM - deserves an ACL if its model differs from yours.
+In the refactoring story the ACL is the companion of [[What is the strangler fig pattern and when do you use it]]: strangling moves traffic from monolith to new services incrementally, and the ACL keeps each extracted service clean while it still calls back into the monolith for the not-yet-migrated capabilities ([[How do you decompose a monolith into microservices]] is the overall playbook). The same pattern applies beyond modernization: any foreign system with a model you do not control - a partner's SOAP API, a purchased CRM - deserves an ACL if its model differs from yours.
 
 ## Costs and the honest boundary
 

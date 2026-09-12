@@ -11,7 +11,7 @@ priority: 0
 
 ## The defining traits
 
-Fowler and Lewis characterize the style by nine common traits, and any interview answer should hit the load-bearing ones:
+The style is characterized by nine common traits, and any interview answer should hit the load-bearing ones:
 
 * **Componentization via services** - components are out-of-process services linked by calls, not in-process libraries, so they can be deployed and replaced independently.
 * **Organized around business capabilities** - service boundaries follow business functions, not technical layers; Conway's law made explicit.

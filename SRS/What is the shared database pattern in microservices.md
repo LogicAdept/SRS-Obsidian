@@ -7,7 +7,7 @@ priority: 0
 # What is the shared database pattern in microservices
 
 > [!abstract] Short answer
-> The shared database pattern — several microservices reading and writing one database — is the anti-pattern counterpart of database-per-service. It maximizes coupling: schema changes ripple to every service, one database is a scaling and failure bottleneck, and ACID transactions across the shared tables tempt services into logic they should not own. Richardson catalogs it because real systems drift into it and someone must name the cost.
+> The shared database pattern — several microservices reading and writing one database — is the anti-pattern counterpart of database-per-service. It maximizes coupling: schema changes ripple to every service, one database is a scaling and failure bottleneck, and ACID transactions across the shared tables tempt services into logic they should not own. It is named explicitly because real systems drift into it and someone must name the cost.
 
 ## Why it exists: the shortcuts it offers are real
 

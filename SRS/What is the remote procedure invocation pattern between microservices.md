@@ -7,7 +7,7 @@ priority: 0
 # What is the remote procedure invocation pattern between microservices
 
 > [!abstract] Short answer
-> Remote procedure invocation (RPI) is the synchronous communication style for microservices: a service calls another service's API and blocks for the response — REST over HTTP the common default, gRPC for high-throughput internal calls. Richardson lists it as one of the two main inter-service communication styles; the caller's error handling (timeouts, retries, circuit breaking) is part of the pattern's price.
+> Remote procedure invocation (RPI) is the synchronous communication style for microservices: a service calls another service's API and blocks for the response — REST over HTTP the common default, gRPC for high-throughput internal calls. It is one of the two main inter-service communication styles; the caller's error handling (timeouts, retries, circuit breaking) is part of the pattern's price.
 
 ## Mechanics of the synchronous contract
 

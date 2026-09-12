@@ -7,7 +7,7 @@ priority: 0
 # How would you explain multiple services per host deployment
 
 > [!abstract] Short answer
-> Multiple-services-per-host packs several service instances (often different services) onto one shared host: utilization is high and the operational footprint small, but isolation is weak — the services contend for the same CPU, memory, ports and runtime, and one misbehaving service degrades its neighbors. Richardson's ladder puts it at the low-isolation, high-utilization end.
+> Multiple-services-per-host packs several service instances (often different services) onto one shared host: utilization is high and the operational footprint small, but isolation is weak — the services contend for the same CPU, memory, ports and runtime, and one misbehaving service degrades its neighbors. The deployment ladder puts it at the low-isolation, high-utilization end.
 
 ## The mechanics and the sharing costs
 
@@ -34,7 +34,7 @@ s2 -> note
 
 ## The modern position of the pattern
 
-As a deliberate architecture, multiple-services-per-host is mostly a transitional or small-scale choice: the standard answer to its weaknesses is the container — service-per-container keeps the density while adding per-process resource ceilings, filesystem isolation and image-level dependency pinning ([[What is the service per container pattern]] is the direct successor; the JVM variant of the same idea is multiple application instances in one process, Richardson's "multiple service instances per process" — same contention trade, even denser). The pattern stays reasonable for: internal tools with tiny footprints, single-team systems where the host is effectively owned by one team (which removes the security and contention blast radius between owners), and environments where container platforms are not yet available. Where it is used, per-service cgroups or equivalent resource controls and per-service log separation are the minimum hygiene ([[How would you explain single service per host deployment]] is the high-isolation opposite end of the same ladder).
+As a deliberate architecture, multiple-services-per-host is mostly a transitional or small-scale choice: the standard answer to its weaknesses is the container — service-per-container keeps the density while adding per-process resource ceilings, filesystem isolation and image-level dependency pinning ([[What is the service per container pattern]] is the direct successor; the JVM variant of the same idea is multiple application instances in one process — the same contention trade, even denser). The pattern stays reasonable for: internal tools with tiny footprints, single-team systems where the host is effectively owned by one team (which removes the security and contention blast radius between owners), and environments where container platforms are not yet available. Where it is used, per-service cgroups or equivalent resource controls and per-service log separation are the minimum hygiene ([[How would you explain single service per host deployment]] is the high-isolation opposite end of the same ladder).
 
 > [!warning] Density hides coupling, until the night it doesn't
 > The pattern's apparent simplicity — everything on one box — is operational coupling: any change that affects the host (OS patch, runtime upgrade, security hardening) affects every service at once, and any service's capacity growth needs a conversation with every neighbor. If two services share a host because "it was convenient", they share its failure modes too.

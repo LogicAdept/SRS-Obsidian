@@ -7,7 +7,7 @@ priority: 0
 # What is the consumer-driven contract test pattern
 
 > [!abstract] Short answer
-> The consumer-driven contract test pattern — from the Testing group of the microservices.io catalogue — makes the consumer of a service author a test suite that encodes exactly the requests and responses it depends on, and makes the provider run that suite in its own pipeline. The contract becomes the provider's obligation: if a change breaks any consumer's expectations, the provider's build fails before the change can ship. It converts "will this break the client?" from a deployment-time surprise into a build-time signal.
+> The consumer-driven contract test pattern makes the consumer of a service author a test suite that encodes exactly the requests and responses it depends on, and makes the provider run that suite in its own pipeline. The contract becomes the provider's obligation: if a change breaks any consumer's expectations, the provider's build fails before the change can ship. It converts "will this break the client?" from a deployment-time surprise into a build-time signal.
 
 ## Problem: integration testing at deployment time is too late
 
