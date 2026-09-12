@@ -7,11 +7,11 @@ priority: 0
 # What is message passing in object oriented programming?
 
 > [!abstract] Short answer
-> In OOP textbooks, **message passing** means: ask an **object** to **do something**, with **arguments**; the object’s **method** of that name runs. In **Java** that is a **method invocation** (`ball.bounce()`), not a separate language feature. For **instance** methods the JVM still **looks up** the body on the **run-time class** ([[What is polymorphism]]; [[How would you explain dynamic runtime polymorphism in Java]]). The compiler already chose the **signature** ([[How would you explain Overload vs Override]]). Java OO: [[What does it mean that Java is object oriented]]. Principles: [[What are the main oop principles]].
+> In OOP textbooks, **message passing** means: ask an **object** to **do something**, with **arguments**; the object’s **method** of that name runs. In **Java** that is a **method invocation** (`ball.bounce()`), not a separate language feature. For **instance** methods the JVM still **looks up** the body on the **run-time class** ([[What is polymorphism]]; [[How would you explain dynamic runtime polymorphism in Java]]). The compiler already chose the **signature** ([[How would you explain Overload vs Override]]). Java OO: [[What does it mean that Java is object oriented]]. History: [[Why was object oriented programming favored by the industry for so long]]. Principles: [[What are the main oop principles]].
 
 ## Smalltalk word, Java method call
 
-**Dump (the bounce story).** Procedural code: `bounce(id, …)` and a table of ball data. OO: each ball is an object that **contains** its state **and** `bounce()`. You send **that object** the bounce **message** instead of passing a ball number into a global procedure.
+**Dump (the bounce story).** Procedural code: `bounce(id, …)` and a table of ball data. OO: each ball is an object that **contains** its state **and** `bounce()`. You send **that object** the bounce **message** instead of passing a ball number into a global procedure. The design consequence: [[What is tell don't ask in object oriented design]].
 
 **Java.** `b.bounce()` is a method invocation expression. Compile time: name, argument types, accessibility → one **signature**. Run time (virtual/interface instance call): start from the **class of the target object**, find the method that **overrides** that signature ([[How would you explain method overriding in Java]]). `null` → `NullPointerException`. `static` calls (`Type.m()` or even `obj.m()` when `m` is static) do **not** look up on the object; they are not message passing in the Kay sense.
 

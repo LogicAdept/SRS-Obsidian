@@ -7,7 +7,7 @@ priority: 0
 # What is the difference between composition and aggregation?
 
 > [!abstract] Short answer
-> Both are **has-a** (a field), not **is-a** (`extends`) ([[What do in OOP expressions is-a and has-a]]). **Composition** means a **part belongs to at most one whole** (exclusive ownership; interviewers also tie **lifetimes**). **Aggregation** is drawn as a weaker part-whole; in UML it has **no extra meaning** beyond a plain association unless the author defines one. Java has **neither keyword**—only references. Inheritance: [[What is inheritance]].
+> Both are **has-a** (a field), not **is-a** (`extends`) ([[What do in OOP expressions is-a and has-a]]). **Composition** means a **part belongs to at most one whole** (exclusive ownership; interviewers also tie **lifetimes**). **Aggregation** is drawn as a weaker part-whole; in UML it has **no extra meaning** beyond a plain association unless the author defines one. Java has **neither keyword**—only references. Composition concept: [[How would you explain composition in object oriented design]]. vs inheritance: [[How does composition differ from inheritance]]. Inheritance: [[What is inheritance]].
 
 ## Exclusive part vs a shared link
 

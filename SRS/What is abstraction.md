@@ -7,7 +7,7 @@ priority: 0
 # What is abstraction?
 
 > [!abstract] Short answer
-> **Abstraction** is keeping the **essential operations and type** and omitting **how** they are stored or computed. In Java you program to a **supertype**—an **interface** or **`abstract` class**—and call methods; the run-time class supplies the body ([[What is polymorphism]]). That is not the same as encapsulation (hiding fields) ([[What is encapsulation]]; [[How would you explain encapsulation in object oriented design]]). Ranking of types: [[Which has the highest abstraction level among class abstract class and interface]]. Principles: [[What are the main oop principles]].
+> **Abstraction** is keeping the **essential operations and type** and omitting **how** they are stored or computed. In Java you program to a **supertype**—an **interface** or **`abstract` class**—and call methods; the run-time class supplies the body ([[What is polymorphism]]). That is not the same as encapsulation (hiding fields) ([[What is encapsulation]]; [[How would you explain encapsulation in object oriented design]]). vs encapsulation: [[What is the difference between abstraction and encapsulation]]. vs polymorphism: [[What is the difference between abstraction and polymorphism]]. Ranking of types: [[Which has the highest abstraction level among class abstract class and interface]]. Principles: [[What are the main oop principles]].
 
 ## Essential type, omitted details
 

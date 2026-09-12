@@ -15,7 +15,7 @@ priority: 0
 
 **`this` and instance methods.** Instance methods are invoked **on** an instance; during the call that instance is `this`. That is the OO style the spec calls out. **`static` methods** operate **without** a specific object—they are not instance polymorphism.
 
-**Inheritance and polymorphism.** Each class except `Object` has a single direct superclass ([[Do Java classes inherit from Object explicitly or implicitly]]; [[Does Java support multiple inheritance for classes]]). Unrelated classes can share an interface type. Variables of a class or interface type can refer to subclass / implementing instances, and instance calls use the run-time class ([[What is polymorphism]]). The usual three/four principles: [[What are the three core principles of object oriented programming]].
+**Inheritance and polymorphism.** Each class except `Object` has a single direct superclass ([[Do Java classes inherit from Object explicitly or implicitly]]; [[Does Java support multiple inheritance for classes]]). Unrelated classes can share an interface type. Variables of a class or interface type can refer to subclass / implementing instances, and instance calls use the run-time class ([[What is polymorphism]]). The usual three/four principles: [[What are the main oop principles]].
 
 **Not “everything is an object.”** Primitive types (`int`, `boolean`, …) are not references. `null` is not an object. Operators on primitives are not method calls. Encapsulation can still fail with public fields. Tradeoffs: [[What are the advantages and disadvantages of object oriented programming]].
 
