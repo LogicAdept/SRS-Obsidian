@@ -80,7 +80,7 @@ public class FullTimeEmployee extends Employee {
 
 **Listing 2.** Conceptual. Both operate on concrete subclass rows. Returned instances have a concrete runtime class (`FullTimeEmployee`, …).
 
-If `@Inheritance` is omitted, the default strategy is `SINGLE_TABLE` (one table, discriminator column). `JOINED` and `TABLE_PER_CLASS` are the other options. The abstract root still needs an `@Id` on the hierarchy: [[What is the JPA Id annotation]].
+If `@Inheritance` is omitted, the default strategy is `SINGLE_TABLE` (one table, discriminator column). `JOINED` and `TABLE_PER_CLASS` are the other options — choosing between them: [[How do you choose a JPA inheritance mapping strategy]]. The abstract root still needs an `@Id` on the hierarchy: [[What is the JPA Id annotation]].
 
 ## Not a mapped superclass, not a plain abstract Java class
 

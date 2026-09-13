@@ -113,4 +113,4 @@ class Country { @Id String code; String name; }
 > [!tip] Interview answer
 > First-level cache is the persistence context on the current Session: always on, same id same instance, dirty checking at flush, gone when the session ends. Second-level cache is optional, SessionFactory-wide, stores disassembled state through a RegionFactory, and only for types you mark cacheable. Query cache is an extra switch on L2 that stores ids, so the entities themselves still need to be in L2. I do not use L2 as a substitute for understanding isolation — it can fight ACID if the data is write-heavy.
 
-See [[How does the Hibernate first-level cache work in Spring]], [[What is Hibernate second level cache and its main components]], [[What is Hibernate SessionFactory]], and [[What advantages does Hibernate provide over plain JDBC]].
+See [[How does the Hibernate first-level cache work in Spring]], [[What is Hibernate second level cache and its main components]], [[What is the Hibernate query cache and when does it help]], [[What is Hibernate SessionFactory]], and [[What advantages does Hibernate provide over plain JDBC]].
