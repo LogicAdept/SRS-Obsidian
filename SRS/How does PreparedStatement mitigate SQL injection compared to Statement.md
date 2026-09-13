@@ -72,3 +72,5 @@ Precompilation is a **driver optimization** (`prepareStatement` may send SQL ear
 - [[How do JDBC interface types such as Statement and PreparedStatement differ]]
 - [[What is the difference between PreparedStatement and Statement in JDBC]]
 - [[How would you explain SQL injection attacks and defenses]]
+
+See [[How do you prevent SQL injection in Hibernate queries]], [[What is the difference between PreparedStatement and Statement in JDBC]], and [[How would you explain SQL injection attacks and defenses]].

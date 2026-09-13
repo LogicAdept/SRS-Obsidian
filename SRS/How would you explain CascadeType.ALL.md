@@ -119,3 +119,5 @@ public class Order {
 
 > [!tip] Interview answer
 > ALL means persist, merge, remove, refresh, and detach all cascade along that association. Persist the parent and new children are persisted; remove the parent and those children are removed too, which is why you put it on a privately owned OneToMany, not on ManyToMany. Orphan removal is a separate flag: it deletes a child when you take it out of the collection, which ALL by itself does not do.
+
+See [[What is the owning side of a bidirectional association]], [[What is ElementCollection and how does it differ from OneToMany]], and [[How does an aggregate persist and publish events without a distributed transaction]].

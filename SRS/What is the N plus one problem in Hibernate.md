@@ -62,4 +62,4 @@ List<Book> books = session.createSelectionQuery(
 > [!tip] Interview answer
 > N+1 means one query for N parents plus one select per parent for an association, usually lazy collections or to-ones in a loop. Eager mapping does not fix list queries; Hibernate still issues secondary selects unless I JOIN FETCH. I keep associations LAZY, fetch the graph this use case needs in one query or a DTO, and use @BatchSize only as a safety net. Two collection fetch joins in one query are a cartesian product, not a solution.
 
-See [[What is lazy fetch in JPA or Hibernate]], [[What is JOIN FETCH and EntityGraph in Spring Data JPA]], [[What is Hibernate performance tuning]], [[What is LazyInitializationException]], [[What is the N plus 1 problem in Spring Data JPA]], and [[What are Hibernate first and second level cache tiers]].
+See [[What is lazy fetch in JPA or Hibernate]], [[What is JOIN FETCH and EntityGraph in Spring Data JPA]], [[What is Hibernate performance tuning]], [[What is LazyInitializationException]], [[What are the Hibernate fetching strategies]], [[What is the N plus 1 problem in Spring Data JPA]], and [[What are Hibernate first and second level cache tiers]].
