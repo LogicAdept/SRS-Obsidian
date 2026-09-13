@@ -11,7 +11,7 @@ priority: 0
 
 ## What lives inside the model
 
-Within one bounded context the model is built from DDD's tactical pieces. Entities carry identity that survives state changes (a shipment is the same shipment after rerouting). Value objects describe things measured by their attributes and are immutable (an address, a money amount). Aggregates group entities and values under a root that guards consistency. Domain services hold operations that genuinely involve several aggregates and no single owner. The model also speaks the business vocabulary: class and method names come from the ubiquitous language, so a domain expert can roughly follow a code review.
+Within one bounded context the model is built from DDD's tactical pieces. Entities carry identity that survives state changes (a shipment is the same shipment after rerouting). Value objects describe things measured by their attributes and are immutable (an address, a money amount). Aggregates group entities and values under a root that guards consistency. Domain services hold operations that genuinely involve several aggregates and no single owner. The model also speaks the business vocabulary: class and method names come from the ubiquitous language, so a domain expert can roughly follow a code review. The collaborative loop that builds and refines such a model together with the business is [[What is knowledge crunching in DDD]].
 
 ```java
 public class Order {
@@ -37,7 +37,7 @@ public class Order {
 
 ## Rich model vs schema-plus-services
 
-The alternative that DDD argues against is a model reduced to data bags: classes with fields and accessors whose behavior sits in a separate service layer. That is the [[What is an anemic domain model and is it useful|anemic domain model]] - and it quietly moves all invariants into whichever service happens to touch the data, so nothing stops a new code path from bypassing them. A rich model keeps behavior with the data it guards. Microsoft's DDD guidance explicitly recommends "domain entities with rich models (no anemic domain model)" for contexts with significant rules.
+The alternative that DDD argues against is a model reduced to data bags: classes with fields and accessors whose behavior sits in a separate service layer. That is the [[What is an anemic domain model and is it useful|anemic domain model]] - and it quietly moves all invariants into whichever service happens to touch the data, so nothing stops a new code path from bypassing them. A rich model keeps behavior with the data it guards: for contexts with significant rules, the entities carry the behavior - no anemic model.
 
 > [!warning] "Domain model = ER diagram" is the classic trap
 > An entity-relationship diagram describes data shape, not behavior. A domain model includes state transitions and invariants: when an order may be cancelled, what makes a price valid, who may approve a refund. If your "model" cannot answer those questions, it is a schema, and the real model is hidden inside service methods.

@@ -11,7 +11,7 @@ priority: 0
 
 ## How to recognize it
 
-The shape is easy to spot. Entities are bags of mutable data with an accessor for everything; a parallel "service" or "manager" layer holds all behavior, typically as long procedural methods. Martin Fowler, who named the pattern in 2003, describes it as the opposite of what encapsulation is supposed to buy you: bundling data with the functions that operate on it. Microsoft's DDD guidance explicitly steers the other way - "domain entities with rich models (no anemic domain model)" - for contexts with real business rules.
+The shape is easy to spot. Entities are bags of mutable data with an accessor for everything; a parallel "service" or "manager" layer holds all behavior, typically as long procedural methods. The name stuck because the shape is the opposite of what encapsulation is supposed to buy you: bundling data with the functions that operate on it. For contexts with real business rules, the guidance across the DDD literature is rich models with behavior in the entities - no anemic domain model.
 
 ```java
 // Anemic: every caller decides the rules

@@ -7,7 +7,7 @@ priority: 0
 # Should commands and events be immutable?
 
 > [!abstract] Short answer
-> Events: yes, unconditionally - an event is a fact that already happened, and mutating a recorded fact destroys audit history, breaks replay and projections, and makes the log untrustworthy; event-sourced stores are append-only by design. Commands: immutable is also the right default - a command is a message that gets queued, retried, and inspected, and a mutable command object that changes while in flight produces races and unreproducible failures. In both cases immutability is what makes retries, debugging, and audit legal and cheap.
+> Events: yes, unconditionally - an event is a fact that already happened, and mutating a recorded fact destroys audit history, breaks replay and projections, and makes the log untrustworthy; event-sourced stores are append-only by design. Commands: immutable is also the right default - a command is a message that gets queued, retried, and inspected, and a mutable command object that changes while in flight produces races and unreproducible failures. In both cases immutability is what makes retries, debugging, and audit legal and cheap. The two message kinds themselves - request versus fact - are compared in [[What is the difference between a command and an event in DDD]].
 
 ## Why events are frozen history
 

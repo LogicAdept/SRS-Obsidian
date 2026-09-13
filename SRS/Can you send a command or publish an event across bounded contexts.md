@@ -7,7 +7,7 @@ priority: 0
 # Can you send a command or publish an event across bounded contexts?
 
 > [!abstract] Short answer
-> Both are possible, and the difference is coupling. A command is a request addressed to a specific receiving handler - sending one across a boundary means you know the other context, its API, and its availability, and it may reject you. An event is a published fact - "this happened here" - that other contexts subscribe to and translate into their own local commands. For integration between bounded contexts, publishing events is the default: it preserves each context's autonomy and lets consumers evolve independently; direct cross-context commands are acceptable for a deliberate, synchronous, request-driven relationship.
+> Both are possible, and the difference is coupling. A command is a request addressed to a specific receiving handler - sending one across a boundary means you know the other context, its API, and its availability, and it may reject you. An event is a published fact - "this happened here" - that other contexts subscribe to and translate into their own local commands. The general contrast between the two message kinds is in [[What is the difference between a command and an event in DDD]]. For integration between bounded contexts, publishing events is the default: it preserves each context's autonomy and lets consumers evolve independently; direct cross-context commands are acceptable for a deliberate, synchronous, request-driven relationship.
 
 ## What each one means across a boundary
 
