@@ -7,7 +7,7 @@ priority: 0
 # What is Hibernate entity lifecycle states?
 
 > [!abstract] Short answer
-> An entity’s **lifecycle state** is its relation to a **persistence context** (`Session` / `EntityManager`) and to the database. **JPA** names four: **new** (Hibernate: **transient**), **managed** (**persistent**), **detached**, and **removed**. Current **`Session`** Javadoc frames three with respect to one open session — **transient**, **persistent**, **detached** — and treats **`remove`** as marking a persistent instance for deletion until flush, after which it is **transient** again. Only **managed** instances are identity-unique in that context, dirty-checked, and flushed. Transitions are **`persist`**, **`find`/`get`/query**, field mutation, **`detach`/`evict`/`clear`/close**, **`merge`**, and **`remove`**.
+> An entity’s **lifecycle state** is its relation to a **persistence context** (`Session` / `EntityManager`) and to the database. **JPA** names four: **new** (Hibernate: **transient**), **managed** (**persistent**), **detached**, and **removed**. Current **`Session`** Javadoc frames three with respect to one open session — **transient**, **persistent**, **detached** — and treats **`remove`** as marking a persistent instance for deletion until flush, after which it is **transient** again. Only **managed** instances are identity-unique in that context, dirty-checked, and flushed; the hooks fired on those transitions: [[When do JPA entity lifecycle callbacks fire]]. Transitions are **`persist`**, **`find`/`get`/query**, field mutation, **`detach`/`evict`/`clear`/close**, **`merge`**, and **`remove`**.
 
 ## Four names, one persistence context
 

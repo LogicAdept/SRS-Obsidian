@@ -7,7 +7,7 @@ priority: 0
 # What is the N plus one problem in Hibernate?
 
 > [!abstract] Short answer
-> The **N+1 problem** is Hibernate’s **select-fetch** strategy: **1** SQL statement loads **N** parents, then **one extra `SELECT` per parent** loads a lazy (or un-fetched eager) association — **N+1** round-trips. Fetching chapter: a **separate select per association** “is generally termed N+1.” Classic loop: `for (Order o : orders) o.getLines().size()`. HQL without **`join fetch`** hits the same “n+1 selects” problem. **`EAGER` does not save you** on a query: omitted eager associations still get **one secondary select each**. Fix the **use case** with **`JOIN FETCH`**, an entity graph, or a **DTO** — not by mapping everything eager.
+> The **N+1 problem** is Hibernate’s **select-fetch** strategy: **1** SQL statement loads **N** parents, then **one extra `SELECT` per parent** loads a lazy (or un-fetched eager) association — **N+1** round-trips. Fetching chapter: a **separate select per association** “is generally termed N+1.” Classic loop: `for (Order o : orders) o.getLines().size()`. HQL without **`join fetch`** hits the same “n+1 selects” problem. **`EAGER` does not save you** on a query: omitted eager associations still get **one secondary select each**. Fix the **use case** with **`JOIN FETCH`**, an entity graph, or a **DTO** — not by mapping everything eager (and two collections at once add [[What is MultipleBagFetchException and how do you fetch two collections|a bag-fetch constraint]]).
 
 ## One list, then N selects
 
