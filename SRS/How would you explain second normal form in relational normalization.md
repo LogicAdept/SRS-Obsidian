@@ -9,9 +9,9 @@ priority: 0
 > [!abstract] Short answer
 > **2NF forbids a non-key column that depends on only part of a composite key — a partial dependency.** It can only be violated when the key is composite: if every non-key fact is a fact about the *whole* key, the table is in 2NF.
 
-## The classic partial dependency, from Kent's guide
+## The classic partial dependency
 
-Kent's inventory table is the canonical example: key (PART, WAREHOUSE), with QUANTITY — a fact about the whole pair — but also WAREHOUSE-ADDRESS, a fact about WAREHOUSE alone. The address is repeated on every row for any part stored there; changing it touches many rows and can disagree between them; and a warehouse holding no parts has no row to keep its address at all. Those are exactly the update, insertion, and deletion anomalies 2NF exists to kill.
+The inventory table is the canonical example: key (PART, WAREHOUSE), with QUANTITY — a fact about the whole pair — but also WAREHOUSE-ADDRESS, a fact about WAREHOUSE alone. The address is repeated on every row for any part stored there; changing it touches many rows and can disagree between them; and a warehouse holding no parts has no row to keep its address at all. Those are exactly the update, insertion, and deletion anomalies 2NF exists to kill.
 
 ```sql
 -- violates 2NF: WAREHOUSE-ADDRESS depends on WAREHOUSE only
@@ -60,7 +60,7 @@ Note the scope: with a single-column primary key there is nothing to be "part" o
 > [!warning] 2NF is about dependencies, not about "columns I see twice"
 > The same address appearing in two tables is normal — one of them stores it, the other references it. The violation is a non-key column whose value is determined by a *subset of the key* within one relation. Over-eager "dedup everywhere" designs that split until every table is two columns lose joins and transactions for nothing; stop when every non-key column depends on the whole key — then move to 3NF, whose transitive-dependency case is the other classic: [[How would you explain third normal form in relational databases]].
 
-Position in the ladder: [[What is normalization]]; the dependency that motivates keys overall: [[How would you explain candidate keys in relational databases]].
+Position in the ladder: [[What is normalization]]; the dependency that motivates keys overall: [[How would you explain candidate keys in relational databases]]; the rungs above 3NF: [[What is Boyce-Codd normal form and how does it differ from 3NF]] and [[What is fourth normal form and what are multivalued dependencies]].
 
 > [!tip] Interview answer
 > Second normal form forbids partial dependencies: a non-key column determined by only part of a composite key. The example is warehouse address hanging off the (part, warehouse) key of inventory — repeated per row, inconsistent on update, and unstoreable for an empty warehouse. The cure is decomposition: quantity under the whole key, address under warehouse. With a single-column key 2NF cannot be violated.

@@ -11,7 +11,7 @@ priority: 0
 
 ## The three anomalies on one example
 
-Keep Kent's warehouse table: (PART, WAREHOUSE, QUANTITY, WAREHOUSE-ADDRESS). **Update anomaly:** the warehouse moves; every row for every part stored there must be corrected — miss one and the database now states two addresses for one warehouse, and no constraint flags it because the duplicates are ordinary values, not keyed facts. **Insertion anomaly:** a new warehouse is built but stocks no parts — with the key being (part, warehouse) there is no row to record its address without inventing a fake part. **Deletion anomaly:** the last part leaves a warehouse; deleting that row erases the warehouse's address from the database entirely. The same pattern repeats at 3NF with employee/department/location and at 1NF with packed lists.
+The canonical warehouse table: (PART, WAREHOUSE, QUANTITY, WAREHOUSE-ADDRESS). **Update anomaly:** the warehouse moves; every row for every part stored there must be corrected — miss one and the database now states two addresses for one warehouse, and no constraint flags it because the duplicates are ordinary values, not keyed facts. **Insertion anomaly:** a new warehouse is built but stocks no parts — with the key being (part, warehouse) there is no row to record its address without inventing a fake part. **Deletion anomaly:** the last part leaves a warehouse; deleting that row erases the warehouse's address from the database entirely. The same pattern repeats at 3NF with employee/department/location and at 1NF with packed lists.
 
 ```d2
 direction: right
@@ -39,7 +39,7 @@ Beyond anomalies the costs are physical: duplicated values inflate table and ind
 > [!warning] The diseases are invisible until concurrency and time arrive
 > On a laptop with one writer the unnormalized table behaves; the anomalies are *probabilistic* under real load — the second update of the same address can happen months apart, the deletion happens in an admin script nobody reviewed. That is why "we can just be careful" is the classic wrong answer: normalization moves the consistency burden from developer discipline into the schema, where a CHECK or FK enforces it forever. The legitimate counter-move is deliberate, measured denormalization for read speed — chosen with an update path, not drift: [[What is database denormalization for]].
 
-The forms that prevent each disease: [[What is normalization]], [[How would you explain second normal form in relational normalization]], [[How would you explain third normal form in relational databases]].
+The forms that prevent each disease: [[What is normalization]], [[How would you explain second normal form in relational normalization]], [[How would you explain third normal form in relational databases]] — and the stricter rungs for the cases 3NF still allows: [[What is Boyce-Codd normal form and how does it differ from 3NF]] and [[What is fourth normal form and what are multivalued dependencies]].
 
 > [!tip] Interview answer
 > Violating normalization stores the same fact in many rows, which yields the three anomalies: updates must touch every copy and can disagree, some facts cannot be inserted without unrelated context, and deleting one row can erase an unrelated fact. Add storage bloat and constraint-blind drift. The cure is decomposition to 3NF for OLTP; denormalization stays acceptable only as a deliberate, maintained read-path choice.
