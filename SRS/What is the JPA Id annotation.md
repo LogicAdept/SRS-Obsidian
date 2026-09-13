@@ -7,7 +7,7 @@ priority: 0
 # What is the JPA Id annotation?
 
 > [!abstract] Short answer
-> **`jakarta.persistence.Id`** is a **marker** on a field or getter that **is the entity’s primary key** (or one piece of a composite key with `@IdClass`). Every entity hierarchy must declare a PK **exactly once**, on the **root** entity or a **mapped superclass**. `@Id` does **not** generate values — pair **`@GeneratedValue`** for that. It is not `@EmbeddedId`.
+> **`jakarta.persistence.Id`** is a **marker** on a field or getter that **is the entity’s primary key** (or one piece of a composite key with `@IdClass`). Every entity hierarchy must declare a PK **exactly once**, on the **root** entity or a **mapped superclass**. `@Id` does **not** generate values — pair **`@GeneratedValue`** for that (and mind the strategy: [[Why does GenerationType.IDENTITY disable JDBC batching]]). It is not `@EmbeddedId`.
 
 ## Identity, not a column DSL
 

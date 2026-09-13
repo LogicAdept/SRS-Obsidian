@@ -64,7 +64,7 @@ Turn it **off** for an instance: **`session.setReadOnly(entity, true)`** — no 
 
 **`StatelessSession`**: **no** persistence context, **no** write-behind, **no** automatic dirty checking. Changes are **`update(entity)`** (or insert/delete) **immediately**.
 
-Flush **order** is the **`ActionQueue`**, not call order (inserts can run **before** deletes).
+Flush **order** is the **`ActionQueue`**, not call order (inserts can run **before** deletes) — the full execution order and its FK-safety logic: [[How does Hibernate order SQL statements on flush]].
 
 > [!warning] A setter is an UPDATE, even if you never “save”
 > After `find`, `setEmail` inside `@Transactional` **will** flush an `UPDATE` on commit. Mutating a `java.util.Date` **in place** (`setTime`) is still dirty under snapshot comparison. A huge persistence context makes **every** flush walk **every** managed instance. `@DynamicUpdate` does not skip that walk; it only shrinks the SQL. Detached graphs and `StatelessSession` do **not** get this behavior — there is no snapshot.
