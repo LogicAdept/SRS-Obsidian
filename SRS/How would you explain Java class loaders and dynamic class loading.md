@@ -103,7 +103,7 @@ redef -> keep
 > `loadClass` that stays parent-first will return the parent’s `Class` and never call your `findClass`. Isolation and reload need either a name the parent will not define, or a deliberate child-first `loadClass` (and then two types named `Plugin` if some other loader also defined it). Casts across defining loaders are `ClassCastException`.
 
 > [!warning] `redefineClasses` is not a custom `ClassLoader`
-> Agents may patch an already loaded class under JVM TI rules. That does not unload anything, does not create a second `Class`, and does not re-run `<clinit>`. Application reload is a **new defining loader** after the old one is unreachable. A loader that still has live instances, threads, or a parent pointing at it will not let those classes go.
+> Agents may patch an already loaded class under JVM TI rules. That does not unload anything, does not create a second `Class`, and does not re-run `<clinit>`. Application reload is a **new defining loader** after the old one is unreachable. A loader that still has live instances, threads, or a parent pointing at it will not let those classes go. The limits of the redefine road, end to end: [[How does hot swapping of classes work in the JVM and what are its limits]].
 
 > [!tip] Interview answer
 > **Dynamic loading means the VM creates `Class` objects on demand through a class loader — built-in chain for the JDK and class path, your subclass for other bytes or for isolation.** Custom loaders override `findClass` and `defineClass`; reload means throw the defining loader away, because a `Class` is stuck to that loader for its lifetime. **Parent-first is the default; parent-last is a choice when you must hide the parent’s copy of a name.**

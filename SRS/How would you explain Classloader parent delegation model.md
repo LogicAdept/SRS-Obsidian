@@ -11,7 +11,7 @@ priority: 0
 
 ## What “parent-first” actually runs
 
-Every `ClassLoader` instance has a **parent** used for delegation (`getParent()`). `new ClassLoader()` uses `getSystemClassLoader()` as that parent. `new ClassLoader(parent)` lets you pick; `parent == null` means bootstrap. Bootstrap itself is not a `ClassLoader` object and has no parent.
+Every `ClassLoader` instance has a **parent** used for delegation (`getParent()`). `new ClassLoader()` uses `getSystemClassLoader()` as that parent. `new ClassLoader(parent)` lets you pick; `parent == null` means bootstrap. Bootstrap itself is not a `ClassLoader` object and has no parent ([[What is the bootstrap class loader in the JVM and what does it load]]).
 
 The default `loadClass(name, resolve)` search is:
 
@@ -100,7 +100,7 @@ class DelegationWalk {
 
 **Listing 1.** Typical printed chain is `app -> platform -> bootstrap`. `throughChild("java.lang.String")` is defined by bootstrap; the anonymous child is only an initiating loader. Override **`findClass`**, not `loadClass`, to stay on this model. `Class.forName(name)` still uses the **caller’s defining loader**, not “the child’s parent” ([[What does Class.forName do and what are its overloads]]).
 
-Custom loaders (plugins, extra code sources) pass an explicit parent — usually the system loader, or `getPlatformClassLoader()` when the child must see all platform types. Graphs that are **not** a tree must `registerAsParallelCapable()`; otherwise `loadClass` holds the loader lock for the whole search and cross-delegation deadlocks.
+Custom loaders (plugins, extra code sources) pass an explicit parent — usually the system loader, or `getPlatformClassLoader()` when the child must see all platform types ([[What is the platform class loader in Java and what does it load]]). Graphs that are **not** a tree must `registerAsParallelCapable()`; otherwise `loadClass` holds the loader lock for the whole search and cross-delegation deadlocks.
 
 > [!warning] Parent-first is the default, not a law
 > Override `loadClass` and you skip the documented order (child-first, filtered packages, graphs). The sanctioned downward bridge, for framework code that must reach classes its own loader cannot see, is [[What is the thread context class loader in Java]]. The VM still allows a loader to define a class itself. What you cannot do is `defineClass` a `java.*` name unless you *are* the platform loader or an ancestor — `SecurityException`. Parent `null` also hides platform types that bootstrap does not define.
