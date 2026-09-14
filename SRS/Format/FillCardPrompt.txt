@@ -96,6 +96,7 @@ Java
 #Java/Language
 #Java/Language/Assert
 #Java/Language/Enum
+#Java/Language/Expressions
 #Java/Language/Optional
 #Java/Language/Primitives
 #Java/Language/Primitives/ShortType
