@@ -68,7 +68,7 @@ mvn -B clean install
 // [INFO] BUILD SUCCESS
 ```
 
-**Listing 1.** Maven 3.9.9 on JDK 21: `AppTest` ran at the `test` phase, `AppIT` only after packaging at `integration-test` — each plugin caught its own naming pattern.
+**Listing 1.** Captured with Maven 3.9.9 on JDK 21: `AppTest` ran at the `test` phase, `AppIT` only after packaging at `integration-test` — each plugin caught its own naming pattern. Both are core plugins the packaging binds for you — [[Which core plugins does Maven ship with]] surveys the whole catalog.
 
 Failsafe needs two goals bound in the POM (`integration-test` and `verify`) because without `verify` a failing IT would never fail the build:
 
