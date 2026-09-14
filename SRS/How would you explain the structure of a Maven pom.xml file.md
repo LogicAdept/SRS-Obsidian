@@ -52,7 +52,7 @@ priority: 0
 
 **Listing 1.** A working POM (it built successfully with Maven 3.9.9 on JDK 21). Coordinates, one test dependency with a scope, one pinned plugin.
 
-The block map: coordinates (`groupId`, `artifactId`, `version`, `packaging`) make the artifact resolvable in repositories; `properties` are named values referenced as `${...}` and used to pin compiler release and encoding; `dependencies` declares what the classpath needs — resolution rules and scopes in [[What are the dependency scopes in a Maven pom]]; `build/plugins` configures the goals that execute phases — the phase model in [[How would you explain the Maven build lifecycle]]. Two more blocks matter at scale: `dependencyManagement` centralizes versions so child modules inherit them without restating, and `parent`/`modules` tie a reactor of modules into one versioned build.
+The block map: coordinates (`groupId`, `artifactId`, `version`, `packaging`) make the artifact resolvable in repositories; `properties` are named values referenced as `${...}` and used to pin compiler release and encoding; `dependencies` declares what the classpath needs — resolution rules and scopes in [[What are the dependency scopes in a Maven pom]]; `build/plugins` configures the goals that execute phases — the phase model in [[How would you explain the Maven build lifecycle]]. Two more blocks matter at scale: `dependencyManagement` centralizes versions so child modules inherit them without restating ([[What is the dependencyManagement section in Maven for]] is its dedicated card), and `parent`/`modules` tie a reactor of modules into one versioned build ([[How do multi-module Maven builds work]]).
 
 ```d2
 direction: right

@@ -59,6 +59,8 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 **Runtime in the tree:** **`#Java/Runtime`** is the process-level API (`java.lang.Runtime`, `java.lang.System`: standard streams, `System.exit`, environment and properties, `Runtime.exec` / shutdown hooks). The **JRE product** (JVM + libraries, no compiler) is **`#Java/JRE`**, not Runtime. JVM internals stay **`#Java/JVM/...`**. Compile-time vs runtime **language** semantics (dynamic dispatch / polymorphism) stay **`#Java/OOP`** and **`#Java/Language`**. Do not put **`#Java/Runtime`** next to a more specific **`#Java/Runtime/...`** child on the same card.
 
+**Java build tools in the tree:** Maven, Gradle, and Ant are Java build tools and live under **`#Java/Tooling`**: **`#Java/Tooling/Maven`** is Maven the tool (POM, lifecycles, dependency mechanism and scopes, plugin goals, build profiles, repository resolution, SNAPSHOT semantics, wrapper, reactor), **`#Java/Tooling/Gradle`** is Gradle the tool, **`#Java/Tooling/Ant`** is Ant. Maven-vs-Gradle comparison cards carry **both** tool leaves. There is **no `#Build/Tools/Maven`** or `#Build/Tools/Gradle` — retired as parallel synonyms of the `#Java/Tooling/...` leaves. The **`#Build`** root is for cross-ecosystem build concepts: **`#Build/Dependencies`** (artifact/dependency management as infrastructure), **`#Build/ArtifactRepositories`** and **`#Build/ArtifactRepositories/Nexus`** (repository managers and publish/consume infrastructure — dual-tag with the tool leaf when the cue is the tool's commands), and **`#Build/Tools`** holds non-JVM build tools (`#Build/Tools/CMake`). Do not put **`#Java/Tooling`** next to a more specific **`#Java/Tooling/...`** child on the same card.
+
 **IO in the tree:** **`#Java/IO`** is classic `java.io` and IO-vs-NIO comparison cards (dual-tag **`#Java/NIO`** on those). **File** is `java.io.File`: abstract pathnames, separators, `FileFilter` / `listFiles`, absolute vs relative, filesystem-entry metadata. **Streams** is byte and character stream types and filters (`InputStream` / `OutputStream` / `Reader` / `Writer`, buffered, data, print, zip, charset bridges, `System.in`/`out`). **RandomAccessFile** is `java.io.RandomAccessFile` (modes, pointer, not in the stream tree). Close / try-with-resources / checked `IOException` catalogs stay on **`#Java/IO`** plus **`#Java/Exceptions/...`** when that leaf owns the cue. `java.util.stream` stays **`#Java/Streams`**. Do not put **`#Java/IO`** next to a more specific **`#Java/IO/...`** child on the same card.
 
 **JVM in the tree:** **`#Java/JVM`** is the virtual machine as a platform (what the JVM is, JRE vs JDK vs JVM, bytecode portability, other languages on the VM, startup, interpreter-plus-JIT as the execution engine, compiled vs interpreted). **Memory** is runtime data areas (heap, stacks / frames, Metaspace vs PermGen, string-pool *location*, off-heap, object layout / size, strong / weak / soft / phantom references). **GarbageCollector** is reachability, generations, collector algorithms (Serial / Parallel / CMS / G1 / ZGC / Shenandoah), and finalization as a GC hook. Do not add per-collector leaves. **ClassLoaders** is class loading, parent delegation, and the classpath (`Class.forName` / `getClass` dual-tag **`#Java/Language/Reflection/Class`**). **JIT** is just-in-time compilation, inlining, and escape analysis — not the whole execution engine. **Tuning** is launch flags, heap / thread dumps, and profilers. Dual-tag **`#Java/Bytecode`** for class-file / instruction encoding, **`#Java/JMM`** for the memory model, **`#Java/Runtime`** for `java.lang.Runtime` / `System`, **`#Java/String`** when the cue is the string *type* or intern API rather than the pool as a region, **`#Java/JRE`** / **`#Java/JDK`** on product comparisons. Do not put **`#Java/JVM`** next to a more specific **`#Java/JVM/...`** child on the same card. Memory-layout vs GC comparison cards carry **Memory** and **GarbageCollector**.
@@ -262,6 +264,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Tooling`
 * `#Java/Tooling/Maven`
 * `#Java/Tooling/Gradle`
+* `#Java/Tooling/Ant`
 * `#Java/JavaEE`
 * `#Java/Servlet`
 * `#Java/Servlet/Filters`
@@ -727,9 +730,6 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 
 ### Build
 * `#Build/Tools`
-* `#Build/Tools/Maven`
-* `#Build/Tools/Gradle`
-* `#Build/Tools/Ant`
 * `#Build/Tools/CMake`
 * `#Build/Dependencies`
 * `#Build/ArtifactRepositories`
