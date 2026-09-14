@@ -53,3 +53,5 @@ List<Employee> employees;
 
 > [!tip] Interview answer
 > EAGER means the provider must load that association when it loads the entity. LAZY is only a hint to load on first access, and the provider may ignore it. Collections default to LAZY, many-to-one and one-to-one default to EAGER. Prefer LAZY mappings and fetch what a use case needs in the query, instead of making associations EAGER globally.
+
+See [[What are the Hibernate fetching strategies]], [[How do Hibernate lazy proxies work]], and [[What is JOIN FETCH and EntityGraph in Spring Data JPA]].

@@ -33,3 +33,5 @@ The moment the composite key becomes an index, order matters: (student_id, cours
 
 > [!tip] Interview answer
 > A composite key uses two or more columns together as the identifier: uniqueness holds for the combination, not the parts. As a constraint it is enforced by a unique index over the tuple, and as an index it sorts lexicographically, so column order decides which leading prefixes are seekable. In InnoDB the composite PK is also the clustered index and gets duplicated into every secondary index, so keep it short.
+
+See [[How do you map a composite key in JPA]], [[What is the JPA Id annotation]], and [[What is Hibernate performance tuning]].
