@@ -31,7 +31,7 @@ mvn clean install
 // [INFO] BUILD SUCCESS
 ```
 
-**Listing 1.** Captured with Maven 3.9.9 on JDK 21 — every line names the plugin goal and the phase it is bound to.
+**Listing 1.** Captured with Maven 3.9.9 on JDK 21 — every line names the plugin goal and the phase it is bound to. One line can also chain independent lifecycles and direct goals; [[What happens when you mix phases and plugin goals in one mvn command]] dissects the argument-by-argument semantics.
 
 ```d2
 direction: right

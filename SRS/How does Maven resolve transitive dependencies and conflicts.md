@@ -11,7 +11,7 @@ priority: 0
 
 ## Nearest definition wins — depth, not recency
 
-Mediation walks the dependency tree and, for each `groupId:artifactId`, keeps the version with the shortest path to your project. Declaring an artifact directly in your POM makes it depth zero, which is why a direct declaration can always force a version. When two versions sit at the same depth, declaration order decides — the first wins. The model is documented with a tree:
+Mediation walks the dependency tree and, for each `groupId:artifactId`, keeps the version with the shortest path to your project. Declaring an artifact directly in your POM makes it depth zero, which is why a direct declaration can always force a version. When two versions sit at the same depth, declaration order decides — the first wins. The tool that makes this tree visible on a real project is `mvn dependency:tree` ([[What does the maven-dependency-plugin do]]):
 
 ```d2
 direction: right

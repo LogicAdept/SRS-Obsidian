@@ -11,7 +11,7 @@ priority: 0
 
 ## What Maven actually provides
 
-Maven's stated objectives are a simple, uniform build process and quality project information. The mechanics behind that: a conventional project layout (`src/main/java`, `src/test/java`, `target/` for output), a centrally defined build lifecycle, and a dependency mechanism that resolves artifacts by `groupId:artifactId:version` coordinates from remote repositories into your local cache (`~/.m2/repository`) — [[How does Maven resolve artifacts from repositories]] walks the full resolution path, and [[What is a SNAPSHOT version in Maven]] covers its moving-target corner.
+Maven's stated objectives are a simple, uniform build process and quality project information. The mechanics behind that: a conventional project layout (`src/main/java`, `src/test/java`, `target/` for output), a centrally defined build lifecycle, and a dependency mechanism that resolves artifacts by `groupId:artifactId:version` coordinates from remote repositories into your local cache (`~/.m2/repository`) — [[How does Maven resolve artifacts from repositories]] walks the full resolution path, and [[What is a SNAPSHOT version in Maven]] covers its moving-target corner. Every actual build action belongs to a plugin; [[What are Maven plugins and how are goals invoked]] explains how goals are reached.
 
 ```d2
 direction: right
