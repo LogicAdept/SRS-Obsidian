@@ -11,7 +11,7 @@ priority: 0
 
 ## Three fields, three setters
 
-`System` exposes the process standard streams and the only supported way to replace them ([[What is the purpose of the Runtime class and the System class]], [[What is the difference between and what InputStream OutputStream Reader Writer]]):
+`System` exposes the process standard streams and the only supported way to replace them ([[What is the purpose of the Runtime class and the System class]], [[What is the difference between InputStream OutputStream Reader and Writer]]):
 
 | Field | Type | Setter (since 1.1) |
 | --- | --- | --- |
@@ -23,7 +23,7 @@ The fields start already open. Typically they are the host keyboard and display,
 
 `err` exists so diagnostics still reach a watched destination when `out` is sent to a file. `setOut` does not reassign `err`.
 
-`PrintStream` is a byte `OutputStream` that prints; `setOut` will not take a raw `OutputStream` or a `Writer`. Wrap first: `new PrintStream(out, autoFlush, charset)` or a file-name constructor ([[What is the difference between PrintWriter and PrintStream]], [[Which subclasses class InputStream you do you know for what they intended]]). The two-arg `PrintStream(OutputStream, boolean)` encodes with the default charset and, if `autoFlush` is true, flushes after a byte-array write, a `println`, or a `'\n'`.
+`PrintStream` is a byte `OutputStream` that prints; `setOut` will not take a raw `OutputStream` or a `Writer`. Wrap first: `new PrintStream(out, autoFlush, charset)` or a file-name constructor ([[What is the difference between PrintWriter and PrintStream]], [[What are common concrete InputStream and OutputStream implementations]]). The two-arg `PrintStream(OutputStream, boolean)` encodes with the default charset and, if `autoFlush` is true, flushes after a byte-array write, a `println`, or a `'\n'`.
 
 Java 21 still documents a security-manager gate: if one is installed, each setter calls `checkPermission` with `RuntimePermission("setIO")` and throws `SecurityException` on denial. `SecurityManager` has been deprecated for removal since 17; with none installed, the check is a no-op.
 

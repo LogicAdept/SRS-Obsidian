@@ -233,6 +233,11 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/IO/Streams`
 * `#Java/IO/RandomAccessFile`
 * `#Java/NIO`
+* `#Java/NIO/Buffers`
+* `#Java/NIO/Channels`
+* `#Java/NIO/Selector`
+* `#Java/NIO/Charset`
+* `#Java/NIO/Files`
 * `#Java/Networking`
 * `#Java/Networking/UrlEncoding`
 * `#Java/Logging`
@@ -354,6 +359,7 @@ Tags are **composite paths** (`Root/.../Leaf`) plus, when necessary, **multiple 
 * `#Java/Testing/Cucumber`
 * `#Java/Testing/Gherkin`
 
+**Java IO and NIO in the tree:** `#Java/IO` is the classic `java.io` blocking stream model: overview and IO-versus-NIO cards, `#Java/IO/File` is the `java.io.File` pathname object (filters, separators, absolute vs relative), `#Java/IO/Streams` covers the byte and character stream classes and their decorators (buffered, data, print, piped, bridges, compression) — including `Scanner`/`BufferedReader` reading questions, and `#Java/IO/RandomAccessFile` is the seekable file handle. `#Java/NIO` is the NIO overview hub (feature surveys, IO-vs-NIO comparisons); its children split the package: `#Java/NIO/Buffers` is the `Buffer` family and invariants (position/limit/flip, direct vs heap), `#Java/NIO/Channels` is the channel family including `FileChannel` powers (map, lock, transferTo) and the asynchronous channels, `#Java/NIO/Selector` is readiness multiplexing with `SelectionKey`, `#Java/NIO/Charset` is `java.nio.charset` encode/decode and default-charset questions, and `#Java/NIO/Files` is the NIO.2 `java.nio.file` API (`Path`, `Files`, `WatchService`, links, attributes). Serialization stays under `#Java/Serialization`; OS-level I/O concepts stay under `#OperatingSystems/IO/...` (dual-tag only when the card answers a Java API question). Do not put `#Java/NIO` next to a more specific `#Java/NIO/...` child on the same card.
 ### Testing
 * `#Testing`
 * `#Testing/Mocking`

@@ -11,11 +11,11 @@ priority: 0
 
 ## Open, decode, buffer, close
 
-A `File` does not open anything ([[Does a java.io.File instance represent only a path without opening the file]]). `new FileInputStream(file)` **opens a connection** and a `FileDescriptor`; missing or unreadable files throw `FileNotFoundException` ([[Which subclasses class InputStream you do you know for what they intended]]).
+A `File` does not open anything ([[Does a java.io.File instance represent only a path without opening the file]]). `new FileInputStream(file)` **opens a connection** and a `FileDescriptor`; missing or unreadable files throw `FileNotFoundException` ([[What are common concrete InputStream and OutputStream implementations]]).
 
 `InputStream` (Java 1.0) is the abstract **byte** input root. A subclass must supply the next byte. `read()` blocks until a byte, EOF, or an error. Array `read` may return fewer bytes than requested. After `close()`, further `read` throws `IOException`.
 
-Text is not bytes. `Reader` (Java 1.1) is abstract **character** input; a subclass must implement `read(char[],int,int)` and `close()`. `InputStreamReader` is the **bridge**: it reads bytes and **decodes** them with a named charset, a `Charset`, or the **default charset**. One `read()` on the reader may pull extra bytes from the underlying stream for conversion ([[Which classes convert between Java byte streams and character streams]], [[What is the difference between and what InputStream OutputStream Reader Writer]]).
+Text is not bytes. `Reader` (Java 1.1) is abstract **character** input; a subclass must implement `read(char[],int,int)` and `close()`. `InputStreamReader` is the **bridge**: it reads bytes and **decodes** them with a named charset, a `Charset`, or the **default charset**. One `read()` on the reader may pull extra bytes from the underlying stream for conversion ([[Which classes convert between Java byte streams and character streams]], [[What is the difference between InputStream OutputStream Reader and Writer]]).
 
 Buffering is a decorator, not a third kind of stream. `BufferedInputStream` keeps an internal `byte[]` and refills it from the wrapped stream **many bytes at a time**; it also implements `mark` / `reset`. `BufferedReader` buffers characters and lines. `InputStreamReader` JavaDoc tells you to wrap it in `BufferedReader` for efficiency. `BufferedReader` JavaDoc: without that wrap, each `read` / `readLine` can hit the file and decode ([[What are buffered streams in Java]]).
 

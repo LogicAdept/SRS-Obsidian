@@ -71,7 +71,7 @@ def -> gz
 def -> zip
 ```
 
-**Fig. 1.** Interview set: deflate pair, then GZIP and ZIP subclasses. Engines `Deflater`/`Inflater` sit inside, not in the `InputStream` tree ([[Which subclasses class InputStream you do you know for what they intended]]).
+**Fig. 1.** Interview set: deflate pair, then GZIP and ZIP subclasses. Engines `Deflater`/`Inflater` sit inside, not in the `InputStream` tree ([[What are common concrete InputStream and OutputStream implementations]]).
 
 > [!warning] `ZipOutputStream` is not a raw deflate blob, and `available()` is not length
 > ZIP needs `putNextEntry`. `InflaterInputStream.available()` is 0 or 1. `Deflater`/`Inflater` need `end()`; they are not `Closeable` streams. Unsupported store or missing privileges are not these types — they are still `java.io` filters when the platform supports zip.

@@ -4,10 +4,10 @@ priority: 0
 -->
 #Java/IO/File #Java/NIO #OperatingSystems/IO/Files #SRS
 
-# What is a symbolic link?
+# How do symbolic links work in Java?
 
 > [!abstract] Short answer
-> A **symbolic link** is a directory entry whose stored value is a **path** (absolute or relative), not the target’s bytes. `Files.createSymbolicLink` creates one (optional). The target **need not exist**; `Files.readSymbolicLink` returns that path without requiring the target. Most `java.nio.file.Files` reads **follow** the link to the final target unless `LinkOption.NOFOLLOW_LINKS` is passed. `Files.delete` removes the **link**, not the target. `java.io.File.getCanonicalPath()` typically **resolves** UNIX symlinks as part of making a unique absolute path ([[What is a symbolic link]], [[What is and]]).
+> A **symbolic link** is a directory entry whose stored value is a **path** (absolute or relative), not the target’s bytes. `Files.createSymbolicLink` creates one (optional). The target **need not exist**; `Files.readSymbolicLink` returns that path without requiring the target. Most `java.nio.file.Files` reads **follow** the link to the final target unless `LinkOption.NOFOLLOW_LINKS` is passed. `Files.delete` removes the **link**, not the target. `java.io.File.getCanonicalPath()` typically **resolves** UNIX symlinks as part of making a unique absolute path ([[What are absolute and relative paths in the Java File API]], [[What is a special file in Unix]]).
 
 ## Path stored in an entry, then usually followed
 
@@ -15,7 +15,7 @@ priority: 0
 
 `Files.isSymbolicLink(path)` is **true** only if that path **is** a symlink. **False** if missing, not a link, or the type cannot be determined — it does **not** throw `IOException`. Use `readAttributes` + `BasicFileAttributes.isSymbolicLink()` when you must see I/O failures.
 
-`Files.createLink(link, existing)` is a **hard link**: another directory entry for an **existing** file. Typically all such entries must live on the **same** file system. Directory hard links and privilege checks are **platform-specific**, not a Java-wide ban ([[What is a special file in Unix]], [[How would you explain in how is difference between IO and NIO]]).
+`Files.createLink(link, existing)` is a **hard link**: another directory entry for an **existing** file. Typically all such entries must live on the **same** file system. Directory hard links and privilege checks are **platform-specific**, not a Java-wide ban ([[What is a special file in Unix]], [[What is the difference between Java IO and NIO]]).
 
 | | Symbolic link | Hard link (`createLink`) |
 | --- | --- | --- |

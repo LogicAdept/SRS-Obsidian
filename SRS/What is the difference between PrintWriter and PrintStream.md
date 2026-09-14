@@ -7,7 +7,7 @@ priority: 0
 # What is the difference between `PrintWriter` and `PrintStream`?
 
 > [!abstract] Short answer
-> **`PrintStream` (1.0) is a byte `FilterOutputStream` that can also print values; `PrintWriter` (1.1) is a `Writer` for formatted text and has no raw-byte `write`.** Both swallow `IOException` from print methods and expose `checkError()`. Autoflush differs: `PrintStream` flushes after a byte array, after `println`, or when a `'\n'` byte/char is written; `PrintWriter` flushes only on `println` / `printf` / `format`, using the **platform line separator**, not whenever `'\n'` appears. JavaDoc: use `PrintWriter` when the job is **characters**, unencoded byte streams when the job is **bytes** ([[What is the difference between and what InputStream OutputStream Reader Writer]], [[What kinds of input and output streams exist in Java]]).
+> **`PrintStream` (1.0) is a byte `FilterOutputStream` that can also print values; `PrintWriter` (1.1) is a `Writer` for formatted text and has no raw-byte `write`.** Both swallow `IOException` from print methods and expose `checkError()`. Autoflush differs: `PrintStream` flushes after a byte array, after `println`, or when a `'\n'` byte/char is written; `PrintWriter` flushes only on `println` / `printf` / `format`, using the **platform line separator**, not whenever `'\n'` appears. JavaDoc: use `PrintWriter` when the job is **characters**, unencoded byte streams when the job is **bytes** ([[What is the difference between InputStream OutputStream Reader and Writer]], [[What kinds of input and output streams exist in Java]]).
 
 ## Bytes that print vs a character writer
 

@@ -11,7 +11,7 @@ priority: 0
 
 ## First match wins; siblings do not share the throw
 
-A `try` with several `catch` clauses considers them left to right. If the `try` block throws a value `V`, the **first (leftmost)** `catch` whose type can accept `V` is selected. `V` is assigned to that clause’s parameter and **only that** block runs. If the selected `catch` completes normally, the `try` statement completes normally (then `finally`, if present). Control does not fall through to the next `catch` ([[Does control return to the try block after a catch handles an exception]], [[In what order should catch blocks appear for IOException and FileNotFoundException]]).
+A `try` with several `catch` clauses considers them left to right. If the `try` block throws a value `V`, the **first (leftmost)** `catch` whose type can accept `V` is selected. `V` is assigned to that clause’s parameter and **only that** block runs. If the selected `catch` completes normally, the `try` statement completes normally (then `finally`, if present). Control does not fall through to the next `catch` ([[Does control return to the try block after a catch handles an exception]], [[How do you order catch blocks for FileNotFoundException and IOException]]).
 
 If no clause of that `try` matches, the throw continues out of the statement (after `finally`, if any). An **enclosing** `try` is a different statement and may select **its** first matching `catch` for the same `V` ([[What happens if no catch matches and a finally block is present]], [[How would you explain try-catch-finally]]).
 

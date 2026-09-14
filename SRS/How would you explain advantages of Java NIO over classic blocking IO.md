@@ -11,7 +11,7 @@ priority: 0
 
 ## What `java.io` cannot do the same way
 
-Classic streams are sequential byte or char pipes. `InputStream.read()` **blocks** until a byte, EOF, or error ([[How does Java]], [[What is the difference between and what InputStream OutputStream Reader Writer]], [[How would you explain blocking versus non blocking methods in IO and concurrency]], [[How would you explain in how is difference between IO and NIO]]). `mark`/`reset` exist on some streams; you still do not have a file **position** you can set, a mapped region, or one thread watching hundreds of sockets.
+Classic streams are sequential byte or char pipes. `InputStream.read()` **blocks** until a byte, EOF, or error ([[How does file reading work in Java]], [[What is the difference between InputStream OutputStream Reader and Writer]], [[How would you explain blocking versus non blocking methods in IO and concurrency]], [[What is the difference between Java IO and NIO]]). `mark`/`reset` exist on some streams; you still do not have a file **position** you can set, a mapped region, or one thread watching hundreds of sockets.
 
 NIO’s units (since 1.4):
 
@@ -24,7 +24,7 @@ NIO’s units (since 1.4):
 | Direct `ByteBuffer` | JVM **best effort** to run native I/O on the buffer without an extra copy |
 | NIO.2 `Files` (1.7) | `newDirectoryStream` instead of materializing every name; exceptions instead of `listFiles` → `null` ([[How do you list directory entries that match a criterion in Java]]) |
 
-**Non-blocking and selectors.** Newly created selectable channels are **blocking**. `configureBlocking(false)`: an I/O call **never blocks** and may transfer **zero** bytes. Register with a `Selector` only after non-blocking mode (`IllegalBlockingModeException` if still blocking). `select()` asks the OS which registered channels are ready for the interest set — one thread, many connections, instead of one blocking thread per `Socket`/`InputStream` ([[How does NIO provide non-blocking access to resources]], [[What is blocking method]]).
+**Non-blocking and selectors.** Newly created selectable channels are **blocking**. `configureBlocking(false)`: an I/O call **never blocks** and may transfer **zero** bytes. Register with a `Selector` only after non-blocking mode (`IllegalBlockingModeException` if still blocking). `select()` asks the OS which registered channels are ready for the interest set — one thread, many connections, instead of one blocking thread per `Socket`/`InputStream` ([[How does NIO provide non-blocking access to resources]], [[What is a blocking method]]).
 
 **Files.** `FileChannel.map`: for **large** files, mapping is often much more efficient than looped `read`/`write`. Mapping a few tens of kilobytes is **usually more expensive** than ordinary reads. The mapping stays valid after the channel is closed (until the `MappedByteBuffer` is GC’d). `transferTo` / `transferFrom` can let the OS move bytes between the filesystem cache and another channel **without copying** through Java. `read`/`write` at an explicit position do not move the channel position.
 

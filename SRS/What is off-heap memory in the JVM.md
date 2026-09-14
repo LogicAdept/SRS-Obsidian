@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JVM/Memory #Java/NIO #SRS
+#Java/JVM/Memory #Java/NIO/Buffers #SRS
 
 # What is off-heap memory in the JVM?
 

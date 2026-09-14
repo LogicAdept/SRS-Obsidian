@@ -26,7 +26,7 @@ Constructors: `File(String)`, `File(String parent, String child)`, `File(File pa
 
 `toURI()` builds a `file:` URI (`toURL()` is deprecated — it does not escape illegal URL characters). `toPath()` yields a `java.nio.file.Path` for the same abstract path (default filesystem). `equals` / `hashCode` / `compareTo` compare **pathnames** (case rules follow the OS), not inodes.
 
-Methods such as `exists()`, `listFiles()`, `createNewFile()` talk to the filesystem when you call them. They do not turn the `File` into a live handle. Opening bytes is `new FileInputStream(file)` ([[How does Java]], [[How do you list directory entries that match a criterion in Java]], [[Which methods class File you do you know]]).
+Methods such as `exists()`, `listFiles()`, `createNewFile()` talk to the filesystem when you call them. They do not turn the `File` into a live handle. Opening bytes is `new FileInputStream(file)` ([[How does file reading work in Java]], [[How do you list directory entries that match a criterion in Java]], [[How would you explain the java.io.File class and path representation]]).
 
 ```d2
 direction: down

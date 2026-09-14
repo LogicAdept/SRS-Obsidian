@@ -64,7 +64,7 @@ class Demo {
 An override may **narrow** checked `throws` (parent `throws IOException`, child `throws FileNotFoundException`) but must not **widen** them (parent `throws FileNotFoundException`, child `throws IOException`) — [[What happens if an override declares a broader checked exception than the parent]].
 
 > [!warning] Catch order is the opposite mnemonic
-> If you catch both types, `FileNotFoundException` must appear **before** `IOException`. A preceding `catch (IOException)` already handles the subclass, so the child `catch` is unreachable ([[In what order should catch blocks appear for IOException and FileNotFoundException]]). `throws` wants the supertype; `catch` lists want the subtype first.
+> If you catch both types, `FileNotFoundException` must appear **before** `IOException`. A preceding `catch (IOException)` already handles the subclass, so the child `catch` is unreachable ([[How do you order catch blocks for FileNotFoundException and IOException]]). `throws` wants the supertype; `catch` lists want the subtype first.
 
 > [!warning] `throws IOException` is a wider caller contract
 > Callers must be prepared for any `IOException`, not only “file not found.” If the method can only fail that way, declaring `throws FileNotFoundException` is the tighter API. Both are legal when the body only throws the subclass.
