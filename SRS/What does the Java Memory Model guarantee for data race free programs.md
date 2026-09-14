@@ -14,8 +14,18 @@ This is the headline guarantee the model makes to programmers. The definition is
 ```d2
 direction: right
 ok: "Every conflicting pair\nordered by hb?" {
-  yes: "correctly synchronized\n-> all executions appear\nsequentially consistent" { style.fill: "#e8f5e9" }
-  no: "a data race exists\n-> no DRF-SC guarantee;\nreads may see defaults\nor any racing write" { style.fill: "#ffebee" }
+  width: 258
+  height: 104
+  yes: "correctly synchronized\n-> all executions appear\nsequentially consistent" {
+    width: 276
+    height: 134
+    style.fill: "#e8f5e9"
+  }
+  no: "a data race exists\n-> no DRF-SC guarantee;\nreads may see defaults\nor any racing write" {
+    width: 267
+    height: 164
+    style.fill: "#ffebee"
+  }
   ok -> yes: "yes"
   ok -> no: "no"
 }

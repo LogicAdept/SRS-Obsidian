@@ -14,13 +14,33 @@ This is the one safe-publication mechanism that needs no explicit edge at the re
 ```d2
 direction: right
 c: "Constructor thread" {
-  w: "final int a = 41;\nfinal int b = 1;" { style.fill: "#e3f2fd" }
-  end: "constructor completes\n(final fields frozen)" { style.fill: "#fff3e0" }
+  width: 222
+  height: 74
+  w: "final int a = 41;\nfinal int b = 1;" {
+    width: 213
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  end: "constructor completes\n(final fields frozen)" {
+    width: 249
+    height: 104
+    style.fill: "#fff3e0"
+  }
   w -> end: "program order"
 }
 r: "Reader thread" {
-  ref: "reads reference\n(even via data race)" { style.fill: "#f3e5f5" }
-  rd: "reads a and b\n-> guaranteed 41 and 1" { style.fill: "#e8f5e9" }
+  width: 200
+  height: 74
+  ref: "reads reference\n(even via data race)" {
+    width: 240
+    height: 104
+    style.fill: "#f3e5f5"
+  }
+  rd: "reads a and b\n-> guaranteed 41 and 1" {
+    width: 258
+    height: 104
+    style.fill: "#e8f5e9"
+  }
   ref -> rd: "program order"
 }
 end -> ref: "publication (any mechanism,\nno lock required)"

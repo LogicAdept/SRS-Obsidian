@@ -13,10 +13,26 @@ The modes form a strength ladder. Volatile mode is the familiar full guarantee: 
 
 ```d2
 direction: right
-vol: "getVolatile / setVolatile\nfull volatile hb semantics" { style.fill: "#e8f5e9" }
-acr: "getAcquire / setRelease\none-way release-acquire pair" { style.fill: "#fff3e0" }
-opq: "getOpaque / setOpaque\ncoherence per variable only" { style.fill: "#e3f2fd" }
-plain: "get / set\nno ordering" { style.fill: "#f5f5f5" }
+vol: "getVolatile / setVolatile\nfull volatile hb semantics" {
+  width: 294
+  height: 104
+  style.fill: "#e8f5e9"
+}
+acr: "getAcquire / setRelease\none-way release-acquire pair" {
+  width: 312
+  height: 104
+  style.fill: "#fff3e0"
+}
+opq: "getOpaque / setOpaque\ncoherence per variable only" {
+  width: 303
+  height: 104
+  style.fill: "#e3f2fd"
+}
+plain: "get / set\nno ordering" {
+  width: 200
+  height: 104
+  style.fill: "#f5f5f5"
+}
 vol -> acr: "weaker"
 acr -> opq: "weaker"
 opq -> plain: "weaker"

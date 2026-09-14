@@ -14,13 +14,33 @@ This is the return half of the executor pair: submission publishes to the task a
 ```d2
 direction: right
 t: "Task thread" {
-  c: "compute result\n(plain writes)" { style.fill: "#e3f2fd" }
-  st: "outcome = v; STATE.setRelease(NORMAL)\n(release)" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  c: "compute result\n(plain writes)" {
+    width: 200
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  st: "outcome = v; STATE.setRelease(NORMAL)\n(release)" {
+    width: 340
+    height: 104
+    style.fill: "#fff3e0"
+  }
   c -> st: "program order"
 }
 m: "Main thread" {
-  g: "future.get()\n(acquire on state)" { style.fill: "#fff3e0" }
-  r: "reads result\n-> fully visible" { style.fill: "#e8f5e9" }
+  width: 200
+  height: 74
+  g: "future.get()\n(acquire on state)" {
+    width: 222
+    height: 104
+    style.fill: "#fff3e0"
+  }
+  r: "reads result\n-> fully visible" {
+    width: 204
+    height: 104
+    style.fill: "#e8f5e9"
+  }
   g -> r: "program order"
 }
 st -> g: "release -> acquire\n(same FutureTask state)"

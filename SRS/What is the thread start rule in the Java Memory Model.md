@@ -14,13 +14,33 @@ The edge makes `start()` a safe-publication point for the initial work item: con
 ```d2
 direction: right
 p: "Parent thread" {
-  w: "build config\n(plain writes)" { style.fill: "#e3f2fd" }
-  s: "thread.start()\n(release)" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  w: "build config\n(plain writes)" {
+    width: 200
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  s: "thread.start()\n(release)" {
+    width: 200
+    height: 104
+    style.fill: "#fff3e0"
+  }
   w -> s: "program order"
 }
 c: "Child thread" {
-  f: "first action in run()\n(acquire)" { style.fill: "#fff3e0" }
-  r: "reads config\n-> fully visible" { style.fill: "#e8f5e9" }
+  width: 200
+  height: 74
+  f: "first action in run()\n(acquire)" {
+    width: 249
+    height: 104
+    style.fill: "#fff3e0"
+  }
+  r: "reads config\n-> fully visible" {
+    width: 204
+    height: 104
+    style.fill: "#e8f5e9"
+  }
   f -> r: "program order"
 }
 s -> f: "synchronizes-with"

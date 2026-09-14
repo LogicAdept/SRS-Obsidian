@@ -14,13 +14,33 @@ The rule makes the interruption status a legitimate communication channel: write
 ```d2
 direction: right
 c: "Controller thread" {
-  w: "shutdown = true\n(plain write)" { style.fill: "#e3f2fd" }
-  i: "worker.interrupt()\n(release)" { style.fill: "#fff3e0" }
+  width: 213
+  height: 74
+  w: "shutdown = true\n(plain write)" {
+    width: 200
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  i: "worker.interrupt()\n(release)" {
+    width: 222
+    height: 104
+    style.fill: "#fff3e0"
+  }
   w -> i: "program order"
 }
 wk: "Worker thread" {
-  d: "catch (InterruptedException)\nor isInterrupted() == true\n(acquire)" { style.fill: "#fff3e0" }
-  r: "reads shutdown -> true" { style.fill: "#e8f5e9" }
+  width: 200
+  height: 74
+  d: "catch (InterruptedException)\nor isInterrupted() == true\n(acquire)" {
+    width: 312
+    height: 134
+    style.fill: "#fff3e0"
+  }
+  r: "reads shutdown -> true" {
+    width: 258
+    height: 74
+    style.fill: "#e8f5e9"
+  }
   d -> r: "program order"
 }
 i -> d: "synchronizes-with\n(interruption detected)"

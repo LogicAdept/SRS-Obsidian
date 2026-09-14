@@ -14,13 +14,33 @@ Submission is publication: the executor moves the task object through internal c
 ```d2
 direction: right
 s: "Submitting thread" {
-  b: "create input, capture in task" { style.fill: "#e3f2fd" }
-  sub: "executor.submit(task)\n(release via work queue)" { style.fill: "#fff3e0" }
+  width: 213
+  height: 74
+  b: "create input, capture in task" {
+    width: 321
+    height: 74
+    style.fill: "#e3f2fd"
+  }
+  sub: "executor.submit(task)\n(release via work queue)" {
+    width: 276
+    height: 104
+    style.fill: "#fff3e0"
+  }
   b -> sub: "program order"
 }
 wk: "Worker thread" {
-  st: "task starts executing\n(acquire)" { style.fill: "#fff3e0" }
-  r: "reads input\n-> fully visible" { style.fill: "#e8f5e9" }
+  width: 200
+  height: 74
+  st: "task starts executing\n(acquire)" {
+    width: 249
+    height: 104
+    style.fill: "#fff3e0"
+  }
+  r: "reads input\n-> fully visible" {
+    width: 204
+    height: 104
+    style.fill: "#e8f5e9"
+  }
   st -> r: "program order"
 }
 sub -> st: "happens-before\n(submission -> execution begins)"

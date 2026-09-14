@@ -13,13 +13,33 @@ The rule is the precise answer to "what can possibly go wrong without synchroniz
 
 ```d2
 direction: right
-w1: "T1: B = 1" { style.fill: "#e3f2fd" }
-w2: "T2: A = 2" { style.fill: "#e3f2fd" }
-r1: "T1: r2 = A\nmay see 0" { style.fill: "#ffebee" }
-r2: "T2: r1 = B\nmay see 0" { style.fill: "#ffebee" }
+w1: "T1: B = 1" {
+  width: 200
+  height: 74
+  style.fill: "#e3f2fd"
+}
+w2: "T2: A = 2" {
+  width: 200
+  height: 74
+  style.fill: "#e3f2fd"
+}
+r1: "T1: r2 = A\nmay see 0" {
+  width: 200
+  height: 104
+  style.fill: "#ffebee"
+}
+r2: "T2: r1 = B\nmay see 0" {
+  width: 200
+  height: 104
+  style.fill: "#ffebee"
+}
 w1 -> r1: "program order"
 w2 -> r2: "program order"
-note: "no hb edges across threads:\nr2=0 and r1=0 is a legal outcome" { style.fill: "#fff3e0" }
+note: "no hb edges across threads:\nr2=0 and r1=0 is a legal outcome" {
+  width: 340
+  height: 104
+  style.fill: "#fff3e0"
+}
 ```
 
 **Fig. 1.** Two racing reads both observing initial values — allowed by happens-before consistency and impossible under sequential consistency. This is exactly the reordering-style surprise DRF-SC programs never see ([[What does the Java Memory Model guarantee for data race free programs]]).

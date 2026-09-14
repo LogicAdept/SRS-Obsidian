@@ -13,10 +13,26 @@ This rule is the floor of the whole visibility system. It is why a freshly creat
 
 ```d2
 direction: right
-dv: "Conceptual default writes\nat program start\n(0, false, null)" { style.fill: "#fff3e0" }
-t1: "Thread 1\nfirst action" { style.fill: "#e3f2fd" }
-t2: "Thread 2\nfirst action" { style.fill: "#e3f2fd" }
-t3: "Thread 3\nfirst action" { style.fill: "#e3f2fd" }
+dv: "Conceptual default writes\nat program start\n(0, false, null)" {
+  width: 285
+  height: 134
+  style.fill: "#fff3e0"
+}
+t1: "Thread 1\nfirst action" {
+  width: 200
+  height: 104
+  style.fill: "#e3f2fd"
+}
+t2: "Thread 2\nfirst action" {
+  width: 200
+  height: 104
+  style.fill: "#e3f2fd"
+}
+t3: "Thread 3\nfirst action" {
+  width: 200
+  height: 104
+  style.fill: "#e3f2fd"
+}
 dv -> t1: "synchronizes-with"
 dv -> t2: "synchronizes-with"
 dv -> t3: "synchronizes-with"

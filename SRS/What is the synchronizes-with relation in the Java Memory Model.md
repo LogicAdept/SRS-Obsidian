@@ -14,14 +14,42 @@ Happens-before is built from exactly two ingredients: program order inside a thr
 ```d2
 direction: right
 graph: {
-  monitor: "monitor unlock -> lock\n(same monitor)" { style.fill: "#e3f2fd" }
-  vol: "volatile write -> read\n(same variable)" { style.fill: "#e3f2fd" }
-  start: "start() -> first action\nof the new thread" { style.fill: "#e3f2fd" }
-  def: "default-value write\n-> first action in any thread" { style.fill: "#e3f2fd" }
-  term: "final action of T1 ->\ndetection in T2 (join, isAlive)" { style.fill: "#e3f2fd" }
-  intr: "interrupt() ->\ndetection of interruption" { style.fill: "#e3f2fd" }
+  monitor: "monitor unlock -> lock\n(same monitor)" {
+    width: 258
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  vol: "volatile write -> read\n(same variable)" {
+    width: 258
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  start: "start() -> first action\nof the new thread" {
+    width: 267
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  def: "default-value write\n-> first action in any thread" {
+    width: 321
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  term: "final action of T1 ->\ndetection in T2 (join, isAlive)" {
+    width: 339
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  intr: "interrupt() ->\ndetection of interruption" {
+    width: 285
+    height: 104
+    style.fill: "#e3f2fd"
+  }
 }
-note: "sw(x, y) implies hb(x, y);\nhb = program order + sw, transitively closed" { style.fill: "#e8f5e9" }
+note: "sw(x, y) implies hb(x, y);\nhb = program order + sw, transitively closed" {
+  width: 340
+  height: 104
+  style.fill: "#e8f5e9"
+}
 ```
 
 **Fig. 1.** The complete synchronizes-with catalogue from JLS 17.4.4. Every higher-level j.u.c guarantee (executors, concurrent collections, latches, barriers) is expressed in terms of these basic edges plus program order.

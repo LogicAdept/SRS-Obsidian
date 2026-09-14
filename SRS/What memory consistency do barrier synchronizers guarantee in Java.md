@@ -14,18 +14,50 @@ Barriers therefore have a stronger shape than a plain latch: instead of one rele
 ```d2
 direction: right
 p1: "Party 1" {
-  w1: "phase work 1" { style.fill: "#e3f2fd" }
-  a1: "await()" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  w1: "phase work 1" {
+    width: 200
+    height: 74
+    style.fill: "#e3f2fd"
+  }
+  a1: "await()" {
+    width: 200
+    height: 74
+    style.fill: "#fff3e0"
+  }
   w1 -> a1: "prior actions"
 }
 p2: "Party 2" {
-  w2: "phase work 2" { style.fill: "#e3f2fd" }
-  a2: "await()" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  w2: "phase work 2" {
+    width: 200
+    height: 74
+    style.fill: "#e3f2fd"
+  }
+  a2: "await()" {
+    width: 200
+    height: 74
+    style.fill: "#fff3e0"
+  }
   w2 -> a2: "prior actions"
 }
-b: "Barrier action\n(command.run)" { style.fill: "#f3e5f5" }
-r1: "Party 1 after await\nsees barrier action output" { style.fill: "#e8f5e9" }
-r2: "Party 2 after await\nsees barrier action output" { style.fill: "#e8f5e9" }
+b: "Barrier action\n(command.run)" {
+  width: 200
+  height: 104
+  style.fill: "#f3e5f5"
+}
+r1: "Party 1 after await\nsees barrier action output" {
+  width: 294
+  height: 104
+  style.fill: "#e8f5e9"
+}
+r2: "Party 2 after await\nsees barrier action output" {
+  width: 294
+  height: 104
+  style.fill: "#e8f5e9"
+}
 a1 -> b: "happens-before"
 a2 -> b: "happens-before"
 b -> r1: "happens-before"

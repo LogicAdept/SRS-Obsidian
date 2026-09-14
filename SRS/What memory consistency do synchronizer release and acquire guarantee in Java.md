@@ -14,14 +14,38 @@ It is the generalized monitor rule: the same release-to-acquire edge, extended t
 ```d2
 direction: right
 p: "Releasing thread" {
-  w: "populate state\n(plain writes)" { style.fill: "#e3f2fd" }
-  rel: "unlock / release / countDown\n(release)" { style.fill: "#fff3e0" }
+  width: 204
+  height: 74
+  w: "populate state\n(plain writes)" {
+    width: 200
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  rel: "unlock / release / countDown\n(release)" {
+    width: 312
+    height: 104
+    style.fill: "#fff3e0"
+  }
   w -> rel: "program order"
 }
-aqs: "Synchronizer object\n(AQS volatile state + CLH queue)" { style.fill: "#f3e5f5" }
+aqs: "Synchronizer object\n(AQS volatile state + CLH queue)" {
+  width: 340
+  height: 104
+  style.fill: "#f3e5f5"
+}
 c: "Acquiring thread" {
-  acq: "lock / acquire / await returns\n(acquire)" { style.fill: "#fff3e0" }
-  r: "reads state\n-> fully visible" { style.fill: "#e8f5e9" }
+  width: 204
+  height: 74
+  acq: "lock / acquire / await returns\n(acquire)" {
+    width: 330
+    height: 104
+    style.fill: "#fff3e0"
+  }
+  r: "reads state\n-> fully visible" {
+    width: 204
+    height: 104
+    style.fill: "#e8f5e9"
+  }
   acq -> r: "program order"
 }
 rel -> aqs: "release writes state"

@@ -14,13 +14,33 @@ The rule exists because finalization is inherently cross-thread: the finalizer i
 ```d2
 direction: right
 c: "Thread A" {
-  ctor: "new Resource()\nconstructor writes fields" { style.fill: "#e3f2fd" }
-  end: "constructor completes" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  ctor: "new Resource()\nconstructor writes fields" {
+    width: 285
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  end: "constructor completes" {
+    width: 249
+    height: 74
+    style.fill: "#fff3e0"
+  }
   ctor -> end: "program order"
 }
 g: "GC / finalizer thread" {
-  fin: "finalize() starts\n(acquire)" { style.fill: "#fff3e0" }
-  r: "sees all constructor writes" { style.fill: "#e8f5e9" }
+  width: 249
+  height: 74
+  fin: "finalize() starts\n(acquire)" {
+    width: 213
+    height: 104
+    style.fill: "#fff3e0"
+  }
+  r: "sees all constructor writes" {
+    width: 303
+    height: 74
+    style.fill: "#e8f5e9"
+  }
   fin -> r: "program order"
 }
 end -> fin: "happens-before\n(constructor end -> finalizer start)"

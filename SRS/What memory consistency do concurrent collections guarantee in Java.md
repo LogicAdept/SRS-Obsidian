@@ -14,14 +14,38 @@ The property turns every `put`/`offer`/`add` into a release and every `take`/`po
 ```d2
 direction: right
 p: "Producer thread" {
-  b: "build order DTO\n(plain writes)" { style.fill: "#e3f2fd" }
-  put: "queue.put(order)\n(release)" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  b: "build order DTO\n(plain writes)" {
+    width: 200
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  put: "queue.put(order)\n(release)" {
+    width: 204
+    height: 104
+    style.fill: "#fff3e0"
+  }
   b -> put: "program order"
 }
-q: "BlockingQueue\n(volatile / lock state)" { style.fill: "#f3e5f5" }
+q: "BlockingQueue\n(volatile / lock state)" {
+  width: 267
+  height: 104
+  style.fill: "#f3e5f5"
+}
 c: "Consumer thread" {
-  take: "order = queue.take()\n(acquire)" { style.fill: "#fff3e0" }
-  u: "reads order fields\n-> fully visible" { style.fill: "#e8f5e9" }
+  width: 200
+  height: 74
+  take: "order = queue.take()\n(acquire)" {
+    width: 240
+    height: 104
+    style.fill: "#fff3e0"
+  }
+  u: "reads order fields\n-> fully visible" {
+    width: 222
+    height: 104
+    style.fill: "#e8f5e9"
+  }
   take -> u: "program order"
 }
 put -> q: "enqueue"

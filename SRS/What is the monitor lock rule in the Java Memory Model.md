@@ -15,13 +15,33 @@ The edge is pairwise but its effect is transitive: because program order links a
 ```d2
 direction: right
 t1: "Thread 1" {
-  w: "data = 42" { style.fill: "#e3f2fd" }
-  u: "unlock(m)\n(exit synchronized)" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  w: "data = 42" {
+    width: 200
+    height: 74
+    style.fill: "#e3f2fd"
+  }
+  u: "unlock(m)\n(exit synchronized)" {
+    width: 231
+    height: 104
+    style.fill: "#fff3e0"
+  }
   w -> u: "program order"
 }
 t2: "Thread 2" {
-  l: "lock(m)\n(enter synchronized)" { style.fill: "#fff3e0" }
-  r: "reads data -> 42" { style.fill: "#e8f5e9" }
+  width: 200
+  height: 74
+  l: "lock(m)\n(enter synchronized)" {
+    width: 240
+    height: 104
+    style.fill: "#fff3e0"
+  }
+  r: "reads data -> 42" {
+    width: 204
+    height: 74
+    style.fill: "#e8f5e9"
+  }
   l -> r: "program order"
 }
 u -> l: "synchronizes-with\n(release -> acquire)"

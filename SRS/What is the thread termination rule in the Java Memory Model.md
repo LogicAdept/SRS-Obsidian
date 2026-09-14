@@ -14,13 +14,33 @@ This is the receiving half of the thread lifecycle: results computed in a worker
 ```d2
 direction: right
 w: "Worker thread" {
-  c: "compute result\n(plain writes)" { style.fill: "#e3f2fd" }
-  f: "final action in run()" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  c: "compute result\n(plain writes)" {
+    width: 200
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  f: "final action in run()" {
+    width: 249
+    height: 74
+    style.fill: "#fff3e0"
+  }
   c -> f: "program order"
 }
 m: "Main thread" {
-  j: "worker.join()\n(detects termination)" { style.fill: "#fff3e0" }
-  r: "reads result\n-> fully visible" { style.fill: "#e8f5e9" }
+  width: 200
+  height: 74
+  j: "worker.join()\n(detects termination)" {
+    width: 249
+    height: 104
+    style.fill: "#fff3e0"
+  }
+  r: "reads result\n-> fully visible" {
+    width: 204
+    height: 104
+    style.fill: "#e8f5e9"
+  }
   j -> r: "program order"
 }
 f -> j: "synchronizes-with\n(termination detected)"

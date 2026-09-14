@@ -14,13 +14,33 @@ The Exchanger is symmetric, which distinguishes it from queues and latches: ther
 ```d2
 direction: right
 a: "Thread A" {
-  fa: "fill buffer A\n(plain writes)" { style.fill: "#e3f2fd" }
-  xa: "exchange(bufferA)\nrelease + acquire" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  fa: "fill buffer A\n(plain writes)" {
+    width: 200
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  xa: "exchange(bufferA)\nrelease + acquire" {
+    width: 213
+    height: 104
+    style.fill: "#fff3e0"
+  }
   fa -> xa: "program order"
 }
 b: "Thread B" {
-  fb: "fill buffer B\n(plain writes)" { style.fill: "#e3f2fd" }
-  xb: "exchange(bufferB)\nrelease + acquire" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  fb: "fill buffer B\n(plain writes)" {
+    width: 200
+    height: 104
+    style.fill: "#e3f2fd"
+  }
+  xb: "exchange(bufferB)\nrelease + acquire" {
+    width: 213
+    height: 104
+    style.fill: "#fff3e0"
+  }
   fb -> xb: "program order"
 }
 xa -> xb: "A's writes visible to B"

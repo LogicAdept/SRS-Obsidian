@@ -14,12 +14,28 @@ The rule is the first edge generator of the happens-before relation. It is delib
 ```d2
 direction: right
 t1: "Thread 1" {
-  a: "x = 1" { style.fill: "#e3f2fd" }
-  b: "y = 2" { style.fill: "#e3f2fd" }
+  width: 200
+  height: 74
+  a: "x = 1" {
+    width: 200
+    height: 74
+    style.fill: "#e3f2fd"
+  }
+  b: "y = 2" {
+    width: 200
+    height: 74
+    style.fill: "#e3f2fd"
+  }
   a -> b: "hb: program order"
 }
 t2: "Thread 2" {
-  r: "reads x and y" { style.fill: "#fff3e0" }
+  width: 200
+  height: 74
+  r: "reads x and y" {
+    width: 200
+    height: 74
+    style.fill: "#fff3e0"
+  }
 }
 t1 -> t2: "no edge: no guarantee" { style.stroke: "#c62828"; style.stroke-dash: 4 }
 ```

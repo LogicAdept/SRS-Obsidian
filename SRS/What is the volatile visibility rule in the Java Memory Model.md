@@ -14,10 +14,26 @@ priority: 0
 
 ```d2
 direction: right
-w: "T1: config = new Config()\n(plain write)" { style.fill: "#e3f2fd" }
-vw: "T1: ready = true\n(volatile write, release)" { style.fill: "#fff3e0" }
-vr: "T2: ready == true\n(volatile read, acquire)" { style.fill: "#fff3e0" }
-r: "T2: reads config\n-> sees fully built object" { style.fill: "#e8f5e9" }
+w: "T1: config = new Config()\n(plain write)" {
+  width: 285
+  height: 104
+  style.fill: "#e3f2fd"
+}
+vw: "T1: ready = true\n(volatile write, release)" {
+  width: 285
+  height: 104
+  style.fill: "#fff3e0"
+}
+vr: "T2: ready == true\n(volatile read, acquire)" {
+  width: 276
+  height: 104
+  style.fill: "#fff3e0"
+}
+r: "T2: reads config\n-> sees fully built object" {
+  width: 294
+  height: 104
+  style.fill: "#e8f5e9"
+}
 w -> vw: "program order"
 vw -> vr: "synchronizes-with"
 vr -> r: "program order"
