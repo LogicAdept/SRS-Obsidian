@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #SRS
+#Java/JMM/HappensBefore #SRS
 
 # How would you explain the happens-before guarantee in the Java Memory Model
 

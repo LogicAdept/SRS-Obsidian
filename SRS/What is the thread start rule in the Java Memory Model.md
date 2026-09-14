@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #Java/Concurrency/Threads #SRS
+#Java/JMM/HappensBefore #Java/Concurrency/Threads #SRS
 
 # What is the thread start rule in the Java Memory Model
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #Java/Concurrency/Synchronization/Locks #Java/Concurrency/Synchronizers #SRS
+#Java/JMM/HappensBefore #Java/Concurrency/Synchronization/Locks #Java/Concurrency/Synchronizers #SRS
 
 # What memory consistency do synchronizer release and acquire guarantee in Java
 

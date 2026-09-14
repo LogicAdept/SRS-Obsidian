@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #Java/Concurrency/Atomics #SRS
+#Java/JMM/HappensBefore #Java/Concurrency/Atomics #SRS
 
 # How do VarHandle access modes order memory in Java
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #Java/Concurrency/Executors #SRS
+#Java/JMM/HappensBefore #Java/Concurrency/Executors #SRS
 
 # What memory consistency does Future get guarantee in Java
 

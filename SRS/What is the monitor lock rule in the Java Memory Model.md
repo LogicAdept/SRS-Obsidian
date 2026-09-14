@@ -3,7 +3,7 @@ reps: 0
 priority: 0
 -->
 
-#Java/JMM #Java/Concurrency/Synchronization #SRS
+#Java/JMM/HappensBefore #Java/Concurrency/Synchronization #SRS
 
 # What is the monitor lock rule in the Java Memory Model
 

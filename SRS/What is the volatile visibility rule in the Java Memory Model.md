@@ -3,7 +3,7 @@ reps: 0
 priority: 0
 -->
 
-#Java/JMM #Java/Language/Modifiers/Volatile #SRS
+#Java/JMM/HappensBefore #Java/Language/Modifiers/Volatile #SRS
 
 # What is the volatile visibility rule in the Java Memory Model
 

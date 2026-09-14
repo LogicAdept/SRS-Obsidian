@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #Java/Concurrency #SRS
+#Java/JMM/HappensBefore #Java/Concurrency #SRS
 
 # What does the Java Memory Model guarantee for data race free programs
 
