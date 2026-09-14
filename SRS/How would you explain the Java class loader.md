@@ -39,9 +39,9 @@ cl -> vm
 
 ## Built-in loaders
 
-- **Bootstrap** — VM-built-in, typically `null`, no parent. Core types in a platform-dependent way. Not a `ClassLoader` you construct. Not every `java.*` type is bootstrap-defined; some SE types moved to platform (Java 9).
-- **Platform** — `ClassLoader.getPlatformClassLoader()` (since 9, name `"platform"`). Java SE APIs, their implementations, and JDK run-time types defined here or by an ancestor. Replaces the old extension loader.
-- **System / application** — `ClassLoader.getSystemClassLoader()` (name `"app"`). Class path, module path, JDK tools. Platform is its parent **or ancestor**. Default parent of `new ClassLoader()`.
+- **Bootstrap** — VM-built-in, typically `null`, no parent. Core types in a platform-dependent way. Not a `ClassLoader` you construct. Not every `java.*` type is bootstrap-defined; some SE types moved to platform (Java 9) ([[What is the bootstrap class loader in the JVM and what does it load]]).
+- **Platform** — `ClassLoader.getPlatformClassLoader()` (since 9, name `"platform"`). Java SE APIs, their implementations, and JDK run-time types defined here or by an ancestor. Replaces the old extension loader ([[What is the platform class loader in Java and what does it load]]).
+- **System / application** — `ClassLoader.getSystemClassLoader()` (name `"app"`). Class path, module path, JDK tools. Platform is its parent **or ancestor**. Default parent of `new ClassLoader()` ([[What is the application class loader in Java and what does it load]]).
 
 Before 9 the middle loader was **extension** (`lib/ext`, `java.ext.dirs`) and core libraries lived in `rt.jar`. JEP 220 removed both. JEP 261 renamed the leftover middle loader to platform and stopped using `URLClassLoader` for it or for the application loader.
 
@@ -139,7 +139,7 @@ Subclass `ClassLoader` when bytes are not on the class/module path, or when you 
 > Parent-first keeps `java.lang.String` unique along a well-behaved chain. Two defining loaders that each `defineClass` the same bytes still produce two types; a cast between them is `ClassCastException` — [[What happens if two class loaders load the same class]] walks the failure end to end. `a.loadClass(N) == b.loadClass(N)` only when they share the defining ancestor.
 
 > [!warning] Pre-Java 9 loader folklore
-> There is no `lib/ext` / `java.ext.dirs` search, no `rt.jar`, and `getSystemClassLoader()` is not a `URLClassLoader`. Internal names such as `Launcher$AppClassLoader` are not the API.
+> There is no `lib/ext` / `java.ext.dirs` search, no `rt.jar`, and `getSystemClassLoader()` is not a `URLClassLoader`. Internal names such as `Launcher$AppClassLoader` are not the API. The full before-and-after: [[What is the difference between the extension and platform class loaders]].
 
 > [!tip] Interview answer
 > **A class loader maps a binary name to bytes and the VM turns that into a `Class` — you never `new` a `Class`.** Built-in chain is bootstrap (`null`), platform, application; default `loadClass` is already-loaded, then parent, then `findClass`. **Loading makes the `Class`; linking verifies and prepares statics to defaults; initialization runs `<clinit>`. The run-time type is (name, defining loader).** `forName` initializes; `loadClass` does not.
