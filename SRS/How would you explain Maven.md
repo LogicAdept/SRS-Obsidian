@@ -11,7 +11,7 @@ priority: 0
 
 ## What Maven actually provides
 
-Maven's stated objectives are a simple, uniform build process and quality project information. The mechanics behind that: a conventional project layout (`src/main/java`, `src/test/java`, `target/` for output), a centrally defined build lifecycle, and a dependency mechanism that resolves artifacts by `groupId:artifactId:version` coordinates from remote repositories into your local cache (`~/.m2/repository`).
+Maven's stated objectives are a simple, uniform build process and quality project information. The mechanics behind that: a conventional project layout (`src/main/java`, `src/test/java`, `target/` for output), a centrally defined build lifecycle, and a dependency mechanism that resolves artifacts by `groupId:artifactId:version` coordinates from remote repositories into your local cache (`~/.m2/repository`) — [[How does Maven resolve artifacts from repositories]] walks the full resolution path, and [[What is a SNAPSHOT version in Maven]] covers its moving-target corner.
 
 ```d2
 direction: right
@@ -64,7 +64,7 @@ mvn clean install
 **Listing 1.** Verified with Maven 3.9.9 on JDK 21: one command cleaned, compiled, tested, packaged, and installed the artifact into the local repository.
 
 > [!warning] Maven is declarative — fighting it costs more than the XML is worth
-> The common misread is that Maven is "outdated XML" and the workaround is hacking behavior in. The model inverts responsibility: the lifecycle and layout are fixed, so unusual steps (generated sources, custom packaging) go through plugins bound to phases, not free-form script. Two traps follow. First, Maven runs phases, not plugin goals directly — calling `mvn compiler:compile` skips the test and packaging steps a phase would have run. Second, without version management the build is unpinned: dependency coordinates without `dependencyManagement` drift across modules, and transitive conflicts resolve silently. For the phase model itself see [[How would you explain the Maven build lifecycle]], for one full command walk-through [[How would you explain mvn clean install]], and for Gradle's counter-model see [[Do you use Maven or Gradle for Java project builds]].
+> The common misread is that Maven is "outdated XML" and the workaround is hacking behavior in. The model inverts responsibility: the lifecycle and layout are fixed, so unusual steps (generated sources, custom packaging) go through plugins bound to phases, not free-form script. Two traps follow. First, Maven runs phases, not plugin goals directly — calling `mvn compiler:compile` skips the test and packaging steps a phase would have run. Second, without version management the build is unpinned: dependency coordinates without `dependencyManagement` drift across modules ([[What is the dependencyManagement section in Maven for]] owns that section), and transitive conflicts resolve silently ([[How does Maven resolve transitive dependencies and conflicts]]). For the phase model itself see [[How would you explain the Maven build lifecycle]], for one full command walk-through [[How would you explain mvn clean install]], and for Gradle's counter-model see [[Do you use Maven or Gradle for Java project builds]].
 
 ## Where it sits in interviews
 

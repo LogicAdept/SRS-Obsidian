@@ -48,7 +48,7 @@ Where Gradle measurably wins: incremental and cacheable tasks (unchanged inputs 
 
 ## How to answer the question
 
-Name the criterion, not the religion: "Greenfield Android or a performance-sensitive multi-module monorepo — Gradle. A team of mixed experience with mostly standard Java modules — Maven is easier to keep consistent. What matters more than the pick: pinned plugin/dependency versions (managed centrally — see [[How would you explain the structure of a Maven pom.xml file]] or Gradle version catalogs), the wrapper in VCS, and reproducible CI." Then actually answer: name what your current project uses and one concrete thing you did in it.
+Name the criterion, not the religion: "Greenfield Android or a performance-sensitive multi-module monorepo — Gradle. A team of mixed experience with mostly standard Java modules — Maven is easier to keep consistent. What matters more than the pick: pinned plugin/dependency versions (managed centrally — see [[How would you explain the structure of a Maven pom.xml file]] or Gradle version catalogs), the wrapper in VCS ([[What is the Maven Wrapper for]]), and reproducible CI." Then actually answer: name what your current project uses and one concrete thing you did in it.
 
 > [!tip] Interview answer
 > **I pick by team and project shape. Maven: fixed lifecycle, conventions, verbose but uniform — great for standard Java services and mixed teams. Gradle: programmable DSL, incremental builds and the daemon — faster for large or unconventional builds, but build logic becomes code you maintain. I know both; consistency, pinned versions and a committed wrapper matter more than the tool itself.**
