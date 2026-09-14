@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #Problems/Concurrency #SRS
+#Java/JMM/HappensBefore #Problems/Concurrency #SRS
 
 # What reads does the Java Memory Model allow in a data race
 

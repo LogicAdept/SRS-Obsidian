@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #Java/Concurrency/Synchronizers #SRS
+#Java/JMM/HappensBefore #Java/Concurrency/Synchronizers #SRS
 
 # What memory consistency do barrier synchronizers guarantee in Java
 

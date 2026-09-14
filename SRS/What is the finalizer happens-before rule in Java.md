@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #Java/Language/Object/Finalize #SRS
+#Java/JMM/HappensBefore #Java/Language/Object/Finalize #SRS
 
 # What is the finalizer happens-before rule in Java
 

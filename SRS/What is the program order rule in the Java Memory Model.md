@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/JMM #SRS
+#Java/JMM/HappensBefore #SRS
 
 # What is the program order rule in the Java Memory Model
 
