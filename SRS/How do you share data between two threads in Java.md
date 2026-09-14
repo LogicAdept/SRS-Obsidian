@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Concurrency/Threads #Java/Collections/Concurrency #Java/JMM #SRS
+#Java/Concurrency/Threads #Java/Concurrency/Collections #Java/JMM #SRS
 
 # How do you share data between two threads in Java?
 

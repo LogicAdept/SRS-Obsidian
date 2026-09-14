@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/HashMap #Java/Collections/Map/Hashtable #Java/Collections/Concurrency #SRS
+#Java/Collections/Map/HashMap #Java/Collections/Map/Hashtable #Java/Concurrency/Collections #SRS
 
 # Is `java.util.HashMap` thread safe?
 

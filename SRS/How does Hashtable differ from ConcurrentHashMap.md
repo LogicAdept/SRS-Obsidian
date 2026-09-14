@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency #Java/Collections/Map/Hashtable #Java/Collections/Map/ConcurrentHashMap #SRS
+#Java/Concurrency/Collections #Java/Collections/Map/Hashtable #Java/Collections/Map/ConcurrentHashMap #SRS
 
 # How does `Hashtable` differ from `ConcurrentHashMap`?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Queues/PriorityQueue #Java/Collections/Queues/BlockingQueue #Java/Collections/Concurrency #SRS
+#Java/Collections/Queues/PriorityQueue #Java/Collections/Queues/BlockingQueue #Java/Concurrency/Collections #SRS
 
 # Is `PriorityQueue` thread-safe?
 

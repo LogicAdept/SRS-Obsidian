@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/EnumMap #Java/Collections/Concurrency #SRS
+#Java/Collections/Map/EnumMap #Java/Concurrency/Collections #SRS
 
 # Is `EnumMap` synchronized?
 

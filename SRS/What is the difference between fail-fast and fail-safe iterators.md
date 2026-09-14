@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Iteration/FailFast #Java/Collections/Concurrency #SRS
+#Java/Collections/Iteration/FailFast #Java/Concurrency/Collections #SRS
 
 # What is the difference between fail-fast and fail-safe iterators?
 

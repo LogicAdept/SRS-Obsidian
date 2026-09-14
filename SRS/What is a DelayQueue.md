@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency #Java/Collections/Queues/BlockingQueue #Java/Collections/Queues/PriorityQueue #SRS
+#Java/Concurrency/Collections #Java/Collections/Queues/BlockingQueue #Java/Collections/Queues/PriorityQueue #SRS
 
 # What is a `DelayQueue`?
 

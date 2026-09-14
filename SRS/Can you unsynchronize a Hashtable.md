@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/Hashtable #Java/Collections/Map/HashMap #Java/Collections/Concurrency #SRS
+#Java/Collections/Map/Hashtable #Java/Collections/Map/HashMap #Java/Concurrency/Collections #SRS
 
 # Can you unsynchronize a `Hashtable`?
 

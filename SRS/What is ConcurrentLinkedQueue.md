@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency #Java/Collections/Queues #SRS
+#Java/Concurrency/Collections #Java/Collections/Queues #SRS
 
 # What is `ConcurrentLinkedQueue`?
 

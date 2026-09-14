@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/List/ArrayList #Java/Collections/Concurrency/CopyOnWrite #SRS
+#Java/Collections/List/ArrayList #Java/Concurrency/Collections/CopyOnWrite #SRS
 
 # What is the difference between `CopyOnWriteArrayList` and `ArrayList`?
 

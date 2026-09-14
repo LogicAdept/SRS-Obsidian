@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/LinkedHashMap #Java/Collections/Concurrency #SRS
+#Java/Collections/Map/LinkedHashMap #Java/Concurrency/Collections #SRS
 
 # Is `LinkedHashMap` synchronized?
 

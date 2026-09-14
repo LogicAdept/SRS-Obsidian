@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency #Java/Collections/Queues/BlockingQueue #Java/Concurrency/Executors #SRS
+#Java/Concurrency/Collections #Java/Collections/Queues/BlockingQueue #Java/Concurrency/Executors #SRS
 
 # What is a `SynchronousQueue`?
 

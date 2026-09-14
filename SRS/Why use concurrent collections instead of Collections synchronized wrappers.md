@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency #SRS
+#Java/Concurrency/Collections #SRS
 
 # Why use concurrent collections instead of `Collections` synchronized wrappers?
 

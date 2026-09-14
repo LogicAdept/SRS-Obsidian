@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/ConcurrentHashMap #Java/Collections/Concurrency #SRS
+#Java/Collections/Map/ConcurrentHashMap #Java/Concurrency/Collections #SRS
 
 # How do you avoid a check-then-act race on `ConcurrentHashMap`?
 
