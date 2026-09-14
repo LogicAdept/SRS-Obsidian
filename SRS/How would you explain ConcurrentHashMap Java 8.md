@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/ConcurrentHashMap #Java/Versions/8 #Java/Collections/Concurrency #SRS
+#Java/Collections/Map/ConcurrentHashMap #Java/Versions/8 #Java/Concurrency/Collections #SRS
 
 # How would you explain `ConcurrentHashMap` Java 8?
 

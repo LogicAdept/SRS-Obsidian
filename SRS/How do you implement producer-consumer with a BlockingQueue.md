@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency #Java/Collections/Queues/BlockingQueue #SRS
+#Java/Concurrency/Collections #Java/Collections/Queues/BlockingQueue #SRS
 
 # How do you implement producer-consumer with a `BlockingQueue`?
 

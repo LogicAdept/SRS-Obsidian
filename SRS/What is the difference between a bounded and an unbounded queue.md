@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Queues #Java/Collections/Concurrency #SRS
+#Java/Collections/Queues #Java/Concurrency/Collections #SRS
 
 # What is the difference between a bounded and an unbounded queue?
 

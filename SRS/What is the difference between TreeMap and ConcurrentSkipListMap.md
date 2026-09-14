@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/TreeMap #Java/Collections/Concurrency #SRS
+#Java/Collections/Map/TreeMap #Java/Concurrency/Collections #SRS
 
 # What is the difference between `TreeMap` and `ConcurrentSkipListMap`?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency #SRS
+#Java/Concurrency/Collections #SRS
 
 # What is the difference between thread-safe and non-thread-safe collections?
 

@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Set/HashSet #Java/Collections/Concurrency #SRS
+#Java/Collections/Set/HashSet #Java/Concurrency/Collections #SRS
 
 # Is `HashSet` synchronized?
 

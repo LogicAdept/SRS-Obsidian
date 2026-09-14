@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency #SRS
+#Java/Concurrency/Collections #SRS
 
 # How do you obtain synchronized wrappers for standard Java collections?
 

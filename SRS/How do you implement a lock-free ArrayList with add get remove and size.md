@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#OperatingSystems/Concurrency/LockFree #Java/Concurrency/Atomics #Java/Collections/Concurrency #Java/Collections/List/ArrayList #Career/Interview/Exercises #SRS
+#OperatingSystems/Concurrency/LockFree #Java/Concurrency/Atomics #Java/Concurrency/Collections #Java/Collections/List/ArrayList #Career/Interview/Exercises #SRS
 
 # How do you implement a lock-free `ArrayList` with `add`, `get`, `remove`, and `size`?
 

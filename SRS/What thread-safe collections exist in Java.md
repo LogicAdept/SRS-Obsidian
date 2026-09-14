@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency #SRS
+#Java/Concurrency/Collections #SRS
 
 # What thread-safe collections exist in Java?
 

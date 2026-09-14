@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/Hashtable #Java/Collections/Map/ConcurrentHashMap #Java/Versions/5 #Java/Collections/Concurrency #SRS
+#Java/Collections/Map/Hashtable #Java/Collections/Map/ConcurrentHashMap #Java/Versions/5 #Java/Concurrency/Collections #SRS
 
 # Why is `ConcurrentHashMap` faster than `Hashtable`?
 

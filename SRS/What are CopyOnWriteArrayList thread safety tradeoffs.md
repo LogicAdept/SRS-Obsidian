@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency/CopyOnWrite #SRS
+#Java/Concurrency/Collections/CopyOnWrite #SRS
 
 # What are `CopyOnWriteArrayList` thread safety tradeoffs?
 

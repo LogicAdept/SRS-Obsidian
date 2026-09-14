@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Concurrency/CopyOnWrite #Java/Collections/Set #SRS
+#Java/Concurrency/Collections/CopyOnWrite #Java/Collections/Set #SRS
 
 # What is `CopyOnWriteArraySet`?
 

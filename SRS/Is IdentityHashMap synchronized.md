@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Map/IdentityHashMap #Java/Collections/Concurrency #SRS
+#Java/Collections/Map/IdentityHashMap #Java/Concurrency/Collections #SRS
 
 # Is `IdentityHashMap` synchronized?
 

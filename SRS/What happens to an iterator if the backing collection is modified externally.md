@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/Iteration/FailFast #Java/Collections/Concurrency #SRS
+#Java/Collections/Iteration/FailFast #Java/Concurrency/Collections #SRS
 
 # What happens to an iterator if the backing collection is modified externally?
 

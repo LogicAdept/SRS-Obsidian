@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/Collections/List/Vector #Java/Collections/Concurrency #Java/Legacy #SRS
+#Java/Collections/List/Vector #Java/Concurrency/Collections #Java/Legacy #SRS
 
 # How would you explain java.util.Vector and why it is legacy?
 
