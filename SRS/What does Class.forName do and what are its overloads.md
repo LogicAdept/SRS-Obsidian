@@ -71,7 +71,7 @@ A newly loaded JDBC `Driver` is specified to call `DriverManager.registerDriver`
 > That is the feature and the foot-gun. A static block that talks to the network or registers a singleton runs on `forName(name)`. Use `initialize = false` when you only need the `Class` object. Initialization later still happens on first active use.
 
 > [!warning] `ClassNotFoundException` is not the only failure
-> Missing name → checked CNFE (except the `Module` overload’s `null`). Bad linkage → `LinkageError`. Failed `<clinit>` → `ExceptionInInitializerError`; a later use of that class is `NoClassDefFoundError`. Hidden classes are invisible to `forName`.
+> Missing name → checked CNFE (except the `Module` overload’s `null`). Bad linkage → `LinkageError`. Failed `<clinit>` → `ExceptionInInitializerError`; a later use of that class is `NoClassDefFoundError`. Hidden classes are invisible to `forName`. How this differs from `ClassLoader.loadClass`: [[What is the difference between loadClass and Class.forName in Java]].
 
 > [!tip] Interview answer
 > **One-arg `forName` loads and initializes with the caller’s class loader — it is the three-arg call with `true`.** Three-arg chooses loader and whether to run `<clinit>`; `null` loader is bootstrap. **The Java 9 `forName(Module, name)` does not initialize and returns `null` on miss, not `ClassNotFoundException`.**

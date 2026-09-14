@@ -19,7 +19,7 @@ A type is `<binary name, defining loader>`. Two loaders that each `defineClass` 
 
 ## Why a custom `ClassLoader`
 
-The VM supplies bootstrap (`null`), platform, and application. User-defined loaders exist to **change where bytes come from** and **who defines** the resulting `Class`. The VM spec’s examples are: download across a network, generate on the fly, extract from an encrypted file. Isolation follows: a plugin’s types never become the parent’s types, so you can unload the plugin by dropping every live reference to that loader.
+The VM supplies bootstrap (`null`), platform, and application. User-defined loaders exist to **change where bytes come from** and **who defines** the resulting `Class`. The VM spec’s examples are: download across a network, generate on the fly, extract from an encrypted file. Isolation follows: a plugin’s types never become the parent’s types, so you can unload the plugin by dropping every live reference to that loader. The step-by-step recipe: [[How do you write a custom class loader in Java]].
 
 ```d2
 direction: down

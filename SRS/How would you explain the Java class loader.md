@@ -74,7 +74,7 @@ Default `loadClass(name, resolve)`: `findLoadedClass` → parent (`null` → boo
 
 **Loading** finds a binary and constructs a `Class`. **Linking:** verification (`VerifyError` if the binary is illegal); preparation (create `static` fields and set **defaults** — no Java code; explicit static initializers are not this step); resolution of symbolic references (lazy per use or eager at verify; uses the referring class’s defining loader). A class is fully loaded before it is linked, and fully verified and prepared before it is initialized.
 
-**Initialization** runs `<clinit>`. Superclasses (and superinterfaces that declare default methods) first. Triggers: `new`, a non-constant static field, a static method, one-arg `Class.forName`, some reflective APIs, VM startup of `main`. Failed `<clinit>` is `ExceptionInInitializerError`; a later use is `NoClassDefFoundError` ([[What is the difference between ClassNotFoundException and NoClassDefFoundError]]).
+**Initialization** runs `<clinit>`. Superclasses (and superinterfaces that declare default methods) first. Triggers: `new`, a non-constant static field, a static method, one-arg `Class.forName`, some reflective APIs, VM startup of `main`. Failed `<clinit>` is `ExceptionInInitializerError`; a later use is `NoClassDefFoundError` ([[What is the difference between ClassNotFoundException and NoClassDefFoundError]]). The linking middle phase in detail: [[What happens during the linking phase of class loading in the JVM]].
 
 Implicit load: bytecode that first uses a name asks the referring class’s defining loader. Explicit: `loadClass` / `forName` ([[What does Class.forName do and what are its overloads]], [[How can you get the Class object in Java]]).
 
@@ -133,10 +133,10 @@ Subclass `ClassLoader` when bytes are not on the class/module path, or when you 
 > Bootstrap-defined types return `null`. So do `int.class` and `void.class`, which were never loaded by a class loader. `Integer.class.getClassLoader()` is not `int.class.getClassLoader()`’s wrapper equivalent — one is a reference type from bootstrap, the other is a primitive `Class`.
 
 > [!warning] `loadClass` is not `forName`
-> `loadClass(name)` is `loadClass(name, false)`: find the `Class`, do not link, do not run `<clinit>`. One-arg `Class.forName(name)` is `forName(name, true, callerLoader)` and **does** initialize. `forName("int")` is not `int.class`.
+> `loadClass(name)` is `loadClass(name, false)`: find the `Class`, do not link, do not run `<clinit>`. One-arg `Class.forName(name)` is `forName(name, true, callerLoader)` and **does** initialize. `forName("int")` is not `int.class`. Full comparison: [[What is the difference between loadClass and Class.forName in Java]].
 
 > [!warning] One name is not one type
-> Parent-first keeps `java.lang.String` unique along a well-behaved chain. Two defining loaders that each `defineClass` the same bytes still produce two types; a cast between them is `ClassCastException`. `a.loadClass(N) == b.loadClass(N)` only when they share the defining ancestor.
+> Parent-first keeps `java.lang.String` unique along a well-behaved chain. Two defining loaders that each `defineClass` the same bytes still produce two types; a cast between them is `ClassCastException` — [[What happens if two class loaders load the same class]] walks the failure end to end. `a.loadClass(N) == b.loadClass(N)` only when they share the defining ancestor.
 
 > [!warning] Pre-Java 9 loader folklore
 > There is no `lib/ext` / `java.ext.dirs` search, no `rt.jar`, and `getSystemClassLoader()` is not a `URLClassLoader`. Internal names such as `Launcher$AppClassLoader` are not the API.
