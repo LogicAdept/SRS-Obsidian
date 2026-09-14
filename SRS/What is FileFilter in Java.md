@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/IO/File #Java/NIO #OperatingSystems/IO/Files #SRS
+#Java/IO/File #Java/NIO/Files #OperatingSystems/IO/Files #SRS
 
 # What is `FileFilter` in Java?
 

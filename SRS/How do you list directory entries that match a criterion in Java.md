@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/IO/File #Java/NIO #OperatingSystems/IO/Files #SRS
+#Java/IO/File #Java/NIO/Files #OperatingSystems/IO/Files #SRS
 
 # How do you list directory entries that match a criterion in Java?
 

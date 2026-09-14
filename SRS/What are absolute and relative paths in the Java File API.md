@@ -4,7 +4,7 @@ priority: 0
 -->
 #Java/IO/File #OperatingSystems/IO/Files #SRS
 
-# What are an absolute path and a relative path?
+# What are absolute and relative paths in the Java File API?
 
 > [!abstract] Short answer
 > **Absolute:** complete — no other pathname is needed to locate the file. **Relative:** interpreted against another pathname (in `java.io`, the current user directory `user.dir`, typically where the JVM was started). On UNIX, absolute means prefix `"/"`. On Windows, absolute means a drive letter plus `"\"`, or a UNC prefix `"\\"`. `File.isAbsolute()` tests that; `getAbsolutePath()` fills in `user.dir` (or the named drive’s current directory on Windows). Canonical form is a further step: absolute **and unique** (`"."` / `".."` / symlinks) ([[What is the difference between an absolute path and a relative path]], [[How would you explain the java.io.File class and path representation]]).

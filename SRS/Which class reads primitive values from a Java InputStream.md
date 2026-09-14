@@ -11,7 +11,7 @@ priority: 0
 
 ## A `DataInput` filter, not a source
 
-Constructor: `DataInputStream(InputStream in)`. Wrap a file, socket, or `ByteArrayInputStream`. `RandomAccessFile` also implements `DataInput` but is not an `InputStream` wrapper ([[What is RandomAccessFile in Java]], [[Which subclasses class InputStream you do you know for what they intended]]). `ObjectInputStream` can read primitives during **deserialization** — wrong class for this cue.
+Constructor: `DataInputStream(InputStream in)`. Wrap a file, socket, or `ByteArrayInputStream`. `RandomAccessFile` also implements `DataInput` but is not an `InputStream` wrapper ([[What is RandomAccessFile in Java]], [[What are common concrete InputStream and OutputStream implementations]]). `ObjectInputStream` can read primitives during **deserialization** — wrong class for this cue.
 
 | Read | Width | Writer twin |
 | --- | --- | --- |
@@ -61,7 +61,7 @@ prim: "readInt / readUTF" {
 in -> dis -> prim
 ```
 
-**Fig. 1.** Primitives from a byte `InputStream` go through `DataInputStream`, not `Scanner` and not `Reader` ([[What is the difference between and what InputStream OutputStream Reader Writer]], [[Which classes convert between Java byte streams and character streams]]).
+**Fig. 1.** Primitives from a byte `InputStream` go through `DataInputStream`, not `Scanner` and not `Reader` ([[What is the difference between InputStream OutputStream Reader and Writer]], [[Which classes convert between Java byte streams and character streams]]).
 
 > [!warning] `read()` EOF is not `readInt()` EOF
 > `InputStream.read()` returns `-1` at end. `DataInput.readInt()` throws `EOFException`. `readUTF` rejects standard UTF-8 that uses 4-byte sequences or a 1-byte NUL. Do not use this class to **write** — that is `DataOutputStream`.

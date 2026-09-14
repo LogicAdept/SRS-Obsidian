@@ -7,7 +7,7 @@ priority: 0
 # Which classes convert between Java byte streams and character streams?
 
 > [!abstract] Short answer
-> **`InputStreamReader` and `OutputStreamWriter` (Java 1.1) — the bridges.** `InputStreamReader` extends `Reader`: it reads **bytes** from an `InputStream` and **decodes** them to `char`s with a charset. `OutputStreamWriter` extends `Writer`: **characters written** are **encoded** to bytes on an `OutputStream`. Specify a `Charset`, a charset name, or a `CharsetDecoder`/`CharsetEncoder` (since 1.4). One-arg constructors use the **default charset**, or a `PrintStream`’s charset when wrapping one. Wrap with `BufferedReader` / `BufferedWriter` so the converter is not invoked on every tiny call ([[What is the difference between and what InputStream OutputStream Reader Writer]], [[What are buffered streams in Java]]).
+> **`InputStreamReader` and `OutputStreamWriter` (Java 1.1) — the bridges.** `InputStreamReader` extends `Reader`: it reads **bytes** from an `InputStream` and **decodes** them to `char`s with a charset. `OutputStreamWriter` extends `Writer`: **characters written** are **encoded** to bytes on an `OutputStream`. Specify a `Charset`, a charset name, or a `CharsetDecoder`/`CharsetEncoder` (since 1.4). One-arg constructors use the **default charset**, or a `PrintStream`’s charset when wrapping one. Wrap with `BufferedReader` / `BufferedWriter` so the converter is not invoked on every tiny call ([[What is the difference between InputStream OutputStream Reader and Writer]], [[What are buffered streams in Java]]).
 
 ## Decode inbound, encode outbound
 
@@ -18,7 +18,7 @@ priority: 0
 
 `getEncoding()` returns the historical name if there is one, else the canonical name, or **`null` after `close()`**. Named charset constructors throw `UnsupportedEncodingException` if the name is unknown. Both classes **replace** malformed and unmappable sequences with the charset default; use `CharsetDecoder` / `CharsetEncoder` for other error actions.
 
-`OutputStreamWriter` accumulates **bytes** in a buffer; the **characters** you pass are not buffered there — hence `BufferedWriter`. `InputStreamReader.read` may read **ahead** more bytes than this call needs ([[What are buffered streams in Java]], [[How does Java]]).
+`OutputStreamWriter` accumulates **bytes** in a buffer; the **characters** you pass are not buffered there — hence `BufferedWriter`. `InputStreamReader.read` may read **ahead** more bytes than this call needs ([[What are buffered streams in Java]], [[How does file reading work in Java]]).
 
 `PrintStream` / `PrintWriter` also encode text, but they are print facades; this cue’s pair is the two bridges ([[What is the difference between PrintWriter and PrintStream]], [[What kinds of input and output streams exist in Java]]). For `System.in`, prefer `Console.charset()` (or `stdin.encoding`) ([[Can you redirect standard input and output streams in Java]], [[What kinds of input and output streams exist in Java]]).
 

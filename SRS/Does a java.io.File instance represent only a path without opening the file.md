@@ -17,7 +17,7 @@ Relative names resolve, when needed, against `user.dir` (the JVM’s current use
 
 That is still only a path. `exists()`, `isFile()`, `isDirectory()`, `length()`, `canRead()` **query** the filesystem when you call them. `createNewFile()`, `mkdir()`, `delete()`, `renameTo()` **mutate** it. None of those turn the `File` into a live handle, and none keep a stream you must close ([[How would you explain the AutoCloseable interface in Java]]).
 
-Contrast `FileInputStream(File)`: it **opens a connection** to the file named by that `File`, allocates a `FileDescriptor`, and throws `FileNotFoundException` if the name does not exist, is a directory, or cannot be opened for reading. `close()` releases that connection ([[Which subclasses class InputStream you do you know for what they intended]], [[What is RandomAccessFile in Java]]).
+Contrast `FileInputStream(File)`: it **opens a connection** to the file named by that `File`, allocates a `FileDescriptor`, and throws `FileNotFoundException` if the name does not exist, is a directory, or cannot be opened for reading. `close()` releases that connection ([[What are common concrete InputStream and OutputStream implementations]], [[What is RandomAccessFile in Java]]).
 
 `toPath()` builds a `java.nio.file.Path` from the same abstract path (default filesystem). `Path` is still a location, not an open channel.
 

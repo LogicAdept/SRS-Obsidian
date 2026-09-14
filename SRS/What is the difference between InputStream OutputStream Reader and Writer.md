@@ -4,7 +4,7 @@ priority: 0
 -->
 #Java/IO/Streams #SRS
 
-# What is the difference between and what `InputStream` `OutputStream` `Reader` `Writer`?
+# What is the difference between `InputStream`, `OutputStream`, `Reader` and `Writer`?
 
 > [!abstract] Short answer
 > **Bytes vs characters, and in vs out.** `InputStream` / `OutputStream` (Java 1.0) are abstract **byte** streams (`read`/`write` of 8-bit values). `Reader` / `Writer` (Java 1.1) are abstract **character** streams (`char` / `char[]` / `String`). All four are sequential I/O, `Closeable` / try-with-resources. They are **not** `java.util.stream`. Bridge bytes↔chars with `InputStreamReader` / `OutputStreamWriter` and a **charset**. Dump’s “Unicode” is the character family, not a fourth type.

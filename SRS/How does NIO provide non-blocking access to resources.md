@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/NIO #SRS
+#Java/NIO/Selector #SRS
 
 # How does NIO provide non-blocking access to resources
 
@@ -79,7 +79,7 @@ while (true) {
 **Listing 1.** The accept side of a single-threaded server. `select()` woke up only when the client's TCP connect arrived — no thread sat blocked inside `accept()` between events. (Verified on JDK 21; the client side was a separate thread that then wrote "ping".)
 
 > [!warning] Non-blocking is not the same as asynchronous, and selected keys bite
-> The interview traps in order of frequency. First, "NIO never blocks" is false — `select()` blocks (that is the point); what never blocks is channel I/O after `configureBlocking(false)`: a `read()` on a socket without data returns `0` immediately instead of parking the thread. Second, NIO is synchronous non-blocking — the readiness event model — while `AsynchronousSocketChannel`/`AsynchronousChannelGroup` (NIO.2, Java 7+) is the asynchronous completion-based API; mixing them up is a classic slip. Third, the bug pattern: `selector.selectedKeys()` is not cleared automatically — forgetting `it.remove()` re-dispatches stale events; and `accept()` in non-blocking mode can legally return `null`, so code assuming a connection crashes on the benign case. Files: `FileChannel` has no selector support — multiplexing is socket/pipe territory. Stream-level context: [[What are channels in Java NIO]], the trade-off comparison in [[How would you explain advantages of Java NIO over classic blocking IO]], and the blocking baseline in [[How would you explain in how is difference between IO and NIO]].
+> The interview traps in order of frequency. First, "NIO never blocks" is false — `select()` blocks (that is the point); what never blocks is channel I/O after `configureBlocking(false)`: a `read()` on a socket without data returns `0` immediately instead of parking the thread. Second, NIO is synchronous non-blocking — the readiness event model — while `AsynchronousSocketChannel`/`AsynchronousChannelGroup` (NIO.2, Java 7+) is the asynchronous completion-based API; mixing them up is a classic slip. Third, the bug pattern: `selector.selectedKeys()` is not cleared automatically — forgetting `it.remove()` re-dispatches stale events; and `accept()` in non-blocking mode can legally return `null`, so code assuming a connection crashes on the benign case. Files: `FileChannel` has no selector support — multiplexing is socket/pipe territory. Stream-level context: [[What are channels in Java NIO]], the trade-off comparison in [[How would you explain advantages of Java NIO over classic blocking IO]], and the blocking baseline in [[What is the difference between Java IO and NIO]].
 
 > [!tip] Interview answer
 > **NIO gets non-blocking behavior from selectable channels plus a selector: you set the channel non-blocking, register it with interest ops like OP_ACCEPT or OP_READ, and one thread calls select(), which reports exactly which channels are ready. That replaces one blocked thread per connection with one thread multiplexing thousands. Channel I/O returns immediately with zero bytes instead of blocking; files are the exception — no selector support. And it is synchronous non-blocking, not async NIO.2.**

@@ -13,7 +13,7 @@ priority: 0
 
 Handlers are considered left to right. The first clause whose type is assignment-compatible with the thrown object is selected; later siblings of the same `try` are skipped ([[How many catch blocks execute for one thrown exception]], [[How would you explain try-catch-finally]]).
 
-If an earlier `catch` can catch `E1` or a **superclass** of `E1`, a later `catch` for `E1` is unreachable. Classic case: `catch (IOException)` then `catch (FileNotFoundException)` — `FileNotFoundException` is already handled ([[In what order should catch blocks appear for IOException and FileNotFoundException]], [[Does throws IOException cover FileNotFoundException]]). The same for `catch (Exception)` then `catch (RuntimeException)` ([[Does catch Exception also catch RuntimeException]]).
+If an earlier `catch` can catch `E1` or a **superclass** of `E1`, a later `catch` for `E1` is unreachable. Classic case: `catch (IOException)` then `catch (FileNotFoundException)` — `FileNotFoundException` is already handled ([[How do you order catch blocks for FileNotFoundException and IOException]], [[Does throws IOException cover FileNotFoundException]]). The same for `catch (Exception)` then `catch (RuntimeException)` ([[Does catch Exception also catch RuntimeException]]).
 
 Unrelated checked types (`IOException` and `InterruptedException`) have no parent/child relation, so either order compiles.
 

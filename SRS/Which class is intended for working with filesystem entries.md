@@ -2,7 +2,7 @@
 reps: 0
 priority: 0
 -->
-#Java/IO/File #Java/NIO #OperatingSystems/IO/Files #SRS
+#Java/IO/File #Java/NIO/Files #OperatingSystems/IO/Files #SRS
 
 # Which class is intended for working with filesystem entries?
 
@@ -11,7 +11,7 @@ priority: 0
 
 ## Pathname object, then filesystem calls
 
-`File` is the interview “filesystem element” class in `java.io`. Bytes still go through `FileInputStream` / `FileOutputStream` or NIO `Files`. `RandomAccessFile` is a seekable **open** file, not this type ([[What is RandomAccessFile in Java]], [[How does Java]]).
+`File` is the interview “filesystem element” class in `java.io`. Bytes still go through `FileInputStream` / `FileOutputStream` or NIO `Files`. `RandomAccessFile` is a seekable **open** file, not this type ([[What is RandomAccessFile in Java]], [[How does file reading work in Java]]).
 
 | Dump claim | Actual API |
 | --- | --- |
@@ -21,8 +21,11 @@ priority: 0
 | Parent | `getParent()` / `getParentFile()` — `null` if the name sequence has no parent |
 | Create file | `createNewFile()` — atomic create-if-absent; **not** a lock (`FileLock` instead) |
 | Create dir | `mkdir()` one level; `mkdirs()` also missing parents (failure may still have created some) |
+| Rename | `renameTo(dest)` — platform-dependent, may fail silently on collisions; check the `boolean` |
+| List names | `list()` → `String[]`, `listFiles()` → `File[]` — **`null` if not a directory**; never `.` / `..` |
+| Hidden | `isHidden()` — OS-defined (leading dot on UNIX, DOS attribute on Windows) |
 
-`delete()` requires an empty directory. `listFiles` / `FileFilter` list **children**, not a tree ([[What is FileFilter in Java]], [[How do you list directory entries that match a criterion in Java]], [[Which methods class File you do you know]]).
+`delete()` requires an empty directory. `listFiles` / `FileFilter` list **children**, not a tree ([[What is FileFilter in Java]], [[How do you list directory entries that match a criterion in Java]], [[How would you explain the java.io.File class and path representation]]).
 
 ```java
 import java.io.File;
@@ -65,7 +68,7 @@ file -> meta
 file -> open
 ```
 
-**Fig. 1.** The class for names, create, and metadata. Opening content is a different type ([[What character separates path components in the Java File API]], [[What is and]]).
+**Fig. 1.** The class for names, create, and metadata. Opening content is a different type ([[What character separates path components in the Java File API]], [[What are absolute and relative paths in the Java File API]]).
 
 > [!warning] `File` is not creation time, and `canRead` is not a permission dump
 > There is no `getCreationTime()` on `File`. `lastModified()` granularity may be **seconds**. `canRead()` tests whether **this JVM** can read, not the POSIX mode bits. A `File` that never existed still has a parent string. `createNewFile` returning `false` means the name already existed, not necessarily a permission failure.

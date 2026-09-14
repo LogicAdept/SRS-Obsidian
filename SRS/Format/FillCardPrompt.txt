@@ -125,6 +125,11 @@ Java
 #Java/Immutability
 #Java/IO
 #Java/NIO
+#Java/NIO/Buffers
+#Java/NIO/Channels
+#Java/NIO/Selector
+#Java/NIO/Charset
+#Java/NIO/Files
 #Java/Networking
 #Java/Networking/UrlEncoding
 #Java/Logging

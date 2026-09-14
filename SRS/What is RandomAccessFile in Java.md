@@ -28,7 +28,7 @@ Local-device `rws`/`rwd`: when a method returns, that invocation’s changes are
 
 `readLine()` is **not** Unicode: each byte becomes a `char` with the high eight bits zero. Terminators `\r`, `\n`, `\r\n`, or EOF; terminators are dropped. `readUTF()` is modified UTF-8 with a two-byte length prefix (`UTFDataFormatException` if invalid).
 
-`getChannel()` returns the **unique** `FileChannel` for this file; its position tracks `getFilePointer()` both ways. `close()` cannot be reopened and closes that channel too. You cannot wrap this in `InputStreamReader` ([[How does Java]], [[Which class reads primitive values from a Java InputStream]]).
+`getChannel()` returns the **unique** `FileChannel` for this file; its position tracks `getFilePointer()` both ways. `close()` cannot be reopened and closes that channel too. You cannot wrap this in `InputStreamReader` ([[How does file reading work in Java]], [[Which class reads primitive values from a Java InputStream]]).
 
 ```d2
 direction: down

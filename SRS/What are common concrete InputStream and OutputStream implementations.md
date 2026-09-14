@@ -11,11 +11,13 @@ priority: 0
 
 ## Byte sources, then wrappers
 
-`FileInputStream` **opens a connection** to a named file (`FileDescriptor`); missing or unreadable → `FileNotFoundException`. `FileOutputStream` writes raw bytes to a `File` / name / descriptor; `append == true` writes at the end (1.1 / 1.4 overloads). Some platforms allow only one writer at a time. Close via try-with-resources ([[Does a java.io.File instance represent only a path without opening the file]], [[How does Java]]).
+`FileInputStream` **opens a connection** to a named file (`FileDescriptor`); missing or unreadable → `FileNotFoundException`. `FileOutputStream` writes raw bytes to a `File` / name / descriptor; `append == true` writes at the end (1.1 / 1.4 overloads). Some platforms allow only one writer at a time. Close via try-with-resources ([[Does a java.io.File instance represent only a path without opening the file]], [[How does file reading work in Java]]).
 
 `ByteArrayInputStream` reads an existing `byte[]` (**not copied**). `read` **cannot block**. `close()` has **no effect**. `markSupported()` is `true`. `ByteArrayOutputStream` grows a buffer (initial capacity **32** if unspecified); retrieve with `toByteArray()` / `toString(Charset)`. `close()` is also a no-op. `toString()` without a charset uses the **default charset**; `toString(int hibyte)` is deprecated.
 
 `SequenceInputStream` concatenates streams: two-arg (`s1` then `s2`) or an `Enumeration<InputStream>`. On EOF it **closes** the current substream and switches. `close()` on an enumeration constructor closes **remaining** streams ([[What is SequenceInputStream]]).
+
+`PipedInputStream` / `PipedOutputStream` (and the character twins `PipedReader` / `PipedWriter`) form a small circular buffer between **two threads** — one writes, one reads; using both ends from a single thread can deadlock it ([[What are piped streams in Java for]]). The legacy `StringBufferInputStream` is **deprecated** because it silently converts characters to bytes with the wrong mapping — read from a `StringReader` instead.
 
 `FilterInputStream` wraps `in` and forwards; subclasses add behavior ([[What are buffered streams in Java]]):
 
@@ -28,7 +30,7 @@ priority: 0
 
 `ObjectInputStream` extends `InputStream` (not `FilterInputStream`) and deserializes what `ObjectOutputStream` wrote. Only `Serializable` / `Externalizable` types. JavaDoc warning: deserialization of **untrusted** data is inherently dangerous; use filters (`ObjectInputFilter`). Pair with `FileInputStream` / `FileOutputStream` for a file graph.
 
-`RandomAccessFile` is **not** an `InputStream` ([[What is RandomAccessFile in Java]]). Character bridges are `InputStreamReader` / `OutputStreamWriter`, not byte-stream subclasses ([[What is the difference between and what InputStream OutputStream Reader Writer]], [[Which subclasses class InputStream you do you know for what they intended]]).
+`RandomAccessFile` is **not** an `InputStream` ([[What is RandomAccessFile in Java]]). Character bridges are `InputStreamReader` / `OutputStreamWriter`, not byte-stream subclasses ([[What is the difference between InputStream OutputStream Reader and Writer]], [[What are common concrete InputStream and OutputStream implementations]]).
 
 ```d2
 direction: down

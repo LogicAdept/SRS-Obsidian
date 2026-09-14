@@ -11,7 +11,7 @@ priority: 0
 
 ## One logical byte stream from several
 
-`SequenceInputStream` extends `InputStream` (not `FilterInputStream`). It starts with an ordered collection of streams and reads from the first until EOF, then the second, until EOF on the last ([[Which subclasses class InputStream you do you know for what they intended]], [[What are common concrete InputStream and OutputStream implementations]]).
+`SequenceInputStream` extends `InputStream` (not `FilterInputStream`). It starts with an ordered collection of streams and reads from the first until EOF, then the second, until EOF on the last ([[What are common concrete InputStream and OutputStream implementations]], [[What are common concrete InputStream and OutputStream implementations]]).
 
 `SequenceInputStream(s1, s2)` reads `s1` then `s2`. `SequenceInputStream(Enumeration<? extends InputStream> e)` reads whatever the enumeration yields, in order. A `null` element from the enumeration is a `NullPointerException` (OpenJDK `peekNextStream`).
 
@@ -19,7 +19,7 @@ priority: 0
 
 `close()`: a closed sequence cannot be reopened. If it was created from an enumeration, **all remaining** elements are taken from the enumeration and closed before `close` returns (exceptions can be suppressed onto the first `IOException`).
 
-`available()` is only the **current** substream’s `available()` — not the sum of everything still concatenated ([[What kinds of input and output streams exist in Java]], [[What is the difference between and what InputStream OutputStream Reader Writer]]).
+`available()` is only the **current** substream’s `available()` — not the sum of everything still concatenated ([[What kinds of input and output streams exist in Java]], [[What is the difference between InputStream OutputStream Reader and Writer]]).
 
 ```d2
 direction: right
