@@ -103,7 +103,7 @@ class DelegationWalk {
 Custom loaders (plugins, extra code sources) pass an explicit parent — usually the system loader, or `getPlatformClassLoader()` when the child must see all platform types. Graphs that are **not** a tree must `registerAsParallelCapable()`; otherwise `loadClass` holds the loader lock for the whole search and cross-delegation deadlocks.
 
 > [!warning] Parent-first is the default, not a law
-> Override `loadClass` and you skip the documented order (child-first, filtered packages, graphs). The VM still allows a loader to define a class itself. What you cannot do is `defineClass` a `java.*` name unless you *are* the platform loader or an ancestor — `SecurityException`. Parent `null` also hides platform types that bootstrap does not define.
+> Override `loadClass` and you skip the documented order (child-first, filtered packages, graphs). The sanctioned downward bridge, for framework code that must reach classes its own loader cannot see, is [[What is the thread context class loader in Java]]. The VM still allows a loader to define a class itself. What you cannot do is `defineClass` a `java.*` name unless you *are* the platform loader or an ancestor — `SecurityException`. Parent `null` also hides platform types that bootstrap does not define.
 
 > [!warning] Same binary name, two defining loaders
 > Parent-first prevents the *child* from defining a name the *parent* already owns. Two siblings that each `defineClass` the same bytes still produce two types. `a.loadClass(N) == b.loadClass(N)` is true when both delegate to the same defining ancestor; it is false when each defines `N`. Casts across that boundary are `ClassCastException`.
