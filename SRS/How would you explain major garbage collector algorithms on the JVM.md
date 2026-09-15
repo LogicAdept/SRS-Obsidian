@@ -25,6 +25,8 @@ How live objects are *moved* is the algorithm people mean by copying / compact /
 
 Serial is the same generational copy/promote story as Parallel, but **one** GC thread. Parallel uses **many** GC threads for throughput. Neither is “copying in young and mark-sweep-compact as a separate named old-gen collector” in the Java 21 guide — the documented old-gen contrast is **compact the old generation as a whole** versus G1’s incremental evacuation ([[What is Serial GC]], [[What is Parallel GC]], [[What is G1 GC]], [[What is ZGC]], [[What is CMS Concurrent Mark Sweep GC]]).
 
+How the work is scheduled is a second axis from how space is reclaimed: parallel threads inside a stop-the-world pause versus concurrent work beside the running application ([[What is the difference between parallel and concurrent garbage collection phases]]); how much has to stop at all is the stop-the-world question ([[What is a stop the world pause in garbage collection and why do collectors minimize it]]); and compaction exists because sweeping leaves fragmentation behind ([[What is heap fragmentation and how does compaction resolve it in garbage collectors]]).
+
 ```d2
 direction: down
 trace: "Trace from roots" {

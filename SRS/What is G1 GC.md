@@ -20,7 +20,7 @@ Space is reclaimed by **evacuation**: copy live objects out of a **collection se
 Cycle (Java 21):
 
 1. **Young-only** — normal young collections that promote into old.
-2. When old occupancy hits the initiating threshold, a **Concurrent Start** young collection begins **concurrent marking** of live objects in old (not a separate collector named “Copy”).
+2. When old occupancy hits the initiating threshold, a **Concurrent Start** young collection begins **concurrent marking** of live objects in old (not a separate collector named “Copy”) — the algorithm is SATB, explained with the other consistency mechanisms in [[How do concurrent garbage collectors keep the object graph consistent while the application runs]].
 3. **Remark** and **Cleanup** (STW) finish marking, references, class unloading, and decide whether mixed work is worth it.
 4. **Space-reclamation / mixed** — young plus selected old regions in the same pauses, until further old regions would not pay. Then young-only starts again.
 5. Backup: **Full GC** — in-place stop-the-world compact of the whole heap if memory runs out while marking.
