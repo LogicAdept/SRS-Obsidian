@@ -15,7 +15,7 @@ JEP 189 (experimental in **JDK 12**): Shenandoah shortens pauses by doing **evac
 
 JEP 379 (**JDK 15**): product feature. `-XX:+UnlockExperimentalVMOptions` is no longer required with `-XX:+UseShenandoahGC`. It does **not** become the default collector (that stays G1).
 
-It trades **CPU and extra heap** for those pauses. It is a regionalized collector (heap as regions). It is **not** the same algorithm as ZGC (ZGC uses colored pointers and load/store barriers; Shenandoah uses a per-object **indirection / forwarding** pointer). Both aim at low, heap-size-independent pauses ([[What is ZGC]], [[What is G1 GC]], [[What is CMS Concurrent Mark Sweep GC]], [[How would you explain major garbage collector algorithms on the JVM]]).
+It trades **CPU and extra heap** for those pauses. It is a regionalized collector (heap as regions). It is **not** the same algorithm as ZGC (ZGC uses colored pointers and load/store barriers; Shenandoah uses a per-object **indirection / forwarding** pointer). Both aim at low, heap-size-independent pauses ([[What is ZGC]], [[What is G1 GC]], [[What is CMS Concurrent Mark Sweep GC]], [[How would you explain major garbage collector algorithms on the JVM]], [[How do concurrent garbage collectors keep the object graph consistent while the application runs]]).
 
 Availability is a **build** question. Oracle’s Java 21 `java` man page and Available Collectors list Serial, Parallel, G1, and ZGC — not Shenandoah. OpenJDK/Temurin/Corretto-style binaries often include it; Oracle JDK historically does not. Builds can disable it with `--with-jvm-features=-shenandoahgc`. If `UseShenandoahGC` is unrecognized, you do not have that collector ([[How does garbage collection work on the JVM]]).
 

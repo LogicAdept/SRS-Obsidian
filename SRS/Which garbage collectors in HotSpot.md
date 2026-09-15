@@ -18,7 +18,7 @@ The Tuning Guide characterizes each collector; the distinctions are thread count
 * **G1** — "a **mostly concurrent** collector ... designed to scale from small machines to large multiprocessor machines with a large amount of memory. It provides the capability to meet a **pause-time goal** with high probability, while achieving high throughput." Internally: "G1 partitions the heap into a set of **equally sized heap regions**"; it is "a generational, incremental, parallel, mostly concurrent, stop-the-world, and **evacuating** garbage collector."
 * **ZGC** — "provides **max pause times under a millisecond**, but at the cost of some throughput ... Pause times are **independent of heap size** that is being used. ZGC works well for heap sizes from a few hundred megabytes to **16TB**."
 
-The algorithm deep-dive for the classic pair is in [[How does the Serial GC work]]; G1's region mechanics are sketched in [[How does garbage collection work on the JVM]].
+The algorithm deep-dive for the classic pair is in [[How does the Serial GC work]]; G1's region mechanics are sketched in [[How does garbage collection work on the JVM]]. The edge of the catalog holds one more entry — the no-op Epsilon, which allocates and never collects ([[What is the Epsilon garbage collector and when does a no-op collector make sense]]).
 
 ```java
 // Selecting and verifying a collector on the java command line (Java 21):
