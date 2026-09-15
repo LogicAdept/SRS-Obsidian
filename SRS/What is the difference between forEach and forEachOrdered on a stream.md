@@ -13,7 +13,7 @@ priority: 0
 
 `Stream.forEach(Consumer)` “performs an action for each element.” Terminal. On **parallel** pipelines it **does not guarantee** encounter order — that would sacrifice parallelism. The action may run at whatever time, on whatever thread the library chooses. If it touches shared state, **you** synchronize ([[What is the difference between sequential and parallel streams in Java]], [[What terminal stream operations do you know in Java]]).
 
-`Stream.forEachOrdered(Consumer)` performs the action for each element **in the stream’s encounter order if one exists**. It processes elements **one at a time** in that order. Action *N* happens-before action *N+1*. The thread for a given element is still the library’s choice.
+`Stream.forEachOrdered(Consumer)` performs the action for each element **in the stream’s encounter order if one exists**. It processes elements **one at a time** in that order. Action *N* happens-before action *N+1*. The thread for a given element is still the library’s choice. Sequential traversal plus a blocking `join` can even fix the print order of async tasks — [[What happens when a sequential stream creates CompletableFuture tasks and joins each one in forEach]].
 
 Package doc lists `forEach()` among terminals that **may ignore** encounter order. `List` / array sources are ordered; `HashSet` is not — then `forEachOrdered` has no encounter order to keep ([[What is the Java Stream API]]).
 
